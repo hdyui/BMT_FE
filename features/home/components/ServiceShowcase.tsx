@@ -1,0 +1,250 @@
+"use client";
+
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
+import { services } from "@/config/site";
+import { Reveal } from "@/lib/components/shared/Reveal";
+
+const serviceDetails = [
+  {
+    image: "/images/home/trust-card-interior.png",
+    copy: "Cung cấp giải pháp xây dựng trọn gói từ tư vấn, thiết kế đến thi công hoàn thiện, tối ưu tiến độ và ngân sách.",
+  },
+  {
+    image: "/images/home/trust-card-design.png",
+    copy: "Kiến tạo không gian có thẩm mỹ, tối ưu công năng và thể hiện rõ cá tính của từng khách hàng.",
+  },
+  {
+    image: "/images/home/trust-card-build.png",
+    copy: "Đội ngũ thi công giàu kinh nghiệm, kiểm soát chặt chẽ chất lượng, an toàn và tiến độ công trình.",
+  },
+  {
+    image: "/images/home/trust-card-site.png",
+    copy: "Khảo sát hiện trạng, đề xuất phương án cải tạo phù hợp và hoàn thiện không gian nhanh chóng.",
+  },
+] as const;
+
+const SERVICE_FADE_DURATION = 280;
+type TransitionPhase = "idle" | "leaving" | "entering";
+
+export function ServiceShowcase() {
+  const [active, setActive] = useState(0);
+  const [selected, setSelected] = useState(0);
+  const [phase, setPhase] = useState<TransitionPhase>("idle");
+  const [tabsVisible, setTabsVisible] = useState(false);
+  const [indicator, setIndicator] = useState({
+    left: 0,
+    top: 0,
+    width: 0,
+  });
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const fadeTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const enterTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const detail = serviceDetails[active];
+  const isTransitioning = phase !== "idle";
+  const motionVisible = tabsVisible && phase === "idle";
+  const motionDuration = phase === "leaving" ? "duration-300" : "duration-700";
+
+  useEffect(
+    () => () => {
+      if (fadeTimer.current) clearTimeout(fadeTimer.current);
+      if (enterTimer.current) clearTimeout(enterTimer.current);
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const element = tabsRef.current;
+    if (!element) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        setTabsVisible(true);
+        observer.unobserve(entry.target);
+      },
+      { threshold: 0.35 },
+    );
+
+    observer.observe(element);
+    return () => observer.disconnect();
+  }, []);
+
+  useEffect(() => {
+    const container = tabsRef.current;
+    const button = buttonRefs.current[selected];
+    if (!container || !button) return;
+
+    const updateIndicator = () => {
+      const gridItem = button.parentElement;
+      if (!gridItem) return;
+
+      setIndicator({
+        left: gridItem.offsetLeft + button.offsetLeft,
+        top: gridItem.offsetTop + button.offsetTop + button.offsetHeight,
+        width: button.offsetWidth,
+      });
+    };
+
+    const frame = requestAnimationFrame(updateIndicator);
+    const resizeObserver = new ResizeObserver(updateIndicator);
+    resizeObserver.observe(container);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+    };
+  }, [selected, tabsVisible]);
+
+  const selectService = (index: number) => {
+    if (isTransitioning || index === selected) return;
+
+    setSelected(index);
+    setPhase("leaving");
+    fadeTimer.current = setTimeout(() => {
+      setActive(index);
+      setPhase("entering");
+      enterTimer.current = setTimeout(() => setPhase("idle"), 30);
+    }, SERVICE_FADE_DURATION);
+  };
+
+  return (
+    <div className="mt-8">
+      <div
+        ref={tabsRef}
+        className="relative grid gap-x-4 gap-y-3 border-b border-neutral-300 sm:grid-cols-2 lg:grid-cols-4"
+      >
+        {services.map((service, index) => (
+          <Reveal delay={index * 120} key={service.href}>
+            <button
+              className={`w-full px-3 py-5 text-[13px] font-bold uppercase leading-snug transition-[color,translate] duration-300 ease-out sm:text-sm ${
+                selected === index
+                  ? "text-brand"
+                  : "hover:-translate-y-0.5 hover:text-brand"
+              }`}
+              disabled={isTransitioning}
+              onClick={() => selectService(index)}
+              ref={(element) => {
+                buttonRefs.current[index] = element;
+              }}
+              aria-pressed={selected === index}
+              type="button"
+            >
+              {service.label}
+            </button>
+          </Reveal>
+        ))}
+
+        <span
+          aria-hidden="true"
+          className={`pointer-events-none absolute h-0.5 bg-brand transition-[left,top,width,opacity] duration-500 ease-out ${
+            tabsVisible ? "opacity-100" : "opacity-0"
+          }`}
+          style={indicator}
+        />
+      </div>
+
+      <div className="relative mx-auto mt-8 max-w-[1200px]">
+        <div
+          aria-hidden="true"
+          className={`absolute inset-y-14 left-0 right-0 hidden rounded-3xl bg-brand transition-[opacity,translate] ease-out lg:block ${motionDuration} ${
+            motionVisible
+              ? "translate-x-0 opacity-100"
+              : "translate-x-8 opacity-0"
+          }`}
+          style={{
+            transitionDelay: motionVisible ? "100ms" : "0ms",
+          }}
+        />
+
+        <div className="relative grid items-center lg:grid-cols-[1.2fr_0.9fr]">
+          <div
+            className={`relative z-10 transition-[opacity,translate] ease-out lg:ml-4 ${motionDuration} ${
+              motionVisible
+                ? "translate-x-0 opacity-100"
+                : "-translate-x-8 opacity-0"
+            }`}
+          >
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 -right-3 z-0 hidden w-6 bg-white lg:block"
+            />
+            <span
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-10 translate-x-3 -translate-y-3 rounded-[3rem] border border-brand"
+            />
+            <div className="relative z-20 min-h-[480px] overflow-hidden rounded-[3rem] bg-white">
+              <Image
+                className="object-cover [transform:scale(1)] transition-transform duration-700 ease-out hover:[transform:scale(1.03)]"
+                src={detail.image}
+                alt={services[active].label}
+                fill
+                sizes="(max-width:1024px) 100vw, 55vw"
+                unoptimized
+              />
+            </div>
+          </div>
+
+          <article
+            className={`relative z-20 -mt-8 flex flex-col items-center justify-center rounded-3xl bg-brand p-8 text-center text-white transition-[opacity,translate] ease-out lg:-ml-6 lg:mt-0 lg:min-h-[23rem] lg:bg-transparent lg:px-12 lg:py-12 ${motionDuration} ${
+              motionVisible
+                ? "translate-x-0 opacity-100"
+                : "translate-x-8 opacity-0"
+            }`}
+            style={{
+              transitionDelay: motionVisible ? "100ms" : "0ms",
+            }}
+          >
+            <div
+              className={`transition-[opacity,translate] duration-500 ease-out ${
+                motionVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-3 opacity-0"
+              }`}
+              style={{
+                transitionDelay: motionVisible ? "240ms" : "0ms",
+              }}
+            >
+              <h3 className="text-3xl font-bold uppercase lg:text-[42px] lg:leading-[1.08]">
+                {services[active].label}
+              </h3>
+              <span className="mx-auto mt-5 block h-0.5 w-36 bg-white/90" />
+            </div>
+
+            <p
+              className={`mt-5 max-w-lg text-base leading-relaxed text-white/90 transition-[opacity,translate] duration-500 ease-out lg:text-lg ${
+                motionVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-3 opacity-0"
+              }`}
+              style={{
+                transitionDelay: motionVisible ? "340ms" : "0ms",
+              }}
+            >
+              {detail.copy}
+            </p>
+          </article>
+        </div>
+      </div>
+
+      <div className="mt-7 flex justify-center gap-2">
+        {services.map((service, index) => (
+          <button
+            className={`aspect-square size-3 shrink-0 rounded-full border border-brand transition-[background-color,scale] duration-300 ${
+              selected === index
+                ? "scale-110 bg-brand"
+                : "bg-white hover:scale-110 hover:bg-brand/30"
+            }`}
+            disabled={isTransitioning}
+            key={service.href}
+            onClick={() => selectService(index)}
+            aria-label={`Chọn ${service.label}`}
+            aria-current={selected === index ? "true" : undefined}
+            type="button"
+          />
+        ))}
+      </div>
+    </div>
+  );
+}
