@@ -7,9 +7,11 @@ import { cn } from "@/lib/utils";
 export function BuildingRule({
   className,
   light = false,
+  src = "/images/home/section-rule.png",
 }: {
   className?: string;
   light?: boolean;
+  src?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -46,7 +48,7 @@ export function BuildingRule({
           visible ? "scale-x-100" : "scale-x-0",
           light && "brightness-0 invert",
         )}
-        src="/images/home/section-rule.png"
+        src={src}
         alt=""
         fill
         sizes="430px"
