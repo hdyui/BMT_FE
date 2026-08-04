@@ -1,0 +1,9 @@
+⚠ Port 3000 is in use by process 26124, using available port 3001 instead.
+⨯ Another next dev server is already running.
+
+- Local:        http://localhost:3000
+- PID:          26124
+- Dir:          E:\PIEDTEAM\VNZ_TASK\BMT_internship\my-app
+- Log:          .next\dev\logs\next-development.log
+
+Run taskkill /PID 26124 /F to stop it.

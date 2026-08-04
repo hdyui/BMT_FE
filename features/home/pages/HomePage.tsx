@@ -10,7 +10,7 @@ import { HomeHero } from "@/features/home/components/HomeHero";
 import { ProjectShowcase } from "@/features/home/components/ProjectShowcase";
 import { ServiceShowcase } from "@/features/home/components/ServiceShowcase";
 import { CountUpStats } from "@/features/home/components/CountUpStats";
-import { PartnerMarquee } from "@/features/home/components/PartnerMarquee";
+import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
 import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
@@ -111,7 +111,7 @@ function ServiceSectionHeading() {
 
 export function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden pt-16">
+    <div className="min-h-screen overflow-x-clip pt-16">
       <SiteHeader />
       <HomeHero />
 

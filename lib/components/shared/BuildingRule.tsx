@@ -6,10 +6,14 @@ import { cn } from "@/lib/utils";
 
 export function BuildingRule({
   className,
+  delay = 0,
   light = false,
+  fullWidth = false,
 }: {
   className?: string;
+  delay?: number;
   light?: boolean;
+  fullWidth?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -40,17 +44,49 @@ export function BuildingRule({
       )}
       aria-hidden="true"
     >
-      <Image
-        className={cn(
-          "origin-left object-contain object-right transition-[scale] duration-700 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none",
-          visible ? "scale-x-100" : "scale-x-0",
-          light && "brightness-0 invert",
-        )}
-        src="/images/home/section-rule.png"
-        alt=""
-        fill
-        sizes="430px"
-      />
+      {fullWidth ? (
+        <>
+          <span
+            className={cn(
+              "absolute inset-x-0 bottom-0 h-0.5 origin-left bg-current transition-transform duration-700 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none",
+              visible ? "scale-x-100" : "scale-x-0",
+            )}
+            style={{ transitionDelay: `${Math.min(delay, 600)}ms` }}
+          />
+          <span
+            className={cn(
+              "absolute right-0 bottom-0 h-10 w-12 overflow-hidden transition-opacity duration-500 motion-reduce:opacity-100 motion-reduce:transition-none",
+              visible ? "opacity-100" : "opacity-0",
+            )}
+            style={{ transitionDelay: `${Math.min(delay + 240, 700)}ms` }}
+          >
+            <Image
+              className={cn(
+                "absolute right-0 bottom-0 h-10 w-auto max-w-none",
+                light && "brightness-0 invert",
+              )}
+              src="/images/home/section-rule.png"
+              alt=""
+              width={1388}
+              height={128}
+              sizes="48px"
+            />
+          </span>
+        </>
+      ) : (
+        <Image
+          className={cn(
+            "origin-left object-contain object-right transition-[scale] duration-700 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none",
+            visible ? "scale-x-100" : "scale-x-0",
+            light && "brightness-0 invert",
+          )}
+          style={{ transitionDelay: `${Math.min(delay, 600)}ms` }}
+          src="/images/home/section-rule.png"
+          alt=""
+          fill
+          sizes="430px"
+        />
+      )}
     </div>
   );
 }

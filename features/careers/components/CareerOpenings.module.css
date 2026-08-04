@@ -1,0 +1,90 @@
+.careerApplyButton {
+  background: #f47a2a;
+  box-shadow: 0 8px 22px rgb(244 122 42 / 28%);
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s;
+}
+
+.careerApplyButton:hover {
+  transform: scale(1.04);
+  background: #ff8a3b;
+  box-shadow: 0 12px 30px rgb(244 122 42 / 42%);
+}
+
+.careerApplyButton:active {
+  transform: scale(0.97);
+}
+
+.careerApplyButton:focus-visible {
+  outline: 2px solid #f47a2a;
+  outline-offset: 4px;
+}
+
+.careerPagination {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: center;
+  margin-top: clamp(18px, 2.2vw, 30px);
+  color: #262626;
+  font-size: 14px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+
+.careerPageButton {
+  display: inline-flex;
+  width: fit-content;
+  align-items: center;
+  gap: 6px;
+  color: #262626;
+  text-decoration-line: underline;
+  text-decoration-color: transparent;
+  text-underline-offset: 4px;
+  transition:
+    color 0.3s ease,
+    text-decoration-color 0.3s ease;
+}
+
+.careerPageButtonNext {
+  justify-self: end;
+}
+
+.careerPageButton:disabled {
+  cursor: not-allowed;
+}
+
+.careerPageButton:enabled:hover,
+.careerPageButton:enabled:focus-visible {
+  color: #f47a2a;
+  text-decoration-color: #f47a2a;
+}
+
+.careerPageButtonIcon {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 auto;
+  border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.careerPageButton:not(.careerPageButtonNext):enabled:hover .careerPageButtonIcon {
+  transform: translateX(-3px);
+}
+
+.careerPageButtonNext:enabled:hover .careerPageButtonIcon {
+  transform: translateX(3px);
+}
+
+.careerPageButton:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #f47a2a;
+  outline-offset: 5px;
+}
+
+.careerPageIndicator {
+  justify-self: center;
+  color: #f47a2a;
+  text-transform: none;
+}

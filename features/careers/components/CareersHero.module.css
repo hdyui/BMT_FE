@@ -1,0 +1,88 @@
+@keyframes cta-fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.careersHeroCta {
+  display: inline-flex;
+  height: clamp(40px, 3.75vw, 62px);
+  align-items: center;
+  gap: 0.7vw;
+  margin-top: 1vw;
+  padding: 0 clamp(20px, 1.7vw, 36px);
+  border-radius: 999px;
+  background: #f47a2a;
+  color: white;
+  font-size: clamp(14px, 1.4vw, 20px);
+  font-weight: 700;
+  box-shadow: 0 8px 22px rgb(244 122 42 / 28%);
+  transition:
+    background-color 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s;
+  animation: cta-fade-in 0.85s 0.76s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.careersHeroCta:hover {
+  transform: scale(1.04);
+  background: #ff8a3b;
+  box-shadow: 0 12px 30px rgb(244 122 42 / 42%);
+}
+
+.careersHeroCta:active {
+  transform: scale(0.97);
+}
+
+.careersHeroCta:focus-visible {
+  outline: 2px solid #f47a2a;
+  outline-offset: 4px;
+}
+
+.careersHeroCtaIcon {
+  display: grid;
+  width: clamp(30px, 2.8vw, 42px);
+  height: clamp(30px, 2.8vw, 42px);
+  place-items: center;
+  border: 2px solid rgb(255 255 255 / 90%);
+  border-radius: 50%;
+  transition: transform 0.3s;
+}
+
+.careersHeroCtaIcon svg {
+  width: clamp(16px, 1.6vw, 22px);
+  height: clamp(16px, 1.6vw, 22px);
+}
+
+.careersHeroCta:hover .careersHeroCtaIcon {
+  transform: rotate(45deg);
+}
+
+@media (max-width: 1023px) {
+  .careersHeroCta {
+    height: 56px;
+    gap: 16px;
+    margin-top: 28px;
+    padding: 0 28px;
+    font-size: 18px;
+  }
+
+  .careersHeroCtaIcon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .careersHeroCtaIcon svg {
+    width: 20px;
+    height: 20px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .careersHeroCta {
+    animation: none;
+  }
+}

@@ -3,7 +3,36 @@
 import { PointerEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { motion, type Variants } from "framer-motion";
 import { ArrowUpRight, Building2 } from "lucide-react";
+
+const contentContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.16,
+      delayChildren: 0.25,
+    },
+  },
+};
+
+const titleVariants: Variants = {
+  hidden: { opacity: 0, x: -60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const bodyItemVariants: Variants = {
+  hidden: { opacity: 0, y: 44 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
 const slides = [
   {
@@ -145,33 +174,26 @@ export function HomeHero() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
 
             <div className="relative mx-auto flex h-full w-[min(1380px,calc(100%-2.5rem))] items-end pb-20 sm:pb-24 lg:pb-28">
-              <div className="max-w-[660px] text-white">
-                <h1
-                  className={`text-3xl leading-[1.08] font-bold text-balance uppercase drop-shadow-lg transition-all duration-700 sm:text-5xl ${
-                    isActive
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-10 opacity-0"
-                  }`}
+              <motion.div
+                className="max-w-[660px] text-white"
+                animate={isActive ? "visible" : "hidden"}
+                initial="hidden"
+                variants={contentContainerVariants}
+              >
+                <motion.h1
+                  className="text-3xl leading-[1.08] font-bold text-balance uppercase drop-shadow-lg sm:text-5xl"
+                  variants={titleVariants}
                 >
                   {slide.title}
-                </h1>
-                <p
-                  className={`mt-5 max-w-xl text-xl leading-relaxed text-white/90 transition-all delay-150 duration-700 sm:text-base ${
-                    isActive
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-7 opacity-0"
-                  }`}
+                </motion.h1>
+                <motion.p
+                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90 sm:text-base"
+                  variants={bodyItemVariants}
                 >
                   <Building2 className="mr-2 inline size-4" />
                   {slide.copy}
-                </p>
-                <div
-                  className={`mt-6 transition-[opacity,transform] delay-100 duration-700 ease-out ${
-                    isActive
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-7 opacity-0"
-                  }`}
-                >
+                </motion.p>
+                <motion.div className="mt-6" variants={bodyItemVariants}>
                   <Link
                     className="inline-flex items-center gap-2 rounded-full border border-white px-5 py-2 text-sm transition-[color,background-color,border-color,transform] duration-700 ease-out hover:scale-105 hover:border-brand hover:bg-brand hover:text-white active:scale-95"
                     href={slide.href}
@@ -179,8 +201,8 @@ export function HomeHero() {
                   >
                     TÌM HIỂU THÊM <ArrowUpRight className="size-4" />
                   </Link>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         );

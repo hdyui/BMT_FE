@@ -2,8 +2,29 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import { motion, type Variants } from "framer-motion";
 import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
 import { Reveal } from "@/lib/components/shared/Reveal";
+
+const cardContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.12,
+      delayChildren: 0.05,
+    },
+  },
+};
+
+const cardItemVariants: Variants = {
+  hidden: { opacity: 0, y: 36, scale: 0.97 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    scale: 1,
+    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
 type Project = {
   id: string;
@@ -275,16 +296,24 @@ export function ProjectShowcase() {
         onTouchEnd={handleTouchEnd}
       >
         <div className="relative lg:mx-auto lg:w-fit lg:max-w-full">
-          <div className="grid gap-4 sm:grid-cols-2 lg:flex lg:h-[360px] lg:items-stretch lg:justify-center">
+          <motion.div
+            className="grid gap-4 sm:grid-cols-2 lg:flex lg:h-[360px] lg:items-stretch lg:justify-center"
+            initial="hidden"
+            key={`${activeCategory}-${page}`}
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            variants={cardContainerVariants}
+          >
             {visibleProjects.map((project, index) => {
               const isExpanded = expandedCard === index;
 
               return (
-                <article
+                <motion.article
                   className={`group relative min-h-80 overflow-hidden rounded-3xl bg-charcoal shadow-lg transition-[width,box-shadow] duration-500 ease-in-out hover:shadow-[0_22px_48px_rgb(47_38_34/.24)] sm:min-h-[340px] lg:flex-none ${
                     isExpanded ? "lg:w-[500px]" : "lg:w-[220px]"
                   }`}
                   key={project.id}
+                  variants={cardItemVariants}
                   onBlur={(event) => {
                     if (!event.currentTarget.contains(event.relatedTarget)) {
                       setExpandedCard(null);
@@ -333,10 +362,10 @@ export function ProjectShowcase() {
                     </p>
                     <CardMoreLink className="mt-5" href="/du-an" />
                   </div>
-                </article>
+                </motion.article>
               );
             })}
-          </div>
+          </motion.div>
 
           <button
             className="absolute left-0 top-1/2 z-30 grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-brand shadow-[0_6px_18px_rgb(244_122_42/.34)] transition-[scale,box-shadow,background-color] duration-300 hover:scale-110 hover:bg-[#df641c] hover:shadow-[0_10px_24px_rgb(223_100_28/.42)] active:scale-95 disabled:pointer-events-none disabled:opacity-50"

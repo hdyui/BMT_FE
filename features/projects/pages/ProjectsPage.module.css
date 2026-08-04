@@ -1,0 +1,124 @@
+@keyframes hero-arrive {
+  from {
+    opacity: 0;
+    transform: scale(1.05);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(34px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slide-from-right {
+  from {
+    opacity: 0;
+    transform: translateX(42px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes decor-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.heroArtwork {
+  animation: hero-arrive 1.15s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: 28% 50%;
+}
+
+.heroPhoto {
+  animation: hero-arrive 1.15s 0.12s cubic-bezier(0.22, 1, 0.36, 1) both;
+  transform-origin: center;
+}
+
+.heroSection {
+  --outline-radius: 3vw;
+  --outline-dot-size: 1.9vw;
+}
+
+.heroBackdrop {
+  -webkit-mask: radial-gradient(
+    circle calc(var(--outline-dot-size) / 2 + 3px) at 51.7% 86.63%,
+    transparent 98%,
+    #000 100%
+  );
+  mask: radial-gradient(
+    circle calc(var(--outline-dot-size) / 2 + 3px) at 51.7% 86.63%,
+    transparent 98%,
+    #000 100%
+  );
+  animation: decor-fade 0.72s 0.24s ease-out both;
+}
+
+.heroGrayBlock {
+  animation: decor-fade 0.72s 0.42s ease-out both;
+}
+
+.heroOutline {
+  isolation: isolate;
+  animation: decor-fade 0.72s 0.64s ease-out both;
+}
+
+.heroOutlineFrame {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  border: 1px solid rgb(119 119 119 / 90%);
+  border-radius: var(--outline-radius) 0 var(--outline-radius) 0;
+}
+
+.heroOutlineDot {
+  position: absolute;
+  z-index: 2;
+  top: 76%;
+  right: calc(var(--outline-dot-size) / -2);
+  width: var(--outline-dot-size);
+  height: var(--outline-dot-size);
+  border-radius: 50%;
+  background: #f47a2a;
+  transform: translateY(-50%);
+}
+
+.heroTitle {
+  animation: rise-in 0.8s 0.55s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroRule {
+  animation: slide-from-right 0.75s 0.88s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.heroCopy {
+  animation: slide-from-right 0.82s 1.08s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .heroArtwork,
+  .heroPhoto,
+  .heroBackdrop,
+  .heroGrayBlock,
+  .heroOutline,
+  .heroTitle,
+  .heroRule,
+  .heroCopy {
+    animation: none;
+  }
+}
