@@ -20,11 +20,12 @@ export function PillCtaButton({
 }: PillCtaButtonProps) {
   return (
     <Link
-      className={`group/pill relative inline-flex items-center transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] ${className ?? ""}`}
+      className={`group/pill relative inline-flex shrink-0 items-center self-start transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] ${className ?? ""}`}
       href={href}
+      style={{ aspectRatio: `${imageWidth} / ${imageHeight}` }}
     >
       <Image
-        className="h-auto w-full"
+        className="h-full w-full transition-[filter] duration-300 group-hover/pill:brightness-[.88] group-hover/pill:drop-shadow-[0_10px_18px_rgb(244_122_42/.28)]"
         src={image}
         alt=""
         width={imageWidth}

@@ -20,9 +20,17 @@ export type SolutionCard = {
 
 type SolutionCardsProps = {
   cards: readonly SolutionCard[];
+  /** Icon đứng trước mỗi dòng checklist. */
+  checkIcon?: string;
+  /** Ảnh gạch ngang cam ngắn nằm dưới tagline. */
+  ruleImage?: string;
 };
 
-export function SolutionCards({ cards: solutionCards }: SolutionCardsProps) {
+export function SolutionCards({
+  cards: solutionCards,
+  checkIcon = "/images/services/icon-house.png",
+  ruleImage,
+}: SolutionCardsProps) {
   return (
     <div className="grid gap-5">
       {solutionCards.map((card, index) => {
@@ -30,12 +38,13 @@ export function SolutionCards({ cards: solutionCards }: SolutionCardsProps) {
 
         return (
           <Reveal
-            className="group/card overflow-hidden rounded-[32px] bg-white shadow-[0_4px_20px_rgb(36_33_34/.08)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)]"
-            delay={80}
+            className="group/card overflow-hidden rounded-[32px] bg-white shadow-[0_4px_20px_rgb(36_33_34/.08)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] lg:h-[560px]"
+            delay={index * 160}
+            from="fade"
             key={card.number}
           >
             <div
-              className={`grid items-stretch lg:grid-cols-[1fr_2fr] ${
+              className={`grid h-full items-stretch lg:grid-cols-[1fr_2fr] ${
                 imageFirst ? "" : "lg:[direction:rtl]"
               }`}
             >
@@ -49,41 +58,53 @@ export function SolutionCards({ cards: solutionCards }: SolutionCardsProps) {
                 />
               </div>
 
+              {/* Khối 1, 3 (imageFirst) trượt từ phải qua trái; khối 2, 4
+                  trượt từ trái qua phải, ngay sau khi khối fade in. */}
               <Reveal
                 className="flex flex-col justify-center p-7 lg:p-10 lg:[direction:ltr]"
+                delay={index * 160 + 120}
                 from={imageFirst ? "right" : "left"}
               >
-                <div className="flex items-start gap-3">
-                  <span className="text-6xl leading-none font-bold text-neutral-300 sm:text-7xl">
+                <div className="flex items-start gap-4">
+                  <span className="text-6xl leading-none font-bold text-neutral-300 sm:text-[72px]">
                     {card.number}.
                   </span>
-                  <h3 className="mt-1 text-2xl leading-tight uppercase sm:text-3xl">
-                    <span className="block font-normal text-charcoal">
-                      {card.titlePrefix}
-                    </span>
-                    <span className="block font-bold text-brand">
-                      {card.titleCategory}
-                    </span>
+                  {/* Tiền tố và nhóm công trình chảy nối tiếp nhau như mockup,
+                      chỉ xuống dòng khi hết chỗ. */}
+                  <h3 className="mt-1 text-2xl leading-tight font-bold uppercase sm:text-[28px]">
+                    <span className="text-charcoal">{card.titlePrefix} </span>
+                    <span className="text-brand">{card.titleCategory}</span>
                   </h3>
                 </div>
-                <p className="mt-2 text-sm font-semibold">{card.tagline}</p>
-                <span className="mt-4 mb-4 block h-0.5 w-24 bg-brand" />
-                <p className="text-sm leading-relaxed text-pretty">
+                <p className="mt-2 text-sm font-bold">{card.tagline}</p>
+
+                {ruleImage ? (
+                  <Image
+                    className="mt-3 mb-4 h-[3px] w-[140px] object-fill"
+                    src={ruleImage}
+                    alt=""
+                    width={587}
+                    height={13}
+                    aria-hidden="true"
+                  />
+                ) : (
+                  <span className="mt-4 mb-4 block h-0.5 w-24 bg-brand" />
+                )}
+
+                <p className="text-sm leading-relaxed text-justify">
                   {card.description}
                 </p>
 
-                <p className="mt-5 text-sm font-semibold">
-                  BMT Decor cung cấp:
-                </p>
+                <p className="mt-5 text-sm font-bold">BMT Decor cung cấp:</p>
                 <ul className="mt-2 grid gap-1.5">
                   {card.checklist.map((item) => (
                     <li className="flex items-start gap-2 text-sm" key={item}>
                       <Image
                         className="mt-0.5 size-4 shrink-0 object-contain"
-                        src="/images/services/icon-house.png"
+                        src={checkIcon}
                         alt=""
-                        width={86}
-                        height={91}
+                        width={90}
+                        height={95}
                       />
                       {item}
                     </li>
@@ -91,7 +112,7 @@ export function SolutionCards({ cards: solutionCards }: SolutionCardsProps) {
                 </ul>
 
                 <PillCtaButton
-                  className="mt-6 w-fit max-w-full"
+                  className="mt-6 h-11 max-w-full sm:h-12"
                   href="/du-an"
                   label={card.cta}
                   image={card.ctaImage}

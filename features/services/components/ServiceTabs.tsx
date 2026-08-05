@@ -12,7 +12,10 @@ export function ServiceTabs() {
   const [active, setActive] = useState(0);
   const [shown, setShown] = useState(0);
   const [faded, setFaded] = useState(false);
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
+  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
 
   useEffect(
     () => () => {
@@ -20,6 +23,31 @@ export function ServiceTabs() {
     },
     [],
   );
+
+  useEffect(() => {
+    const container = tabsRef.current;
+    const button = buttonRefs.current[active];
+    if (!container || !button) return;
+
+    const updateIndicator = () => {
+      const gridItem = button.parentElement;
+      if (!gridItem) return;
+
+      setIndicator({
+        left: gridItem.offsetLeft + button.offsetLeft,
+        width: button.offsetWidth,
+      });
+    };
+
+    const frame = requestAnimationFrame(updateIndicator);
+    const resizeObserver = new ResizeObserver(updateIndicator);
+    resizeObserver.observe(container);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      resizeObserver.disconnect();
+    };
+  }, [active]);
 
   function select(index: number) {
     if (index === active) return;
@@ -37,7 +65,8 @@ export function ServiceTabs() {
   return (
     <>
       <div
-        className="grid border-b-4 border-neutral-300 sm:grid-cols-2 lg:grid-cols-4"
+        ref={tabsRef}
+        className="relative grid border-b-4 border-neutral-300 sm:grid-cols-2 lg:grid-cols-4"
         role="tablist"
         aria-label="Các dịch vụ"
       >
@@ -45,11 +74,13 @@ export function ServiceTabs() {
           <Reveal delay={index * 110} from="left" key={service.label}>
             <button
               className={cn(
-                "relative w-full px-3 py-4 text-center text-sm font-medium transition-colors duration-300 hover:text-brand",
-                "after:absolute after:inset-x-0 after:-bottom-1 after:h-1 after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 after:ease-out",
-                index === active && "text-brand after:scale-x-100",
+                "w-full px-3 py-4 text-center text-sm font-medium transition-colors duration-300 hover:text-brand",
+                index === active && "text-brand",
               )}
               onClick={() => select(index)}
+              ref={(element) => {
+                buttonRefs.current[index] = element;
+              }}
               type="button"
               role="tab"
               aria-selected={index === active}
@@ -58,6 +89,16 @@ export function ServiceTabs() {
             </button>
           </Reveal>
         ))}
+
+        {/* Một gạch chân duy nhất trượt sang tab được chọn thay vì thu về 0
+            rồi phóng lại ở tab mới. */}
+        {indicator.width > 0 && (
+          <span
+            className="pointer-events-none absolute -bottom-1 h-1 bg-brand transition-[left,width] duration-500 ease-out"
+            style={indicator}
+            aria-hidden="true"
+          />
+        )}
       </div>
 
       <div
@@ -88,6 +129,8 @@ export function ServiceTabs() {
             <h2 className="mt-3 text-4xl font-normal uppercase">
               {detail.label}
             </h2>
+          </Reveal>
+          <Reveal delay={240}>
             <p className="mt-3 text-sm">{detail.tagline}</p>
             <span className="mt-5 mb-2 block h-0.5 w-36 bg-brand" />
             <p className="text-base leading-relaxed text-pretty">{detail.copy}</p>

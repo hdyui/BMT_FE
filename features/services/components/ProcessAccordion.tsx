@@ -26,22 +26,18 @@ export function ProcessAccordion() {
     >
       {processSteps.map((step, index) => (
         <AccordionItem
-          className="border-b border-neutral-300"
+          className="group/step border-b border-neutral-300"
           value={`step-${index + 1}`}
           key={step.title}
         >
-          <AccordionTrigger className="grid grid-cols-[76px_42px_1fr_auto] items-center gap-3 rounded-none py-4 hover:no-underline sm:grid-cols-[220px_52px_1fr_auto] lg:grid-cols-[340px_72px_1fr_auto] lg:gap-6 **:data-[slot=accordion-trigger-icon]:hidden">
-            <span className="relative block aspect-[1420/320] w-full overflow-hidden transition-[aspect-ratio] duration-300 ease-out group-aria-expanded/accordion-trigger:aspect-[1420/639]">
+          <div className="grid grid-cols-[76px_1fr] items-center gap-3 py-4 sm:grid-cols-[220px_1fr] lg:grid-cols-[340px_1fr] lg:gap-6">
+            {/* Chỉ khung ảnh cao lên; object-cover luôn bị giới hạn theo chiều
+                ngang nên ảnh giữ nguyên tỉ lệ, chỉ lộ thêm phần trên dưới.
+                Chiều cao = bề rộng cột × 320/1420 (thu gọn) và × 639/1420 (mở);
+                bo góc bằng CSS vì lúc thu gọn phần bo sẵn trong ảnh bị cắt mất. */}
+            <span className="relative block h-[17px] w-full overflow-hidden rounded-[3px] transition-[height] duration-300 ease-out group-data-open/step:h-[34px] sm:h-[50px] sm:rounded-[9px] sm:group-data-open/step:h-[99px] lg:h-[77px] lg:rounded-[14px] lg:group-data-open/step:h-[153px]">
               <Image
-                className="object-cover opacity-100 transition-opacity duration-300 group-aria-expanded/accordion-trigger:opacity-0"
-                src={step.image}
-                alt=""
-                fill
-                sizes="340px"
-                loading="eager"
-              />
-              <Image
-                className="object-cover opacity-0 transition-opacity duration-300 group-aria-expanded/accordion-trigger:opacity-100"
+                className="object-cover"
                 src={step.imageOpen}
                 alt=""
                 fill
@@ -49,23 +45,29 @@ export function ProcessAccordion() {
                 loading="eager"
               />
             </span>
-            <span className="text-base font-bold text-brand lg:text-lg">
-              {String(index + 1).padStart(2, "0")}.
-            </span>
-            <span className="pr-4 text-left text-lg font-normal sm:text-2xl lg:text-[34px]">
-              {step.title}
-            </span>
-            <span
-              className="h-6 w-[19px] shrink-0 bg-charcoal transition-[background-color,rotate] duration-300 ease-out group-aria-expanded/accordion-trigger:rotate-180 group-aria-expanded/accordion-trigger:bg-brand"
-              style={arrowMask}
-              aria-hidden="true"
-            />
-          </AccordionTrigger>
-          <AccordionContent className="pb-6 pl-[130px] text-[15px] leading-relaxed text-pretty sm:pl-[296px] lg:pl-[435px] lg:text-base">
-            <span className="block animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out">
-              {step.copy}
-            </span>
-          </AccordionContent>
+
+            <div>
+              <AccordionTrigger className="grid w-full grid-cols-[42px_1fr_auto] items-center gap-3 rounded-none py-0 hover:no-underline sm:grid-cols-[52px_1fr_auto] lg:grid-cols-[72px_1fr_auto] lg:gap-6 **:data-[slot=accordion-trigger-icon]:hidden">
+                <span className="text-base font-bold text-brand lg:text-lg">
+                  {String(index + 1).padStart(2, "0")}.
+                </span>
+                <span className="pr-4 text-left text-lg font-normal sm:text-2xl lg:text-[34px]">
+                  {step.title}
+                </span>
+                <span
+                  className="h-6 w-[19px] shrink-0 bg-charcoal transition-[background-color,rotate] duration-300 ease-out group-aria-expanded/accordion-trigger:rotate-180 group-aria-expanded/accordion-trigger:bg-brand"
+                  style={arrowMask}
+                  aria-hidden="true"
+                />
+              </AccordionTrigger>
+
+              <AccordionContent className="pt-2 pb-0 pl-[54px] sm:pl-[64px] lg:pl-[96px]">
+                <span className="block max-w-[420px] animate-in fade-in slide-in-from-bottom-2 text-[15px] leading-relaxed text-pretty duration-500 ease-out lg:text-base">
+                  {step.copy}
+                </span>
+              </AccordionContent>
+            </div>
+          </div>
         </AccordionItem>
       ))}
     </Accordion>

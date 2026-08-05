@@ -1,7 +1,14 @@
 "use client";
 
 import Image from "next/image";
-import { useRef, useState, useMemo } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { cn } from "@/lib/utils";
 
 export type FeaturedProject = {
@@ -13,144 +20,233 @@ export type FeaturedProject = {
 
 type ProjectCarouselProps = {
   projects: readonly FeaturedProject[];
+  backgroundImage?: string;
+  prevIcon?: string;
+  nextIcon?: string;
 };
 
-export function ProjectCarousel({ projects: featuredProjects }: ProjectCarouselProps) {
-  const count = featuredProjects.length;
-  const [centerIndex, setCenterIndex] = useState(0);
-  const touchStartX = useRef<number | null>(null);
+const DRAG_THRESHOLD = 50;
 
-  const move = (direction: number) => {
-    setCenterIndex((current) => (current + direction + count) % count);
+export function ProjectCarousel({
+  projects: featuredProjects,
+  backgroundImage,
+  prevIcon,
+  nextIcon,
+}: ProjectCarouselProps) {
+  const count = featuredProjects.length;
+  /* Nhân bản danh sách 3 lần để lướt vòng: luôn còn thẻ ở cả hai phía nên
+     hàng thẻ trượt liên tục cùng chiều, không bị giật ngược về đầu. */
+  const slides = useMemo(
+    () => [...featuredProjects, ...featuredProjects, ...featuredProjects],
+    [featuredProjects],
+  );
+  const [active, setActive] = useState(count + Math.min(1, count - 1));
+  const [offset, setOffset] = useState(0);
+  const [animate, setAnimate] = useState(true);
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
+  const dragStartX = useRef<number | null>(null);
+
+  const move = useCallback((direction: number) => {
+    setAnimate(true);
+    setActive((current) => current + direction);
+  }, []);
+
+  /* Toàn bộ hàng thẻ trượt ngang sao cho thẻ đang chọn nằm giữa khung nhìn.
+     Đo bằng offsetLeft nên không phụ thuộc bề rộng thẻ hay khoảng cách. */
+  useLayoutEffect(() => {
+    const align = () => {
+      const viewport = viewportRef.current;
+      const card = cardRefs.current[active];
+      if (!viewport || !card) return;
+      setOffset(
+        viewport.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2),
+      );
+    };
+
+    align();
+    const observer = new ResizeObserver(align);
+    if (viewportRef.current) observer.observe(viewportRef.current);
+    return () => observer.disconnect();
+  }, [active]);
+
+  /* Sau khi nhảy về bản sao giữa (không có transition), bật lại hiệu ứng. */
+  useEffect(() => {
+    if (animate) return;
+    const frame = requestAnimationFrame(() => setAnimate(true));
+    return () => cancelAnimationFrame(frame);
+  }, [animate]);
+
+  /* Trượt xong mà đã lấn sang bản sao ngoài thì dời ngầm về bản sao giữa. */
+  const handleTransitionEnd = () => {
+    if (active >= count && active < count * 2) return;
+    setAnimate(false);
+    setActive(count + (((active % count) + count) % count));
   };
 
-  const leftIndex = (centerIndex - 1 + count) % count;
-  const rightIndex = (centerIndex + 1) % count;
+  useEffect(() => {
+    const onKey = (event: KeyboardEvent) => {
+      if (event.key === "ArrowLeft") move(-1);
+      if (event.key === "ArrowRight") move(1);
+    };
+    const viewport = viewportRef.current;
+    viewport?.addEventListener("keydown", onKey);
+    return () => viewport?.removeEventListener("keydown", onKey);
+  }, [move]);
 
-  const slots = useMemo(
-    () => [
-      { project: featuredProjects[leftIndex], role: "left" as const },
-      { project: featuredProjects[centerIndex], role: "center" as const },
-      { project: featuredProjects[rightIndex], role: "right" as const },
-    ],
-    [centerIndex, leftIndex, rightIndex],
-  );
+  const endDrag = (endX: number) => {
+    if (dragStartX.current === null) return;
+    const distance = endX - dragStartX.current;
+    dragStartX.current = null;
+    if (Math.abs(distance) < DRAG_THRESHOLD) return;
+    move(distance > 0 ? -1 : 1);
+  };
 
   return (
     <div className="relative w-full">
-      {/* Vùng chứa tràn màn hình */}
-      <div className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6">
+      {/*
+        ===================================================================
+        NOTE: ĐỔI LINK ẢNH BACKGROUND Ở ĐÂY NHA!
+        ===================================================================
+      */}
+      <Image
+        // Đã thêm object-bottom để hình neo sát dưới đáy và loang mờ lên trên
+        className="-z-10 object-cover object-bottom"
+        src={backgroundImage || "/images/home/blueprint-background.png"}
+        alt="Background"
+        fill
+        sizes="100vw"
+        quality={100} // Đã thêm quality={100} để giữ hình sắc nét, không bị mờ
+        aria-hidden="true"
+      />
+
+      <div
+        ref={viewportRef}
+        className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6"
+        tabIndex={0}
+        role="group"
+        aria-label="Dự án tiêu biểu"
+        onTouchStart={(event) => {
+          dragStartX.current = event.touches[0].clientX;
+        }}
+        onTouchEnd={(event) => endDrag(event.changedTouches[0].clientX)}
+        onPointerDown={(event) => {
+          if (event.pointerType === "touch") return;
+          dragStartX.current = event.clientX;
+        }}
+        onPointerUp={(event) => {
+          if (event.pointerType === "touch") return;
+          endDrag(event.clientX);
+        }}
+      >
         <div
-          /* ĐÃ NỚI RỘNG KHOẢNG CÁCH: Tăng gap lên 50px ở màn hình lớn */
-          className="flex items-center justify-center gap-6 sm:gap-8 md:gap-10 lg:gap-[50px] transition-transform duration-500 ease-in-out"
-          onTouchStart={(event) => {
-            touchStartX.current = event.touches[0].clientX;
-          }}
-          onTouchEnd={(event) => {
-            if (touchStartX.current === null) return;
-            const distance =
-              event.changedTouches[0].clientX - touchStartX.current;
-            touchStartX.current = null;
-            if (Math.abs(distance) < 50) return;
-            move(distance > 0 ? -1 : 1);
-          }}
+          className={cn(
+            "flex w-max items-center gap-6 sm:gap-8 lg:gap-[50px]",
+            animate && "transition-transform duration-500 ease-out",
+          )}
+          style={{ transform: `translateX(${offset}px)` }}
+          onTransitionEnd={handleTransitionEnd}
         >
-          {slots.map(({ project, role }, slotIndex) => (
-            <div
-              className={cn(
-                "relative shrink-0 overflow-hidden shadow-2xl transition-all duration-500 ease-in-out",
-                role === "center"
-                  ? "z-10 aspect-[1.15/1] w-[42vw] max-w-[580px] rounded-[44px] scale-100"
-                  : "hidden aspect-[1.25/1] w-[36vw] max-w-[480px] rounded-[36px] opacity-90 scale-[0.97] sm:block",
-              )}
-              key={`${project.id}-${slotIndex}`}
-            >
-              <Image
-                className="object-cover transition-opacity duration-300"
-                src={project.image}
-                alt={project.title}
-                fill
-                sizes={role === "center" ? "42vw" : "36vw"}
-                priority={role === "center"}
-              />
+          {slides.map((project, index) => {
+            const isActive = index === active;
 
-              {/* Lớp phủ màu cam */}
+            return (
               <div
+                ref={(element) => {
+                  cardRefs.current[index] = element;
+                }}
                 className={cn(
-                  "absolute inset-x-0 bottom-0 pointer-events-none bg-gradient-to-t from-[#F47A2A] via-[#F47A2A]/90 to-transparent",
-                  role === "center" ? "h-[50%]" : "h-[55%]",
+                  "relative aspect-[3334/2653] w-[42vw] max-w-[600px] shrink-0 overflow-hidden rounded-[32px] transition-[transform,opacity] duration-500 ease-out",
+                  isActive
+                    ? "z-10 scale-100 opacity-100"
+                    : "scale-[0.82] opacity-90",
                 )}
-                aria-hidden="true"
-              />
-
-              {/* Thông tin chữ */}
-              <div
-                className={cn(
-                  "absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-6 text-center text-white",
-                  role === "center" ? "pb-8" : "pb-5",
-                )}
+                key={`${project.id}-${index}`}
               >
-                <p
-                  className={cn(
-                    "font-semibold tracking-wider uppercase",
-                    role === "center" ? "text-sm mb-1.5" : "text-[10px] mb-1",
-                  )}
-                >
-                  {project.tag}
-                </p>
-                <h3
-                  className={cn(
-                    "font-bold uppercase leading-tight",
-                    role === "center"
-                      ? "text-2xl sm:text-3xl lg:text-[32px]"
-                      : "text-sm sm:text-base lg:text-lg",
-                  )}
-                >
-                  {project.title}
-                </h3>
+                <Image
+                  className="object-cover"
+                  src={project.image}
+                  alt={project.title}
+                  fill
+                  sizes="42vw"
+                  priority={index === 0}
+                />
+
+                <div
+                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-[#F47A2A] via-[#F47A2A]/90 to-transparent"
+                  aria-hidden="true"
+                />
+
+                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
+                  <p className="mb-1 text-[11px] font-semibold tracking-wider uppercase sm:text-xs">
+                    {project.tag}
+                  </p>
+                  <h3 className="text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[26px]">
+                    {project.title}
+                  </h3>
+                </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 
-      {/* Cụm nút điều hướng */}
       <div className="relative z-10 mt-6 flex items-center justify-center gap-4">
         <button
-          className="grid size-12 place-items-center rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
+          className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
           onClick={() => move(-1)}
           aria-label="Dự án trước"
           type="button"
         >
-          {/* TRẢ LẠI ICON HÌNH TAM GIÁC ĐẶC (Trái) */}
-          <svg
-            className="ml-[-2px]"
-            width="14"
-            height="16"
-            viewBox="0 0 14 16"
-            fill="white"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M0 8L14 0V16L0 8Z" />
-          </svg>
+          {prevIcon ? (
+            <Image
+              className="size-full object-cover"
+              src={prevIcon}
+              alt=""
+              width={48}
+              height={48}
+              aria-hidden="true"
+            />
+          ) : (
+            <svg
+              className="ml-[-2px]"
+              width="14"
+              height="16"
+              viewBox="0 0 14 16"
+              fill="white"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M0 8L14 0V16L0 8Z" />
+            </svg>
+          )}
         </button>
         <button
-          className="grid size-12 place-items-center rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
+          className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
           onClick={() => move(1)}
           aria-label="Dự án tiếp theo"
           type="button"
         >
-          {/* TRẢ LẠI ICON HÌNH TAM GIÁC ĐẶC (Phải) */}
-          <svg
-            className="mr-[-2px]"
-            width="14"
-            height="16"
-            viewBox="0 0 14 16"
-            fill="white"
-            xmlns="http://www.w3.org/2000/svg"
-          >
-            <path d="M14 8L0 0V16L14 8Z" />
-          </svg>
+          {nextIcon ? (
+            <Image
+              className="size-full object-cover"
+              src={nextIcon}
+              alt=""
+              width={48}
+              height={48}
+              aria-hidden="true"
+            />
+          ) : (
+            <svg
+              className="mr-[-2px]"
+              width="14"
+              height="16"
+              viewBox="0 0 14 16"
+              fill="white"
+              xmlns="http://www.w3.org/2000/svg"
+            >
+              <path d="M14 8L0 0V16L14 8Z" />
+            </svg>
+          )}
         </button>
       </div>
     </div>

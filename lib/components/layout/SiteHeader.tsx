@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
@@ -68,7 +67,7 @@ export function SiteHeader() {
                       return (
                         <Link
                           className={cn(
-                            "flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100",
+                            "group/service flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold opacity-0 transition-[color,background-color,opacity,translate] duration-300 group-hover:translate-y-0 group-hover:opacity-100",
                             isCurrentService
                               ? "bg-charcoal text-white"
                               : "hover:bg-neutral-100 hover:text-brand",
@@ -77,12 +76,26 @@ export function SiteHeader() {
                           style={{ transitionDelay: `${index * 70}ms` }}
                           key={service.href}
                         >
-                          <Image
-                            className="size-5 shrink-0 object-contain"
-                            src={service.icon}
-                            alt=""
-                            width={44}
-                            height={44}
+                          {/* Icon của mục đang chọn luôn cam như mockup; các
+                              mục còn lại đổi đen sang cam khi hover. */}
+                          <span
+                            className={cn(
+                              "size-5 shrink-0 transition-colors duration-300",
+                              isCurrentService
+                                ? "bg-brand"
+                                : "bg-charcoal group-hover/service:bg-brand",
+                            )}
+                            style={{
+                              maskImage: `url(${service.icon})`,
+                              maskPosition: "center",
+                              maskRepeat: "no-repeat",
+                              maskSize: "contain",
+                              WebkitMaskImage: `url(${service.icon})`,
+                              WebkitMaskPosition: "center",
+                              WebkitMaskRepeat: "no-repeat",
+                              WebkitMaskSize: "contain",
+                            }}
+                            aria-hidden="true"
                           />
                           {service.label}
                         </Link>

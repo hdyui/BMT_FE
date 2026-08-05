@@ -8,10 +8,12 @@ export function BuildingRule({
   className,
   light = false,
   src = "/images/home/section-rule.png",
+  delay = 0,
 }: {
   className?: string;
   light?: boolean;
   src?: string;
+  delay?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -52,6 +54,7 @@ export function BuildingRule({
         alt=""
         fill
         sizes="430px"
+        style={{ transitionDelay: `${Math.min(delay, 1500)}ms` }}
       />
     </div>
   );

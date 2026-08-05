@@ -60,7 +60,7 @@ export function ContactForm() {
               Liên hệ tư vấn
             </h2>
           </Reveal>
-          <BuildingRule className="max-w-none" light />
+          <BuildingRule className="max-w-none" light delay={180} />
         </div>
 
         <form className="mt-7" onSubmit={handleSubmit} noValidate>

@@ -16,7 +16,7 @@ export function SiteFooter() {
     <footer className="bg-neutral-100" id="footer">
       <div className="mx-auto grid w-[min(1200px,calc(100%-2.25rem))] gap-10 py-14 sm:grid-cols-2 xl:grid-cols-[180px_210px_minmax(0,1fr)_280px] xl:gap-12">
         <Reveal>
-          <BrandLogo className="w-[145px]" large />
+          <BrandLogo className="w-[145px] mix-blend-multiply" large />
           <p className="mt-5 max-w-48 text-sm leading-relaxed text-neutral-600">
             Thiết kế và thi công kiến trúc, nội thất trọn gói tại Việt Nam.
           </p>
