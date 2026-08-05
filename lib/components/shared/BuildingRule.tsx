@@ -16,6 +16,7 @@ export function BuildingRule({
   light?: boolean;
   fullWidth?: boolean;
   compact?: boolean;
+  src?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
