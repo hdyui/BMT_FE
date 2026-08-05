@@ -64,21 +64,19 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8" delay={240} from="left">
-            <div className="grid max-w-2xl grid-cols-[38px_1fr] items-start gap-3">
+            <p className="max-w-2xl text-xl leading-[1.62] text-charcoal/85 sm:text-lg">
               <Image
-                className="mt-0.5 size-8 object-contain"
+                className="float-left mr-3 size-7 object-contain"
                 src="/images/home/building-mark.png"
                 alt=""
-                width={32}
-                height={32}
+                width={28}
+                height={28}
               />
-              <p className="text-xl leading-[1.62] text-charcoal/85 sm:text-lg">
-                Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT Decor
-                luôn mong muốn phát triển và mang đến những thiết kế ấn tượng và
-                độc đáo. Là đối tác độc quyền của nhiều thương hiệu lớn. Thiết
-                kế và thi công nhiều trung tâm thương mại tại TP.HCM.
-              </p>
-            </div>
+              Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT Decor
+              luôn mong muốn phát triển và mang đến những thiết kế ấn tượng và
+              độc đáo. Là đối tác độc quyền của nhiều thương hiệu lớn. Thiết kế
+              và thi công nhiều trung tâm thương mại tại TP.HCM.
+            </p>
           </Reveal>
 
           <Reveal className="mt-8" delay={360}>

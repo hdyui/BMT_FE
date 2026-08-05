@@ -21,7 +21,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[85px] bg-charcoal text-white shadow-md">
+    <header className="fixed inset-x-0 top-0 z-50 h-[85px] opacity-85 bg-charcoal text-white shadow-md">
       <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5">
         <BrandLogo
           className="w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]"
@@ -48,7 +48,7 @@ export function SiteHeader() {
               >
                 <Link
                   className={cn(
-                    "flex items-center text-[11px] font-semibold whitespace-nowrap transition-colors duration-200 hover:text-brand",
+                    "flex items-center text-[16px] font-extrabold whitespace-nowrap transition-colors duration-200 hover:text-brand",
                     isActive && "text-brand",
                   )}
                   href={item.href}
@@ -63,47 +63,20 @@ export function SiteHeader() {
                   </span>
                 </Link>
                 {"children" in item && (
-                  <div className="invisible absolute top-16 left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                    {item.children.map((service, index) => {
-                      const isCurrentService = pathname === service.href;
-
-                      return (
-                        <Link
-                          className={cn(
-                            "group/service flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold opacity-0 transition-[color,background-color,opacity,translate] duration-300 group-hover:translate-y-0 group-hover:opacity-100",
-                            isCurrentService
-                              ? "bg-charcoal text-white"
-                              : "hover:bg-neutral-100 hover:text-brand",
-                          )}
-                          href={service.href}
-                          style={{ transitionDelay: `${index * 70}ms` }}
-                          key={service.href}
-                        >
-                          {/* Icon của mục đang chọn luôn cam như mockup; các
-                              mục còn lại đổi đen sang cam khi hover. */}
-                          <span
-                            className={cn(
-                              "size-5 shrink-0 transition-colors duration-300",
-                              isCurrentService
-                                ? "bg-brand"
-                                : "bg-charcoal group-hover/service:bg-brand",
-                            )}
-                            style={{
-                              maskImage: `url(${service.icon})`,
-                              maskPosition: "center",
-                              maskRepeat: "no-repeat",
-                              maskSize: "contain",
-                              WebkitMaskImage: `url(${service.icon})`,
-                              WebkitMaskPosition: "center",
-                              WebkitMaskRepeat: "no-repeat",
-                              WebkitMaskSize: "contain",
-                            }}
-                            aria-hidden="true"
-                          />
-                          {service.label}
-                        </Link>
-                      );
-                    })}
+                  <div className="invisible absolute top-[85px] left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    {item.children.map((service, index) => (
+                      <Link
+                        className="flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-neutral-100 hover:text-brand"
+                        href={service.href}
+                        style={{ transitionDelay: `${index * 70}ms` }}
+                        key={service.href}
+                      >
+                        <span className="font-bold text-brand">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        {service.label}
+                      </Link>
+                    ))}
                   </div>
                 )}
               </div>
@@ -145,7 +118,7 @@ export function SiteHeader() {
                     nativeButton={false}
                     render={
                       <Link
-                        className="block py-4 hover:text-brand"
+                        className="block py-4 font-extrabold hover:text-brand"
                         href={item.href}
                       />
                     }
