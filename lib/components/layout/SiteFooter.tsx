@@ -11,7 +11,8 @@ const socialLinks = [
   ["LinkedIn", "/images/home/linkedin.png"],
 ] as const;
 
-const contactIconClass = "mt-0.5 size-8 shrink-0 object-contain";
+const contactIconClass =
+  "mt-0.5 size-6 shrink-0 object-contain 2xl:size-8";
 
 export function SiteFooter({
   showTopBorder = true,
@@ -23,9 +24,12 @@ export function SiteFooter({
       className={`${showTopBorder ? "border-t-[10px] border-brand" : "border-t-0"} bg-[#f1f1f3]`}
       id="footer"
     >
-      <div className="mx-auto grid w-[min(1700px,calc(100%-2.5rem))] gap-10 py-10 md:grid-cols-2 lg:grid-cols-[340px_minmax(0,1fr)_425px] lg:gap-x-16 lg:py-10 xl:gap-x-24">
+      <div className="mx-auto grid w-[min(1700px,calc(100%-2.5rem))] gap-10 py-10 md:grid-cols-2 lg:grid-cols-[260px_minmax(0,1fr)_300px] lg:gap-x-8 lg:py-10 2xl:grid-cols-[340px_minmax(0,1fr)_425px] 2xl:gap-x-24">
         <Reveal className="flex flex-col items-start">
-          <BrandLogo className="ml-1 w-[215px] mix-blend-multiply" large />
+          <BrandLogo
+            className="ml-1 w-[180px] mix-blend-multiply 2xl:w-[215px]"
+            large
+          />
 
           <div className="mt-3">
             <h3 className="mb-1 text-xl font-extrabold uppercase">Dịch vụ:</h3>
@@ -48,7 +52,7 @@ export function SiteFooter({
 
         <Reveal className="md:col-span-2 lg:col-span-1" delay={120}>
           <h3 className="mb-3 text-xl font-extrabold uppercase">Liên hệ:</h3>
-          <div className="grid gap-1.5 text-lg leading-relaxed xl:text-xl">
+          <div className="grid gap-1.5 text-lg leading-relaxed 2xl:text-xl">
             <p className="flex items-start gap-2.5">
               <Image
                 className={contactIconClass}
@@ -81,10 +85,10 @@ export function SiteFooter({
             </p>
           </div>
 
-          <h3 className="mt-24 mb-3 text-xl font-extrabold uppercase">
+          <h3 className="mt-20 mb-3 text-xl font-extrabold uppercase 2xl:mt-24">
             Chi nhánh và nhà xưởng:
           </h3>
-          <div className="grid gap-1.5 text-lg leading-relaxed xl:text-xl">
+          <div className="grid gap-1.5 text-lg leading-relaxed 2xl:text-xl">
             {contactInformation.branches.map((branch, index) => (
               <p className="flex items-start gap-2.5" key={branch}>
                 <Image
