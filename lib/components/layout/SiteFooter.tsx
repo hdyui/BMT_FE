@@ -11,6 +11,8 @@ const socialLinks = [
   ["LinkedIn", "/images/home/linkedin.png"],
 ] as const;
 
+const contactIconClass = "mt-0.5 size-8 shrink-0 object-contain";
+
 export function SiteFooter({
   showTopBorder = true,
 }: {
@@ -18,104 +20,103 @@ export function SiteFooter({
 }) {
   return (
     <footer
-      className={`${showTopBorder ? "border-t-[6px] border-brand" : "border-t-0"} bg-neutral-100`}
+      className={`${showTopBorder ? "border-t-[10px] border-brand" : "border-t-0"} bg-[#f1f1f3]`}
       id="footer"
     >
-      <div className="mx-auto grid w-[min(1360px,calc(100%-2.5rem))] gap-10 py-8 lg:grid-cols-[280px_minmax(0,1fr)_340px] lg:gap-16">
-        <Reveal>
-          <BrandLogo className="w-[145px] mix-blend-multiply" large />
-          <p className="mt-5 max-w-48 text-sm leading-relaxed text-neutral-600">
-            Thiết kế và thi công kiến trúc, nội thất trọn gói tại Việt Nam.
-          </p>
+      <div className="mx-auto grid w-[min(1700px,calc(100%-2.5rem))] gap-10 py-10 md:grid-cols-2 lg:grid-cols-[340px_minmax(0,1fr)_425px] lg:gap-x-16 lg:py-10 xl:gap-x-24">
+        <Reveal className="flex flex-col items-start">
+          <BrandLogo className="ml-1 w-[215px] mix-blend-multiply" large />
+
+          <div className="mt-3">
+            <h3 className="mb-1 text-xl font-extrabold uppercase">Dịch vụ:</h3>
+            <nav
+              className="grid gap-0.5 text-lg leading-relaxed"
+              aria-label="Dịch vụ tại chân trang"
+            >
+              {services.map((service) => (
+                <Link
+                  className="w-fit text-charcoal transition-colors duration-300 hover:text-brand hover:underline hover:decoration-brand hover:underline-offset-4 focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                  href={service.href}
+                  key={service.href}
+                >
+                  {service.label}
+                </Link>
+              ))}
+            </nav>
+          </div>
         </Reveal>
 
-        <Reveal delay={120}>
-          <h3 className="mb-5 text-sm font-bold uppercase">Dịch vụ</h3>
-          <nav
-            className="grid gap-3 text-sm"
-            aria-label="Dịch vụ tại chân trang"
-          >
-            {services.map((service) => (
-              <Link
-                className="w-fit text-charcoal transition-colors duration-300 hover:text-brand hover:underline hover:decoration-brand hover:underline-offset-4 focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-                href={service.href}
-                key={service.href}
-              >
-                {service.label}
-              </Link>
-            ))}
-          </nav>
-        </Reveal>
-
-        <Reveal delay={160}>
-          <h3 className="mb-3 text-base font-extrabold uppercase">Liên hệ:</h3>
-          <div className="grid gap-2 text-base leading-relaxed">
+        <Reveal className="md:col-span-2 lg:col-span-1" delay={120}>
+          <h3 className="mb-3 text-xl font-extrabold uppercase">Liên hệ:</h3>
+          <div className="grid gap-1.5 text-lg leading-relaxed xl:text-xl">
             <p className="flex items-start gap-2.5">
               <Image
-                className="mt-0.5 size-5 shrink-0 object-contain"
+                className={contactIconClass}
                 src="/images/home/pin.png"
                 alt=""
-                width={24}
-                height={24}
+                width={32}
+                height={32}
               />
-              Địa chỉ: {contactInformation.office}
+              <span>Địa chỉ: {contactInformation.office}</span>
             </p>
-            <p className="flex items-center gap-2.5">
+            <p className="flex items-start gap-2.5">
               <Image
-                className="size-5 shrink-0 object-contain"
+                className={contactIconClass}
                 src="/images/home/zalo.png"
                 alt=""
-                width={24}
-                height={24}
+                width={32}
+                height={32}
               />
-              Hỗ trợ tư vấn: {contactInformation.phone}
+              <span>Hỗ trợ tư vấn: {contactInformation.phone}</span>
             </p>
-            <p className="flex items-center gap-2.5">
+            <p className="flex items-start gap-2.5">
               <Image
-                className="size-5 shrink-0 object-contain"
+                className={contactIconClass}
                 src="/images/home/mail.png"
                 alt=""
-                width={24}
-                height={24}
+                width={32}
+                height={32}
               />
-              Email: {contactInformation.email}
+              <span>Email: {contactInformation.email}</span>
             </p>
           </div>
 
-          <h3 className="mt-12 mb-3 text-base font-extrabold uppercase">
+          <h3 className="mt-24 mb-3 text-xl font-extrabold uppercase">
             Chi nhánh và nhà xưởng:
           </h3>
-          <div className="grid gap-2 text-base leading-relaxed">
+          <div className="grid gap-1.5 text-lg leading-relaxed xl:text-xl">
             {contactInformation.branches.map((branch, index) => (
               <p className="flex items-start gap-2.5" key={branch}>
                 <Image
-                  className="mt-0.5 size-5 shrink-0 object-contain"
+                  className={contactIconClass}
                   src={`/images/home/pin-branch-0${index + 1}.png`}
                   alt=""
-                  width={24}
-                  height={24}
+                  width={32}
+                  height={32}
                 />
-                {index < 2
-                  ? `Địa chỉ chi nhánh ${index + 1}: `
-                  : "Xưởng sản xuất: "}
-                {branch}
+                <span>
+                  {index < 2
+                    ? `Địa chỉ chi nhánh ${index + 1}: `
+                    : "Xưởng sản xuất: "}
+                  {branch}
+                </span>
               </p>
             ))}
           </div>
         </Reveal>
 
-        <Reveal delay={320}>
-          <h3 className="mb-3 text-base font-extrabold uppercase">Theo dõi:</h3>
+        <Reveal delay={240}>
+          <h3 className="mb-1 text-xl font-extrabold uppercase">Theo dõi:</h3>
           <div className="flex items-center gap-5">
             {socialLinks.map(([label, src]) => (
               <Link
-                className="group grid size-9 place-items-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                className="group grid size-10 place-items-center focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
                 href="#"
                 aria-label={label}
                 key={label}
               >
                 <span
-                  className="size-7 bg-charcoal transition-[background-color,transform] duration-300 ease-out group-hover:scale-110 group-hover:bg-brand"
+                  className="size-8 bg-charcoal transition-[background-color,transform] duration-300 ease-out group-hover:scale-110 group-hover:bg-brand"
                   style={{
                     maskImage: `url(${src})`,
                     maskPosition: "center",
@@ -132,18 +133,18 @@ export function SiteFooter({
             ))}
           </div>
           <Image
-            className="mt-3 w-full rounded-sm"
+            className="mt-3 w-full"
             src="/images/home/facebook-widget.png"
             alt="Trang Facebook BMT Decor"
             width={1701}
             height={730}
-            sizes="280px"
+            sizes="(min-width: 1024px) 425px, (min-width: 768px) 50vw, 100vw"
           />
         </Reveal>
       </div>
 
       <div className="bg-charcoal px-5 py-4 text-white">
-        <Reveal className="text-center text-xs sm:text-sm" delay={480}>
+        <Reveal className="text-center text-xs sm:text-sm" delay={360}>
           Copyright 2010 © CÔNG TY TNHH TMDV BMT DECOR | MST: 0317552987
         </Reveal>
       </div>
