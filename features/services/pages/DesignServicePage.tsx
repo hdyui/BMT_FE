@@ -26,7 +26,7 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
