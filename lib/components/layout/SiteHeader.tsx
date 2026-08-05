@@ -21,7 +21,7 @@ export function SiteHeader() {
   const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[85px] bg-charcoal text-white shadow-md">
+    <header className="fixed inset-x-0 top-0 z-50 h-[85px] opacity-85 bg-charcoal text-white shadow-md">
       <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5">
         <BrandLogo
           className="w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]"
@@ -37,46 +37,51 @@ export function SiteHeader() {
               "children" in item && pathname.startsWith("/dich-vu")
                 ? true
                 : item.href === "/"
-                ? pathname === "/"
-                : pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  ? pathname === "/"
+                  : pathname === item.href ||
+                    pathname.startsWith(`${item.href}/`);
 
             return (
-            <div className="group relative flex h-full items-center" key={item.href}>
-              <Link
-                className={cn(
-                  "flex items-center text-[16px] font-extrabold whitespace-nowrap transition-colors duration-200 hover:text-brand",
-                  isActive && "text-brand",
-                )}
-                href={item.href}
+              <div
+                className="group relative flex h-full items-center"
+                key={item.href}
               >
-                <span
+                <Link
                   className={cn(
-                    "relative py-1 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:after:scale-x-100",
-                    isActive && "after:scale-x-100",
+                    "flex items-center text-[16px] font-extrabold whitespace-nowrap transition-colors duration-200 hover:text-brand",
+                    isActive && "text-brand",
                   )}
+                  href={item.href}
                 >
-                  {item.label}
-                </span>
-              </Link>
-              {"children" in item && (
-                <div className="invisible absolute top-[85px] left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
-                  {item.children.map((service, index) => (
-                    <Link
-                      className="flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-neutral-100 hover:text-brand"
-                      href={service.href}
-                      style={{ transitionDelay: `${index * 70}ms` }}
-                      key={service.href}
-                    >
-                      <span className="font-bold text-brand">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      {service.label}
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          )})}
+                  <span
+                    className={cn(
+                      "relative py-1 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:after:scale-x-100",
+                      isActive && "after:scale-x-100",
+                    )}
+                  >
+                    {item.label}
+                  </span>
+                </Link>
+                {"children" in item && (
+                  <div className="invisible absolute top-[85px] left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                    {item.children.map((service, index) => (
+                      <Link
+                        className="flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-neutral-100 hover:text-brand"
+                        href={service.href}
+                        style={{ transitionDelay: `${index * 70}ms` }}
+                        key={service.href}
+                      >
+                        <span className="font-bold text-brand">
+                          {String(index + 1).padStart(2, "0")}
+                        </span>
+                        {service.label}
+                      </Link>
+                    ))}
+                  </div>
+                )}
+              </div>
+            );
+          })}
         </nav>
 
         <Link
@@ -96,7 +101,10 @@ export function SiteHeader() {
           >
             <Menu />
           </SheetTrigger>
-          <SheetContent className="w-[88vw] max-w-sm bg-charcoal text-white" side="right">
+          <SheetContent
+            className="w-[88vw] max-w-sm bg-charcoal text-white"
+            side="right"
+          >
             <SheetHeader className="border-b border-white/10">
               <SheetTitle className="text-white">BMT DECOR</SheetTitle>
               <SheetDescription className="text-white/60">
@@ -108,7 +116,12 @@ export function SiteHeader() {
                 <div className="border-b border-white/10" key={item.href}>
                   <SheetClose
                     nativeButton={false}
-                    render={<Link className="block py-4 font-extrabold hover:text-brand" href={item.href} />}
+                    render={
+                      <Link
+                        className="block py-4 font-extrabold hover:text-brand"
+                        href={item.href}
+                      />
+                    }
                   >
                     {item.label}
                   </SheetClose>
@@ -117,7 +130,12 @@ export function SiteHeader() {
                       {item.children.map((service) => (
                         <SheetClose
                           nativeButton={false}
-                          render={<Link className="py-2 text-sm text-white/65 hover:text-brand" href={service.href} />}
+                          render={
+                            <Link
+                              className="py-2 text-sm text-white/65 hover:text-brand"
+                              href={service.href}
+                            />
+                          }
                           key={service.href}
                         >
                           {service.label}
