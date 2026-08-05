@@ -1,190 +1,219 @@
 import Image from "next/image";
-import Link from "next/link";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
+import { BuildingRule } from "@/lib/components/shared/BuildingRule";
+import { Reveal } from "@/lib/components/shared/Reveal";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
-import { FaqAccordion } from "@/features/services/components/FaqAccordion";
-import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
-import { services } from "@/config/site";
-
-const deckImages = [
-  ["/images/bmt-worksite.png", "Khảo sát nội thất", "object-[36%_center]"],
-  ["/images/bmt-hero-interior.png", "Thiết kế nội thất", "object-[72%_center]"],
-  ["/images/bmt-worksite.png", "Thi công công trình", "object-[10%_center]"],
-  [
-    "/images/bmt-faq-interior.png",
-    "Hoàn thiện không gian",
-    "object-[22%_center]",
-  ],
-] as const;
+import { HexagonShowcase } from "@/features/services/components/HexagonShowcase";
+import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
+import { SolutionCards } from "@/features/services/components/SolutionCards";
+import { ProcessStepsGrid } from "@/features/services/components/ProcessStepsGrid";
+import { PillCtaButton } from "@/features/services/components/PillCtaButton";
+import {
+  SERVICE_HERO_CLASS_NAME,
+  SERVICE_PROJECT_CAROUSEL_CLASS_NAME,
+  SERVICE_PROJECT_CTA_CLASS_NAME,
+  SERVICE_PROJECT_HEADING_CLASS_NAME,
+  SERVICE_PROJECT_SECTION_CLASS_NAME,
+  SERVICE_SOLUTION_CARDS_CLASS_NAME,
+  SERVICE_SOLUTION_HEADING_CLASS_NAME,
+  SERVICE_SOLUTION_SECTION_CLASS_NAME,
+} from "@/features/services/config/layout";
+import {
+  featuredProjects,
+  solutionCards,
+} from "@/features/services/data/xay-dung-tron-goi";
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-[86px] text-charcoal">
+    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
       <SiteHeader />
 
-      <section className="relative isolate min-h-[760px] max-md:min-h-[900px]">
+      <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>
+        {/* Đã thêm translate-x-[15%] để cắt cạnh phải của hình này */}
         <Image
-          className="-z-30 object-cover"
-          src="/images/bmt-hero-interior.png"
-          alt="Không gian nội thất hiện đại do BMT Decor thiết kế"
-          fill
+          className="absolute inset-y-0 right-0 translate-x-[15%] -z-10 hidden h-full w-[60%] object-cover object-left opacity-90 md:block"
+          src="/images/xay-dung-tron-goi/hero-wireframe-nodots.png"
+          alt=""
+          width={1400}
+          height={1241}
           priority
-          sizes="100vw"
         />
-        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgb(255_255_255/.95)_0%,rgb(255_255_255/.78)_38%,rgb(255_255_255/.08)_68%)] max-md:bg-[linear-gradient(180deg,rgb(255_255_255/.96)_0%,rgb(255_255_255/.88)_55%,rgb(255_255_255/.18)_100%)]" />
 
-        <div className="relative mx-auto min-h-[760px] w-[min(1640px,calc(100%-4rem))] max-md:min-h-[900px] max-md:w-[calc(100%-2.25rem)]">
-          <Reveal
-            className="relative z-10 w-[46%] max-w-[720px] pt-48 max-md:w-full max-md:pt-16"
-            from="left"
-          >
-            <p className="mb-5 inline-block border-b-2 border-charcoal pb-2 text-xl">
-              GIẢI PHÁP
-            </p>
-            <h1 className="max-w-[520px] text-[clamp(2rem,2.2vw,2.75rem)] leading-[1.18] font-normal text-brand">
-              THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ CẢI TẠO TRỌN GÓI
-            </h1>
-            <BuildingRule className="mt-2" />
-            <h2 className="mt-6 mb-5 max-w-[500px] text-lg font-medium">
-              ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
-            </h2>
-            <p className="max-w-[500px] text-base leading-relaxed">
-              <span className="mr-1 text-xl text-brand" aria-hidden="true">
-                ⌂
-              </span>
-              BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải tạo
-              trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công trình chất
-              lượng và đáp ứng nhu cầu sử dụng.
-            </p>
-          </Reveal>
+        <div className="mx-auto grid w-[min(92%,760px)] items-center gap-10 py-12 md:block md:h-full md:w-full md:max-w-none md:py-0">
+          <div className="md:absolute md:-top-[17.35%] md:left-0 md:w-[55vw] lg:left-[7.3%] lg:w-[clamp(560px,43.35vw,860px)]">
+            <HexagonShowcase />
+          </div>
 
-          <div className="absolute top-20 -right-8 h-[620px] w-[56%] max-lg:origin-top-right max-lg:scale-[.82] max-md:top-auto max-md:-right-12 max-md:bottom-0 max-md:w-[680px] max-md:origin-bottom-right max-md:scale-[.66]">
-            {deckImages.map(([src, alt, position], index) => (
+          {/* Thu nhỏ width phần content: md:w-[39%] -> md:w-[34%], lg:w-[32%] -> lg:w-[27%] để không đè lên hình phải */}
+          <div className="md:absolute md:top-[24%] md:left-[58%] md:w-[40%] lg:top-[30.7%] lg:left-[max(52.3%,calc(7.3%_+_clamp(560px,43.35vw,860px)_+_24px))] lg:w-[40%]">
+            <div className="relative pl-6 sm:pl-8">
               <Reveal
-                className={[
-                  "absolute h-[515px] w-[250px] overflow-hidden rounded-[30px] border-[8px] border-white bg-neutral-200 shadow-[10px_13px_10px_rgb(27_25_25/.35)]",
-                  index === 0 && "top-[118px] left-0 z-40",
-                  index === 1 && "top-[72px] left-[24%] z-30",
-                  index === 2 && "top-8 left-[49%] z-20",
-                  index === 3 && "top-0 right-0 z-10",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                delay={index * 120}
-                from="left"
-                key={alt}
+                className="absolute inset-y-0 left-0 w-[5px]"
+                from="fade"
+                delay={80}
               >
                 <Image
-                  className={`object-cover ${position} transition-transform duration-500 hover:scale-105`}
-                  src={src}
-                  alt={alt}
-                  fill
-                  loading="eager"
-                  sizes="250px"
+                  className="h-full w-full object-fill"
+                  src="/images/xay-dung-tron-goi/hero-bar.png"
+                  alt=""
+                  width={25}
+                  height={1070}
+                  aria-hidden="true"
                 />
               </Reveal>
-            ))}
-          </div>
-        </div>
-      </section>
 
-      <section className="bg-neutral-100 py-16">
-        <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
-          <nav
-            className="grid border-b-4 border-neutral-300 sm:grid-cols-2 lg:grid-cols-4"
-            aria-label="Các dịch vụ"
-          >
-            {services.map((service, index) => (
-              <Link
-                className={[
-                  "relative px-3 py-4 text-center text-sm font-medium transition-colors hover:text-brand",
-                  index === 0 &&
-                    "after:absolute after:inset-x-0 after:-bottom-1 after:h-1 after:bg-brand",
-                ]
-                  .filter(Boolean)
-                  .join(" ")}
-                href={service.href}
-                key={service.href}
-              >
-                {service.label.toUpperCase()}
-              </Link>
-            ))}
-          </nav>
+              <Reveal>
+                <h1 className="text-2xl font-normal leading-[1.12] text-brand sm:text-[clamp(1.75rem,2.15vw,2.45rem)]">
+                  DỊCH VỤ THIẾT KẾ THI CÔNG
+                  <br />& XÂY DỰNG TRỌN GÓI
+                </h1>
+              </Reveal>
+              <BuildingRule
+                className="mt-3 max-w-[280px]"
+                src="/images/xay-dung-tron-goi/rule-dark.png"
+                delay={200}
+              />
+              <Reveal delay={320} from="left">
+                <p className="mt-2 max-w-[310px] text-pretty text-sm font-medium leading-relaxed sm:text-base">
+                  Kiến tạo công trình bền vững từ thiết kế đến thi công
+                </p>
+              </Reveal>
+            </div>
 
-          <div className="grid items-center gap-12 pt-12 lg:grid-cols-2 lg:gap-20">
+            {/* Chuyển ml-[59%] thành ml-[42%] để dấu chấm xích qua trái */}
             <Reveal
-              className="relative min-h-[405px] overflow-hidden rounded-[46px]"
-              from="left"
+              className="mt-8 ml-[42%] w-12 lg:mt-12"
+              from="fade"
+              delay={460}
             >
               <Image
-                className="object-cover transition-transform duration-700 hover:scale-105"
-                src="/images/bmt-worksite.png"
-                alt="Đội ngũ BMT Decor kiểm tra thi công"
-                fill
-                sizes="(max-width: 1024px) 92vw, 46vw"
+                className="h-auto w-full"
+                src="/images/xay-dung-tron-goi/hero-dots.png"
+                alt=""
+                width={291}
+                height={207}
+                aria-hidden="true"
               />
-            </Reveal>
-            <Reveal className="max-w-[510px]" delay={140}>
-              <span className="block text-7xl leading-none font-light text-neutral-400">
-                01.
-              </span>
-              <h2 className="mt-3 text-4xl font-normal">XÂY DỰNG TRỌN GÓI</h2>
-              <p className="mt-3 text-sm">
-                KIẾN TẠO CÔNG TRÌNH BỀN VỮNG - TỪ THIẾT KẾ ĐẾN THI CÔNG
-              </p>
-              <span className="mt-5 mb-2 block h-0.5 w-36 bg-brand" />
-              <p className="text-base leading-relaxed">
-                Triển khai đồng bộ từ tư vấn, thiết kế đến thi công và bàn giao,
-                giúp khách hàng kiểm soát tiến độ, tối ưu chi phí và đảm bảo
-                chất lượng công trình trong từng giai đoạn.
-              </p>
             </Reveal>
           </div>
         </div>
       </section>
 
-      <section className="py-20" id="quy-trinh">
-        <Reveal className="mx-auto mb-10 w-[min(790px,calc(100%-2.25rem))] text-center">
-          <h2 className="text-4xl font-normal md:text-[43px]">
-            QUY TRÌNH LÀM VIỆC
-          </h2>
-          <p className="mx-auto mt-3 max-w-[720px] leading-relaxed">
-            BMT Decor triển khai dự án theo quy trình 6 bước rõ ràng, đảm bảo
-            tiến độ, chất lượng và đồng hành cùng khách hàng trong từng giai
-            đoạn.
-          </p>
-          <BuildingRule className="mx-auto mt-4 max-w-[330px] text-brand" />
-        </Reveal>
-        <ProcessAccordion />
-      </section>
+      {/* SECTION 2 */}
+      <section
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 lg:!py-16`}
+      >
+        <Image
+          className="-z-10 object-cover"
+          src="/images/xay-dung-tron-goi/carousel-background.png"
+          alt=""
+          fill
+          sizes="100vw"
+        />
 
-      <section className="grid min-h-[730px] bg-brand lg:grid-cols-[1fr_1.05fr]">
-        <div className="relative min-h-[440px] lg:min-h-[650px]">
-          <Image
-            className="object-cover"
-            src="/images/bmt-faq-interior.png"
-            alt="Góc nội thất thư giãn với tông màu kem"
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
+        <div
+          className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
+        >
+          <Reveal>
+            <h2 className="text-3xl font-bold sm:text-[32px] text-center">
+              TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
+            </h2>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-pretty text-center">
+              Dịch vụ thiết kế thi công và xây dựng trọn gói giúp chủ đầu tư
+              triển khai công trình một cách đồng bộ, từ ý tưởng, thiết kế đến
+              thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách hàng
+              chỉ cần một đầu mối duy nhất để quản lý toàn bộ dự án, giúp tiết
+              kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh trong quá
+              trình xây dựng.
+            </p>
+          </Reveal>
+          <BuildingRule
+            className="mx-auto mt-5 h-8 max-w-[250px]"
+            src="/images/xay-dung-tron-goi/rule-orange.png"
+            delay={300}
           />
         </div>
-        <div className="mt-[-44px] min-h-[650px] rounded-tr-[54px] bg-neutral-100 lg:mt-10 lg:rounded-tl-[72px] lg:rounded-tr-none">
-          <Reveal
-            className="mx-auto w-[min(610px,calc(100%-2.75rem))] py-14 lg:py-18"
-            from="right"
-          >
-            <h2 className="text-4xl font-normal">CÁC CÂU HỎI THƯỜNG GẶP</h2>
-            <p className="mt-4 max-w-[520px] leading-relaxed">
-              Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ hơn về
-              quy trình và dịch vụ của BMT Decor
-            </p>
-            <BuildingRule className="mt-4 mb-12 max-w-[330px] text-brand" />
-            <FaqAccordion />
-          </Reveal>
+
+        <Reveal
+          className={`${SERVICE_PROJECT_CAROUSEL_CLASS_NAME} w-full`}
+          delay={120}
+        >
+          <ProjectCarousel
+            projects={featuredProjects}
+            prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
+            nextIcon="/images/cai-tao-sua-chua/nav-next.png"
+          />
+        </Reveal>
+
+        <Reveal
+          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 lg:!mt-12 flex justify-center w-full`}
+          delay={200}
+        >
+          <PillCtaButton
+            className="h-full"
+            href="#contact-form"
+            label="TƯ VẤN MIỄN PHÍ"
+            image="/images/thi-cong-xay-dung/btn-pill.png"
+            imageWidth={1539}
+            imageHeight={292}
+          />
+        </Reveal>
+      </section>
+
+      <section className={`bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}>
+        <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
+          <div className="text-center">
+            <Reveal>
+              <h2 className="text-3xl uppercase sm:text-[32px]">
+                <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
+                <br />
+                <span className="font-bold">
+                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
+                </span>
+              </h2>
+            </Reveal>
+            <Reveal delay={140}>
+              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
+                Giải pháp thiết kế tối ưu cho từng không gian
+              </p>
+            </Reveal>
+            <BuildingRule
+              className="mx-auto mt-3 mb-8 h-8 max-w-[250px]"
+              src="/images/xay-dung-tron-goi/rule-orange.png"
+              delay={300}
+            />
+          </div>
         </div>
+
+        <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
+          <SolutionCards cards={solutionCards} />
+        </div>
+      </section>
+
+      <section className="bg-[#f2f2f3] py-12 lg:py-14">
+        <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
+          <Reveal>
+            <h2 className="text-3xl font-bold sm:text-[32px]">
+              QUY TRÌNH THIẾT KẾ THI CÔNG
+              <br />& XÂY NHÀ TRỌN GÓI
+            </h2>
+          </Reveal>
+          <Reveal delay={140}>
+            <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
+              Triển khai đồng bộ, kiểm soát chất lượng trong từng giai đoạn
+            </p>
+          </Reveal>
+          <BuildingRule
+            className="mx-auto mt-3 h-8 max-w-[250px]"
+            src="/images/xay-dung-tron-goi/rule-orange.png"
+            delay={300}
+          />
+        </div>
+
+        <ProcessStepsGrid />
       </section>
 
       <ContactForm />

@@ -11,7 +11,11 @@ const socialLinks = [
   ["LinkedIn", "/images/home/linkedin.png"],
 ] as const;
 
-export function SiteFooter({ showTopBorder = true }: { showTopBorder?: boolean }) {
+export function SiteFooter({
+  showTopBorder = true,
+}: {
+  showTopBorder?: boolean;
+}) {
   return (
     <footer
       className={`${showTopBorder ? "border-t-[6px] border-brand" : "border-t-0"} bg-neutral-100`}
@@ -19,9 +23,18 @@ export function SiteFooter({ showTopBorder = true }: { showTopBorder?: boolean }
     >
       <div className="mx-auto grid w-[min(1360px,calc(100%-2.5rem))] gap-10 py-8 lg:grid-cols-[280px_minmax(0,1fr)_340px] lg:gap-16">
         <Reveal>
-          <BrandLogo className="w-[180px]" large />
-          <h3 className="mt-3 mb-1 text-base font-extrabold uppercase">Dịch vụ:</h3>
-          <nav className="grid gap-1 text-base" aria-label="Dịch vụ tại chân trang">
+          <BrandLogo className="w-[145px] mix-blend-multiply" large />
+          <p className="mt-5 max-w-48 text-sm leading-relaxed text-neutral-600">
+            Thiết kế và thi công kiến trúc, nội thất trọn gói tại Việt Nam.
+          </p>
+        </Reveal>
+
+        <Reveal delay={120}>
+          <h3 className="mb-5 text-sm font-bold uppercase">Dịch vụ</h3>
+          <nav
+            className="grid gap-3 text-sm"
+            aria-label="Dịch vụ tại chân trang"
+          >
             {services.map((service) => (
               <Link
                 className="w-fit text-charcoal transition-colors duration-300 hover:text-brand hover:underline hover:decoration-brand hover:underline-offset-4 focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
@@ -82,7 +95,9 @@ export function SiteFooter({ showTopBorder = true }: { showTopBorder?: boolean }
                   width={24}
                   height={24}
                 />
-                {index < 2 ? `Địa chỉ chi nhánh ${index + 1}: ` : "Xưởng sản xuất: "}
+                {index < 2
+                  ? `Địa chỉ chi nhánh ${index + 1}: `
+                  : "Xưởng sản xuất: "}
                 {branch}
               </p>
             ))}

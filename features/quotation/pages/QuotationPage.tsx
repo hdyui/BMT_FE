@@ -1,17 +1,18 @@
-import { DocumentPageScaffold } from "@/lib/components/layout/DocumentPageScaffold";
+import { QuotationEstimator } from "@/features/quotation/components/QuotationEstimator";
+import { QuotationHero } from "@/features/quotation/components/QuotationHero";
+import styles from "@/features/quotation/quotation.module.css";
+import { SiteFooter } from "@/lib/components/layout/SiteFooter";
+import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 
 export function QuotationPage() {
   return (
-    <DocumentPageScaffold
-      eyebrow="BÁO GIÁ"
-      title="DỰ TOÁN MINH BẠCH CHO TỪNG HẠNG MỤC"
-      description="Nhận tư vấn và dự toán sơ bộ dựa trên loại hình, quy mô và yêu cầu hoàn thiện của công trình."
-      sections={[
-        "Thông tin công trình",
-        "Nhu cầu thiết kế",
-        "Phạm vi thi công",
-        "Yêu cầu vật liệu",
-      ]}
-    />
+    <div className={styles.page}>
+      <SiteHeader />
+      <main>
+        <QuotationHero />
+        <QuotationEstimator />
+      </main>
+      <SiteFooter />
+    </div>
   );
 }
