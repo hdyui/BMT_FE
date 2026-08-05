@@ -54,10 +54,17 @@
   container-type: inline-size;
   width: 100%;
   aspect-ratio: 6498 / 2689;
-  overflow: hidden;
+  overflow: visible;
   background: #f8f8fa;
   color: #242122;
   isolation: isolate;
+}
+
+.heroCanvas {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  overflow: hidden;
 }
 
 .backgroundTexture {
@@ -93,137 +100,128 @@
 }
 
 .title > span:first-child,
-.brandLine {
+.brandLogo {
   opacity: 0;
   animation: titleRise 760ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.brandLine {
-  display: flex;
-  align-items: center;
-  gap: 0.6cqw;
-  color: #f47a2a;
+.brandLogo {
+  display: block;
+  width: 65%;
+  max-width: 100%;
+  height: auto;
+  margin-top: 0.55cqw;
   animation-delay: 110ms;
 }
 
-.brandMark {
-  width: 3.65cqw;
-  height: 3.35cqw;
-  flex: 0 0 auto;
-  overflow: hidden;
-}
-
-.brandMark img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
-
 .description {
-  display: flex;
+  display: block;
   max-width: 96%;
   margin: 0.62cqw 0 0;
-  gap: 0.3cqw;
   opacity: 0;
   font-size: clamp(0.75rem, 0.96cqw, 1.35rem);
   line-height: 1.18;
   animation: copySlide 720ms 420ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.description svg {
-  width: 1.05cqw;
-  height: 1.05cqw;
-  min-width: 0.8rem;
-  min-height: 0.8rem;
-  flex: 0 0 auto;
-  margin-top: 0.08em;
-  color: #f47a2a;
-  stroke-width: 1.7;
+.descriptionIcon {
+  display: inline-block;
+  width: auto;
+  height: 1.05em;
+  margin-right: 0.38em;
+  vertical-align: -0.16em;
+  filter: brightness(0) saturate(100%) invert(56%) sepia(88%) saturate(2340%)
+    hue-rotate(343deg) brightness(100%) contrast(92%);
 }
 
 .cta {
+  position: relative;
   display: inline-flex;
   width: 17.2cqw;
   min-width: 10.5rem;
-  height: 3.65cqw;
+  height: auto;
   min-height: 2.5rem;
+  aspect-ratio: 1366 / 291;
   margin-top: 1.55cqw;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  border: 1px solid rgb(255 255 255 / 62%);
+  justify-content: center;
+  border: 0;
   border-radius: 999px;
-  background: #f47a2a;
-  padding: 0.25rem 0.3rem 0.25rem 1.35cqw;
+  background: url("/images/careers/careers-cta.jpg") center / 100% 100%
+    no-repeat;
+  padding: 0 17% 0 3%;
   opacity: 0;
   color: white;
-  font-size: clamp(0.9rem, 1.4cqw, 1.75rem);
-  font-weight: 700;
-  box-shadow: 0 0.5rem 1.25rem rgb(244 122 42 / 18%);
-  animation: titleRise 680ms 720ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  font-size: clamp(0.82rem, 1.18cqw, 1.4rem);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
+  text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
+  animation: fadeDecoration 680ms 720ms ease-out forwards;
   transition:
     transform 260ms ease,
-    background-color 260ms ease,
+    filter 260ms ease,
     box-shadow 260ms ease;
 }
 
 .cta:hover {
-  background: #ff8a3d;
-  box-shadow: 0 1rem 2rem rgb(244 122 42 / 34%);
-  transform: scale(1.035);
+  filter: brightness(1.04) saturate(1.03);
+  box-shadow: 0 1rem 2rem rgb(137 52 8 / 42%);
+  transform: translateY(-5px) scale(1.02);
 }
 .cta:active {
-  transform: scale(0.985);
+  box-shadow: 0 0.45rem 0.9rem rgb(137 52 8 / 24%);
+  transform: translateY(2px) scale(0.99);
 }
 .cta:focus-visible {
   outline: 3px solid #242122;
   outline-offset: 4px;
 }
 
-.ctaIcon {
-  display: grid;
-  width: 2.9cqw;
-  height: 2.9cqw;
-  min-width: 2rem;
-  min-height: 2rem;
-  flex: 0 0 auto;
-  place-items: center;
-  border: 2px solid rgb(255 255 255 / 82%);
-  border-radius: 50%;
-  background: rgb(255 255 255 / 12%);
-}
-
-.ctaIcon svg {
-  width: 55%;
-  height: 55%;
-}
-
 .photoEntrance {
-  width: 100%;
-  margin-top: 3.35cqw;
-  justify-self: end;
+  position: absolute;
+  z-index: 20;
+  top: 3.35cqw;
+  left: 49.96%;
+  width: 43.84%;
+  height: 40.6cqw;
+  overflow: hidden;
+  border-radius: 50% 50% 0 2.75rem;
   opacity: 0;
   animation: photoSlide 940ms 260ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  transition: box-shadow 360ms ease;
+}
+
+.photoBackdrop {
+  position: absolute;
+  z-index: 10;
+  right: 0;
+  bottom: -2.57cqw;
+  width: 50.04%;
+  height: 2.57cqw;
+  border-radius: 0 0 0 2.75rem;
+  background: white;
+  pointer-events: none;
 }
 
 .photoFrame {
   position: relative;
   width: 100%;
+  height: 100%;
   overflow: hidden;
-  border-radius: 50% 50% 0px 0px;
-  aspect-ratio: 1.15;
-  background: white;
-  transition: box-shadow 360ms ease;
+  border-radius: inherit;
 }
 
-.photoFrame:hover {
+.photoEntrance:has(.photoFrame:hover) {
   box-shadow: 0 1.75rem 3.8rem rgb(36 33 34 / 18%);
 }
 
 .photo {
   object-fit: cover;
   object-position: center top;
-  animation: photoZoom 1.2s 300ms cubic-bezier(0.16, 1, 0.3, 1) both;
+  animation: photoZoom 1.2s 300ms cubic-bezier(0.16, 1, 0.3, 1) backwards;
   transition: transform 620ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
@@ -303,6 +301,12 @@
 @media (max-width: 55rem) {
   .hero {
     aspect-ratio: auto;
+    overflow: hidden;
+  }
+
+  .heroCanvas {
+    position: relative;
+    inset: auto;
   }
 
   .inner {
@@ -322,46 +326,41 @@
   .title {
     font-size: clamp(2.4rem, 8.5vw, 4.25rem);
   }
-  .brandLine {
-    justify-content: center;
-    gap: 0.45rem;
-  }
-  .brandMark {
-    width: 0.95em;
-    height: 0.86em;
+  .brandLogo {
+    width: min(82%, 29rem);
+    margin: 0.7rem auto 0;
   }
 
   .description {
     max-width: 38rem;
     margin-top: 1.25rem;
-    gap: 0.4rem;
     font-size: clamp(0.95rem, 2.5vw, 1.08rem);
     text-align: left;
   }
 
-  .description svg {
-    width: 1.15rem;
-    height: 1.15rem;
-  }
-
   .cta {
     width: min(15rem, 80%);
-    height: 3.35rem;
+    height: auto;
     margin-top: 1.5rem;
-    padding-left: 1.3rem;
+    padding: 0 17% 0 3%;
     font-size: 1rem;
   }
-
-  .ctaIcon {
-    width: 2.65rem;
-    height: 2.65rem;
-  }
   .photoEntrance {
+    position: relative;
+    top: auto;
+    left: auto;
     width: min(100%, 40rem);
+    height: auto;
+    aspect-ratio: 1.05;
     margin: 0 auto;
-    justify-self: center;
+    border-radius: 0;
+  }
+  .photoBackdrop {
+    display: none;
   }
   .photoFrame {
+    width: 100%;
+    height: 100%;
     aspect-ratio: 1.05;
     border-radius: 50% 50% 0px 0px;
   }
@@ -427,7 +426,7 @@
 @media (prefers-reduced-motion: reduce) {
   .decoration,
   .title > span:first-child,
-  .brandLine,
+  .brandLogo,
   .description,
   .cta,
   .photoEntrance,

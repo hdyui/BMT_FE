@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import styles from "./CareersHero.module.css";
 
@@ -142,6 +141,15 @@ export function CareersHero() {
           </Reveal>
           <Reveal delay={420} from="left">
             <p className="mt-7 max-w-[620px] text-base leading-7 text-neutral-700 sm:text-lg sm:leading-8">
+              <Image
+                className="mr-[0.38em] inline-block h-[1.05em] w-auto align-[-0.16em] [filter:brightness(0)_saturate(100%)_invert(56%)_sepia(88%)_saturate(2340%)_hue-rotate(343deg)_brightness(100%)_contrast(92%)]"
+                src="/images/home/building-mark.png"
+                alt=""
+                width={110}
+                height={116}
+                sizes="24px"
+                aria-hidden="true"
+              />
               Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm. Nếu
               bạn yêu thích lĩnh vực thiết kế, kiến trúc và thi công, BMT Decor
               luôn sẵn sàng chào đón bạn đồng hành trên hành trình phát triển
@@ -150,10 +158,7 @@ export function CareersHero() {
           </Reveal>
           <div>
             <Link className={styles.careersHeroCta} href="/lien-he">
-              LIÊN HỆ NGAY
-              <span className={styles.careersHeroCtaIcon}>
-                <ArrowUpRight aria-hidden="true" />
-              </span>
+              <span>LIÊN HỆ NGAY</span>
             </Link>
           </div>
         </div>

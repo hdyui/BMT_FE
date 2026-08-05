@@ -180,13 +180,13 @@ export function CareerOpenings() {
         <nav className={styles.careerPagination} aria-label="Phân trang tuyển dụng">
           <button className={styles.careerPageButton} type="button" onClick={() => changePage(page - 1)} disabled={page === 0 || leaving}>
             <Image className={styles.careerPageButtonIcon} src="/images/careers/page-previous.jpg" alt="" width={104} height={104} aria-hidden="true" />
-            <span className="hidden sm:inline">Previous Page</span>
-            <span className="sm:hidden">Trước</span>
+            <span className="hidden sm:inline">PREVIOUS PAGE</span>
+            <span className="sm:hidden">TRƯỚC</span>
           </button>
           <span className={styles.careerPageIndicator}>Page {page + 1}/{pageCount}</span>
           <button className={`${styles.careerPageButton} ${styles.careerPageButtonNext}`} type="button" onClick={() => changePage(page + 1)} disabled={page === pageCount - 1 || leaving}>
-            <span className="hidden sm:inline">Next Page</span>
-            <span className="sm:hidden">Sau</span>
+            <span className="hidden sm:inline">NEXT PAGE</span>
+            <span className="sm:hidden">SAU</span>
             <Image className={styles.careerPageButtonIcon} src="/images/careers/page-next.jpg" alt="" width={104} height={104} aria-hidden="true" />
           </button>
         </nav>

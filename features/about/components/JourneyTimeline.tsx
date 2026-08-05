@@ -124,7 +124,7 @@ export function JourneyTimeline() {
       <div className="mx-auto w-[min(1380px,calc(100%-2.25rem))]">
         <div className="mx-auto flex flex-col items-center text-center">
           <h2
-            className={`whitespace-nowrap text-[clamp(1.45rem,3.6vw,3.5rem)] font-bold uppercase leading-none tracking-[-0.025em] text-charcoal transition-[opacity,translate] delay-150 duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+            className={`max-w-full text-balance text-4xl sm:text-5xl font-extrabold uppercase leading-none tracking-[-0.025em] text-charcoal transition-[opacity,translate] delay-150 duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -190,7 +190,7 @@ export function JourneyTimeline() {
 
                 return (
                   <article
-                    className={`group/item relative w-[min(80vw,285px)] shrink-0 snap-start outline-none transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 md:w-[min(18vw,250px)] md:min-w-[185px] ${
+                    className={`group/item relative w-[min(88vw,340px)] shrink-0 snap-start outline-none transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 md:w-[340px] ${
                       isVisible
                         ? "translate-y-0 opacity-100"
                         : "translate-y-24 opacity-0"
@@ -217,8 +217,8 @@ export function JourneyTimeline() {
                       aria-hidden="true"
                     />
 
-                    <div className="grid grid-cols-[minmax(0,1fr)_54px_18px] gap-2 pt-9">
-                      <div className="relative left-[20px]">
+                    <div className="grid grid-cols-[minmax(0,1fr)_54px] gap-3 pt-9">
+                      <div className="min-w-0">
                         <div
                           className={`relative ml-auto mr-1 size-[40px] transition-[opacity,translate] duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                             isVisible
@@ -246,10 +246,10 @@ export function JourneyTimeline() {
                           }`}
                           style={{ transitionDelay: `${baseDelay + 210}ms` }}
                         >
-                          <h3 className="whitespace-nowrap text-[14px] font-bold uppercase leading-tight text-charcoal sm:text-[15px]">
+                          <h3 className="whitespace-nowrap text-right text-xl font-bold uppercase leading-tight text-charcoal">
                             {milestone.title}
                           </h3>
-                          <p className="mt-1.5 text-right text-[14px] leading-[1.35] text-neutral-700">
+                          <p className="mt-1.5 text-right text-xl leading-[1.35] text-neutral-700">
                             {milestone.description}
                           </p>
                         </div>
@@ -263,7 +263,7 @@ export function JourneyTimeline() {
                         }`}
                         style={{ transitionDelay: `${baseDelay + 140}ms` }}
                       >
-                        <span className="text-3xl ml-10 font-bold leading-none text-neutral-400 transition-colors duration-300 [writing-mode:vertical-rl] rotate-180 group-hover/item:text-brand group-focus-visible/item:text-brand">
+                        <span className="text-3xl font-bold leading-none text-neutral-400 transition-colors duration-300 [writing-mode:vertical-rl] rotate-180 group-hover/item:text-brand group-focus-visible/item:text-brand">
                           {milestone.year}
                         </span>
                       </div>

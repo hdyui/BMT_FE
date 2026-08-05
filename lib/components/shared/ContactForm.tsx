@@ -13,7 +13,13 @@ type Errors = Partial<Record<FieldName, string>>;
 
 const requiredMessage = "Vui lòng nhập thông tin.";
 
-export function ContactForm() {
+type ContactFormProps = {
+  revealPreviousBackground?: boolean;
+};
+
+export function ContactForm({
+  revealPreviousBackground = false,
+}: ContactFormProps = {}) {
   const [errors, setErrors] = useState<Errors>({});
 
   function clearFieldError(field: FieldName) {
@@ -53,14 +59,16 @@ export function ContactForm() {
 
   return (
     <section
-      className="relative overflow-hidden bg-brand pt-[clamp(5rem,5.5vw,7rem)] pb-14 text-white"
+      className="relative isolate overflow-hidden bg-brand pt-[clamp(5rem,5.5vw,7rem)] pb-14 text-white"
       id="contact-form"
     >
-      <div
-        aria-hidden="true"
-        className="pointer-events-none absolute -right-px -top-px h-10 w-[calc(50%+2px)] rounded-bl-[2.25rem] [transform:translateZ(0)] bg-white sm:h-11 sm:rounded-bl-[2.75rem] lg:h-12 lg:rounded-bl-[3rem]"
-      />
-      <div className="mx-auto w-[min(92%,78rem)] xl:w-[62.5%]">
+      {!revealPreviousBackground && (
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute -right-px -top-px h-10 w-[calc(50%+1px)] rounded-bl-[2.25rem] [transform:translateZ(0)] bg-white sm:h-11 sm:rounded-bl-[2.75rem] lg:h-12 lg:rounded-bl-[3rem]"
+        />
+      )}
+      <div className="relative z-30 mx-auto w-[min(92%,78rem)] xl:w-[62.5%]">
         <div className="grid gap-1 [&_h2]:text-[clamp(1.5rem,1.9vw,2.4rem)] [&_h2]:!font-bold">
           <Reveal className="shrink-0">
             <h2 className="text-2xl font-normal uppercase">Liên hệ tư vấn</h2>

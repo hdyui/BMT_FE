@@ -25,8 +25,15 @@ export function CareersContactForm() {
   const inputClass = "h-12 w-full rounded-full border-2 border-transparent bg-white px-5 text-charcoal outline-none placeholder:text-neutral-500 transition-shadow focus:border-white focus:shadow-[0_0_0_4px_rgba(255,255,255,.28)]";
 
   return (
-    <section className="bg-brand py-14 text-white" id="contact-form">
-      <div className="mx-auto w-[min(1180px,calc(100%-2.25rem))]">
+    <section
+      className="relative overflow-hidden bg-brand pt-[clamp(5rem,5.5vw,7rem)] pb-14 text-white"
+      id="contact-form"
+    >
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute -right-px -top-px h-10 w-[calc(50%+2px)] rounded-bl-[2.25rem] [transform:translateZ(0)] bg-white sm:h-11 sm:rounded-bl-[2.75rem] lg:h-12 lg:rounded-bl-[3rem]"
+      />
+      <div className="relative z-10 mx-auto w-[min(1180px,calc(100%-2.25rem))]">
         <div className="flex items-end gap-6">
           <Reveal className="shrink-0"><h2 className="text-2xl font-bold uppercase sm:text-3xl">Liên hệ tư vấn</h2></Reveal>
           <BuildingRule className="max-w-none" delay={120} light />

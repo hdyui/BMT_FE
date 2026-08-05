@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
@@ -20,25 +19,25 @@ const trustReasons = [
     image: "/images/home/trust-card-interior.png",
     icon: "/images/home/trust-icon-team.png",
     title: "Đội ngũ giàu kinh nghiệm",
-    copy: "Kiến trúc sư và kỹ sư giàu chuyên môn, tận tâm trong từng hạng mục.",
+    copy: "Kiến trúc sư và kỹ sư giàu chuyên môn, luôn đồng hành và tư vấn giải pháp phù hợp với nhu cầu của khách hàng.",
   },
   {
     image: "/images/home/trust-card-design.png",
     icon: "/images/home/trust-icon-plan.png",
     title: "Quy trình chuyên nghiệp",
-    copy: "Quy trình làm việc rõ ràng, minh bạch, đảm bảo tiến độ và chất lượng.",
+    copy: "Quy trình làm việc rõ ràng, minh bạch, kiểm soát tiến độ và chất lượng trong từng giai đoạn.",
   },
   {
     image: "/images/home/trust-card-build.png",
     icon: "/images/home/trust-icon-process.png",
     title: "Thi công trọn gói, đồng bộ",
-    copy: "Từ thiết kế đến hoàn thiện đều được triển khai trong một hệ thống thống nhất.",
+    copy: "Triển khai xuyên suốt từ thiết kế đến hoàn thiện, đảm bảo tính thống nhất và tối ưu thời gian, chi phí.",
   },
   {
     image: "/images/home/trust-card-site.png",
     icon: "/images/home/trust-icon-quality.png",
     title: "Chất lượng thi công",
-    copy: "Vật liệu đúng cam kết, kỹ thuật chuẩn xác và kiểm soát chất lượng chặt chẽ.",
+    copy: "Thi công đúng kỹ thuật, sử dụng vật liệu phù hợp và kiểm tra kỹ lưỡng trước khi bàn giao.",
   },
 ] as const;
 
@@ -46,23 +45,28 @@ const news = [
   {
     image: "/images/home/news-01.png",
     title: "Những lưu ý quan trọng khi bắt đầu thiết kế nhà ở",
+    copy: "Những yếu tố cần chuẩn bị trước khi thiết kế để tối ưu công năng, chi phí và hạn chế thay đổi trong quá trình thi công.",
   },
   {
     image: "/images/home/news-02.png",
     title: "Cách lựa chọn phong cách nội thất phù hợp",
+    copy: "Gợi ý lựa chọn phong cách dựa trên nhu cầu sử dụng, sở thích cá nhân và đặc điểm thực tế của từng không gian.",
   },
   {
     image: "/images/home/news-03.png",
     title: "Tối ưu ngân sách mà vẫn đảm bảo chất lượng công trình",
+    copy: "Cách phân bổ ngân sách hợp lý cho từng hạng mục mà vẫn duy trì chất lượng vật liệu, kỹ thuật và giá trị sử dụng lâu dài.",
   },
 ] as const;
 
 function SectionHeading({ title, copy }: { title: string; copy?: string }) {
   return (
     <Reveal className="text-center">
-      <h2 className="text-3xl font-bold uppercase sm:text-4xl">{title}</h2>
+      <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
+        {title}
+      </h2>
       {copy && (
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-[17px]">
           {copy}
         </p>
       )}
@@ -75,17 +79,16 @@ function ProjectSectionHeading() {
   return (
     <div className="text-center">
       <Reveal>
-        <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
           Dự án tiêu biểu
         </h2>
       </Reveal>
       <Reveal delay={140}>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground">
           Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công,
           khẳng định năng lực và chất lượng trong từng hạng mục.
         </p>
       </Reveal>
-      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand" />
     </div>
   );
 }
@@ -94,12 +97,12 @@ function ServiceSectionHeading() {
   return (
     <div className="text-center">
       <Reveal>
-        <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
           Dịch vụ nổi bật
         </h2>
       </Reveal>
       <Reveal delay={140}>
-        <p className="mx-auto mt-3 max-w-2xl text-sm leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground">
           BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa
           dạng nhu cầu từ nhà ở đến không gian kinh doanh.
         </p>
@@ -169,7 +172,7 @@ export function HomePage() {
                       <h3 className="text-lg font-bold leading-snug">
                         {reason.title}
                       </h3>
-                      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                      <p className="mt-3 text-xl leading-relaxed text-muted-foreground">
                         {reason.copy}
                       </p>
                     </div>
@@ -189,7 +192,7 @@ export function HomePage() {
               key={reason.title}
               motionClassName="origin-[center_176px] [transform:scale(1)] transition-transform duration-300 ease-in-out group-hover/card-lift:[transform:scale(1.02)]"
             >
-              <article className="group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)]">
+              <article className="h-100 group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)]">
                 <div className="relative h-44 overflow-hidden">
                   <Image
                     className="object-cover"
@@ -216,10 +219,10 @@ export function HomePage() {
                       height={44}
                     />
                   </span>
-                  <h3 className="text-lg font-bold leading-snug">
+                  <h3 className="text-xl font-bold leading-snug">
                     {reason.title}
                   </h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
                     {reason.copy}
                   </p>
                 </div>
@@ -297,7 +300,7 @@ export function HomePage() {
           <div className="mt-9 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <Reveal>
               <Link className="group block" href="/tin-tuc">
-                <div className="relative h-80 overflow-hidden rounded-3xl">
+                <div className="relative aspect-[1.16/1] overflow-hidden rounded-3xl">
                   <Image
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     src="/images/home/news-featured.png"
@@ -319,32 +322,32 @@ export function HomePage() {
               {news.map((item, index) => (
                 <Reveal delay={index * 100} key={item.title}>
                   <Link
-                    className="group grid grid-cols-[125px_1fr] items-center gap-5"
+                    className="group grid grid-cols-[148px_1fr] items-center gap-5"
                     href="/tin-tuc"
                   >
-                    <div className="relative h-24 overflow-hidden rounded-2xl">
+                    <div className="relative aspect-square overflow-hidden rounded-2xl">
                       <Image
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         src={item.image}
                         alt=""
                         fill
-                        sizes="125px"
+                        sizes="148px"
                       />
                     </div>
-                    <div>
-                      <h3 className="font-bold transition-colors group-hover:text-brand">
+                    <div className="min-w-0">
+                      <h3 className="text-lg font-extrabold leading-snug text-charcoal transition-colors group-hover:text-brand">
                         {item.title}
                       </h3>
-                      <span className="mt-2 inline-flex items-center gap-1 text-xs text-brand">
-                        Đọc tiếp <ArrowUpRight className="size-3" />
-                      </span>
+                      <p className="mt-2 line-clamp-3 text-sm leading-[1.45] text-muted-foreground">
+                        {item.copy}
+                      </p>
                     </div>
                   </Link>
                 </Reveal>
               ))}
               <Reveal className="ml-auto w-fit" delay={320}>
                 <Link
-                  className="group inline-flex origin-center items-center gap-2 text-xl font-semibold text-brand transition-[color,transform] duration-300 ease-out hover:scale-105 hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
+                  className="group inline-flex origin-center items-center gap-2 text-base font-bold text-brand underline decoration-2 underline-offset-4 transition-[color,transform] duration-300 ease-out hover:scale-105 hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
                   href="/tin-tuc"
                 >
                   XEM TẤT CẢ TIN

@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowLeft, ArrowRight, ArrowUpRight } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
 import {
   useCallback,
   useEffect,
@@ -70,27 +70,6 @@ const articles = [
 
 const pageSize = 5;
 
-function AnimatedCharacters({
-  text,
-  startDelay,
-  step = 45,
-}: {
-  text: string;
-  startDelay: number;
-  step?: number;
-}) {
-  return Array.from(text).map((character, index) => (
-    <span
-      className={styles.heroCharacter}
-      style={{ animationDelay: `${startDelay + index * step}ms` }}
-      aria-hidden="true"
-      key={`${character}-${index}`}
-    >
-      {character === " " ? "\u00a0" : character}
-    </span>
-  ));
-}
-
 function ArticleReveal({
   children,
   delay,
@@ -131,10 +110,7 @@ function ArticleReveal({
 
 function MoreLink() {
   return (
-    <Link
-      className={styles.articleMoreLink}
-      href="#contact-form"
-    >
+    <Link className={styles.articleMoreLink} href="#contact-form">
       Xem chi tiết
       <ArrowUpRight aria-hidden="true" />
     </Link>
@@ -227,52 +203,66 @@ export function NewsPage() {
       <main className="overflow-hidden pt-[85px]">
         <section className={styles.newsHero}>
           <div className={styles.newsHeroDecorations} aria-hidden="true">
-            <span className={`${styles.heroDecoration} ${styles.heroDecor01}`} />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor01}`}
+            />
             <span className={`${styles.heroDecoration} ${styles.heroDecor02}`}>
-              <i /><i /><i /><i />
+              <i />
+              <i />
+              <i />
+              <i />
             </span>
-            <span className={`${styles.heroDecoration} ${styles.heroDecor03}`} />
-            <span className={`${styles.heroDecoration} ${styles.heroDecor04}`} />
-            <span className={`${styles.heroDecoration} ${styles.heroDecor05}`} />
-            <span className={`${styles.heroDecoration} ${styles.heroDecor06}`} />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor03}`}
+            />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor04}`}
+            />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor05}`}
+            />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor06}`}
+            />
             <span className={`${styles.heroDecoration} ${styles.heroDecor07}`}>
-              <i /><i /><i /><i />
+              <i />
+              <i />
+              <i />
+              <i />
             </span>
             <span className={`${styles.heroDecoration} ${styles.heroDecor08}`}>
-              <i /><i /><i /><i />
+              <i />
+              <i />
+              <i />
+              <i />
             </span>
-            <span className={`${styles.heroDecoration} ${styles.heroDecor09}`} />
+            <span
+              className={`${styles.heroDecoration} ${styles.heroDecor09}`}
+            />
           </div>
 
           <div className={styles.newsHeroCopy}>
-            <p className={styles.newsHeroEyebrow} aria-label="KIẾN THỨC">
-              <AnimatedCharacters text="KIẾN THỨC" startDelay={300} />
-            </p>
-            <h1
-              className={styles.newsHeroTitle}
-              aria-label="THIẾT KẾ & THI CÔNG"
-            >
-              <span className={styles.newsHeroTitleLine}>
-                <AnimatedCharacters
-                  text="THIẾT KẾ &"
-                  startDelay={720}
-                  step={42}
-                />
-              </span>
-              <span className={styles.newsHeroTitleLine}>
-                <AnimatedCharacters text="THI CÔNG" startDelay={1180} />
-              </span>
+            <p className={styles.newsHeroEyebrow}>KIẾN THỨC</p>
+            <h1 className={styles.newsHeroTitle}>
+              <span className={styles.newsHeroTitleLine}>THIẾT KẾ &amp;</span>
+              <span className={styles.newsHeroTitleLine}>THI CÔNG</span>
             </h1>
             <p className={styles.newsHeroDescription}>
+              <Image
+                className={styles.newsHeroDescriptionIcon}
+                src="/images/home/building-mark.png"
+                alt=""
+                width={110}
+                height={116}
+                sizes="24px"
+                aria-hidden="true"
+              />
               Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công
               xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ
               BMT Decor.
             </p>
             <Link className={styles.newsHeroCta} href="/lien-he">
-              LIÊN HỆ NGAY
-              <span className={styles.newsHeroCtaIcon}>
-                <ArrowUpRight aria-hidden="true" />
-              </span>
+              <span>LIÊN HỆ NGAY</span>
             </Link>
           </div>
 
@@ -309,7 +299,10 @@ export function NewsPage() {
               >
                 <CarouselContent className={styles.featuredCarouselContent}>
                   {featuredNews.map((item, index) => (
-                    <CarouselItem className={styles.featuredCarouselItem} key={item.title}>
+                    <CarouselItem
+                      className={styles.featuredCarouselItem}
+                      key={item.title}
+                    >
                       <article
                         className={`${styles.featuredCard} ${index === selectedSlide ? styles.featuredCardActive : ""}`}
                       >
@@ -324,7 +317,9 @@ export function NewsPage() {
                           />
                         </div>
                         <div className={styles.featuredCardBody}>
-                          <span className={`${styles.featuredBadge} ${index === selectedSlide ? "" : styles.featuredBadgeHidden}`}>
+                          <span
+                            className={`${styles.featuredBadge} ${index === selectedSlide ? "" : styles.featuredBadgeHidden}`}
+                          >
                             Nổi bật!
                           </span>
                           <h3 className={styles.featuredCardTitle}>
@@ -333,7 +328,10 @@ export function NewsPage() {
                           <p className={styles.featuredCardDescription}>
                             {item.description}
                           </p>
-                          <Link className={styles.featuredMoreLink} href="#contact-form">
+                          <Link
+                            className={styles.featuredMoreLink}
+                            href="#contact-form"
+                          >
                             Xem chi tiết <ArrowUpRight aria-hidden="true" />
                           </Link>
                         </div>
@@ -349,7 +347,14 @@ export function NewsPage() {
                     onClick={() => carouselApi?.scrollPrev()}
                     aria-label="Tin trước"
                   >
-                    <ArrowLeft />
+                    <Image
+                      className={styles.featuredNavIcon}
+                      src="/images/news/featured-previous.jpg"
+                      alt=""
+                      width={208}
+                      height={208}
+                      aria-hidden="true"
+                    />
                   </button>
                   <button
                     className={styles.featuredNavButton}
@@ -357,11 +362,21 @@ export function NewsPage() {
                     onClick={() => carouselApi?.scrollNext()}
                     aria-label="Tin tiếp theo"
                   >
-                    <ArrowRight />
+                    <Image
+                      className={styles.featuredNavIcon}
+                      src="/images/news/featured-next.jpg"
+                      alt=""
+                      width={208}
+                      height={208}
+                      aria-hidden="true"
+                    />
                   </button>
                 </div>
 
-                <div className={styles.featuredDots} aria-label="Chọn tin nổi bật">
+                <div
+                  className={styles.featuredDots}
+                  aria-label="Chọn tin nổi bật"
+                >
                   {featuredNews.map((item, index) => (
                     <button
                       className={`${styles.featuredDot} ${selectedSlide === index ? styles.featuredDotActive : ""}`}
@@ -419,9 +434,9 @@ export function NewsPage() {
                           {title}
                         </h2>
                         <p className="mt-4 text-[15px] leading-[1.3] text-neutral-600">
-                          BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết kế
-                          và thi công, giúp gia chủ chủ động hơn trong từng quyết
-                          định về công năng, vật liệu và ngân sách.
+                          BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết
+                          kế và thi công, giúp gia chủ chủ động hơn trong từng
+                          quyết định về công năng, vật liệu và ngân sách.
                         </p>
                         <div className="mt-4">
                           <MoreLink />
@@ -451,8 +466,8 @@ export function NewsPage() {
                   height={104}
                   aria-hidden="true"
                 />
-                <span className="hidden sm:inline">Previous Page</span>
-                <span className="sm:hidden">Trước</span>
+                <span className="hidden sm:inline">PREVIOUS PAGE</span>
+                <span className="sm:hidden">TRƯỚC</span>
               </button>
               <span className={styles.articlePageIndicator}>
                 Page {page + 1}/{pageCount}
@@ -463,8 +478,8 @@ export function NewsPage() {
                 onClick={() => changePage(page + 1)}
                 disabled={page === pageCount - 1 || isPageLeaving}
               >
-                <span className="hidden sm:inline">Next Page</span>
-                <span className="sm:hidden">Sau</span>
+                <span className="hidden sm:inline">NEXT PAGE</span>
+                <span className="sm:hidden">SAU</span>
                 <Image
                   className={styles.articlePageButtonIcon}
                   src="/images/news/page-next.jpg"

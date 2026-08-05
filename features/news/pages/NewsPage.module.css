@@ -100,17 +100,6 @@
   }
 }
 
-@keyframes hero-character-in {
-  from {
-    opacity: 0;
-    transform: translateY(0.65em);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 .newsHero {
   position: relative;
   isolation: isolate;
@@ -123,7 +112,7 @@
 .newsHeroDecorations {
   position: absolute;
   inset: 0;
-  z-index: 0;
+  z-index: 1;
   pointer-events: none;
 }
 
@@ -275,30 +264,27 @@
 
 .newsHeroEyebrow {
   margin: 0;
+  opacity: 0;
   font-size: clamp(24px, 2.55vw, 40px);
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.04em;
+  animation: rise-in 0.76s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .newsHeroTitle {
   margin: 1vw 0 0;
+  opacity: 0;
   color: #242122;
   font-size: clamp(48px, 4.7vw, 96px);
   font-weight: 900;
   line-height: 1.1;
   letter-spacing: -0.055em;
+  animation: rise-in 0.76s 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 .newsHeroTitleLine {
   display: block;
-}
-
-.heroCharacter {
-  display: inline-block;
-  opacity: 0;
-  transform: translateY(0.65em);
-  animation: hero-character-in 0.58s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .newsHeroDescription {
@@ -306,60 +292,61 @@
   color: #404040;
   font-size: clamp(12px, 1.15vw, 19px);
   line-height: 1.28;
-  animation: slide-from-left 0.78s 1.78s cubic-bezier(0.22, 1, 0.36, 1)
-    backwards;
+  animation: slide-from-left 0.78s 0.92s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+}
+
+.newsHeroDescriptionIcon {
+  display: inline-block;
+  width: auto;
+  height: 1.05em;
+  margin-right: 0.38em;
+  vertical-align: -0.16em;
+  filter: brightness(0) saturate(100%) invert(56%) sepia(88%) saturate(2340%)
+    hue-rotate(343deg) brightness(100%) contrast(92%);
 }
 
 .newsHeroCta {
+  position: relative;
   display: inline-flex;
-  height: clamp(40px, 3.75vw, 62px);
+  width: clamp(190px, 17.2vw, 330px);
+  min-height: 40px;
+  aspect-ratio: 1366 / 291;
   align-items: center;
-  gap: 0.7vw;
-  margin-top: 1vw;
-  padding: 0 clamp(20px, 1.7vw, 36px);
+  justify-content: center;
+  margin-top: 1.25vw;
+  padding: 0 17% 0 3%;
+  border: 0;
   border-radius: 999px;
-  background: #f47a2a;
+  background: url("/images/careers/careers-cta.jpg") center / 100% 100%
+    no-repeat;
   color: white;
   font-size: clamp(14px, 1.4vw, 20px);
-  font-weight: 700;
-  box-shadow: 0 8px 22px rgb(244 122 42 / 28%);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
+  text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
   transition:
-    background-color 0.3s,
-    box-shadow 0.3s,
-    transform 0.3s;
-  animation: rise-in 0.7s 2.08s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+    transform 260ms ease,
+    filter 260ms ease,
+    box-shadow 260ms ease;
+  animation: rise-in 0.7s 1.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
 }
 
 .newsHeroCta:hover {
-  transform: scale(1.04);
-  background: #ff8a3b;
-  box-shadow: 0 12px 30px rgb(244 122 42 / 42%);
+  filter: brightness(1.04) saturate(1.03);
+  box-shadow: 0 1rem 2rem rgb(137 52 8 / 42%);
+  transform: translateY(-5px) scale(1.02);
 }
 
 .newsHeroCta:active {
-  transform: scale(0.97);
+  box-shadow: 0 0.45rem 0.9rem rgb(137 52 8 / 24%);
+  transform: translateY(2px) scale(0.99);
 }
 .newsHeroCta:focus-visible {
   outline: 2px solid #f47a2a;
   outline-offset: 4px;
-}
-
-.newsHeroCtaIcon {
-  display: grid;
-  width: clamp(30px, 2.8vw, 42px);
-  height: clamp(30px, 2.8vw, 42px);
-  place-items: center;
-  border: 2px solid rgb(255 255 255 / 90%);
-  border-radius: 50%;
-  transition: transform 0.3s;
-}
-
-.newsHeroCtaIcon svg {
-  width: clamp(16px, 1.6vw, 22px);
-  height: clamp(16px, 1.6vw, 22px);
-}
-.newsHeroCta:hover .newsHeroCtaIcon {
-  transform: rotate(45deg);
 }
 
 .newsHeroPhoto {
@@ -413,28 +400,11 @@
   background: linear-gradient(
     180deg,
     #f47a2a 0%,
-    #f58a43 25%,
-    rgb(246 151 83 / 92%) 40%,
-    rgb(246 173 124 / 66%) 62%,
-    rgb(246 173 124 / 38%) 84%,
-    rgb(246 173 124 / 24%) 100%
-  );
-  -webkit-mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    #000 62%,
-    rgb(0 0 0 / 92%) 70%,
-    rgb(0 0 0 / 58%) 82%,
-    rgb(0 0 0 / 18%) 93%,
-    transparent 100%
-  );
-  mask-image: linear-gradient(
-    180deg,
-    #000 0%,
-    #000 62%,
-    rgb(0 0 0 / 92%) 70%,
-    rgb(0 0 0 / 58%) 82%,
-    rgb(0 0 0 / 18%) 93%,
+    #f47a2a 22%,
+    rgb(245 132 55 / 94%) 30%,
+    rgb(246 151 83 / 72%) 46%,
+    rgb(246 173 124 / 42%) 67%,
+    rgb(246 173 124 / 16%) 86%,
     transparent 100%
   );
   content: "";
@@ -685,32 +655,35 @@
   right: 18.75%;
   display: flex;
   gap: clamp(12px, 1.2vw, 18px);
-  opacity: 0;
-  transform: translateY(16px);
+  opacity: 1;
+  transform: none;
 }
 
 .featuredNavButton {
-  display: grid;
+  display: block;
   width: clamp(32px, 2.7vw, 40px);
   height: clamp(32px, 2.7vw, 40px);
-  place-items: center;
+  overflow: hidden;
+  padding: 0;
+  border: 0;
   border-radius: 50%;
-  background: #f47a2a;
-  color: white;
+  background: transparent;
   transition:
-    background-color 0.3s,
+    filter 0.3s,
     box-shadow 0.3s,
     transform 0.3s;
 }
 
-.featuredNavButton svg {
-  width: 18px;
-  height: 18px;
-  stroke-width: 3;
+.featuredNavIcon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 .featuredNavButton:hover {
-  background: #ff8a3b;
+  filter: brightness(1.06) saturate(1.04);
   box-shadow: 0 8px 20px rgb(244 122 42 / 32%);
+  transform: translateY(-2px) scale(1.04);
 }
 .featuredNavButton:active {
   transform: scale(0.9);
@@ -727,10 +700,6 @@
   margin-top: clamp(13px, 1.2vw, 18px);
   opacity: 0;
   transform: translateY(14px);
-}
-
-.featuredSectionVisible .featuredNav {
-  animation: section-fade-up 0.68s cubic-bezier(0.22, 1, 0.36, 1) 0.76s both;
 }
 
 .featuredSectionVisible .featuredDots {
@@ -950,19 +919,11 @@
     line-height: 1.4;
   }
   .newsHeroCta {
-    height: 56px;
-    gap: 16px;
+    width: min(240px, 78vw);
+    min-height: 0;
     margin-top: 28px;
-    padding: 0 28px;
+    padding: 0 17% 0 3%;
     font-size: 18px;
-  }
-  .newsHeroCtaIcon {
-    width: 36px;
-    height: 36px;
-  }
-  .newsHeroCtaIcon svg {
-    width: 20px;
-    height: 20px;
   }
 
   .featuredSection {
@@ -1057,7 +1018,6 @@
   .heroDecoration,
   .newsHeroEyebrow,
   .newsHeroTitle,
-  .heroCharacter,
   .newsHeroDescription,
   .newsHeroCta,
   .newsHeroPhoto,
@@ -1073,7 +1033,6 @@
   .featuredCard,
   .featuredNav,
   .featuredDots,
-  .heroCharacter,
   .articleReveal {
     opacity: 1;
     transform: none;

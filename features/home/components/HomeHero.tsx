@@ -4,7 +4,6 @@ import { PointerEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import { ArrowUpRight, Building2 } from "lucide-react";
 
 const contentContainerVariants: Variants = {
   hidden: {},
@@ -39,7 +38,7 @@ const slides = [
     image: "/images/home/hero-background-01.png",
     alt: "Mẫu nhà phố do BMT Decor thiết kế",
     title: "BMT Decor - Đơn vị thiết kế và thi công trọn gói",
-    copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng.",
+    copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng cho nhà ở, văn phòng và công trình thương mại.",
     href: "/gioi-thieu",
   },
   {
@@ -181,25 +180,38 @@ export function HomeHero() {
                 variants={contentContainerVariants}
               >
                 <motion.h1
-                  className="text-3xl leading-[1.08] font-bold text-balance uppercase drop-shadow-lg sm:text-5xl"
+                  className="text-[36px] leading-[1.12] font-extrabold text-balance uppercase drop-shadow-lg sm:text-[40px]"
                   variants={titleVariants}
                 >
                   {slide.title}
                 </motion.h1>
                 <motion.p
-                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90 sm:text-base"
+                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90"
                   variants={bodyItemVariants}
                 >
-                  <Building2 className="mr-2 inline size-4" />
+                  <Image
+                    className="mr-2 inline h-4 w-auto brightness-0 invert align-[-0.125em]"
+                    src="/images/home/building-mark.png"
+                    alt=""
+                    width={113}
+                    height={119}
+                  />
                   {slide.copy}
                 </motion.p>
                 <motion.div className="mt-6" variants={bodyItemVariants}>
                   <Link
-                    className="inline-flex items-center gap-2 rounded-full border border-white px-5 py-2 text-sm transition-[color,background-color,border-color,transform] duration-700 ease-out hover:scale-105 hover:border-brand hover:bg-brand hover:text-white active:scale-95"
+                    className="group inline-flex items-center gap-3 rounded-full border border-white px-5 py-2 text-sm font-bold transition-[color,background-color,border-color,transform] duration-300 hover:scale-105 hover:border-brand hover:bg-brand active:scale-95"
                     href={slide.href}
                     tabIndex={isActive ? 0 : -1}
                   >
-                    TÌM HIỂU THÊM <ArrowUpRight className="size-4" />
+                    TÌM HIỂU THÊM
+                    <Image
+                      className="size-4 object-contain brightness-0 invert transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      src="/images/home/arrow-orange.png"
+                      alt=""
+                      width={24}
+                      height={24}
+                    />
                   </Link>
                 </motion.div>
               </motion.div>

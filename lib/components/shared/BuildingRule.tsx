@@ -9,11 +9,13 @@ export function BuildingRule({
   delay = 0,
   light = false,
   fullWidth = false,
+  compact = false,
 }: {
   className?: string;
   delay?: number;
   light?: boolean;
   fullWidth?: boolean;
+  compact?: boolean;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
@@ -55,14 +57,18 @@ export function BuildingRule({
           />
           <span
             className={cn(
-              "absolute right-0 bottom-0 h-10 w-12 overflow-hidden transition-opacity duration-500 motion-reduce:opacity-100 motion-reduce:transition-none",
+              compact
+                ? "absolute right-0 bottom-0 h-5 w-7 overflow-hidden transition-opacity duration-500 motion-reduce:opacity-100 motion-reduce:transition-none"
+                : "absolute right-0 bottom-0 h-10 w-12 overflow-hidden transition-opacity duration-500 motion-reduce:opacity-100 motion-reduce:transition-none",
               visible ? "opacity-100" : "opacity-0",
             )}
             style={{ transitionDelay: `${Math.min(delay + 240, 700)}ms` }}
           >
             <Image
               className={cn(
-                "absolute right-0 bottom-0 h-10 w-auto max-w-none",
+                compact
+                  ? "absolute right-0 bottom-0 h-5 w-auto max-w-none"
+                  : "absolute right-0 bottom-0 h-10 w-auto max-w-none",
                 light && "brightness-0 invert",
               )}
               src="/images/home/section-rule.png"

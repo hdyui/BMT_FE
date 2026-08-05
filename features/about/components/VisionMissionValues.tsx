@@ -49,7 +49,7 @@ function AnimatedHeading({
   return (
     <div>
       <h3
-        className={`text-[clamp(1.7rem,2.6vw,2.75rem)] font-bold uppercase leading-none text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        className={`text-2xl sm:text-3xl font-bold uppercase leading-none text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
         }`}
         style={{ transitionDelay: `${delay}ms` }}
@@ -110,14 +110,14 @@ export function VisionMissionValues() {
         sizes="100vw"
       />
 
-      <div className="mx-auto grid w-[min(1380px,calc(100%-2.25rem))] items-center gap-14 lg:grid-cols-[.9fr_1.25fr_1fr] lg:gap-10">
+      <div className="mx-auto grid w-[min(1380px,calc(100%-2.25rem))] items-start gap-14 lg:grid-cols-[.9fr_1.25fr_1fr] lg:gap-10">
         <div className="space-y-14 lg:space-y-16">
           <div>
             <AnimatedHeading isVisible={isVisible} delay={100}>
               Tầm nhìn
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-base leading-7 text-neutral-700 transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
+              className={`mt-5 max-w-[410px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"
@@ -136,7 +136,7 @@ export function VisionMissionValues() {
               Sứ mệnh
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-base leading-7 text-neutral-700 transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
+              className={`mt-5 max-w-[410px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"
@@ -169,7 +169,7 @@ export function VisionMissionValues() {
           </div>
         </div>
 
-        <div>
+        <div className="lg:pt-0">
           <AnimatedHeading isVisible={isVisible} delay={260}>
             Giá trị cốt lõi
           </AnimatedHeading>
@@ -189,7 +189,7 @@ export function VisionMissionValues() {
                   key={title}
                 >
                   <button
-                    className="group/value grid w-full grid-cols-[22px_1fr] items-center gap-2.5 py-2 text-left"
+                    className="group/value grid w-full grid-cols-[18px_22px_1fr] items-center gap-2.5 py-2 text-left"
                     type="button"
                     onClick={() => setActiveValue(index)}
                     aria-expanded={isActive}
@@ -203,7 +203,11 @@ export function VisionMissionValues() {
                       aria-hidden="true"
                     />
                     <span
-                      className={`text-[15px] font-bold uppercase leading-tight transition-colors duration-400 group-hover/value:text-brand ${
+                      className={`h-px w-full transition-colors duration-400 ${isActive ? "bg-brand" : "bg-charcoal"}`}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={`text-xl font-bold uppercase leading-tight transition-colors duration-400 group-hover/value:text-brand ${
                         isActive ? "text-brand" : "text-charcoal"
                       }`}
                     >
@@ -219,7 +223,7 @@ export function VisionMissionValues() {
                     }`}
                   >
                     <div className="overflow-hidden">
-                      <p className="pb-3 text-sm leading-6 text-neutral-700">
+                      <p className="pb-3 text-justify text-xl leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character]">
                         {description}
                       </p>
                     </div>

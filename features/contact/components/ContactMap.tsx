@@ -1,3 +1,4 @@
+import { Reveal } from "@/lib/components/shared/Reveal";
 import styles from "./ContactMap.module.css";
 
 const mapUrl =
@@ -5,18 +6,20 @@ const mapUrl =
 
 export function ContactMap() {
   return (
-    <section className={styles.section} aria-labelledby="contact-map-title">
-      <h2 className="sr-only" id="contact-map-title">
-        Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM
-      </h2>
-      <iframe
-        className={styles.map}
-        src={mapUrl}
-        title="Bản đồ văn phòng BMT Decor"
-        loading="lazy"
-        referrerPolicy="no-referrer-when-downgrade"
-        allowFullScreen
-      />
-    </section>
+    <Reveal className={styles.reveal} from="left">
+      <section className={styles.section} aria-labelledby="contact-map-title">
+        <h2 className="sr-only" id="contact-map-title">
+          Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM
+        </h2>
+        <iframe
+          className={styles.map}
+          src={mapUrl}
+          title="Bản đồ văn phòng BMT Decor"
+          loading="lazy"
+          referrerPolicy="no-referrer-when-downgrade"
+          allowFullScreen
+        />
+      </section>
+    </Reveal>
   );
 }

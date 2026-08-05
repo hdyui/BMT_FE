@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
 import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
+import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
 
 const cardContainerVariants: Variants = {
@@ -30,8 +31,9 @@ type Project = {
   id: string;
   image: string;
   title: string;
-  location: string;
-  scope: string;
+  area: string;
+  style: string;
+  year: number;
 };
 
 const projectImages = [
@@ -114,11 +116,9 @@ const categories = categoryBlueprints.map((category) => ({
     id: `${category.slug}-${index + 1}`,
     image: projectImages[index],
     title,
-    location: index % 2 === 0 ? "TP. Hồ Chí Minh" : "Khu vực phía Nam",
-    scope:
-      index % 3 === 0
-        ? "Thiết kế và thi công hoàn thiện"
-        : "Thiết kế kiến trúc & nội thất",
+    area: `${120 + index * 15}m²`,
+    style: index % 2 === 0 ? "Hiện đại" : "Tối giản",
+    year: 2024 + (index % 3),
   })),
 }));
 
@@ -185,9 +185,10 @@ export function ProjectShowcase() {
       if (!gridItem) return;
 
       setCategoryIndicator({
-        left: gridItem.offsetLeft + button.offsetLeft,
+        left:
+          gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
         top: gridItem.offsetTop + button.offsetTop + button.offsetHeight,
-        width: button.offsetWidth,
+        width: Math.max(28, button.offsetWidth * 0.42),
       });
     };
 
@@ -336,7 +337,7 @@ export function ProjectShowcase() {
                   </div>
 
                   <div
-                    className={`absolute inset-0 bg-gradient-to-t from-charcoal via-charcoal/80 to-brand/30 transition-opacity duration-500 ${
+                    className={`absolute inset-0 bg-[#ff9858]/90 mix-blend-multiply transition-opacity duration-500 ${
                       isExpanded ? "opacity-100" : "opacity-0"
                     }`}
                   />
@@ -348,17 +349,24 @@ export function ProjectShowcase() {
                         : "pointer-events-none translate-y-5 opacity-0"
                     }`}
                   >
-                    <span className="mb-auto text-xs font-semibold tracking-[0.18em] text-brand">
+                    <span className="mb-auto text-xs font-extrabold tracking-[0.18em] text-white">
                       0{page * PROJECTS_PER_PAGE + index + 1}
                     </span>
                     <h3 className="max-w-md text-xl font-bold uppercase leading-snug">
                       {project.title}
                     </h3>
-                    <div className="mt-4 h-px w-28 bg-brand" />
-                    <p className="mt-4 text-sm leading-relaxed text-white/82">
-                      Địa điểm: {project.location}
+                    <BuildingRule
+                      className="mt-1 h-5 max-w-48 text-white"
+                      compact
+                      light
+                      fullWidth
+                    />
+                    <p className="mt-2 text-sm leading-relaxed text-white/95">
+                      <strong>Diện tích:</strong> {project.area}
                       <br />
-                      Hạng mục: {project.scope}
+                      <strong>Phong cách thiết kế:</strong> {project.style}
+                      <br />
+                      <strong>Năm thực hiện:</strong> {project.year}
                     </p>
                     <CardMoreLink className="mt-5" href="/du-an" />
                   </div>
@@ -368,44 +376,48 @@ export function ProjectShowcase() {
           </motion.div>
 
           <button
-            className="absolute left-0 top-1/2 z-30 grid size-9 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-brand shadow-[0_6px_18px_rgb(244_122_42/.34)] transition-[scale,box-shadow,background-color] duration-300 hover:scale-110 hover:bg-[#df641c] hover:shadow-[0_10px_24px_rgb(223_100_28/.42)] active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+            className="absolute left-0 top-1/2 z-30 size-11 -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full transition-transform duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
             disabled={isFading}
             onClick={() => move(-1)}
             aria-label="Nhóm dự án trước"
             type="button"
           >
-            <span
-              aria-hidden="true"
-              className="mr-0.5 size-0 border-y-[5px] border-r-[7px] border-y-transparent border-r-white"
+            <Image
+              src="/images/home/project-previous.png"
+              alt=""
+              fill
+              sizes="44px"
             />
           </button>
 
           <button
-            className="absolute right-0 top-1/2 z-30 grid size-9 translate-x-1/2 -translate-y-1/2 place-items-center rounded-full border-2 border-white bg-brand shadow-[0_6px_18px_rgb(244_122_42/.34)] transition-[scale,box-shadow,background-color] duration-300 hover:scale-110 hover:bg-[#df641c] hover:shadow-[0_10px_24px_rgb(223_100_28/.42)] active:scale-95 disabled:pointer-events-none disabled:opacity-50"
+            className="absolute right-0 top-1/2 z-30 size-11 translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-full transition-transform duration-300 hover:scale-110 active:scale-95 disabled:pointer-events-none disabled:opacity-50"
             disabled={isFading}
             onClick={() => move(1)}
             aria-label="Nhóm dự án tiếp theo"
             type="button"
           >
-            <span
-              aria-hidden="true"
-              className="ml-0.5 size-0 border-y-[5px] border-l-[7px] border-y-transparent border-l-white"
+            <Image
+              src="/images/home/project-next.png"
+              alt=""
+              fill
+              sizes="44px"
             />
           </button>
         </div>
       </div>
 
-      <div className="mt-8 flex items-center justify-center">
+      <div className="mt-[42px] flex items-center justify-center">
         <div
-          className="flex items-center gap-2.5"
+          className="flex items-center gap-[10px]"
           aria-label="Phân trang dự án"
         >
           {Array.from({ length: pageCount }, (_, index) => (
             <button
-              className={`aspect-square size-2.5 shrink-0 rounded-full border border-brand transition-[background-color,scale] duration-300 ${
+              className={`size-[22px] shrink-0 rounded-full border-[3px] transition-[border-color,background-color,transform] duration-300 hover:scale-110 ${
                 page === index
-                  ? "bg-brand"
-                  : "bg-white hover:scale-125 hover:bg-brand/30"
+                  ? "border-brand bg-brand shadow-[inset_0_0_0_4px_white]"
+                  : "border-charcoal bg-white"
               }`}
               disabled={isFading}
               key={index}

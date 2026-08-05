@@ -8,19 +8,19 @@ import { Reveal } from "@/lib/components/shared/Reveal";
 const serviceDetails = [
   {
     image: "/images/home/trust-card-interior.png",
-    copy: "Cung cấp giải pháp xây dựng trọn gói từ tư vấn, thiết kế đến thi công hoàn thiện, tối ưu tiến độ và ngân sách.",
+    copy: "Cung cấp giải pháp xây dựng trọn gói từ tư vấn, thiết kế, thi công đến hoàn thiện, đảm bảo chất lượng, tiến độ và tối ưu chi phí.",
   },
   {
     image: "/images/home/trust-card-design.png",
-    copy: "Kiến tạo không gian có thẩm mỹ, tối ưu công năng và thể hiện rõ cá tính của từng khách hàng.",
+    copy: "Thiết kế không gian hài hòa giữa công năng và thẩm mỹ, mang đến giải pháp phù hợp với nhu cầu sử dụng và phong cách của từng khách hàng.",
   },
   {
     image: "/images/home/trust-card-build.png",
-    copy: "Đội ngũ thi công giàu kinh nghiệm, kiểm soát chặt chẽ chất lượng, an toàn và tiến độ công trình.",
+    copy: "Thi công công trình theo đúng bản vẽ và tiêu chuẩn kỹ thuật, đảm bảo chất lượng, an toàn và tiến độ trong suốt quá trình thực hiện.",
   },
   {
     image: "/images/home/trust-card-site.png",
-    copy: "Khảo sát hiện trạng, đề xuất phương án cải tạo phù hợp và hoàn thiện không gian nhanh chóng.",
+    copy: "Nâng cấp, cải tạo và sửa chữa công trình hiện hữu, tối ưu công năng, làm mới không gian và gia tăng giá trị sử dụng.",
   },
 ] as const;
 
@@ -81,9 +81,9 @@ export function ServiceShowcase() {
       if (!gridItem) return;
 
       setIndicator({
-        left: gridItem.offsetLeft + button.offsetLeft,
+        left: gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
         top: gridItem.offsetTop + button.offsetTop + button.offsetHeight,
-        width: button.offsetWidth,
+        width: Math.max(30, button.offsetWidth * 0.42),
       });
     };
 
@@ -118,7 +118,7 @@ export function ServiceShowcase() {
         {services.map((service, index) => (
           <Reveal delay={index * 120} key={service.href}>
             <button
-              className={`w-full px-3 py-5 text-[13px] font-bold uppercase leading-snug transition-[color,translate] duration-300 ease-out sm:text-sm ${
+              className={`w-full px-3 py-5 text-sm font-extrabold uppercase leading-snug transition-[color,translate] duration-300 ease-out sm:text-base ${
                 selected === index
                   ? "text-brand"
                   : "hover:-translate-y-0.5 hover:text-brand"
@@ -228,13 +228,13 @@ export function ServiceShowcase() {
         </div>
       </div>
 
-      <div className="mt-7 flex justify-center gap-2">
+      <div className="mt-[42px] flex justify-center gap-[10px]">
         {services.map((service, index) => (
           <button
-            className={`aspect-square size-3 shrink-0 rounded-full border border-brand transition-[background-color,scale] duration-300 ${
+            className={`size-[22px] shrink-0 rounded-full border-[3px] transition-[border-color,background-color,transform] duration-300 hover:scale-110 ${
               selected === index
-                ? "scale-110 bg-brand"
-                : "bg-white hover:scale-110 hover:bg-brand/30"
+                ? "border-brand bg-brand shadow-[inset_0_0_0_4px_white]"
+                : "border-charcoal bg-white"
             }`}
             disabled={isTransitioning}
             key={service.href}

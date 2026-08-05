@@ -9,32 +9,37 @@
 
 .careersHeroCta {
   display: inline-flex;
-  height: clamp(40px, 3.75vw, 62px);
+  width: clamp(190px, 17.2vw, 330px);
+  aspect-ratio: 1366 / 291;
   align-items: center;
-  gap: 0.7vw;
+  justify-content: center;
   margin-top: 1vw;
-  padding: 0 clamp(20px, 1.7vw, 36px);
+  padding: 0 17% 0 3%;
   border-radius: 999px;
-  background: #f47a2a;
+  background: url("/images/careers/careers-cta.jpg") center / 100% 100% no-repeat;
   color: white;
   font-size: clamp(14px, 1.4vw, 20px);
-  font-weight: 700;
-  box-shadow: 0 8px 22px rgb(244 122 42 / 28%);
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  white-space: nowrap;
+  text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
+  box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
   transition:
-    background-color 0.3s,
+    filter 0.3s,
     box-shadow 0.3s,
     transform 0.3s;
   animation: cta-fade-in 0.85s 0.76s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
 .careersHeroCta:hover {
-  transform: scale(1.04);
-  background: #ff8a3b;
-  box-shadow: 0 12px 30px rgb(244 122 42 / 42%);
+  transform: translateY(-5px) scale(1.02);
+  filter: brightness(1.04) saturate(1.03);
+  box-shadow: 0 1rem 2rem rgb(137 52 8 / 42%);
 }
 
 .careersHeroCta:active {
-  transform: scale(0.97);
+  transform: translateY(2px) scale(0.99);
 }
 
 .careersHeroCta:focus-visible {
@@ -42,42 +47,13 @@
   outline-offset: 4px;
 }
 
-.careersHeroCtaIcon {
-  display: grid;
-  width: clamp(30px, 2.8vw, 42px);
-  height: clamp(30px, 2.8vw, 42px);
-  place-items: center;
-  border: 2px solid rgb(255 255 255 / 90%);
-  border-radius: 50%;
-  transition: transform 0.3s;
-}
-
-.careersHeroCtaIcon svg {
-  width: clamp(16px, 1.6vw, 22px);
-  height: clamp(16px, 1.6vw, 22px);
-}
-
-.careersHeroCta:hover .careersHeroCtaIcon {
-  transform: rotate(45deg);
-}
-
 @media (max-width: 1023px) {
   .careersHeroCta {
-    height: 56px;
-    gap: 16px;
+    width: min(17rem, 84vw);
+    height: auto;
     margin-top: 28px;
-    padding: 0 28px;
+    padding: 0 17% 0 3%;
     font-size: 18px;
-  }
-
-  .careersHeroCtaIcon {
-    width: 36px;
-    height: 36px;
-  }
-
-  .careersHeroCtaIcon svg {
-    width: 20px;
-    height: 20px;
   }
 }
 

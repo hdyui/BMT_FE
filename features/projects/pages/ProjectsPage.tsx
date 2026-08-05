@@ -240,7 +240,7 @@ export function ProjectsPage() {
 
             <div className="relative z-30 text-right text-charcoal lg:absolute lg:top-[28.7%] lg:left-[56.2%] lg:w-[36.5%]">
               <h1
-                className={`text-[clamp(36px,3.2vw,80px)] leading-[1.12] font-bold tracking-[-0.04em] ${styles.heroTitle}`}
+                className={`text-[clamp(34px,2.8vw,68px)] leading-[1.12] font-bold tracking-[-0.04em] ${styles.heroTitle}`}
               >
                 MỖI CÔNG TRÌNH
                 <br />
@@ -251,11 +251,11 @@ export function ProjectsPage() {
                 alt=""
                 width={1388}
                 height={128}
-                className={`mt-[4.4%] ml-auto h-auto w-[48%] ${styles.heroRule}`}
+                className={`mt-[4.4%] ml-auto h-auto w-[48%] -scale-x-100 ${styles.heroRule}`}
                 aria-hidden="true"
               />
               <p
-                className={`mt-[3.3%] text-justify text-[clamp(15px,1vw,26px)] leading-[1.25] font-normal tracking-[-0.018em] ${styles.heroCopy}`}
+                className={`mt-[3.3%] ml-auto max-w-[44rem] text-[clamp(17px,1.12vw,28px)] leading-[1.38] font-normal tracking-[-0.018em] ${styles.heroCopy}`}
               >
                 Mỗi dự án là minh chứng cho năng lực{" "}
                 <strong className="font-bold">thiết kế thi công</strong> và sự
@@ -284,7 +284,7 @@ export function ProjectsPage() {
                       alt="BMT Decor"
                       width={1202}
                       height={209}
-                      className="h-auto mb-1 w-[5.05em] shrink-0"
+                      className="mb-1 h-auto w-[5.05em] shrink-0"
                     />
                     <span className="text-[0.8em] leading-none">
                       ĐÃ THI CÔNG
@@ -299,7 +299,11 @@ export function ProjectsPage() {
                   mục.
                 </p>
               </Reveal>
-              <Reveal className="mx-auto mt-[18px] w-fit" delay={360} from="left">
+              <Reveal
+                className="mx-auto mt-[18px] w-fit"
+                delay={360}
+                from="left"
+              >
                 <Image
                   src="/images/projects/section-rule.png"
                   alt=""
@@ -383,55 +387,53 @@ export function ProjectsPage() {
                     key={`${activeCategory}-${activePage}`}
                     aria-live="polite"
                   >
-                  {visibleProjects.map((project, index) => (
-                    <motion.article
-                      className="group relative aspect-[1.04/1] overflow-hidden rounded-[28px] bg-neutral-100"
-                      variants={projectCardVariants}
-                      whileHover={{
-                        y: -7,
-                        scale: 1.012,
-                        boxShadow: "0 20px 42px rgba(38, 38, 38, 0.2)",
-                        transition: {
-                          type: "spring",
-                          stiffness: 260,
-                          damping: 24,
-                        },
-                      }}
-                      whileTap={{ scale: 0.992 }}
-                      key={`${activePage}-${index}-${project.title}`}
-                    >
-                      <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.055]">
-                        <Image
-                          src={project.image}
-                          alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
-                          fill
-                          priority={index < 3}
-                          sizes="(min-width: 1024px) 381px, (min-width: 640px) 48vw, 100vw"
-                          className="object-cover"
+                    {visibleProjects.map((project, index) => (
+                      <motion.article
+                        className="group relative aspect-[1.04/1] overflow-hidden rounded-[28px] bg-neutral-100"
+                        variants={projectCardVariants}
+                        whileHover={{
+                          y: -3,
+                          scale: 1.006,
+                          boxShadow: "0 14px 30px rgba(38, 38, 38, 0.16)",
+                          transition: {
+                            type: "spring",
+                            stiffness: 260,
+                            damping: 24,
+                          },
+                        }}
+                        whileTap={{ scale: 0.992 }}
+                        key={`${activePage}-${index}-${project.title}`}
+                      >
+                        <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.055]">
+                          <Image
+                            src={project.image}
+                            alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
+                            fill
+                            priority={index < 3}
+                            sizes="(min-width: 1024px) 381px, (min-width: 640px) 48vw, 100vw"
+                            className="object-cover"
+                          />
+                        </div>
+                        <div
+                          className="absolute inset-0 bg-white/0 transition-colors duration-500 group-hover:bg-white/38"
+                          aria-hidden="true"
                         />
-                      </div>
-                      <div
-                        className="absolute inset-0 bg-white/0 transition-colors duration-500 group-hover:bg-white/38"
-                        aria-hidden="true"
-                      />
-                      <span
-                        className="absolute top-[43%] left-1/2 grid size-16 -translate-x-1/2 -translate-y-1/2 scale-75 place-items-center rounded-full bg-white/90 text-charcoal opacity-0 shadow-lg transition-[opacity,transform] duration-500 group-hover:scale-100 group-hover:opacity-100"
-                        aria-hidden="true"
-                      >
-                        <Search className="size-9 stroke-[1.6]" />
-                      </span>
-                      <div
-                        className="absolute inset-x-0 bottom-0 grid min-h-[84px] content-center bg-white/86 px-4 py-[13px] text-center text-charcoal transition-[min-height,background-color,color] duration-500 ease-out group-hover:min-h-[118px] group-hover:bg-brand group-hover:text-white"
-                      >
-                        <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
-                          Thiết kế thi công nội thất
-                        </p>
-                        <h3 className="mt-[7px] text-[21px] leading-none font-bold uppercase tracking-[-0.025em]">
-                          {project.title}
-                        </h3>
-                      </div>
-                    </motion.article>
-                  ))}
+                        <span
+                          className="absolute top-[43%] left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 scale-90 place-items-center text-charcoal opacity-0 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100"
+                          aria-hidden="true"
+                        >
+                          <Search className="size-10 stroke-[1.8]" />
+                        </span>
+                        <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-4 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
+                          <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
+                            Thiết kế thi công nội thất
+                          </p>
+                          <h3 className="mt-[7px] whitespace-nowrap text-[clamp(12px,1.35vw,18px)] leading-none font-bold uppercase tracking-[-0.035em]">
+                            {project.title}
+                          </h3>
+                        </div>
+                      </motion.article>
+                    ))}
                   </motion.div>
                 </AnimatePresence>
               </div>

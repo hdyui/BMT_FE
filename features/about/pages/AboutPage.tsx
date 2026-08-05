@@ -17,6 +17,7 @@ import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { Reveal } from "@/lib/components/shared/Reveal";
+import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 
 const imageRoot = "/images/about/source";
 
@@ -131,7 +132,27 @@ function SectionHeading({ children }: { children: React.ReactNode }) {
     </div>
   );
 }
-
+function SectionHeadingPartNer({
+  title,
+  copy,
+}: {
+  title: string;
+  copy?: string;
+}) {
+  return (
+    <Reveal className="text-center">
+      <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
+        {title}
+      </h2>
+      {copy && (
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-[17px]">
+          {copy}
+        </p>
+      )}
+      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand" />
+    </Reveal>
+  );
+}
 function EditorialHeading({ children }: { children: React.ReactNode }) {
   return (
     <div>
@@ -355,23 +376,48 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="relative isolate bg-[#f6f6f6] py-24 sm:py-28 lg:py-32">
-          <Image
-            className="-z-10 object-cover opacity-55"
-            src={`${imageRoot}/city-blueprint.png`}
-            alt=""
-            fill
-            sizes="100vw"
-          />
-          <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-            <Reveal>
-              <SectionHeading>Đối tác của BMT Decor</SectionHeading>
-            </Reveal>
-            <PartnerMarquee />
+        <section className="relative py-24 sm:py-28 lg:py-32">
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 z-0 overflow-hidden bg-[#f6f6f6] sm:-bottom-11 lg:-bottom-12"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-cover object-bottom opacity-55"
+              src={`${imageRoot}/city-blueprint.png`}
+              alt=""
+              fill
+              sizes="100vw"
+            />
+          </div>
+          <div
+            className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 z-20 overflow-hidden bg-[#f6f6f6] [--cutout-height:2.5rem] [--cutout-radius:2.25rem] sm:-bottom-11 sm:[--cutout-height:2.75rem] sm:[--cutout-radius:2.75rem] lg:-bottom-12 lg:[--cutout-height:3rem] lg:[--cutout-radius:3rem]"
+            style={{
+              clipPath:
+                "inset(calc(100% - var(--cutout-height)) 0 0 50% round 0 0 0 var(--cutout-radius))",
+            }}
+            aria-hidden="true"
+          >
+            <Image
+              className="object-cover object-bottom opacity-55"
+              src={`${imageRoot}/city-blueprint.png`}
+              alt=""
+              fill
+              sizes="100vw"
+            />
+          </div>
+          <div className="relative z-10 mx-auto w-[min(1280px,calc(100%-2.25rem))]">
+            <section className="py-14">
+              <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+                <SectionHeadingPartNer title="Đối tác của BMT Decor" />
+                <Reveal delay={120}>
+                  <PartnerMarquee />
+                </Reveal>
+              </div>
+            </section>
           </div>
         </section>
 
-        <ContactForm />
+        <ContactForm revealPreviousBackground />
       </main>
       <SiteFooter />
     </>

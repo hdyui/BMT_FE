@@ -9,11 +9,13 @@ export function ContactPage() {
     <>
       <SiteHeader />
       <main className="overflow-hidden pt-[85px]">
-        <ContactHero />
-        <ContactForm />
+        <div className="relative z-20">
+          <ContactHero />
+        </div>
+        <ContactForm revealPreviousBackground />
         <ContactMap />
       </main>
-      <SiteFooter />
+      <SiteFooter showTopBorder={false} />
     </>
   );
 }
