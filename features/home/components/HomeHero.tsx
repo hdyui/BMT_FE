@@ -3,14 +3,42 @@
 import { PointerEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight, Building2 } from "lucide-react";
+import { motion, type Variants } from "framer-motion";
+
+const contentContainerVariants: Variants = {
+  hidden: {},
+  visible: {
+    transition: {
+      staggerChildren: 0.16,
+      delayChildren: 0.25,
+    },
+  },
+};
+
+const titleVariants: Variants = {
+  hidden: { opacity: 0, x: -60 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
+
+const bodyItemVariants: Variants = {
+  hidden: { opacity: 0, y: 44 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    transition: { duration: 0.9, ease: [0.16, 1, 0.3, 1] },
+  },
+};
 
 const slides = [
   {
     image: "/images/home/hero-background-01.png",
     alt: "Mẫu nhà phố do BMT Decor thiết kế",
     title: "BMT Decor - Đơn vị thiết kế và thi công trọn gói",
-    copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng.",
+    copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng cho nhà ở, văn phòng và công trình thương mại.",
     href: "/gioi-thieu",
   },
   {
@@ -145,42 +173,48 @@ export function HomeHero() {
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
 
             <div className="relative mx-auto flex h-full w-[min(1380px,calc(100%-2.5rem))] items-end pb-20 sm:pb-24 lg:pb-28">
-              <div className="max-w-[660px] text-white">
-                <h1
-                  className={`text-3xl leading-[1.08] font-bold text-balance uppercase drop-shadow-lg transition-all duration-700 sm:text-5xl ${
-                    isActive
-                      ? "translate-x-0 opacity-100"
-                      : "-translate-x-10 opacity-0"
-                  }`}
+              <motion.div
+                className="max-w-[660px] text-white"
+                animate={isActive ? "visible" : "hidden"}
+                initial="hidden"
+                variants={contentContainerVariants}
+              >
+                <motion.h1
+                  className="text-[36px] leading-[1.12] font-extrabold text-balance uppercase drop-shadow-lg sm:text-[40px]"
+                  variants={titleVariants}
                 >
                   {slide.title}
-                </h1>
-                <p
-                  className={`mt-5 max-w-xl text-xl leading-relaxed text-white/90 transition-all delay-150 duration-700 sm:text-base ${
-                    isActive
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-7 opacity-0"
-                  }`}
+                </motion.h1>
+                <motion.p
+                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90"
+                  variants={bodyItemVariants}
                 >
-                  <Building2 className="mr-2 inline size-4" />
+                  <Image
+                    className="mr-2 inline h-4 w-auto brightness-0 invert align-[-0.125em]"
+                    src="/images/home/building-mark.png"
+                    alt=""
+                    width={113}
+                    height={119}
+                  />
                   {slide.copy}
-                </p>
-                <div
-                  className={`mt-6 transition-[opacity,transform] delay-100 duration-700 ease-out ${
-                    isActive
-                      ? "translate-y-0 opacity-100"
-                      : "translate-y-7 opacity-0"
-                  }`}
-                >
+                </motion.p>
+                <motion.div className="mt-6" variants={bodyItemVariants}>
                   <Link
-                    className="inline-flex items-center gap-2 rounded-full border border-white px-5 py-2 text-sm transition-[color,background-color,border-color,transform] duration-700 ease-out hover:scale-105 hover:border-brand hover:bg-brand hover:text-white active:scale-95"
+                    className="group inline-flex items-center gap-3 rounded-full border border-white px-5 py-2 text-sm font-bold transition-[color,background-color,border-color,transform] duration-300 hover:scale-105 hover:border-brand hover:bg-brand active:scale-95"
                     href={slide.href}
                     tabIndex={isActive ? 0 : -1}
                   >
-                    TÌM HIỂU THÊM <ArrowUpRight className="size-4" />
+                    TÌM HIỂU THÊM
+                    <Image
+                      className="size-4 object-contain brightness-0 invert transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5"
+                      src="/images/home/arrow-orange.png"
+                      alt=""
+                      width={24}
+                      height={24}
+                    />
                   </Link>
-                </div>
-              </div>
+                </motion.div>
+              </motion.div>
             </div>
           </div>
         );

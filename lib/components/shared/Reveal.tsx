@@ -54,7 +54,7 @@ export function Reveal({
           : cn(hiddenDirection, "opacity-0"),
         className,
       )}
-      style={{ transitionDelay: `${Math.min(delay, 1500)}ms`, ...style }}
+      style={{ transitionDelay: `${Math.min(delay, 1200)}ms` }}
       {...props}
     >
       {children}

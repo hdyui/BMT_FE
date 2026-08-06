@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
 import { Reveal } from "@/lib/components/shared/Reveal";
 
 const portfolioSlices = [
@@ -65,32 +64,24 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8" delay={240} from="left">
-            <div className="grid max-w-2xl grid-cols-[38px_1fr] items-start gap-3">
+            <p className="max-w-2xl text-xl leading-[1.62] text-charcoal/85 sm:text-lg">
               <Image
-                className="mt-0.5 size-8 object-contain"
+                className="float-left mr-3 size-7 object-contain"
                 src="/images/home/building-mark.png"
                 alt=""
-                width={32}
-                height={32}
+                width={28}
+                height={28}
               />
-              <p className="text-base leading-[1.62] text-charcoal/85 sm:text-lg">
-                Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT
-                Decor luôn mong muốn phát triển và mang đến những thiết kế ấn
-                tượng và độc đáo. Là đối tác độc quyền của nhiều thương hiệu
-                lớn. Thiết kế và thi công nhiều trung tâm thương mại tại TP.HCM.
-              </p>
-            </div>
+              Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT Decor
+              luôn mong muốn phát triển và mang đến những thiết kế ấn tượng và
+              độc đáo. Là đối tác độc quyền của nhiều thương hiệu lớn. Thiết kế
+              và thi công nhiều trung tâm thương mại tại TP.HCM.
+            </p>
           </Reveal>
 
           <Reveal className="mt-8" delay={360}>
-            <Link
-              className="group/button inline-flex items-center gap-5 rounded-full border border-[#ff9f68] bg-brand py-3 pr-3 pl-8 text-xl font-extrabold text-white shadow-[inset_0_1px_0_rgb(255_255_255/.35)] transition-[background-color,box-shadow,transform] duration-300 ease-out hover:-translate-y-0.5 hover:bg-[#ff8a3d] hover:shadow-[0_12px_28px_rgb(244_122_42/.28)] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:text-2xl"
-              href="/ho-so-nang-luc"
-            >
-              XEM THÊM
-              <span className="grid size-12 place-items-center rounded-full border-2 border-white/70 transition-transform duration-300 group-hover/button:rotate-6 group-hover/button:scale-105">
-                <ArrowUpRight className="size-7" aria-hidden="true" />
-              </span>
+            <Link className="home-contact-cta" href="/ho-so-nang-luc">
+              <span>XEM THÊM</span>
             </Link>
           </Reveal>
         </div>

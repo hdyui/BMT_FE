@@ -64,16 +64,16 @@ function CountUpNumber({
 
 export function CountUpStats() {
   return (
-    <div className="mx-auto grid w-[min(900px,calc(100%-2.25rem))] grid-cols-1 gap-8 text-center sm:grid-cols-3">
+    <div className="mx-auto grid w-[min(1050px,calc(100%-2.25rem))] grid-cols-1 gap-8 text-center sm:grid-cols-3 sm:gap-16">
       {stats.map((stat, index) => (
         <div
           className="group transition-all duration-500 hover:-translate-y-1"
           key={stat.label}
         >
-          <strong className="block text-6xl font-black transition-colors group-hover:text-brand sm:text-7xl">
+          <strong className="block text-[72px] font-extrabold leading-none tracking-[-0.06em] transition-colors group-hover:text-brand sm:text-[88px] lg:text-[96px]">
             <CountUpNumber value={stat.value} delay={index * 140} />
           </strong>
-          <span className="mx-auto mt-3 block max-w-48 border-t-2 border-brand pt-3 text-xs font-bold uppercase">
+          <span className="mx-auto mt-3 block max-w-52 border-t-2 border-brand pt-3 text-sm font-extrabold uppercase sm:text-base">
             {stat.label}
           </span>
         </div>
