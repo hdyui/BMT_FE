@@ -31,7 +31,7 @@ export function ProcessStepsGrid() {
 
                     {/* Số thứ tự trượt ngang độc lập, đồng thời đổi cam khi hover. */}
                     <Reveal
-                      className="absolute top-[25%] left-0 h-[52%] w-[18%]"
+                      className="absolute top-[35%] right-56 h-[52%] w-[18%]"
                       delay={index * 110 + 80}
                       from="left"
                     >
@@ -67,7 +67,7 @@ export function ProcessStepsGrid() {
                           aria-hidden="true"
                         />
                         <Image
-                          className="relative size-[52%] object-contain"
+                          className="relative size-[85%] object-contain bottom-[28%] left-[17%]"
                           src={step.icon}
                           alt=""
                           width={340}

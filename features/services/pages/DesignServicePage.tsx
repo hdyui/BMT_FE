@@ -68,17 +68,17 @@ export function DesignServicePage() {
 
         {/* Layout mới: Trái là Text (Max Width), Phải là Gallery bám sát viền */}
         {/* Màn nhỏ: chữ dồn lên trên, cụm ảnh nằm dưới -> không chồng lên nhau. */}
-        <div className="relative mx-auto flex h-full w-full max-w-[1920px] items-start pt-14 lg:items-center lg:pt-0">
+        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 lg:items-center lg:pt-0">
           {/* Cụm Text Bên Trái */}
           {/* Bề rộng khối chữ đi theo cỡ chữ (28vw ≈ 14.3 lần font-size) nên
               tiêu đề luôn ngắt đúng 2 dòng như mockup và mép phải dừng trước
               cụm ảnh nghiêng ở mọi bề rộng màn hình. */}
           <div className="relative z-10 w-full max-w-[500px] shrink-0 pl-4 sm:pl-8 lg:ml-[10%] lg:max-w-[min(580px,calc(28vw_+_40px))] lg:pl-10">
             <Reveal
-              className="absolute inset-y-0 left-0 w-2"
+              className="absolute -top-5 -bottom-5 left-0 w-1.5"
               delay={110}
               from="fade"
-            >
+              >
               <Image
                 className="size-full object-fill"
                 src="/images/thiet-ke-kien-truc-noi-that/hero-accent-line.png"
@@ -87,12 +87,12 @@ export function DesignServicePage() {
                 sizes="8px"
                 aria-hidden="true"
               />
-            </Reveal>
+              </Reveal>
 
             <Reveal>
               {/* Mockup dùng cỡ chữ ~1.89vw; 2.15vw cũ làm tiêu đề tràn khỏi
                   khối chữ và đè lên bản vẽ nền. */}
-              <h1 className="text-2xl font-normal leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
+              <h1 className="text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
                 DỊCH VỤ THIẾT KẾ KIẾN TRÚC &
                 <br />
                 NỘI THẤT CHUYÊN NGHIỆP
@@ -115,7 +115,7 @@ export function DesignServicePage() {
             </Reveal>
 
             <Reveal delay={300} from="left">
-              <p className="mt-2 max-w-[310px] text-pretty text-sm font-medium leading-relaxed sm:text-base">
+              <p className="mt-2 max-w-[250px] text-pretty text-sm leading-relaxed sm:text-base">
                 Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
               </p>
             </Reveal>
@@ -220,9 +220,9 @@ export function DesignServicePage() {
         className="relative z-10 scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] py-16"
       >
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
-          <Reveal>
-            <h2 className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-3xl font-normal">
-              <span>QUY TRÌNH THIẾT KẾ TẠI</span>
+          <Reveal className="">
+            <h2 className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-4xl font-extrabold">
+              <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"
                 src="/images/thiet-ke-kien-truc-noi-that/process-brand-logo.png"

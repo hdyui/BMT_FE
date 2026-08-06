@@ -64,18 +64,18 @@ export function FullConstructionServicePage() {
               </Reveal>
 
               <Reveal>
-                <h1 className="text-2xl font-normal leading-[1.12] text-brand sm:text-[clamp(1.75rem,2.15vw,2.45rem)]">
+                <h1 className="text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.75rem,2.15vw,2.45rem)]">
                   DỊCH VỤ THIẾT KẾ THI CÔNG
                   <br />& XÂY DỰNG TRỌN GÓI
                 </h1>
               </Reveal>
               <BuildingRule
-                className="mt-3 max-w-[280px]"
+                className="mt-3 block mr-auto ml-0 max-w-[165px]"
                 src="/images/xay-dung-tron-goi/rule-dark.png"
                 delay={200}
               />
               <Reveal delay={320} from="left">
-                <p className="mt-2 max-w-[310px] text-pretty text-sm font-medium leading-relaxed sm:text-base">
+                <p className="mt-2 max-w-[310px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                   Kiến tạo công trình bền vững từ thiết kế đến thi công
                 </p>
               </Reveal>
@@ -121,8 +121,8 @@ export function FullConstructionServicePage() {
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-pretty text-center">
-              Dịch vụ thiết kế thi công và xây dựng trọn gói giúp chủ đầu tư
+            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-center">
+              Dịch vụ <span className="font-bold">thiết kế thi công</span> và <span className="font-bold">xây dựng trọn gói</span> giúp chủ đầu tư
               triển khai công trình một cách đồng bộ, từ ý tưởng, thiết kế đến
               thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách hàng
               chỉ cần một đầu mối duy nhất để quản lý toàn bộ dự án, giúp tiết
@@ -196,9 +196,9 @@ export function FullConstructionServicePage() {
       <section className="bg-[#f2f2f3] py-12 lg:py-14">
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="text-3xl font-bold sm:text-[32px]">
-              QUY TRÌNH THIẾT KẾ THI CÔNG
-              <br />& XÂY NHÀ TRỌN GÓI
+            <h2 className="text-3xl font-extrabold sm:text-[32px]">
+              QUY TRÌNH THIẾT KẾ THI CÔNG &
+              <br /> XÂY NHÀ TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>

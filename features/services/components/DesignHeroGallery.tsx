@@ -73,7 +73,7 @@ const heroFrames: readonly HeroFrame[] = [
       // Tăng số này = đẩy tấm trái lên cao thêm.
       bottom: 8.57,
     },
-    backing: { width: 23.85, height: 78.88, right: 63.2, bottom: 10.33 },
+    backing: { width: 23.85, height: 52, right: 60.2, bottom: 37.21 },
     hitArea: "polygon(47.9% 5.54%, 97.88% 5.54%, 54.36% 96.25%, 4.19% 96.25%)",
   },
   {
@@ -88,7 +88,7 @@ const heroFrames: readonly HeroFrame[] = [
       // Đáy ngang hàng với khung phải.
       bottom: 1.42,
     },
-    backing: { width: 23.85, height: 78.88, right: 42.25, bottom: 3.05 },
+    backing: { width: 23.85, height: 72.88, right: 42.25, bottom: 10.05 },
     hitArea: "polygon(45.89% 3.2%, 95.59% 3.2%, 52.28% 96.3%, 2.63% 96.3%)",
   },
   {
@@ -140,7 +140,7 @@ export function DesignHeroGallery() {
           key={`${frame.id}-backing`}
         >
           <div
-            className="size-full rounded-[14px] bg-gradient-to-b from-[#c3c4c7] to-[#e4e5e8]"
+            className="size-full rounded-[24px] bg-gradient-to-b from-[#c3c4c7] to-[#e4e5e8]"
             style={{ transform: `skewX(${SKEW_DEG}deg)` }}
           />
         </Reveal>

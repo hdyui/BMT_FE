@@ -71,7 +71,9 @@ export function ContactForm({
       <div className="relative z-30 mx-auto w-[min(92%,78rem)] xl:w-[62.5%]">
         <div className="grid gap-1 [&_h2]:text-[clamp(1.5rem,1.9vw,2.4rem)] [&_h2]:!font-bold">
           <Reveal className="shrink-0">
-            <h2 className="text-2xl font-normal uppercase">Liên hệ tư vấn</h2>
+            <h2 className="text-2xl font-bold uppercase">
+              Liên hệ tư vấn
+            </h2>
           </Reveal>
           <BuildingRule className="max-w-none" light delay={180} />
         </div>

@@ -23,9 +23,8 @@ function TimelineStep({
   return (
     <Reveal from={isLeft ? "right" : "left"} delay={delay}>
       <article className="group/step relative min-h-[205px] rounded-[24px] bg-white p-5 pt-16 shadow-[0_10px_28px_rgb(36_33_34/.08)] lg:h-[clamp(168px,14.2vw,200px)] lg:min-h-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
-        {/* Chỉnh viền cam thành 65% để 2 chấm tròn có khoảng cách vừa vặn với icon giữa, không đâm xuyên cũng không nằm quá xa */}
         <Image
-          className={`pointer-events-none absolute top-0 hidden h-full w-[65%] object-fill transition-[filter,opacity] duration-300 group-hover/step:brightness-110 group-hover/step:saturate-150 lg:block ${
+          className={`pointer-events-none absolute pb-5 top-0 hidden h-full w-[65%] object-fill transition-[filter,opacity] duration-300 group-hover/step:brightness-110 group-hover/step:saturate-150 lg:block ${
             isLeft ? "left-0" : "right-0"
           }`}
           src={
@@ -54,12 +53,12 @@ function TimelineStep({
             sizes="64px"
             aria-hidden="true"
           />
-          <span className="relative">{step.number}</span>
+          <span className="relative text-2xl font-extrabold">{step.number}</span>
         </span>
 
         <span
-          className={`absolute top-3 right-4 grid size-14 place-items-center lg:top-1/2 lg:h-auto lg:w-[31%] lg:aspect-square lg:-translate-y-1/2 ${
-            isLeft ? "lg:right-0" : "lg:right-auto lg:left-0"
+          className={`absolute top-3 right-4 grid size-14 place-items-center lg:top-1/2 lg:h-auto lg:w-[38%] lg:aspect-square lg:-translate-y-1/2 ${
+            isLeft ? "lg:right-[-12%]" : "lg:right-auto lg:left-[-12%]"
           }`}
         >
           <Image
@@ -83,11 +82,11 @@ function TimelineStep({
         <div
           className={`lg:absolute lg:top-[28%] ${
             isLeft
-              ? "lg:right-[35%] lg:left-[15%]" /* Căn text ôm vừa vặn không chừa khoảng trắng */
+              ? "lg:right-[35%] lg:left-[15%]"
               : "lg:right-[15%] lg:left-[35%]"
           }`}
         >
-          <h3 className="text-sm leading-tight font-bold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[13px]">
+          <h3 className="text-3xl leading-tight font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[13px]">
             {step.title}
           </h3>
           <p className="mt-2 text-xs leading-relaxed text-pretty lg:text-[10.5px] lg:leading-[1.35] xl:text-[11.5px]">
@@ -104,12 +103,8 @@ export function ProcessTimeline() {
   const secondGroup = processSteps.slice(3, 6);
 
   return (
-    <div className="relative mx-auto w-[min(820px,calc(100%-2.25rem))]">
-      <Reveal
-        className="pointer-events-none absolute inset-y-0 left-1/2 hidden w-[clamp(42px,5vw,62px)] -translate-x-1/2 lg:block"
-        from="fade"
-        delay={420}
-      >
+    <div className="relative mx-auto flex w-[min(820px,calc(100%-2.25rem))] justify-center">
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-14 h-145 -translate-x-1/2 lg:block">
         <Image
           className="size-full object-fill"
           src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"
@@ -118,9 +113,9 @@ export function ProcessTimeline() {
           sizes="62px"
           aria-hidden="true"
         />
-      </Reveal>
+      </div>
 
-      <div className="grid gap-4 lg:grid-cols-2 lg:gap-12">
+      <div className="grid w-full gap-4 lg:grid-cols-2 lg:gap-40">
         <div className="grid gap-4 lg:gap-0">
           {firstGroup.map((step, index) => (
             <TimelineStep

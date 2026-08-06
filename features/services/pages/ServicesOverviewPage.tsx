@@ -48,29 +48,29 @@ export function ServicesOverviewPage() {
             </Reveal>
 
             <BuildingRule
-              className="mt-2 max-w-[340px]"
+              className="mt-2 max-w-85"
               src="/images/services/rule-dark.png"
               delay={200}
             />
 
             <Reveal delay={320} from="left">
-              <h2 className="mt-5 mb-4 max-w-[640px] text-base font-semibold">
+              <h2 className="mt-5 mb-4 max-w-160 text-base">
                 ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
               </h2>
-              <p className="flex max-w-[640px] items-start gap-1.5 text-base leading-relaxed text-pretty">
-                <Image
-                  className="size-4 shrink-0 translate-y-0.5 object-contain"
-                  src="/images/services/icon-house.png"
-                  alt=""
-                  width={86}
-                  height={91}
-                />
-                <span>
-                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải
-                  tạo trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công
-                  trình chất lượng và đáp ứng nhu cầu sử dụng.
-                </span>
-              </p>
+              <span className="flex max-w-160 items-start gap-1.5 text-base leading-relaxed text-pretty">
+                <p className="leading-normal">
+                  <Image
+                    className="inline-block size-4 mr-0.5 my-1 align-sub object-contain"
+                    src="/images/services/icon-house.png"
+                    alt=""
+                    width={86}
+                    height={91}
+                  />
+                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải tạo trọn
+                  gói từ ý tưởng đến hoàn thiện, tạo nên những công trình chất lượng và đáp
+                  ứng nhu cầu sử dụng.
+                </p>
+              </span>
             </Reveal>
           </div>
 
@@ -133,7 +133,7 @@ export function ServicesOverviewPage() {
           14 = R - √(R² - (R - lệch)²) với R = 72, lệch = 30. */}
       <section className="grid lg:grid-cols-2">
         <Reveal
-          className="relative z-20 min-h-[280px] overflow-hidden rounded-tr-[54px] lg:min-h-[480px] lg:rounded-tr-[72px]"
+          className="relative mr-3.5 z-20 min-h-[280px] overflow-hidden rounded-tr-[54px] lg:min-h-[480px] lg:rounded-tr-[72px]"
           from="left"
         >
           <Image
