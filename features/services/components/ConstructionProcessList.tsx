@@ -22,6 +22,9 @@ function ProcessBlockShape() {
       preserveAspectRatio="none"
       aria-hidden="true"
     >
+      <g transform="translate(0 3)">
+        <path d={BLOCK_PATH} fill="#EE7B30" />
+      </g>
       <g transform="translate(5.4 0)">
         <path
           d={BLOCK_PATH}
@@ -30,9 +33,6 @@ function ProcessBlockShape() {
           strokeWidth={2}
           vectorEffect="non-scaling-stroke"
         />
-      </g>
-      <g transform="translate(0 3)">
-        <path d={BLOCK_PATH} fill="#EE7B30" />
       </g>
     </svg>
   );
@@ -43,9 +43,11 @@ export function ConstructionProcessList() {
     <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
       {/* Thanh dọc màu xám chạy suốt danh sách, canh theo cột thứ hai */}
       <span
-        className="absolute top-0 bottom-10 left-[16.3%] hidden w-[18px] -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
+        className="absolute top-0 bottom-10 left-[16.3%] hidden w-[8px] -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
         aria-hidden="true"
-      />
+      >
+        <span className="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rounded-full bg-[#C9C9C9]" />
+      </span>
 
       <div className="flex flex-col gap-6 md:gap-10">
         {processSteps.map((step, index) => {
@@ -71,16 +73,16 @@ export function ConstructionProcessList() {
                     height={300}
                     aria-hidden="true"
                   />
-                  <span className="relative text-[38px] leading-none font-normal text-charcoal md:text-[46px]">
+                  <span className="relative text-7xl leading-none font-normal text-charcoal ">
                     {step.number}
                   </span>
                 </div>
               </Reveal>
 
               {/* 2. Chấm tròn cam trên thanh timeline */}
-              <div className="hidden justify-center md:flex">
+              <div className="hidden justify-center md:flex ml-4">
                 <Reveal delay={base} from="zoom">
-                  <span className="grid size-[42px] place-items-center rounded-full bg-[#F2F2F3]">
+                  <span className="grid size-[42px] place-items-center rounded-full border-1 border-brand bg-[#F2F2F3]">
                     <span className="block size-[26px] rounded-full bg-brand" />
                   </span>
                 </Reveal>

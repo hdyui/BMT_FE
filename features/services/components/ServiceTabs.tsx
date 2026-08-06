@@ -121,17 +121,17 @@ export function ServiceTabs() {
 
         <div className="max-w-[510px]">
           <Reveal from="left">
-            <span className="block text-7xl leading-none font-light text-neutral-400">
+            <span className="block text-7xl leading-none font-extrabold text-neutral-400">
               {String(shown + 1).padStart(2, "0")}.
             </span>
           </Reveal>
           <Reveal delay={120}>
-            <h2 className="mt-3 text-4xl font-normal uppercase">
+            <h2 className="mt-3 text-4xl font-extrabold uppercase">
               {detail.label}
             </h2>
           </Reveal>
           <Reveal delay={240}>
-            <p className="mt-3 text-sm">{detail.tagline}</p>
+            <p className="mt-3 text-md font-extrabold max-w-fit">{detail.tagline}</p>
             <span className="mt-5 mb-2 block h-0.5 w-36 bg-brand" />
             <p className="text-base leading-relaxed text-pretty">{detail.copy}</p>
           </Reveal>

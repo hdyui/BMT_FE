@@ -24,15 +24,15 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
         from="bottom"
         className="mb-10 flex w-full flex-col items-center justify-between gap-4 md:flex-row"
       >
-        <h2 className="text-xl font-normal uppercase tracking-wide text-charcoal md:text-[26px]">
+        <h2 className="text-4xl font-extrabold uppercase tracking-wide text-charcoal ">
           Quy trình cải tạo & sửa chữa tại
         </h2>
         <Image
           src="/images/cai-tao-sua-chua/logo.png" // BẠN ĐỔI URL ẢNH LOGO VÀO ĐÂY
           alt="BMT Decor Logo"
-          width={160}
-          height={45}
-          className="object-contain"
+          width={200}
+          height={55}
+          className="object-contain mx-4"
         />
       </Reveal>
 
@@ -54,6 +54,12 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
               className="h-auto w-full object-contain"
               sizes="(max-width: 1024px) 100vw, 20vw"
             />
+            {index === steps.length - 1 && (
+              <span
+                className="pointer-events-none absolute right-0 top-[68%] h-[18%] w-[18%] bg-white"
+                aria-hidden="true"
+              />
+            )}
 
             {/* Lớp overlay sáng màu cam khi hover */}
             <div className="pointer-events-none absolute left-0 top-0 h-[28%] w-full rounded-t-[1.5rem] bg-white/0 transition-colors duration-300 group-hover/step:bg-white/20" />
@@ -82,7 +88,7 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
 
             {/* Icon (Logo dưới): Tràn 50% ra ngoài khung, scale nhỏ lại tí cho cân đối */}
             <Reveal
-              className="absolute bottom-[2%] left-[46%] z-10 -translate-x-1/2 translate-y-1/2"
+              className="absolute bottom-[-4%] left-[46%] z-10 -translate-x-1/2 translate-y-1/2"
               delay={index * 150 + 350}
               from="fade"
             >

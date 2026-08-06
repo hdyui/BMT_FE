@@ -56,7 +56,7 @@ export function ContactForm() {
       <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
         <div className="flex items-end gap-5 sm:gap-7">
           <Reveal className="shrink-0">
-            <h2 className="text-2xl font-normal uppercase">
+            <h2 className="text-2xl font-bold uppercase">
               Liên hệ tư vấn
             </h2>
           </Reveal>

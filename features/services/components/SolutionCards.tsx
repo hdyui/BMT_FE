@@ -66,13 +66,14 @@ export function SolutionCards({
                 from={imageFirst ? "right" : "left"}
               >
                 <div className="flex items-start gap-4">
-                  <span className="text-6xl leading-none font-bold text-neutral-300 sm:text-[72px]">
+                  <span className="text-6xl leading-none font-extrabold text-neutral-400 sm:text-[72px]">
                     {card.number}.
                   </span>
                   {/* Tiền tố và nhóm công trình chảy nối tiếp nhau như mockup,
                       chỉ xuống dòng khi hết chỗ. */}
-                  <h3 className="mt-1 text-2xl leading-tight font-bold uppercase sm:text-[28px]">
+                  <h3 className="mt-1 text-2xl leading-tight font-extrabold uppercase sm:text-[28px]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
+                    <br />
                     <span className="text-brand">{card.titleCategory}</span>
                   </h3>
                 </div>

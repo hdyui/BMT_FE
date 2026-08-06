@@ -108,7 +108,7 @@ export function RenovationServicePage() {
                 <Reveal from="bottom">
                   {/* Mockup dùng cỡ chữ ~1.76vw; 2.15vw cũ làm tiêu đề rộng
                       thêm ~22% và lấn ngược vào vùng bản vẽ. */}
-                  <h1 className="text-2xl font-normal leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
+                  <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
                     DỊCH VỤ CẢI TẠO &
                     <br />
                     SỬA CHỮA TRỌN GÓI
@@ -129,7 +129,7 @@ export function RenovationServicePage() {
 
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
-                  <p className="mt-2 max-w-[310px] text-pretty text-sm font-medium leading-relaxed sm:text-base">
+                  <p className="mt-2 max-w-[310px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                     Cải Tạo Không Gian – Nâng Tầm
                     <br className="hidden sm:block" />
                     Giá Trị Công Trình
