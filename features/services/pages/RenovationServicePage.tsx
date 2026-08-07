@@ -31,7 +31,7 @@ import {
 
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal">
+    <div className="min-h-screen  bg-white pt-16 text-charcoal">
       <SiteHeader />
       {/* SECTION 1: BANNER */}
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -67,17 +67,15 @@ export function RenovationServicePage() {
               Tailwind không sinh ra `-1*max(...)`. Giá trị bị chặn bởi
               `calc(100% - 345px)` để cụm chữ không bao giờ tràn sang cột ảnh
               khi màn hình hẹp. */}
-          <div className="relative z-10 mt-24 flex flex-col justify-center pl-8 lg:mt-[100px] lg:pl-[min(calc(22.6vw_+_min(-1.125rem,600px_-_50vw)),calc(100%_-_345px))] xl:mt-[150px]">
-            {/* Khối chứa thanh cam và Text. Đặt `relative` để hoa văn chấm cam
-                lấy mốc từ mép trong (sau padding) — phần tử `absolute` không
-                tính padding của cha nên nếu neo vào wrapper nó sẽ đứng yên khi
-                cụm chữ dịch sang phải và rơi trở lại lên bản vẽ. */}
+          <div className="relative z-10 mt-32 flex flex-col justify-center pl-8 lg:mt-[150px] lg:pl-[min(calc(28vw_+_min(-1.125rem,600px_-_50vw)),calc(100%_-_345px))] xl:mt-[250px]">
+            {/* Khối chứa thanh cam và Text */}
             <div className="relative mt-2 flex gap-5 sm:gap-6 xl:gap-7">
-              {/* Hoa văn chấm cam */}
+              {/* HOA VĂN CHẤM CAM: 
+        Đã đổi từ -left sang -right để đưa sang góc trên bên phải của chữ */}
               <Reveal
                 delay={520}
                 from="fade"
-                className="absolute -left-[35px] top-[-32px] -z-10 lg:-left-[40px] xl:-left-[50px] xl:top-[-42px]"
+                className="absolute -top-[60px] left-[100px] -z-10 lg:left-[100px] xl:-top-[170px] xl:left-[250px]"
               >
                 <Image
                   className="w-[45px] object-contain xl:w-[50px]"
@@ -101,14 +99,11 @@ export function RenovationServicePage() {
                 />
               </Reveal>
 
-              {/* Khối Text — bề rộng đi theo cỡ chữ (17vw ≈ 9.3 lần font-size)
-                  nên tiêu đề luôn ngắt đúng 2 dòng như mockup. */}
+              {/* Khối Text */}
               <div className="flex flex-col justify-center lg:max-w-[clamp(210px,17vw,320px)]">
                 {/* Tiêu đề */}
                 <Reveal from="bottom">
-                  {/* Mockup dùng cỡ chữ ~1.76vw; 2.15vw cũ làm tiêu đề rộng
-                      thêm ~22% và lấn ngược vào vùng bản vẽ. */}
-                  <h1 className="text-2xl font-normal leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
+                  <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
                     DỊCH VỤ CẢI TẠO &
                     <br />
                     SỬA CHỮA TRỌN GÓI
@@ -129,7 +124,7 @@ export function RenovationServicePage() {
 
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
-                  <p className="mt-2 max-w-[310px] text-pretty text-sm font-medium leading-relaxed sm:text-base">
+                  <p className="mt-2 max-w-[310px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                     Cải Tạo Không Gian – Nâng Tầm
                     <br className="hidden sm:block" />
                     Giá Trị Công Trình
@@ -211,6 +206,7 @@ export function RenovationServicePage() {
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
+            textClassName="!text-[24px]"
           />
         </Reveal>
       </section>

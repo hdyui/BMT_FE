@@ -416,7 +416,8 @@ export function AboutPage() {
           </div>
         </section>
 
-        <ContactForm revealPreviousBackground />
+        {/* Section đối tác đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
+        <ContactForm topNotch={false} />
       </main>
       <SiteFooter />
     </>

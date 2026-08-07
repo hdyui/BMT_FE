@@ -18,25 +18,6 @@ const decorativeLayers = [
 export function QuotationHero() {
   return (
     <section className={styles.hero} aria-labelledby="quotation-title">
-      <svg width="0" height="0" aria-hidden="true">
-        <filter
-          id="quotation-remove-white"
-          colorInterpolationFilters="sRGB"
-        >
-          <feColorMatrix
-            in="SourceGraphic"
-            type="matrix"
-            values="1 0 0 0 0 0 1 0 0 0 0 0 1 0 0 -1 -1 -1 0 3"
-            result="quotation-logo-mask"
-          />
-          <feFlood floodColor="#ef7b30" result="quotation-logo-orange" />
-          <feComposite
-            in="quotation-logo-orange"
-            in2="quotation-logo-mask"
-            operator="in"
-          />
-        </filter>
-      </svg>
       <div className={styles.heroDesktopArt} aria-hidden="true">
         <Image
           className={styles.heroGradient}
@@ -109,7 +90,7 @@ export function QuotationHero() {
         </h1>
         <div className={styles.heroDescription}>
           <Image
-            src="/images/bao-gia/decor-16.jpg"
+            src="/images/bao-gia/dong goi trang bao gia web BMT decor-16.jpg"
             alt=""
             width={86}
             height={90}

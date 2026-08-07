@@ -39,7 +39,7 @@ export function FaqAccordion() {
 
   return (
     <Accordion
-      className="border-t border-neutral-300"
+      className="border-t border-neutral-300 w-md"
       value={value}
       onValueChange={handleValueChange}
     >
@@ -50,7 +50,7 @@ export function FaqAccordion() {
             value={`faq-${index + 1}`}
           >
             <AccordionTrigger className="w-full rounded-none py-2.5 text-left text-[15px] font-normal text-pretty hover:text-brand hover:no-underline group-aria-expanded/accordion-trigger:text-brand **:data-[slot=accordion-trigger-icon]:hidden">
-              <span className="flex items-start gap-3">
+              <span className="flex items-start gap-3 font-bold ">
                 <span
                   className="mt-1.5 size-2.5 shrink-0 rounded-full border border-charcoal transition-colors duration-300 group-aria-expanded/accordion-trigger:border-charcoal group-aria-expanded/accordion-trigger:bg-charcoal"
                   aria-hidden="true"
@@ -58,11 +58,11 @@ export function FaqAccordion() {
                 {faq.question}
               </span>
             </AccordionTrigger>
-            <AccordionContent className="pl-[26px] text-sm leading-relaxed text-pretty">
+            <AccordionContent className="pl-6.5 text-sm leading-relaxed text-pretty">
               {/* 378px (khoảng hợp lệ 370-384) để câu trả lời ngắt đúng 3 hàng,
                   xuống dòng ngay sau "nhà ở,"; text-wrap ghi đè text-pretty
                   thừa hưởng từ khối cha để trình duyệt không tự cân lại dòng. */}
-              <span className="block max-w-[378px] animate-in fade-in slide-in-from-bottom-2 text-wrap duration-500 ease-out">
+              <span className="block max-w-94.5 animate-in fade-in slide-in-from-bottom-2 text-wrap duration-500 ease-out">
                 {faq.answer}
               </span>
             </AccordionContent>
