@@ -1,18 +1,19 @@
-import { DocumentPageScaffold } from "@/lib/components/layout/DocumentPageScaffold";
+import { CareerOpenings } from "@/features/careers/components/CareerOpenings";
+import { CareersContactForm } from "@/features/careers/components/CareersContactForm";
+import { CareersHero } from "@/features/careers/components/CareersHero";
+import { SiteFooter } from "@/lib/components/layout/SiteFooter";
+import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 
 export function CareersPage() {
   return (
-    <DocumentPageScaffold
-      eyebrow="TUYỂN DỤNG"
-      title="ĐỒNG HÀNH CÙNG BMT DECOR"
-      description="Cơ hội phát triển dành cho những ứng viên yêu thiết kế, xây dựng và mong muốn tạo ra giá trị thực."
-      sections={[
-        "Văn hóa BMT Decor",
-        "Vị trí đang tuyển",
-        "Quy trình ứng tuyển",
-        "Chính sách nhân sự",
-      ]}
-      image="/images/bmt-worksite.png"
-    />
+    <>
+      <SiteHeader />
+      <main className="overflow-hidden pt-[85px]">
+        <CareersHero />
+        <CareerOpenings />
+        <CareersContactForm />
+      </main>
+      <SiteFooter />
+    </>
   );
 }

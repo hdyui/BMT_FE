@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Roboto_Condensed } from "next/font/google";
+import localFont from "next/font/local";
 import { Toaster } from "@/lib/components/ui/sonner";
 import "./globals.css";
 
-const font = Roboto_Condensed({
-  subsets: ["latin", "vietnamese"],
+const font = localFont({
+  src: [
+    { path: "./fonts/OpenSans-Light.ttf", weight: "300" },
+    { path: "./fonts/OpenSans-Regular.ttf", weight: "400" },
+    { path: "./fonts/OpenSans-Bold.ttf", weight: "700" },
+    { path: "./fonts/OpenSans-ExtraBold.ttf", weight: "800" },
+  ],
   variable: "--font-sans",
+  display: "swap",
 });
 
 export const metadata: Metadata = {

@@ -86,7 +86,7 @@ export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
           </div>
         </div>
         <form className="mt-7" onSubmit={handleSubmit} noValidate>
-          <Reveal delay={140}>
+          <Reveal delay={220}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-8">
               <label>
                 <span className="sr-only">Tên khách hàng</span>
@@ -135,7 +135,7 @@ export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
             </div>
           </Reveal>
 
-          <Reveal delay={280}>
+          <Reveal delay={380}>
             <Button
               className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm"
               type="submit"
