@@ -19,7 +19,7 @@ const cardPositions = [
 
 export function ServicesOverviewPage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen  bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -43,7 +43,9 @@ export function ServicesOverviewPage() {
                 <span className="block lg:whitespace-nowrap">
                   THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ
                 </span>
-                <span className="block lg:whitespace-nowrap">CẢI TẠO TRỌN GÓI</span>
+                <span className="block lg:whitespace-nowrap">
+                  CẢI TẠO TRỌN GÓI
+                </span>
               </h1>
             </Reveal>
 
@@ -66,9 +68,9 @@ export function ServicesOverviewPage() {
                     width={86}
                     height={91}
                   />
-                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải tạo trọn
-                  gói từ ý tưởng đến hoàn thiện, tạo nên những công trình chất lượng và đáp
-                  ứng nhu cầu sử dụng.
+                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải
+                  tạo trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công
+                  trình chất lượng và đáp ứng nhu cầu sử dụng.
                 </p>
               </span>
             </Reveal>
@@ -131,9 +133,11 @@ export function ServicesOverviewPage() {
           để trắng, đúng bản thiết kế. Panel thụt sang trái 14px chui dưới ảnh
           để mép cong chạm đúng góc trên-trái của panel, không hở nêm trắng:
           14 = R - √(R² - (R - lệch)²) với R = 72, lệch = 30. */}
+      {/* Ảnh trái và panel xám được đặt thẳng hàng để mép dưới khớp mượt mà. 
+          Khe hở ở góc cong phía trên sẽ được lấp bằng một khối div phụ ẩn phía sau. */}
       <section className="grid lg:grid-cols-2">
         <Reveal
-          className="relative mr-3.5 z-20 min-h-[280px] overflow-hidden rounded-tr-[54px] lg:min-h-[480px] lg:rounded-tr-[72px]"
+          className="relative mr-3.5 lg:mr-0 z-20 min-h-[280px] overflow-hidden rounded-tr-[54px] lg:min-h-[480px] lg:rounded-tr-[72px]"
           from="left"
         >
           <Image
@@ -144,7 +148,15 @@ export function ServicesOverviewPage() {
             sizes="(max-width: 1024px) 100vw, 50vw"
           />
         </Reveal>
-        <div className="relative z-10 bg-neutral-100 px-5 py-14 lg:mt-[30px] lg:-mb-[30px] lg:-ml-[14px] lg:rounded-tr-[83px] lg:rounded-bl-[30px] lg:pt-8 lg:pr-[8%] lg:pb-12 lg:pl-[5.5%]">
+
+        {/* Đã xóa lg:-ml-[14px] ở div chứa panel */}
+        <div className="relative z-10 bg-neutral-100 px-5 py-14 lg:mt-[30px] lg:-mb-[30px] lg:rounded-tr-[83px] lg:rounded-bl-[30px] lg:pt-8 lg:pr-[8%] lg:pb-12 lg:pl-[5.5%]">
+          {/* MỚI: Khối màu xám nhỏ ẩn phía sau, dùng để lấp vào khoảng hở 14px ở góc trên cùng */}
+          <div
+            className="hidden lg:block absolute top-0 -left-[14px] w-[14px] h-[100px] bg-neutral-100"
+            aria-hidden="true"
+          />
+
           <Reveal>
             <h2 className="text-4xl font-normal">CÁC CÂU HỎI THƯỜNG GẶP</h2>
           </Reveal>
@@ -163,7 +175,8 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
-      <ContactForm />
+      {/* Panel FAQ đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
+      <ContactForm topNotch={false} />
       <SiteFooter />
     </div>
   );

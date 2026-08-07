@@ -69,7 +69,7 @@ const HERO_DIAMONDS = [
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen  bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       {/* SECTION 1: BANNER */}
@@ -121,9 +121,7 @@ export function ConstructionServicePage() {
               <Reveal from="bottom">
                 {/* Đã cập nhật class font giống với DesignServicePage và giảm kích thước */}
                 <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase tracking-wide sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
-                  <span className="inline-block py-1.5">
-                    Dịch Vụ Thi Công
-                  </span>
+                  <span className="inline-block py-1.5">Dịch Vụ Thi Công</span>
                   <br />
                   <span className="mt-2 inline-block py-1.5 sm:mt-3">
                     Xây Dựng
@@ -227,6 +225,7 @@ export function ConstructionServicePage() {
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
+            textClassName="!text-[24px]"
           />
         </Reveal>
       </section>

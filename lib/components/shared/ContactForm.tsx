@@ -13,7 +13,13 @@ type Errors = Partial<Record<FieldName, string>>;
 
 const requiredMessage = "Vui lòng nhập thông tin.";
 
-export function ContactForm() {
+type ContactFormProps = {
+  /** Bo góc phải phía trên: nửa trái nhô lên, nửa phải để lộ nền section trên.
+   *  Tắt khi section phía trên đã tự thò xuống che phần này. */
+  topNotch?: boolean;
+};
+
+export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
   const [errors, setErrors] = useState<Errors>({});
 
   function clearFieldError(field: FieldName) {
@@ -52,17 +58,33 @@ export function ContactForm() {
     "h-12 rounded-full border-2 border-transparent bg-white px-5 text-base text-charcoal shadow-sm placeholder:text-neutral-500 transition-[border-color,box-shadow] duration-300 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:shadow-[0_0_0_4px_rgb(255_255_255/.2),0_12px_30px_rgb(36_33_34/.22)] aria-invalid:border-red-600 aria-invalid:ring-4 aria-invalid:ring-red-950/15";
 
   return (
-    <section className="bg-brand py-14 text-white" id="contact-form">
+    <section className="relative bg-brand py-14 text-white" id="contact-form">
+      {/* Dải cam nhô lên khỏi mép trên, phủ nửa trái và bo lõm ở góc phải
+          (đường tròn bán kính 44px tâm tại góc phải-trên của dải) nên phần
+          còn lại vẫn để lộ nền của section phía trên. */}
+      {topNotch && (
+        <span
+          className="pointer-events-none absolute bottom-full left-0 z-20 hidden h-11 w-[calc(50%+2.75rem)] bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))] lg:block"
+          aria-hidden="true"
+        />
+      )}
+
       <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
-        <div className="flex items-end gap-5 sm:gap-7">
-          <Reveal className="shrink-0">
-            <h2 className="text-2xl font-bold uppercase">
+        <div className="block w-full">
+          <Reveal>
+            <h2 className="mb-2 text-3xl font-bold uppercase sm:text-[32px]">
               Liên hệ tư vấn
             </h2>
           </Reveal>
-          <BuildingRule className="max-w-none" light delay={180} />
-        </div>
 
+          {/* Flex container để đặt đường kẻ CSS và ảnh logo nằm ngang nhau */}
+          <div className="flex w-full items-end">
+            {/* Đường kẻ giả tự động giãn (flex-1) lấp đầy khoảng trống bên trái */}
+            <div className="mb-0 -mr-[2px] h-[4px] flex-1 bg-white"></div>{" "}
+            {/* Ảnh gốc logo giữ nguyên kích thước, tự động bị đẩy sang phải */}
+            <BuildingRule className="shrink-0" light delay={180} />
+          </div>
+        </div>
         <form className="mt-7" onSubmit={handleSubmit} noValidate>
           <Reveal delay={140}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-8">
@@ -70,7 +92,9 @@ export function ContactForm() {
                 <span className="sr-only">Tên khách hàng</span>
                 <Input
                   className={inputClassName}
-                  aria-describedby={errors.name ? "contact-name-error" : undefined}
+                  aria-describedby={
+                    errors.name ? "contact-name-error" : undefined
+                  }
                   aria-invalid={Boolean(errors.name)}
                   name="name"
                   onChange={() => clearFieldError("name")}
@@ -90,7 +114,9 @@ export function ContactForm() {
                 <span className="sr-only">Số điện thoại</span>
                 <Input
                   className={inputClassName}
-                  aria-describedby={errors.phone ? "contact-phone-error" : undefined}
+                  aria-describedby={
+                    errors.phone ? "contact-phone-error" : undefined
+                  }
                   aria-invalid={Boolean(errors.phone)}
                   name="phone"
                   onChange={() => clearFieldError("phone")}

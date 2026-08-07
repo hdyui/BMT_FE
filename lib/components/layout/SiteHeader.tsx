@@ -60,7 +60,7 @@ export function SiteHeader() {
                   </span>
                 </Link>
                 {"children" in item && (
-                  <div className="invisible absolute top-16 left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="invisible absolute top-16 left-1/2 w-72 -translate-x-1/2 -translate-y-2 overflow-hidden rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                     {item.children.map((service, index) => {
                       const isCurrentService = pathname === service.href;
 
@@ -69,7 +69,10 @@ export function SiteHeader() {
                           className={cn(
                             "group/service flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-semibold opacity-0 transition-[color,background-color,opacity,translate] duration-300 group-hover:translate-y-0 group-hover:opacity-100",
                             isCurrentService
-                              ? "bg-charcoal text-white"
+                              ? // Mảng đen của mục đang chọn tràn hết bề ngang
+                                // khung trắng: bù lại p-2 của khung bằng -mx-2
+                                // và tăng px để chữ vẫn thẳng hàng các mục kia.
+                                "-mx-2 rounded-none bg-charcoal px-6 text-white"
                               : "hover:bg-neutral-100 hover:text-brand",
                           )}
                           href={service.href}

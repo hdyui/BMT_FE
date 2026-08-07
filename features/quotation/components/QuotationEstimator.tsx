@@ -227,7 +227,7 @@ export function QuotationEstimator() {
 
           {step === 1 && (
             <UnitInput
-              label="Diện tích sàn"
+              id="area"
               placeholder="Diện tích sàn..."
               value={area}
               unit="m²"
@@ -240,7 +240,7 @@ export function QuotationEstimator() {
 
           {step === 2 && (
             <UnitInput
-              label="Ngân sách"
+              id="budget"
               placeholder="Ngân sách ..."
               value={budget}
               unit="đ"
@@ -428,7 +428,7 @@ function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
 }
 
 type UnitInputProps = {
-  label: string;
+  id: string;
   placeholder: string;
   value: string;
   unit: string;
@@ -439,7 +439,7 @@ type UnitInputProps = {
 };
 
 function UnitInput({
-  label,
+  id,
   placeholder,
   value,
   unit,
@@ -450,24 +450,24 @@ function UnitInput({
 }: UnitInputProps) {
   return (
     <div className={styles.inputBlock}>
-      <label htmlFor={`quotation-${label}`}>{label}</label>
       <div
         className={`${styles.unitInput} ${error ? styles.inputError : ""} ${valid ? styles.inputValid : ""}`}
       >
         <input
-          id={`quotation-${label}`}
+          id={`quotation-${id}`}
+          aria-label={placeholder}
           value={value}
           placeholder={placeholder}
           inputMode="numeric"
           aria-invalid={Boolean(error)}
-          aria-describedby={error ? `quotation-${label}-error` : undefined}
+          aria-describedby={error ? `quotation-${id}-error` : undefined}
           onBlur={onBlur}
           onChange={(event) => onChange(event.target.value)}
         />
         <span>{unit}</span>
       </div>
       {error && (
-        <p className={styles.errorMessage} id={`quotation-${label}-error`}>
+        <p className={styles.errorMessage} id={`quotation-${id}-error`}>
           {error}
         </p>
       )}

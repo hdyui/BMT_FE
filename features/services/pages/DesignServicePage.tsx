@@ -26,7 +26,7 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen  bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
@@ -73,12 +73,13 @@ export function DesignServicePage() {
           {/* Bề rộng khối chữ đi theo cỡ chữ (28vw ≈ 14.3 lần font-size) nên
               tiêu đề luôn ngắt đúng 2 dòng như mockup và mép phải dừng trước
               cụm ảnh nghiêng ở mọi bề rộng màn hình. */}
-          <div className="relative z-10 w-full max-w-[500px] shrink-0 pl-4 sm:pl-8 lg:ml-[10%] lg:max-w-[min(580px,calc(28vw_+_40px))] lg:pl-10">
+          <div className="relative z-10 w-full max-w-[500px] shrink-0 pl-4 sm:pl-8 ml-4 sm:ml-6 lg:ml-[20%] lg:max-w-[min(580px,calc(28vw_+_40px))] lg:pl-10">
+            {" "}
             <Reveal
               className="absolute -top-5 -bottom-5 left-0 w-1.5"
               delay={110}
               from="fade"
-              >
+            >
               <Image
                 className="size-full object-fill"
                 src="/images/thiet-ke-kien-truc-noi-that/hero-accent-line.png"
@@ -87,8 +88,7 @@ export function DesignServicePage() {
                 sizes="8px"
                 aria-hidden="true"
               />
-              </Reveal>
-
+            </Reveal>
             <Reveal>
               {/* Mockup dùng cỡ chữ ~1.89vw; 2.15vw cũ làm tiêu đề tràn khỏi
                   khối chữ và đè lên bản vẽ nền. */}
@@ -98,7 +98,6 @@ export function DesignServicePage() {
                 NỘI THẤT CHUYÊN NGHIỆP
               </h1>
             </Reveal>
-
             <Reveal
               className="mt-4 w-[110px] sm:w-[125px]"
               delay={180}
@@ -113,7 +112,6 @@ export function DesignServicePage() {
                 aria-hidden="true"
               />
             </Reveal>
-
             <Reveal delay={300} from="left">
               <p className="mt-2 max-w-[250px] text-pretty text-sm leading-relaxed sm:text-base">
                 Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
@@ -184,6 +182,7 @@ export function DesignServicePage() {
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
+            textClassName="!text-[24px]"
           />
         </Reveal>
       </section>
@@ -219,9 +218,10 @@ export function DesignServicePage() {
         id="design-process"
         className="relative z-10 scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] py-16"
       >
-        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
+        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
-            <h2 className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-4xl font-extrabold">
+            {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
+            <h2 className="flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"
