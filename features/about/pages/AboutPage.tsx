@@ -17,7 +17,6 @@ import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { Reveal } from "@/lib/components/shared/Reveal";
-import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 
 const imageRoot = "/images/about/source";
 
@@ -168,7 +167,7 @@ export function AboutPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-16">
+      <main className="overflow-hidden">
         <AboutHero />
         <JourneyTimeline />
         <VisionMissionValues />

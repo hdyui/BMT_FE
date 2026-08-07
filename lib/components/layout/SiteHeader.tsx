@@ -87,7 +87,7 @@ export function SiteHeader() {
         <Link
           className={cn(
             buttonVariants({ size: "sm" }),
-            "ml-auto hidden h-[49px] min-w-[190px] rounded-full bg-brand px-8 text-[16px] font-extrabold text-white shadow-none transition-all duration-300 hover:bg-brand-dark hover:text-white hover:shadow-xl xl:inline-flex",
+            "ml-auto hidden h-[49px] min-w-[190px] rounded-full bg-orange-500 px-8 text-[16px] font-extrabold text-white shadow-none transition-all duration-300 hover:bg-brand-dark hover:text-white hover:shadow-xl xl:inline-flex",
           )}
           href="/lien-he"
         >

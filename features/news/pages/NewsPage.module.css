@@ -184,6 +184,7 @@
   aspect-ratio: 1;
   border: clamp(1px, 0.1vw, 2px) solid #858585;
   border-radius: 14%;
+  z-index: 2;
   animation-delay: 0.4s;
 }
 
@@ -194,6 +195,7 @@
   aspect-ratio: 2860 / 1755;
   border-radius: 9%;
   background: #d0d0d0;
+  z-index: 1;
   animation-delay: 0.48s;
 }
 
@@ -205,6 +207,7 @@
   display: grid;
   grid-template: repeat(2, 1fr) / repeat(2, 1fr);
   gap: 27.8%;
+  z-index: 3;
   animation-delay: 0.56s;
 }
 .heroDecor07 i:nth-child(1),
@@ -246,7 +249,7 @@
   left: 12.7%;
   width: 27.5%;
   padding-left: 1.3vw;
-  z-index: 2;
+  z-index: 3;
 }
 
 .newsHeroCopy::before {
@@ -357,7 +360,7 @@
   aspect-ratio: 1.694 / 1;
   overflow: hidden;
   border-radius: clamp(24px, 2.3vw, 36px);
-  z-index: 1;
+  z-index: 2;
   box-shadow: 0 18px 38px rgb(36 33 34 / 0%);
   transition: box-shadow 0.4s ease;
   animation: slide-from-right 0.95s 0.35s cubic-bezier(0.22, 1, 0.36, 1)
@@ -378,6 +381,19 @@
 
 .newsHeroPhoto:hover .newsHeroPhotoImage {
   transform: scale(1.17);
+}
+
+@media (min-width: 1024px) {
+  .heroDecor01,
+  .heroDecor02,
+  .heroDecor03,
+  .heroDecor04,
+  .heroDecor05,
+  .heroDecor06,
+  .newsHeroCopy,
+  .newsHeroPhoto {
+    translate: 0 -20px;
+  }
 }
 
 .featuredSection {
