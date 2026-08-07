@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { BrandLogo } from "@/lib/components/shared/BrandLogo";
@@ -63,18 +64,26 @@ export function SiteHeader() {
                   </span>
                 </Link>
                 {"children" in item && (
-                  <div className="invisible absolute top-[85px] left-1/2 w-72 -translate-x-1/2 -translate-y-2 rounded-b-xl bg-white p-2 text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="invisible absolute top-[85px] left-0 w-[380px] -translate-y-2 overflow-hidden rounded-b-[28px] bg-white text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                     {item.children.map((service, index) => (
                       <Link
-                        className="flex translate-y-2 items-center gap-3 rounded-lg px-4 py-3 text-sm font-bold opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-neutral-100 hover:text-brand"
+                        className="flex h-[50px] translate-y-2 items-center gap-4 px-6 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-charcoal/85 hover:text-white"
                         href={service.href}
                         style={{ transitionDelay: `${index * 70}ms` }}
                         key={service.href}
                       >
-                        <span className="font-bold text-brand">
-                          {String(index + 1).padStart(2, "0")}
+                        <span className="flex w-9 shrink-0 justify-center">
+                          <Image
+                            className="max-h-[38px] w-auto object-contain"
+                            src={service.icon}
+                            alt=""
+                            width={48}
+                            height={40}
+                          />
                         </span>
-                        {service.label}
+                        <span className="text-[16px] font-extrabold uppercase leading-none tracking-[-0.015em]">
+                          {service.label}
+                        </span>
                       </Link>
                     ))}
                   </div>

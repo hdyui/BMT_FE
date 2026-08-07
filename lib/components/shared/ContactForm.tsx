@@ -76,14 +76,7 @@ export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
               Liên hệ tư vấn
             </h2>
           </Reveal>
-
-          {/* Flex container để đặt đường kẻ CSS và ảnh logo nằm ngang nhau */}
-          <div className="flex w-full items-end">
-            {/* Đường kẻ giả tự động giãn (flex-1) lấp đầy khoảng trống bên trái */}
-            <div className="mb-0 -mr-[2px] h-[4px] flex-1 bg-white"></div>{" "}
-            {/* Ảnh gốc logo giữ nguyên kích thước, tự động bị đẩy sang phải */}
-            <BuildingRule className="shrink-0" light delay={180} />
-          </div>
+          <BuildingRule className="max-w-none" light fullWidth delay={180} />
         </div>
         <form className="mt-7" onSubmit={handleSubmit} noValidate>
           <Reveal delay={220}>
