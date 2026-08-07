@@ -17,7 +17,6 @@ import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { Reveal } from "@/lib/components/shared/Reveal";
-import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 
 const imageRoot = "/images/about/source";
 
@@ -417,7 +416,8 @@ export function AboutPage() {
           </div>
         </section>
 
-        <ContactForm revealPreviousBackground />
+        {/* Section đối tác đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
+        <ContactForm topNotch={false} />
       </main>
       <SiteFooter />
     </>

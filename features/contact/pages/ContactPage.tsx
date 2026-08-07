@@ -12,7 +12,8 @@ export function ContactPage() {
         <div className="relative z-20">
           <ContactHero />
         </div>
-        <ContactForm revealPreviousBackground />
+        {/* Hero đã phủ sẵn mép trên nên không cần dải nhô của form. */}
+        <ContactForm topNotch={false} />
         <ContactMap />
       </main>
       <SiteFooter showTopBorder={false} />
