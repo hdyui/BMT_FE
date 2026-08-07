@@ -24,7 +24,7 @@ export function SiteFooter({
       className={`${showTopBorder ? "border-t-[10px] border-brand" : "border-t-0"} bg-[#f1f1f3]`}
       id="footer"
     >
-      <div className="mx-auto grid w-[min(1700px,calc(100%-2.5rem))] gap-10 py-10 md:grid-cols-2 lg:grid-cols-[260px_minmax(0,1fr)_300px] lg:gap-x-8 lg:py-10 2xl:grid-cols-[340px_minmax(0,1fr)_425px] 2xl:gap-x-24">
+      <div className="mx-auto grid w-[calc(100%-2.5rem)] max-w-[1500px] gap-10 py-10 md:w-[calc(100%-4rem)] md:grid-cols-2 lg:w-[calc(100%-6rem)] lg:grid-cols-[265px_minmax(0,1fr)_300px] lg:gap-x-8 lg:py-10 xl:grid-cols-[275px_minmax(0,1fr)_360px] xl:gap-x-10 2xl:grid-cols-[295px_minmax(0,1fr)_425px] 2xl:gap-x-12">
         <Reveal className="flex flex-col items-start">
           <BrandLogo
             className="ml-1 w-[180px] mix-blend-multiply 2xl:w-[215px]"
@@ -61,7 +61,9 @@ export function SiteFooter({
                 width={32}
                 height={32}
               />
-              <span>Địa chỉ: {contactInformation.office}</span>
+              <span className="min-w-0 max-w-[620px]">
+                Địa chỉ: {contactInformation.office}
+              </span>
             </p>
             <p className="flex items-start gap-2.5">
               <Image
@@ -98,7 +100,7 @@ export function SiteFooter({
                   width={32}
                   height={32}
                 />
-                <span>
+                <span className="min-w-0 max-w-[620px]">
                   {index < 2
                     ? `Địa chỉ chi nhánh ${index + 1}: `
                     : "Xưởng sản xuất: "}

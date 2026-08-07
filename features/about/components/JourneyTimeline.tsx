@@ -181,7 +181,9 @@ export function JourneyTimeline() {
           >
             <div className="relative flex w-max gap-7 px-1 pb-8 pt-4">
               <span
-                className="absolute left-0 right-0 top-[27px] border-t-2 border-dashed border-neutral-300"
+                className={`absolute left-0 right-0 top-[30px] origin-left border-t-2 border-dashed border-neutral-300 transition-[opacity,transform] delay-[520ms] duration-1000 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
+                  isVisible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
+                }`}
                 aria-hidden="true"
               />
 
@@ -208,12 +210,12 @@ export function JourneyTimeline() {
                       style={{ transitionDelay: `${baseDelay}ms` }}
                       aria-hidden="true"
                     >
-                      <div className="grid size-7 place-items-center rounded-full border-2 border-neutral-300 bg-white transition-[scale,background-color,border-color] delay-0 duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/item:scale-110 group-hover/item:border-brand group-hover/item:bg-brand group-focus-visible/item:scale-110 group-focus-visible/item:border-brand group-focus-visible/item:bg-brand">
-                        <span className="size-2.5 rounded-full bg-charcoal opacity-0 transition-opacity delay-0 duration-300 group-hover/item:opacity-100 group-focus-visible/item:opacity-100" />
+                      <div className="grid size-7 place-items-center rounded-full bg-transparent transition-[scale,background-color] delay-0 duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/item:scale-110 group-hover/item:bg-brand group-focus-visible/item:scale-110 group-focus-visible/item:bg-brand">
+                        <span className="size-2.5 rounded-full bg-charcoal transition-transform duration-300 group-hover/item:scale-110 group-focus-visible/item:scale-110" />
                       </div>
                     </div>
                     <span
-                      className="absolute right-[13px] top-7 h-[104px] border-l-2 border-dashed border-neutral-300"
+                      className="absolute right-[13px] top-[14px] h-[128px] border-l-2 border-dashed border-neutral-300"
                       aria-hidden="true"
                     />
 
@@ -239,7 +241,7 @@ export function JourneyTimeline() {
                         </div>
 
                         <div
-                          className={`mt-2 text-right transition-[opacity,translate] duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                          className={`mt-2 text-left transition-[opacity,translate] duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                             isVisible
                               ? "translate-y-0 opacity-100"
                               : "translate-y-12 opacity-0"
@@ -249,21 +251,29 @@ export function JourneyTimeline() {
                           <h3 className="whitespace-nowrap text-right text-xl font-bold uppercase leading-tight text-charcoal">
                             {milestone.title}
                           </h3>
-                          <p className="mt-1.5 text-right text-xl leading-[1.35] text-neutral-700">
+                          <p
+                            className="mt-1.5 text-xl leading-[1.4] tracking-normal text-neutral-700"
+                            style={{
+                              textAlign: "justify",
+                              textAlignLast: "right",
+                              textJustify: "inter-character",
+                              wordSpacing: "normal",
+                            }}
+                          >
                             {milestone.description}
                           </p>
                         </div>
                       </div>
 
                       <div
-                        className={`flex flex-col items-center pt-4 transition-[opacity,translate] duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                        className={`flex flex-col items-center pr-[16px] pt-4 transition-[opacity,translate] duration-700 ease-out motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                           isVisible
                             ? "translate-y-0 opacity-100"
                             : "translate-y-12 opacity-0"
                         }`}
                         style={{ transitionDelay: `${baseDelay + 140}ms` }}
                       >
-                        <span className="text-3xl font-bold leading-none text-neutral-400 transition-colors duration-300 [writing-mode:vertical-rl] rotate-180 group-hover/item:text-brand group-focus-visible/item:text-brand">
+                        <span className="text-[34px] font-bold leading-none text-neutral-400 transition-colors duration-300 [writing-mode:vertical-rl] rotate-180 group-hover/item:text-brand group-focus-visible/item:text-brand">
                           {milestone.year}
                         </span>
                       </div>

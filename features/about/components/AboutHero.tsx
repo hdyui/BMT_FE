@@ -35,7 +35,7 @@ export function AboutHero() {
         onLoad={handleImageLoad}
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,#fff_0%,rgba(255,255,255,.98)_34%,rgba(255,255,255,.78)_48%,rgba(255,255,255,.08)_70%)] max-lg:bg-[linear-gradient(90deg,rgba(255,255,255,.98)_0%,rgba(255,255,255,.9)_58%,rgba(255,255,255,.32)_100%)]"
+        className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,.82)_0%,rgba(255,255,255,.72)_28%,rgba(255,255,255,.52)_45%,rgba(255,255,255,.24)_56%,rgba(255,255,255,.06)_65%,rgba(255,255,255,0)_72%)] max-lg:bg-[linear-gradient(90deg,rgba(255,255,255,.88)_0%,rgba(255,255,255,.76)_42%,rgba(255,255,255,.48)_68%,rgba(255,255,255,.18)_88%,rgba(255,255,255,.08)_100%)]"
         aria-hidden="true"
       />
 
@@ -62,7 +62,7 @@ export function AboutHero() {
                 : "-translate-x-10 opacity-0"
             }`}
           >
-            <BuildingRule className="mt-6 h-7 max-w-[410px] brightness-0" />
+            <BuildingRule className="mt-6 h-[30px] w-[325px] max-w-full brightness-0" />
           </div>
           <p
             className={`mt-7 max-w-[590px] text-justify text-lg leading-7 text-neutral-800 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] delay-[780ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 sm:text-xl sm:leading-8 ${
