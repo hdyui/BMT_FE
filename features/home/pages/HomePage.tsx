@@ -114,7 +114,7 @@ function ServiceSectionHeading() {
 
 export function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-clip pt-16">
+    <div className="min-h-screen overflow-x-clip">
       <SiteHeader />
       <HomeHero />
 

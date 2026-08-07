@@ -117,7 +117,7 @@
 .description {
   display: block;
   max-width: 96%;
-  margin: 0.62cqw 0 0;
+  margin: 1.25cqw 0 0;
   opacity: 0;
   font-size: clamp(0.75rem, 0.96cqw, 1.35rem);
   line-height: 1.18;
@@ -137,24 +137,23 @@
 .cta {
   position: relative;
   display: inline-flex;
-  width: 17.2cqw;
-  min-width: 10.5rem;
+  width: clamp(190px, 17.2cqw, 330px);
   height: auto;
   min-height: 2.5rem;
   aspect-ratio: 1366 / 291;
   margin-top: 1.55cqw;
   align-items: center;
-  justify-content: center;
   border: 0;
   border-radius: 999px;
   background: url("/images/careers/careers-cta.jpg") center / 100% 100%
     no-repeat;
-  padding: 0 17% 0 3%;
+  padding: 0;
   opacity: 0;
   color: white;
-  font-size: clamp(0.82rem, 1.18cqw, 1.4rem);
-  font-weight: 600;
-  line-height: 1;
+  font-size: clamp(18px, 1.65cqw, 30px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   text-align: center;
   white-space: nowrap;
   box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
@@ -339,11 +338,11 @@
   }
 
   .cta {
-    width: min(15rem, 80%);
+    width: min(17rem, 84vw);
     height: auto;
     margin-top: 1.5rem;
-    padding: 0 17% 0 3%;
-    font-size: 1rem;
+    padding: 0;
+    font-size: 24px;
   }
   .photoEntrance {
     position: relative;

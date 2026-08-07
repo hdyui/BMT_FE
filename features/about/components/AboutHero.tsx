@@ -20,7 +20,7 @@ export function AboutHero() {
   }
 
   return (
-    <section className="group relative isolate min-h-[calc(100svh-4rem)] overflow-hidden bg-white lg:min-h-[720px]">
+    <section className="group relative isolate min-h-[100svh] overflow-hidden bg-white lg:min-h-[784px]">
       <Image
         className={`-z-20 object-cover object-[62%_center] transition-[opacity,scale] delay-100 duration-[1600ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:delay-150 group-hover:duration-700 motion-reduce:opacity-100 motion-reduce:scale-100 ${
           isImageReady
@@ -39,7 +39,7 @@ export function AboutHero() {
         aria-hidden="true"
       />
 
-      <div className="mx-auto flex min-h-[calc(100svh-4rem)] w-[min(1380px,calc(100%-2.25rem))] items-center py-16 lg:min-h-[720px]">
+      <div className="mx-auto flex min-h-[100svh] w-[min(1380px,calc(100%-2.25rem))] items-center py-16 lg:min-h-[784px]">
         <div className="w-full max-w-[610px]">
           <p
             className={`text-lg font-medium uppercase tracking-[0.02em] text-charcoal underline decoration-1 underline-offset-8 transition-[opacity,translate] delay-150 duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 sm:text-xl ${

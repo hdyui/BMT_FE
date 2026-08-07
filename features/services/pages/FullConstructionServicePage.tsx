@@ -26,7 +26,7 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>

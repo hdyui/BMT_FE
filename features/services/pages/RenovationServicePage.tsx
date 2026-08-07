@@ -31,7 +31,7 @@ import {
 
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen overflow-x-hidden bg-white pt-16 text-charcoal">
+    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal">
       <SiteHeader />
       {/* SECTION 1: BANNER */}
       <section className={SERVICE_HERO_CLASS_NAME}>

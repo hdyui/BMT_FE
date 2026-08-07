@@ -2,7 +2,7 @@
   --quotation-orange: #ef7b30;
   --quotation-charcoal: #231f20;
   min-height: 100dvh;
-  overflow-x: hidden;
+  overflow-x: clip;
   background: #fff;
   color: var(--quotation-charcoal);
 }
