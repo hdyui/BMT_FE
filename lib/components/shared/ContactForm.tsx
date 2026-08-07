@@ -73,7 +73,7 @@ export function ContactForm({
           <Reveal className="shrink-0">
             <h2 className="text-2xl font-normal uppercase">Liên hệ tư vấn</h2>
           </Reveal>
-          <BuildingRule className="max-w-none" light delay={180} />
+          <BuildingRule className="max-w-none" light fullWidth delay={180} />
         </div>
 
         <form className="mt-7" onSubmit={handleSubmit} noValidate>
