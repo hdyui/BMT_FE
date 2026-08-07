@@ -159,9 +159,17 @@ export function ProjectCarousel({
                   "relative aspect-[3334/2653] w-[42vw] max-w-[600px] shrink-0 overflow-hidden rounded-[32px] transition-[transform,opacity] duration-500 ease-out",
                   isActive
                     ? "z-10 scale-100 opacity-100"
-                    : "scale-[0.82] opacity-90",
+                    : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
+                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100",
                 )}
                 key={`${project.id}-${index}`}
+                // THÊM SỰ KIỆN onClick TẠI ĐÂY
+                onClick={() => {
+                  // Chỉ trượt khi ảnh được click không phải là ảnh đang active
+                  if (!isActive) {
+                    move(index - active);
+                  }
+                }}
               >
                 <Image
                   className="object-cover"

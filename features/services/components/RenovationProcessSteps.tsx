@@ -20,19 +20,26 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
     // Đã thu hẹp max-width xuống còn khoảng 1024px để lọt lòng vừa đường viền đỏ
     <section className="mx-auto w-[min(1024px,calc(100%-2rem))] py-12">
       {/* Header: Chữ bên trái, Logo BMT bên phải */}
+      {/* Header: Chữ bên trái, Logo BMT bên phải */}
+      {/* Header: Chữ bên trái, Logo BMT bên phải */}
+      {/* Header: Chữ và Logo đi liền nhau, canh giữa */}
+      {/* Header: Đẩy sát 2 lề và kích thước vừa đủ để lấp đầy không gian */}
       <Reveal
         from="bottom"
-        className="mb-10 flex w-full flex-col items-center justify-between gap-4 md:flex-row"
+        className="mb-10 flex w-full flex-col items-center justify-between gap-4 lg:flex-row"
       >
-        <h2 className="text-4xl font-extrabold uppercase tracking-wide text-charcoal ">
+        {/* Tiêu đề: Size được canh đúng tầm 46px để đủ dài lấp khoảng trống */}
+        <h2 className="text-3xl font-black uppercase tracking-tight text-charcoal sm:text-4xl lg:text-[42px] xl:text-[46px] whitespace-nowrap">
           Quy trình cải tạo & sửa chữa tại
         </h2>
+
+        {/* Logo: To ra khoảng 310px để nối tiếp ngay sau chữ và chạm mép phải */}
         <Image
           src="/images/cai-tao-sua-chua/logo.png" // BẠN ĐỔI URL ẢNH LOGO VÀO ĐÂY
           alt="BMT Decor Logo"
-          width={200}
-          height={55}
-          className="object-contain mx-4"
+          width={310}
+          height={85}
+          className="h-auto w-[220px] object-contain sm:w-[250px] lg:w-[280px] xl:w-[310px] shrink-0"
         />
       </Reveal>
 
@@ -65,10 +72,9 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
             <div className="pointer-events-none absolute left-0 top-0 h-[28%] w-full rounded-t-[1.5rem] bg-white/0 transition-colors duration-300 group-hover/step:bg-white/20" />
 
             {/* Số thứ tự: Tinh chỉnh lại size một xíu */}
-            <div className="absolute left-[46%] top-[13%] -translate-x-1/2 -translate-y-1/2 text-center text-[24px] font-semibold text-white xl:text-[26px]">
+            <div className="absolute left-1/2 top-[16.5%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center text-[36px] font-black tracking-wide text-white xl:text-[44px]">
               {step.number}
             </div>
-
             {/* Vùng chứa Text: Vẫn giữ nguyên tỉ lệ bóp lề để lọt lòng khung đen */}
             <div className="absolute inset-0 bottom-[12%] left-[10%] right-[16%] top-[27%] flex flex-col pt-2">
               {/* Tiêu đề: Ép size nhỏ lại chút để không rớt dòng */}

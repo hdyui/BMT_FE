@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Chrome profile sinh ra khi chạy browser test, không phải mã nguồn.
+    ".browser-test-profile/**",
   ]),
 ]);
 

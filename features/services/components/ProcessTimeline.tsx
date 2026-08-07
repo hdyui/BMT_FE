@@ -53,7 +53,9 @@ function TimelineStep({
             sizes="64px"
             aria-hidden="true"
           />
-          <span className="relative text-2xl font-extrabold">{step.number}</span>
+          <span className="relative text-2xl font-extrabold">
+            {step.number}
+          </span>
         </span>
 
         <span
@@ -104,7 +106,7 @@ export function ProcessTimeline() {
 
   return (
     <div className="relative mx-auto flex w-[min(820px,calc(100%-2.25rem))] justify-center">
-      <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-14 h-145 -translate-x-1/2 lg:block">
+      <div className="pointer-events-none absolute inset-y-0 left-1/2 z-10 hidden w-17 h-145 -translate-x-1/2 lg:block">
         <Image
           className="size-full object-fill"
           src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"

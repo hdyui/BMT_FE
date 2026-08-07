@@ -26,7 +26,7 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal">
+    <div className="min-h-screen  bg-white pt-16 text-charcoal">
       <SiteHeader />
 
       <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>
@@ -122,12 +122,13 @@ export function FullConstructionServicePage() {
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-center">
-              Dịch vụ <span className="font-bold">thiết kế thi công</span> và <span className="font-bold">xây dựng trọn gói</span> giúp chủ đầu tư
-              triển khai công trình một cách đồng bộ, từ ý tưởng, thiết kế đến
-              thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách hàng
-              chỉ cần một đầu mối duy nhất để quản lý toàn bộ dự án, giúp tiết
-              kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh trong quá
-              trình xây dựng.
+              Dịch vụ <span className="font-bold">thiết kế thi công</span> và{" "}
+              <span className="font-bold">xây dựng trọn gói</span> giúp chủ đầu
+              tư triển khai công trình một cách đồng bộ, từ ý tưởng, thiết kế
+              đến thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách
+              hàng chỉ cần một đầu mối duy nhất để quản lý toàn bộ dự án, giúp
+              tiết kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh
+              trong quá trình xây dựng.
             </p>
           </Reveal>
           <BuildingRule
@@ -158,6 +159,7 @@ export function FullConstructionServicePage() {
             label="TƯ VẤN MIỄN PHÍ"
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
+            textClassName="!text-[24px]"
             imageHeight={292}
           />
         </Reveal>

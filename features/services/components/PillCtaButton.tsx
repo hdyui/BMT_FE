@@ -8,6 +8,7 @@ type PillCtaButtonProps = {
   imageWidth: number;
   imageHeight: number;
   className?: string;
+  textClassName?: string; // <-- 1. Thêm dòng này để nhận class chữ từ bên ngoài
 };
 
 export function PillCtaButton({
@@ -17,6 +18,7 @@ export function PillCtaButton({
   imageWidth,
   imageHeight,
   className,
+  textClassName, // <-- 2. Khai báo biến ở đây
 }: PillCtaButtonProps) {
   return (
     <Link
@@ -32,7 +34,10 @@ export function PillCtaButton({
         height={imageHeight}
         aria-hidden="true"
       />
-      <span className="absolute inset-0 flex items-center justify-center pr-[18%] text-sm font-semibold text-white uppercase">
+      {/* 3. Ghép textClassName vào đoạn thẻ span này */}
+      <span
+        className={`absolute inset-0 flex items-center justify-center pr-[18%] text-sm font-semibold text-white uppercase ${textClassName ?? ""}`}
+      >
         {label}
       </span>
     </Link>
