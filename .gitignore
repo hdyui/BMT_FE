@@ -13,6 +13,7 @@
 # testing
 /coverage
 /.browser-test-profile/
+/.chrome-project-debug/
 
 # next.js
 /.next/
@@ -41,3 +42,4 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .browser-test-profile/
+.chrome-project-debug/

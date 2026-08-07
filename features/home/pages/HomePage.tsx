@@ -300,7 +300,10 @@ export function HomePage() {
           <div className="mt-9 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <Reveal>
               <Link className="group block" href="/tin-tuc">
-                <div className="relative aspect-[1.16/1] overflow-hidden rounded-3xl">
+                <div
+                  className="relative overflow-hidden rounded-3xl"
+                  style={{ aspectRatio: "1.65 / 1" }}
+                >
                   <Image
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
                     src="/images/home/news-featured.png"

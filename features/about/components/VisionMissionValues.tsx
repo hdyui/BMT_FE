@@ -41,10 +41,14 @@ function AnimatedHeading({
   children,
   isVisible,
   delay,
+  ruleWidth = 285,
+  fullWidthRule = false,
 }: {
   children: React.ReactNode;
   isVisible: boolean;
   delay: number;
+  ruleWidth?: number;
+  fullWidthRule?: boolean;
 }) {
   return (
     <div>
@@ -57,19 +61,38 @@ function AnimatedHeading({
         {children}
       </h3>
       <div
-        className={`relative mt-3 h-6 w-full max-w-[285px] origin-left transition-[opacity,scale] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
+        className={`relative mt-3 h-6 w-full origin-left transition-[opacity,scale] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
           isVisible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
         }`}
-        style={{ transitionDelay: `${delay + 220}ms` }}
+        style={{
+          maxWidth: `${ruleWidth}px`,
+          transitionDelay: `${delay + 220}ms`,
+        }}
         aria-hidden="true"
       >
-        <Image
-          className="object-contain object-left"
-          src="/images/home/section-rule.png"
-          alt=""
-          fill
-          sizes="285px"
-        />
+        {fullWidthRule ? (
+          <>
+            <span className="absolute inset-x-0 bottom-0 h-0.5 bg-brand" />
+            <span className="absolute right-0 bottom-0 h-6 w-9 overflow-hidden">
+              <Image
+                className="absolute right-0 bottom-0 h-6 w-auto max-w-none"
+                src="/images/home/section-rule.png"
+                alt=""
+                width={1388}
+                height={128}
+                sizes="36px"
+              />
+            </span>
+          </>
+        ) : (
+          <Image
+            className="object-contain object-left"
+            src="/images/home/section-rule.png"
+            alt=""
+            fill
+            sizes={`${ruleWidth}px`}
+          />
+        )}
       </div>
     </div>
   );
@@ -170,7 +193,12 @@ export function VisionMissionValues() {
         </div>
 
         <div className="lg:pt-0">
-          <AnimatedHeading isVisible={isVisible} delay={260}>
+          <AnimatedHeading
+            isVisible={isVisible}
+            delay={260}
+            ruleWidth={340}
+            fullWidthRule
+          >
             Giá trị cốt lõi
           </AnimatedHeading>
 
@@ -189,19 +217,20 @@ export function VisionMissionValues() {
                   key={title}
                 >
                   <button
-                    className="group/value grid w-full grid-cols-[18px_22px_1fr] items-center gap-2.5 py-2 text-left"
+                    className="group/value grid w-full grid-cols-[30px_22px_1fr] items-center gap-2.5 py-2 text-left"
                     type="button"
                     onClick={() => setActiveValue(index)}
                     aria-expanded={isActive}
                   >
-                    <span
-                      className={`size-[18px] rounded-full border-[3px] transition-[background-color,border-color,box-shadow,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/value:scale-110 group-hover/value:border-white group-hover/value:bg-brand group-hover/value:shadow-[0_0_0_1.5px_#f47a2a] ${
+                    <span className="grid size-[30px] place-items-center" aria-hidden="true">
+                      <span
+                        className={`rounded-full transition-[width,height,background-color,border-color,box-shadow,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/value:scale-110 group-hover/value:border-white group-hover/value:bg-brand group-hover/value:shadow-[0_0_0_1.5px_#f47a2a] ${
                         isActive
-                          ? "border-white bg-brand shadow-[0_0_0_1.5px_#f47a2a]"
-                          : "border-charcoal bg-charcoal shadow-none"
+                          ? "size-[26px] border-2 border-white bg-brand shadow-[0_0_0_1.5px_#f47a2a]"
+                          : "size-[18px] border-[3px] border-charcoal bg-charcoal shadow-none"
                       }`}
-                      aria-hidden="true"
-                    />
+                      />
+                    </span>
                     <span
                       className={`h-px w-full transition-colors duration-400 ${isActive ? "bg-brand" : "bg-charcoal"}`}
                       aria-hidden="true"

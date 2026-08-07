@@ -384,6 +384,10 @@
 }
 
 @media (min-width: 1024px) {
+  .newsHero {
+    overflow: visible;
+  }
+
   .heroDecor01,
   .heroDecor02,
   .heroDecor03,
@@ -415,10 +419,9 @@
   border-radius: 0 clamp(52px, 5.2vw, 76px) clamp(34px, 3.4vw, 52px) 0;
   background: linear-gradient(
     180deg,
-    #f47a2a 0%,
-    #f47a2a 22%,
-    rgb(245 132 55 / 94%) 30%,
-    rgb(246 151 83 / 72%) 46%,
+    #f47a2a 5%,
+    rgb(245 132 55 / 75%) 20%,
+    rgb(246 151 83 / 62%) 46%,
     rgb(246 173 124 / 42%) 67%,
     rgb(246 173 124 / 16%) 86%,
     transparent 100%

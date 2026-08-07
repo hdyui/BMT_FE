@@ -186,9 +186,9 @@ export function ProjectsPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-[50px]">
+      <main className="relative overflow-hidden bg-[#f2f2f4] pt-[60px]">
         <section
-          className={`relative isolate min-h-[650px] overflow-hidden bg-[#f2f2f4] lg:aspect-[1920/750] lg:min-h-0 ${styles.heroSection}`}
+          className={`relative z-[1] isolate min-h-[650px] overflow-hidden bg-[#f2f2f4] lg:h-[calc(39.0625vw+40px)] lg:min-h-0 lg:overflow-visible ${styles.heroSection}`}
         >
           <Image
             src="/images/projects/hero-blueprint.png"
@@ -196,12 +196,32 @@ export function ProjectsPage() {
             fill
             priority
             sizes="100vw"
-            className={`pointer-events-none hidden object-fill lg:block ${styles.heroBackdrop}`}
+            className={`pointer-events-none z-0 hidden object-fill lg:block ${styles.heroBackdrop}`}
+            aria-hidden="true"
+          />
+
+          <Image
+            src="/images/projects/hero-blueprint.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={`pointer-events-none z-[5] hidden object-fill lg:block ${styles.heroHeaderTail}`}
+            aria-hidden="true"
+          />
+
+          <Image
+            src="/images/projects/hero-blueprint.png"
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            className={`pointer-events-none z-[2] hidden object-fill lg:block ${styles.heroDotOverlay}`}
             aria-hidden="true"
           />
 
           <div
-            className={`pointer-events-none absolute top-[4%] left-[3.6%] z-[1] hidden h-[68%] w-[30%] rounded-tl-[4.5rem] bg-[#d5d5d5] lg:block ${styles.heroGrayBlock}`}
+            className={`pointer-events-none absolute top-[6%] left-[3.6%] z-[1] hidden h-[68%] w-[30%] rounded-tl-[4.5rem] bg-[#d5d5d5] lg:block ${styles.heroGrayBlock}`}
             aria-hidden="true"
           />
 
@@ -217,7 +237,7 @@ export function ProjectsPage() {
           </div>
 
           <div
-            className={`pointer-events-none absolute top-[57.6%] left-[33.2%] z-20 hidden h-[38.2%] w-[18.5%] lg:block ${styles.heroOutline}`}
+            className={`pointer-events-none absolute top-[57.6%] left-[33.2%] z-[15] hidden h-[38.2%] w-[18.5%] lg:block ${styles.heroOutline}`}
             aria-hidden="true"
           >
             <span className={styles.heroOutlineFrame} />
@@ -424,11 +444,11 @@ export function ProjectsPage() {
                         >
                           <Search className="size-10 stroke-[1.8]" />
                         </span>
-                        <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-4 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
+                        <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-2 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
                           <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
                             Thiết kế thi công nội thất
                           </p>
-                          <h3 className="mt-[7px] whitespace-nowrap text-[clamp(12px,1.35vw,18px)] leading-none font-bold uppercase tracking-[-0.035em]">
+                          <h3 className="mt-[7px] whitespace-nowrap text-[clamp(14px,1.5vw,21px)] leading-none font-bold uppercase tracking-[-0.04em]">
                             {project.title}
                           </h3>
                         </div>

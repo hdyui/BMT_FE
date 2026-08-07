@@ -200,7 +200,7 @@ export function NewsPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-[85px]">
+      <main className="overflow-hidden bg-[#efedef] pt-[85px]">
         <section className={styles.newsHero}>
           <div className={styles.newsHeroDecorations} aria-hidden="true">
             <span
