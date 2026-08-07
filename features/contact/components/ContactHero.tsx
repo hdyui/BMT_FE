@@ -68,7 +68,9 @@ export function ContactHero() {
             </p>
 
             <a className={styles.cta} href="#contact-form">
-              <span>LIÊN HỆ NGAY</span>
+              <span className="inline-flex h-full w-4/5 items-center justify-center">
+                LIÊN HỆ NGAY
+              </span>
             </a>
           </div>
 

@@ -167,7 +167,7 @@ export function AboutPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-16">
+      <main className="overflow-hidden">
         <AboutHero />
         <JourneyTimeline />
         <VisionMissionValues />

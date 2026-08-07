@@ -10,6 +10,7 @@ export function BuildingRule({
   light = false,
   fullWidth = false,
   compact = false,
+  src = "/images/home/section-rule.png",
 }: {
   className?: string;
   delay?: number;
@@ -87,8 +88,8 @@ export function BuildingRule({
             visible ? "scale-x-100" : "scale-x-0",
             light && "brightness-0 invert",
           )}
-          style={{ transitionDelay: `${Math.min(delay, 600)}ms` }}
-          src="/images/home/section-rule.png"
+          style={{ transitionDelay: `${Math.min(delay, 1500)}ms` }}
+          src={src}
           alt=""
           fill
           sizes="430px"

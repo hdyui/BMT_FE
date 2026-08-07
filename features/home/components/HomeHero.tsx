@@ -129,7 +129,7 @@ export function HomeHero() {
 
   return (
     <section
-      className="relative h-[calc(75svh-64px)] min-h-[520px] touch-pan-y cursor-grab select-none overflow-hidden bg-charcoal outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset lg:min-h-[640px]"
+      className="relative h-[75svh] min-h-[584px] touch-pan-y cursor-grab select-none overflow-hidden bg-charcoal outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset lg:min-h-[704px]"
       aria-label="Banner giới thiệu BMT Decor"
       aria-roledescription="carousel"
       onKeyDown={(event) => {

@@ -81,7 +81,9 @@ export function CapabilityProfileSection() {
 
           <Reveal className="mt-8" delay={360}>
             <Link className="home-contact-cta" href="/ho-so-nang-luc">
-              <span>XEM THÊM</span>
+              <span className="inline-flex h-full w-4/5 items-center justify-center">
+                XEM THÊM
+              </span>
             </Link>
           </Reveal>
         </div>

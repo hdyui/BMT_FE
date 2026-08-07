@@ -278,20 +278,20 @@
 .home-contact-cta {
   position: relative;
   display: inline-flex;
-  width: clamp(190px, 17.2vw, 275px);
+  width: clamp(190px, 17.2vw, 330px);
   min-height: 40px;
   aspect-ratio: 1366 / 291;
   align-items: center;
-  justify-content: center;
-  padding: 0 17% 0 3%;
+  padding: 0;
   border: 0;
   border-radius: 999px;
   background: url("/images/careers/careers-cta.jpg") center / 100% 100%
     no-repeat;
   color: white;
-  font-size: clamp(14px, 1.18vw, 19px);
-  font-weight: 600;
-  line-height: 1;
+  font-size: clamp(18px, 1.65vw, 30px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
   text-align: center;
   white-space: nowrap;
   box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
@@ -316,4 +316,11 @@
 .home-contact-cta:focus-visible {
   outline: 3px solid #242122;
   outline-offset: 4px;
+}
+
+@media (max-width: 1023px) {
+  .home-contact-cta {
+    width: min(17rem, 84vw);
+    font-size: 24px;
+  }
 }

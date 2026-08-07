@@ -186,7 +186,7 @@ export function ProjectsPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-[85px]">
+      <main className="overflow-hidden pt-[50px]">
         <section
           className={`relative isolate min-h-[650px] overflow-hidden bg-[#f2f2f4] lg:aspect-[1920/750] lg:min-h-0 ${styles.heroSection}`}
         >
@@ -238,7 +238,7 @@ export function ProjectsPage() {
               />
             </div>
 
-            <div className="relative z-30 text-right text-charcoal lg:absolute lg:top-[28.7%] lg:left-[56.2%] lg:w-[36.5%]">
+            <div className="relative z-30 text-right text-charcoal lg:absolute lg:top-[28.7%] lg:left-[56.2%] lg:w-[42%]">
               <h1
                 className={`text-[clamp(34px,2.8vw,68px)] leading-[1.12] font-bold tracking-[-0.04em] ${styles.heroTitle}`}
               >
