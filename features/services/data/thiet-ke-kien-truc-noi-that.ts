@@ -140,7 +140,7 @@ export const processSteps = [
     number: "04",
     icon: "/images/thiet-ke-kien-truc-noi-that/process-artwork-4.png",
     circle: "/images/thiet-ke-kien-truc-noi-that/process-circle-4.png",
-    title: "Thiết kế & Triển khai hồ sơ",
+    title: "Thiết kế & Triển khai",
     copy: "Hoàn thiện hồ sơ thiết kế gồm bản vẽ\nkiến trúc, kết cấu, điện nước (MEP), nội\nthất (nếu có) và các tài liệu kỹ thuật\nphục vụ thi công.",
   },
   {
