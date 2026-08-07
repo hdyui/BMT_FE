@@ -92,6 +92,10 @@ function CareersHeroBackdrop() {
           key={part.src}
         />
       ))}
+      <div
+        className="absolute right-0 bottom-[0%] h-[4.58%] w-[31.53%] rounded-tl-[1.5vw] bg-[#ef7b30] animate-[fade-in_.65s_ease-out_both] motion-reduce:animate-none"
+        style={{ animationDelay: `${heroParts.length * 120}ms` }}
+      />
     </div>
   );
 }
@@ -99,7 +103,7 @@ function CareersHeroBackdrop() {
 function HeroVisual() {
   return (
     <Reveal
-      className="relative z-10 mx-auto w-full max-w-[680px] lg:absolute lg:left-[7%] lg:top-[21.5%] lg:max-w-none lg:w-[43.6%]"
+      className="relative z-10 mx-auto w-full max-w-[680px] lg:absolute lg:left-[6.4%] lg:top-[22.5%] lg:max-w-none lg:w-[43.6%]"
       delay={100}
       from="left"
     >
@@ -125,7 +129,7 @@ export function CareersHero() {
       <div className="relative z-10 mx-auto grid w-[min(1460px,calc(100%-2.25rem))] gap-12 py-16 lg:absolute lg:inset-0 lg:block lg:w-full lg:py-0">
         <HeroVisual />
 
-        <div className="relative z-20 max-w-[640px] lg:absolute lg:left-[55%] lg:top-[24%] lg:w-[39%] lg:max-w-none">
+        <div className="relative mt-10 z-20 max-w-[640px] lg:absolute lg:left-[55%] lg:top-[24%] lg:w-[42%] lg:max-w-none">
           <Reveal delay={120}>
             <h1 className="text-[clamp(2.8rem,4.6vw,5.1rem)] leading-[.9] font-bold uppercase tracking-[-.045em] text-charcoal">
               Gia nhập đội ngũ
@@ -140,7 +144,7 @@ export function CareersHero() {
             </h1>
           </Reveal>
           <Reveal delay={420} from="left">
-            <p className="mt-7 max-w-[620px] text-base leading-7 text-neutral-700 sm:text-lg sm:leading-8">
+            <p className="mt-7 max-w-[620px] text-xl leading-7 text-neutral-700 sm:text-lg sm:leading-8">
               <Image
                 className="mr-[0.38em] inline-block h-[1.05em] w-auto align-[-0.16em] [filter:brightness(0)_saturate(100%)_invert(56%)_sepia(88%)_saturate(2340%)_hue-rotate(343deg)_brightness(100%)_contrast(92%)]"
                 src="/images/home/building-mark.png"
@@ -158,7 +162,9 @@ export function CareersHero() {
           </Reveal>
           <div>
             <Link className={styles.careersHeroCta} href="/lien-he">
-              <span>LIÊN HỆ NGAY</span>
+              <span className="inline-flex h-full w-4/5 items-center justify-center">
+                LIÊN HỆ NGAY
+              </span>
             </Link>
           </div>
         </div>

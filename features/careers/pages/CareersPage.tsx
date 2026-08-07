@@ -8,7 +8,7 @@ export function CareersPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden pt-[85px]">
+      <main className="overflow-hidden">
         <CareersHero />
         <CareerOpenings />
         <CareersContactForm />
