@@ -189,7 +189,7 @@ export function ProjectCarousel({
                   <p className="mb-1 text-[11px] font-semibold tracking-wider uppercase sm:text-xs">
                     {project.tag}
                   </p>
-                  <h3 className="text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[26px]">
+                  <h3 className="font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[26px]">
                     {project.title}
                   </h3>
                 </div>

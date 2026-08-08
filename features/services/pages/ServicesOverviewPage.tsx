@@ -19,7 +19,7 @@ const cardPositions = [
 
 export function ServicesOverviewPage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
 
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -39,10 +39,11 @@ export function ServicesOverviewPage() {
               <p className="mb-4 inline-block border-b-2 border-charcoal pb-1 text-lg">
                 GIẢI PHÁP
               </p>
-              <h1 className="max-w-[480px] text-[clamp(1.5rem,1.9vw,2.35rem)] leading-[1.18] font-bold text-brand">
+              <h1 className="font-heading max-w-[480px] text-[clamp(1.5rem,1.9vw,2.35rem)] leading-[1.18] font-bold text-brand">
                 <span className="block lg:whitespace-nowrap">
                   THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ
                 </span>
+
                 <span className="block lg:whitespace-nowrap">
                   CẢI TẠO TRỌN GÓI
                 </span>
@@ -56,7 +57,7 @@ export function ServicesOverviewPage() {
             />
 
             <Reveal delay={320} from="left">
-              <h2 className="mt-5 mb-4 max-w-160 text-base">
+              <h2 className="font-heading mt-5 mb-4 max-w-160 text-base">
                 ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-base leading-relaxed text-pretty">
@@ -108,15 +109,20 @@ export function ServicesOverviewPage() {
       <section className="py-20" id="quy-trinh">
         <div className="mx-auto mb-10 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="text-4xl font-normal md:text-[43px]">
+            <h2 className="font-heading text-4xl font-bold md:text-[43px]">
               QUY TRÌNH LÀM VIỆC
             </h2>
           </Reveal>
           <Reveal delay={160}>
+            {/* Mockup ngắt 2 dòng sau "đảm bảo tiến độ," và in đậm "BMT Decor",
+                "quy trình 6 bước". Ngắt dòng chỉ bật từ md trở lên để màn nhỏ
+                vẫn tự xuống hàng theo bề rộng. */}
             <p className="mx-auto mt-3 max-w-[720px] leading-relaxed">
-              BMT Decor triển khai dự án theo quy trình 6 bước rõ ràng, đảm bảo
-              tiến độ, chất lượng và đồng hành cùng khách hàng trong từng giai
-              đoạn.
+              <strong className="font-bold">BMT Decor</strong> triển khai dự án
+              theo <strong className="font-bold">quy trình 6 bước</strong> rõ
+              ràng, đảm bảo tiến độ,
+              <br className="hidden md:inline" /> chất lượng và đồng hành cùng
+              khách hàng trong từng giai đoạn.
             </p>
           </Reveal>
           <BuildingRule
@@ -158,12 +164,13 @@ export function ServicesOverviewPage() {
           />
 
           <Reveal>
-            <h2 className="text-4xl font-normal">CÁC CÂU HỎI THƯỜNG GẶP</h2>
+            <h2 className="font-heading text-4xl font-bold">CÁC CÂU HỎI THƯỜNG GẶP</h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="mt-4 max-w-[440px] text-sm leading-relaxed text-pretty">
-              Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ hơn về
-              quy trình và dịch vụ của BMT Decor
+              Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ
+              <br className="hidden md:inline" /> hơn về quy trình và dịch vụ
+              của BMT Decor
             </p>
           </Reveal>
           <BuildingRule

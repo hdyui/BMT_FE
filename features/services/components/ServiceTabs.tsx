@@ -74,7 +74,7 @@ export function ServiceTabs() {
           <Reveal delay={index * 110} from="left" key={service.label}>
             <button
               className={cn(
-                "w-full px-3 py-4 text-center text-sm font-medium transition-colors duration-300 hover:text-brand",
+                "w-full px-3 py-4 text-center font-heading text-sm font-bold transition-colors duration-300 hover:text-brand",
                 index === active && "text-brand",
               )}
               onClick={() => select(index)}
@@ -126,7 +126,7 @@ export function ServiceTabs() {
             </span>
           </Reveal>
           <Reveal delay={120}>
-            <h2 className="mt-3 text-4xl font-extrabold uppercase">
+            <h2 className="mt-3 font-heading text-4xl font-extrabold uppercase">
               {detail.label}
             </h2>
           </Reveal>

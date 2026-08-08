@@ -31,7 +31,7 @@ import {
 
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
       {/* SECTION 1: BANNER */}
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -103,7 +103,7 @@ export function RenovationServicePage() {
               <div className="flex flex-col justify-center lg:max-w-[clamp(210px,17vw,320px)]">
                 {/* Tiêu đề */}
                 <Reveal from="bottom">
-                  <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
+                  <h1 className="font-heading text-2xl font-extrabold leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
                     DỊCH VỤ CẢI TẠO &
                     <br />
                     SỬA CHỮA TRỌN GÓI
@@ -167,7 +167,7 @@ export function RenovationServicePage() {
       <section className={SERVICE_PROJECT_SECTION_CLASS_NAME}>
         <div className={SERVICE_PROJECT_HEADING_CLASS_NAME}>
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
               Giải Pháp Cải Tạo Phù Hợp Cho Mọi Công Trình
             </h2>
           </Reveal>
@@ -177,10 +177,15 @@ export function RenovationServicePage() {
               <strong className="font-bold">cải tạo nhà ở</strong>,{" "}
               <strong className="font-bold">cải tạo văn phòng</strong>,{" "}
               <strong className="font-bold">cải tạo showroom</strong>,{" "}
-              <strong className="font-bold">cải tạo nhà hàng</strong>, sửa chữa
-              nhà và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục
-              các hạng mục xuống cấp, tối ưu công năng và nâng cao giá trị sử
-              dụng với chi phí hợp lý.
+              <strong className="font-bold">cải tạo nhà hàng</strong>,{" "}
+              <strong className="font-bold">
+                sửa chữa
+                <br className="hidden lg:inline" /> nhà
+              </strong>{" "}
+              và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục các
+              hạng mục xuống cấp, tối ưu công năng và nâng
+              <br className="hidden lg:inline" /> cao giá trị sử dụng với chi
+              phí hợp lý.
             </p>
           </Reveal>
           <BuildingRule
@@ -218,7 +223,7 @@ export function RenovationServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="mb-12 text-center">
             <Reveal from="bottom">
-              <h2 className="text-3xl uppercase sm:text-4xl">
+              <h2 className="font-heading text-3xl uppercase sm:text-4xl">
                 <span className="font-normal">CẢI TẠO & SỬA CHỮA</span>
                 <br />
                 <span className="font-bold">
@@ -253,7 +258,7 @@ export function RenovationServicePage() {
       <section className="py-16">
         {/* <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
               Quy Trình Cải Tạo & Sửa Chữa Tại BMT Decor
             </h2>
           </Reveal>

@@ -24,7 +24,6 @@
 .hero {
   position: relative;
   min-height: 562px;
-  margin-top: 64px;
   overflow: hidden;
   background: #f6f6f6;
 }
@@ -834,7 +833,6 @@
 @media (max-width: 767px) {
   .hero {
     min-height: 0;
-    margin-top: 64px;
     padding-top: min(62vw, 310px);
     background: #fff;
   }

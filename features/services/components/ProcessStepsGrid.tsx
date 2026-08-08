@@ -77,7 +77,7 @@ export function ProcessStepsGrid() {
                       </span>
 
                       <div className="absolute top-[28%] right-[17%] bottom-[8%] left-[27%]">
-                        <h3 className="pr-[20%] text-[12px] leading-tight font-bold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[13px]">
+                        <h3 className="font-heading pr-[20%] text-[12px] leading-tight font-bold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[13px]">
                           {step.title}
                         </h3>
                         <p className="mt-2 text-[10px] leading-snug text-muted-foreground text-pretty lg:text-[11px]">

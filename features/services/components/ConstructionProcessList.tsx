@@ -94,7 +94,7 @@ export function ConstructionProcessList() {
                 delay={base + 120}
                 from="left"
               >
-                <h3 className="text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand md:text-xl">
+                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand md:text-xl">
                   {step.title}
                   <br className="hidden md:block" />{" "}
                   {step.subtitle}

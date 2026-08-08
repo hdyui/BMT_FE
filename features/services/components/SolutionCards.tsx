@@ -71,7 +71,7 @@ export function SolutionCards({
                   </span>
                   {/* Tiền tố và nhóm công trình chảy nối tiếp nhau như mockup,
                       chỉ xuống dòng khi hết chỗ. */}
-                  <h3 className="mt-1 text-2xl leading-tight font-extrabold uppercase sm:text-[28px]">
+                  <h3 className="font-heading mt-1 text-2xl leading-tight font-extrabold uppercase sm:text-[28px]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
                     <br />
                     <span className="text-brand">{card.titleCategory}</span>

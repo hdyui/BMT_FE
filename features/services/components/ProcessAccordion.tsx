@@ -51,7 +51,7 @@ export function ProcessAccordion() {
                 <span className="text-base lg:text-lg text-charcoal">
                   {String(index + 1).padStart(2, "0")}.
                 </span>
-                <span className="pr-4 text-left text-lg font-normal sm:text-2xl lg:text-[34px]">
+                <span className="pr-4 font-heading text-left text-lg font-bold sm:text-2xl lg:text-[34px]">
                   {step.title}
                 </span>
                 <span

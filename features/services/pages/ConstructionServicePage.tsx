@@ -69,7 +69,7 @@ const HERO_DIAMONDS = [
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
 
       {/* SECTION 1: BANNER */}
@@ -120,7 +120,7 @@ export function ConstructionServicePage() {
             <div className="flex flex-col">
               <Reveal from="bottom">
                 {/* Đã cập nhật class font giống với DesignServicePage và giảm kích thước */}
-                <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase tracking-wide sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
+                <h1 className="font-heading text-2xl font-extrabold leading-[1.12] text-brand uppercase tracking-wide sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
                   <span className="inline-block py-1.5">Dịch Vụ Thi Công</span>
                   <br />
                   <span className="mt-2 inline-block py-1.5 sm:mt-3">
@@ -180,7 +180,7 @@ export function ConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-0 !pb-0 text-center px-4`}
         >
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl text-center">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl text-center">
               THI CÔNG XÂY DỰNG TỪ PHẦN THÔ ĐẾN HOÀN THIỆN
             </h2>
           </Reveal>
@@ -189,11 +189,16 @@ export function ConstructionServicePage() {
               Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ
               của công trình. BMT Decor triển khai{" "}
               <strong className="font-bold">xây dựng phần thô</strong>,{" "}
-              <strong className="font-bold">thi công hoàn thiện</strong> và các
-              hạng mục xây dựng theo đúng hồ sơ kỹ thuật, đảm bảo quy trình thi
-              công đồng bộ, kiểm soát chặt chẽ chất lượng vật liệu, tiến độ và
-              an toàn lao động. Mỗi công trình đều được giám sát xuyên suốt nhằm
-              hạn chế phát sinh và đảm bảo chất lượng khi bàn giao.
+              <strong className="font-bold">
+                thi công hoàn
+                <br className="hidden lg:inline" /> thiện
+              </strong>{" "}
+              và các hạng mục xây dựng theo đúng hồ sơ kỹ thuật, đảm bảo quy
+              trình thi
+              công đồng bộ, kiểm soát chặt chẽ chất lượng vật liệu,
+              <br className="hidden lg:inline" /> tiến độ và an toàn lao động.
+              Mỗi công trình đều được giám sát xuyên suốt nhằm hạn chế phát sinh
+              và đảm bảo chất lượng khi bàn giao.
             </p>
           </Reveal>
           <BuildingRule
@@ -235,7 +240,7 @@ export function ConstructionServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="mb-12 text-center">
             <Reveal from="bottom">
-              <h2 className="text-3xl uppercase sm:text-4xl">
+              <h2 className="font-heading text-3xl uppercase sm:text-4xl">
                 <span className="font-normal">THI CÔNG XÂY DỰNG</span>
                 <br />
                 <span className="font-bold">
@@ -278,7 +283,7 @@ export function ConstructionServicePage() {
         />
         <div className="mx-auto mb-12 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
               QUY TRÌNH THI CÔNG XÂY DỰNG
             </h2>
           </Reveal>

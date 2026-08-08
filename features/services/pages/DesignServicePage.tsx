@@ -26,7 +26,7 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
@@ -92,7 +92,7 @@ export function DesignServicePage() {
             <Reveal>
               {/* Mockup dùng cỡ chữ ~1.89vw; 2.15vw cũ làm tiêu đề tràn khỏi
                   khối chữ và đè lên bản vẽ nền. */}
-              <h1 className="text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
+              <h1 className="font-heading text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
                 DỊCH VỤ THIẾT KẾ KIẾN TRÚC &
                 <br />
                 NỘI THẤT CHUYÊN NGHIỆP
@@ -114,7 +114,8 @@ export function DesignServicePage() {
             </Reveal>
             <Reveal delay={300} from="left">
               <p className="mt-2 max-w-[250px] text-pretty text-sm leading-relaxed sm:text-base">
-                Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
+                Kiến tạo không gian hài hòa giữa
+                <br className="hidden sm:inline" /> thẩm mỹ và công năng
               </p>
             </Reveal>
           </div>
@@ -141,16 +142,21 @@ export function DesignServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 px-4 text-center lg:!mb-10`}
         >
           <Reveal>
-            <h2 className="text-center text-3xl font-normal sm:text-4xl">
+            <h2 className="font-heading text-center text-3xl font-bold sm:text-4xl">
               GIẢI PHÁP THIẾT KẾ TỐI ƯU CHO MỌI KHÔNG GIAN
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p className="mx-auto mt-4 max-w-2xl text-pretty text-center text-sm leading-relaxed">
-              BMT Decor cung cấp dịch vụ thiết kế kiến trúc, thiết kế nội thất
-              và giải pháp thiết kế đồng bộ cho nhà ở, văn phòng, showroom, spa,
-              nhà hàng và khách sạn. Mỗi phương án đều được nghiên cứu kỹ lưỡng
-              nhằm tối ưu công năng, ngân sách và giá trị sử dụng lâu dài.
+            <p className="mx-auto mt-4 max-w-3xl text-pretty text-center text-sm leading-relaxed">
+              BMT Decor cung cấp dịch vụ{" "}
+              <strong className="font-bold">thiết kế kiến trúc</strong>,{" "}
+              <strong className="font-bold">thiết kế nội thất</strong> và giải
+              pháp thiết kế đồng bộ cho nhà ở, văn
+              <br className="hidden lg:inline" /> phòng, showroom, spa, nhà hàng
+              và khách sạn. Mỗi phương án đều được nghiên cứu kỹ lưỡng nhằm tối
+              ưu công
+              <br className="hidden lg:inline" /> năng, ngân sách và giá trị sử
+              dụng lâu dài.
             </p>
           </Reveal>
           <BuildingRule
@@ -193,8 +199,12 @@ export function DesignServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="text-center">
             <Reveal>
-              <h2 className="text-3xl font-normal sm:text-4xl">
-                THIẾT KẾ NỘI THẤT THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
+              {/* Mockup tách 2 dòng: dòng trên chữ thường, dòng dưới in đậm —
+                  giống hệt 3 trang dịch vụ còn lại. */}
+              <h2 className="font-heading text-3xl uppercase sm:text-4xl">
+                <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
+                <br />
+                <span className="font-bold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
               </h2>
             </Reveal>
             <Reveal delay={140}>
@@ -221,7 +231,7 @@ export function DesignServicePage() {
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
             {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
-            <h2 className="flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
+            <h2 className="font-heading flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"

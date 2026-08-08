@@ -26,7 +26,7 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
 
       <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>
@@ -64,7 +64,7 @@ export function FullConstructionServicePage() {
               </Reveal>
 
               <Reveal>
-                <h1 className="text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.75rem,2.15vw,2.45rem)]">
+                <h1 className="font-heading text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.75rem,2.15vw,2.45rem)]">
                   DỊCH VỤ THIẾT KẾ THI CÔNG
                   <br />& XÂY DỰNG TRỌN GÓI
                 </h1>
@@ -76,7 +76,8 @@ export function FullConstructionServicePage() {
               />
               <Reveal delay={320} from="left">
                 <p className="mt-2 max-w-[310px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
-                  Kiến tạo công trình bền vững từ thiết kế đến thi công
+                  Kiến tạo công trình bền vững từ
+                  <br className="hidden sm:inline" /> thiết kế đến thi công
                 </p>
               </Reveal>
             </div>
@@ -116,19 +117,21 @@ export function FullConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
         >
           <Reveal>
-            <h2 className="text-3xl font-bold sm:text-[32px] text-center">
+            <h2 className="font-heading text-3xl font-bold sm:text-[32px] text-center">
               TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p className="mx-auto mt-4 max-w-2xl text-sm leading-relaxed text-center">
+            <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-center">
               Dịch vụ <span className="font-bold">thiết kế thi công</span> và{" "}
               <span className="font-bold">xây dựng trọn gói</span> giúp chủ đầu
-              tư triển khai công trình một cách đồng bộ, từ ý tưởng, thiết kế
-              đến thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách
-              hàng chỉ cần một đầu mối duy nhất để quản lý toàn bộ dự án, giúp
-              tiết kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh
-              trong quá trình xây dựng.
+              tư triển khai công trình một cách đồng bộ, từ ý tưởng,
+              <br className="hidden lg:inline" /> thiết kế đến thi công hoàn
+              thiện. Thay vì làm việc với nhiều đơn vị, khách hàng chỉ cần một
+              đầu mối duy nhất để quản
+              <br className="hidden lg:inline" /> lý toàn bộ dự án, giúp tiết
+              kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh trong quá
+              trình xây dựng.
             </p>
           </Reveal>
           <BuildingRule
@@ -169,7 +172,7 @@ export function FullConstructionServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="text-center">
             <Reveal>
-              <h2 className="text-3xl uppercase sm:text-[32px]">
+              <h2 className="font-heading text-3xl uppercase sm:text-[32px]">
                 <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
                 <br />
                 <span className="font-bold">
@@ -198,7 +201,7 @@ export function FullConstructionServicePage() {
       <section className="bg-[#f2f2f3] py-12 lg:py-14">
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="text-3xl font-extrabold sm:text-[32px]">
+            <h2 className="font-heading text-3xl font-extrabold sm:text-[32px]">
               QUY TRÌNH THIẾT KẾ THI CÔNG &
               <br /> XÂY NHÀ TRỌN GÓI
             </h2>

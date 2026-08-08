@@ -29,7 +29,7 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
         className="mb-10 flex w-full flex-col items-center justify-between gap-4 lg:flex-row"
       >
         {/* Tiêu đề: Size được canh đúng tầm 46px để đủ dài lấp khoảng trống */}
-        <h2 className="text-3xl font-black uppercase tracking-tight text-charcoal sm:text-4xl lg:text-[42px] xl:text-[46px] whitespace-nowrap">
+        <h2 className="font-heading text-3xl font-black uppercase tracking-tight text-charcoal sm:text-4xl lg:text-[42px] xl:text-[46px] whitespace-nowrap">
           Quy trình cải tạo & sửa chữa tại
         </h2>
 
@@ -78,7 +78,7 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
             {/* Vùng chứa Text: Vẫn giữ nguyên tỉ lệ bóp lề để lọt lòng khung đen */}
             <div className="absolute inset-0 bottom-[12%] left-[10%] right-[16%] top-[27%] flex flex-col pt-2">
               {/* Tiêu đề: Ép size nhỏ lại chút để không rớt dòng */}
-              <h3 className="flex flex-col text-left text-[12px] font-bold leading-snug text-charcoal xl:text-[13px]">
+              <h3 className="font-heading flex flex-col text-left text-[12px] font-bold leading-snug text-charcoal xl:text-[13px]">
                 <span>{step.title}</span>
                 <span>{step.subtitle}</span>
               </h3>

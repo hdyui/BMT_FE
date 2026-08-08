@@ -124,7 +124,7 @@ function TimelineStep({
               : "lg:right-[17%] lg:left-[36%]"
           }`}
         >
-          <h3 className="text-3xl leading-tight font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
+          <h3 className="font-heading text-3xl leading-tight font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
             {step.title}
           </h3>
           <p className="mt-2 text-xs leading-relaxed text-pretty lg:mt-[calc(var(--frame-h)*0.035)] lg:text-[calc(var(--frame-h)*0.0652)] lg:leading-[1.4]">
@@ -150,17 +150,16 @@ export function ProcessTimeline() {
           khoảng cách 2 chấm ngoài (70.30% ảnh) phải bằng 2 x --step-h:
             cao ảnh = 2 x --step-h / 0.7030 = --step-h x 2.845
             top     = --frame-h/2 - 0.1479 x cao ảnh = --frame-h/2 - --step-h x 0.4208 */}
-      <div className="pointer-events-none absolute left-1/2 z-10 hidden w-17 -translate-x-1/2 lg:block lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.4208)] lg:h-[calc(var(--step-h)*2.845)]">
+      <div className="pointer-events-none absolute left-1/2 z-10 hidden w-12 -translate-x-1/2 lg:block lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.4208)] lg:h-[calc(var(--step-h)*2.845)]">
         <Image
           className="size-full object-fill"
           src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"
           alt=""
           fill
-          sizes="68px"
+          sizes="48px" // Bạn có thể giảm sizes này xuống tương ứng cho chuẩn (ví dụ w-12 là 48px)
           aria-hidden="true"
         />
       </div>
-
       <div className="grid w-full gap-4 lg:grid-cols-2 lg:gap-40">
         <div className="grid gap-4 lg:gap-0">
           {firstGroup.map((step, index) => (
