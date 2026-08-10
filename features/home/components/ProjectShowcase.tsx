@@ -129,6 +129,7 @@ export function ProjectShowcase() {
   const [activeCategory, setActiveCategory] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(0);
+  const [mobileProjectIndex, setMobileProjectIndex] = useState(0);
   const [expandedCard, setExpandedCard] = useState<number | null>(null);
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const [isFading, setIsFading] = useState(false);
@@ -149,6 +150,7 @@ export function ProjectShowcase() {
     page * PROJECTS_PER_PAGE,
     (page + 1) * PROJECTS_PER_PAGE,
   );
+  const mobileProject = category.projects[mobileProjectIndex];
 
   useEffect(
     () => () => {
@@ -184,10 +186,14 @@ export function ProjectShowcase() {
       const gridItem = button.parentElement;
       if (!gridItem) return;
 
+      const compactLayout = window.innerWidth < 640;
+
       setCategoryIndicator({
         left:
           gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
-        top: gridItem.offsetTop + button.offsetTop + button.offsetHeight,
+        top: compactLayout
+          ? container.offsetHeight + 10
+          : gridItem.offsetTop + button.offsetTop + button.offsetHeight,
         width: Math.max(28, button.offsetWidth * 0.42),
       });
     };
@@ -221,12 +227,24 @@ export function ProjectShowcase() {
     transitionTo(activeCategory, nextPage);
   };
 
+  const moveMobile = (direction: number) => {
+    setMobileProjectIndex(
+      (current) =>
+        (current + direction + category.projects.length) % category.projects.length,
+    );
+  };
+
   const handleTouchEnd = (event: React.TouchEvent<HTMLDivElement>) => {
     if (touchStartX.current === null) return;
     const distance = event.changedTouches[0].clientX - touchStartX.current;
     touchStartX.current = null;
 
     if (Math.abs(distance) < 50) return;
+    if (window.innerWidth < 1024) {
+      moveMobile(distance > 0 ? -1 : 1);
+      return;
+    }
+
     move(distance > 0 ? -1 : 1);
   };
 
@@ -234,12 +252,12 @@ export function ProjectShowcase() {
     <div className="mt-8">
       <div
         ref={categoriesRef}
-        className="relative mx-auto grid max-w-4xl grid-cols-2 gap-x-4 gap-y-6 sm:grid-cols-4"
+        className="relative mx-auto grid max-w-4xl grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-6"
       >
         {categories.map((item, index) => (
           <Reveal delay={index * 120} key={item.slug}>
             <button
-              className={`group relative flex w-full flex-col items-center gap-3 pb-4 text-[11px] font-semibold transition-[color,translate] duration-300 ${
+              className={`group relative flex w-full flex-col items-center gap-3 pb-4 text-[11px] font-semibold transition-[color,translate] duration-300 max-sm:gap-2 max-sm:px-0 max-sm:text-[9px] ${
                 selectedCategory === index
                   ? "text-brand"
                   : "hover:-translate-y-1 hover:text-brand"
@@ -247,6 +265,7 @@ export function ProjectShowcase() {
               disabled={isFading}
               onClick={() => {
                 setSelectedCategory(index);
+                setMobileProjectIndex(0);
                 transitionTo(index, 0);
               }}
               ref={(element) => {
@@ -256,14 +275,14 @@ export function ProjectShowcase() {
               type="button"
             >
               <span
-                className={`grid size-12 place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 ${
+                className={`grid size-12 place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 max-sm:size-10 ${
                   selectedCategory === index
                     ? "scale-110 border-[#df641c] bg-[#e86f25] shadow-[0_8px_24px_rgb(223_100_28/.32)] group-hover:bg-[#df641c]"
                     : "border-brand group-hover:border-[#df641c] group-hover:bg-[#df641c]"
                 }`}
               >
                 <Image
-                  className={`size-7 object-contain transition-[filter] duration-300 ${
+                  className={`size-7 object-contain transition-[filter] duration-300 max-sm:size-6 ${
                     selectedCategory === index
                       ? "brightness-0 invert"
                       : "group-hover:brightness-0 group-hover:invert"
@@ -274,7 +293,9 @@ export function ProjectShowcase() {
                   height={44}
                 />
               </span>
-              <span className="max-w-40 leading-snug">{item.label}</span>
+              <span className="max-w-40 leading-snug max-sm:flex max-sm:h-9 max-sm:w-full max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:text-center max-sm:text-[10px] max-sm:font-extrabold max-sm:leading-[1.05] max-sm:tracking-[-0.025em] sm:whitespace-nowrap sm:text-[13px] sm:font-extrabold sm:leading-none lg:whitespace-normal lg:text-[11px] lg:font-semibold lg:leading-snug">
+                {item.label}
+              </span>
             </button>
           </Reveal>
         ))}
@@ -296,7 +317,69 @@ export function ProjectShowcase() {
         }}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="relative lg:mx-auto lg:w-fit lg:max-w-full">
+        <div className="lg:hidden">
+          {mobileProject && (
+            <div key={mobileProject.id}>
+              <div className="grid min-h-[210px] grid-cols-[46%_54%] overflow-hidden rounded-2xl shadow-lg sm:min-h-[430px] sm:grid-cols-2 sm:rounded-[28px]">
+                <div className="relative min-h-[210px] sm:min-h-[430px]">
+                  <Image
+                    className="object-cover"
+                    src={mobileProject.image}
+                    alt={mobileProject.title}
+                    fill
+                    sizes="(max-width: 639px) 46vw, 50vw"
+                  />
+                </div>
+                <div className="flex flex-col justify-center bg-brand p-4 text-white sm:p-7">
+                  <h3 className="text-lg font-extrabold uppercase leading-tight max-sm:overflow-visible max-sm:pt-0.5 max-sm:text-[14px] max-sm:leading-[1.22] max-sm:tracking-[-0.015em] sm:line-clamp-2 sm:text-[23px] sm:leading-[1.05]">
+                    {mobileProject.title}
+                  </h3>
+                  <BuildingRule
+                    className="mt-2 h-5 max-w-40 text-white sm:mt-5 sm:h-6 sm:max-w-[200px]"
+                    compact
+                    light
+                    fullWidth
+                  />
+                  <div className="mt-3 space-y-0.5 text-xs leading-relaxed text-white sm:mt-6 sm:space-y-1 sm:text-[18px] sm:leading-[1.35]">
+                    <p>
+                      <strong className="font-extrabold">Diện tích:</strong>{" "}
+                      <span className="font-normal">{mobileProject.area}</span>
+                    </p>
+                    <p>
+                      <strong className="font-extrabold">Phong cách thiết kế:</strong>{" "}
+                      <span className="font-normal">{mobileProject.style}</span>
+                    </p>
+                    <p>
+                      <strong className="font-extrabold">Năm thực hiện:</strong>{" "}
+                      <span className="font-normal">{mobileProject.year}</span>
+                    </p>
+                  </div>
+                  <CardMoreLink
+                    className="mt-3 text-white hover:text-white focus-visible:text-white sm:mt-4 sm:text-[17px]"
+                    href="/du-an"
+                  />
+                </div>
+              </div>
+              <div className="mt-5 flex items-center justify-between gap-4 sm:mt-6">
+                <div className="flex gap-2">
+                  <button className="relative size-9 overflow-hidden rounded-full sm:size-14" onClick={() => moveMobile(-1)} aria-label="Dự án trước" type="button">
+                    <Image src="/images/home/project-previous.png" alt="" fill sizes="(max-width: 639px) 36px, 56px" />
+                  </button>
+                  <button className="relative size-9 overflow-hidden rounded-full sm:size-14" onClick={() => moveMobile(1)} aria-label="Dự án tiếp theo" type="button">
+                    <Image src="/images/home/project-next.png" alt="" fill sizes="(max-width: 639px) 36px, 56px" />
+                  </button>
+                </div>
+                <CardMoreLink
+                  className="rounded-full bg-brand px-4 py-2 text-[12px] font-extrabold text-white no-underline shadow-sm hover:text-white focus-visible:text-white sm:px-7 sm:py-3 sm:text-[20px]"
+                  href="/du-an"
+                  label="TÌM HIỂU THÊM"
+                />
+              </div>
+            </div>
+          )}
+        </div>
+
+        <div className="relative hidden lg:mx-auto lg:block lg:w-fit lg:max-w-full">
           <motion.div
             className="grid gap-4 sm:grid-cols-2 lg:flex lg:h-[360px] lg:items-stretch lg:justify-center"
             initial="hidden"
@@ -407,7 +490,7 @@ export function ProjectShowcase() {
         </div>
       </div>
 
-      <div className="mt-[42px] flex items-center justify-center">
+      <div className="mt-[42px] hidden items-center justify-center lg:flex">
         <div
           className="flex items-center gap-[10px]"
           aria-label="Phân trang dự án"

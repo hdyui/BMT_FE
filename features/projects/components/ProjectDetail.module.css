@@ -1,0 +1,145 @@
+.media {
+  position: relative;
+  overflow: hidden;
+  background: #eee;
+}
+
+.media img {
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1),
+    filter 650ms ease;
+}
+
+.imageReveal img {
+  transform: scale(1.05);
+}
+
+.imageReveal[data-visible="true"] img {
+  transform: scale(1);
+}
+
+.renderFrame {
+  width: 100%;
+  isolation: isolate;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .media:hover img {
+    transform: scale(1.025);
+    filter: saturate(1.025) contrast(1.01);
+  }
+}
+
+.renderLeadGrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(1.25rem, 2.75vw, 2.75rem);
+}
+
+.renderStack {
+  display: grid;
+  gap: clamp(1.25rem, 2.75vw, 2.75rem);
+}
+
+.renderSecondaryGrid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: clamp(1.25rem, 2.75vw, 2.75rem);
+  margin-top: clamp(1.25rem, 2.75vw, 2.75rem);
+}
+
+.comparisonGrid {
+  position: relative;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2px;
+}
+
+.comparisonGrid > * {
+  min-width: 0;
+}
+
+.comparisonMedia {
+  position: relative;
+}
+
+.comparisonImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.comparisonRowFacade .comparisonMedia {
+  aspect-ratio: 1.42 / 1;
+}
+
+.comparisonRowStair .comparisonMedia {
+  aspect-ratio: 1.08 / 1;
+}
+
+.comparisonRowLiving .comparisonMedia {
+  aspect-ratio: 1.15 / 1;
+}
+
+.comparisonGrid > :first-child .media {
+  border-radius: 2.8rem 0 0 2.8rem;
+}
+
+.comparisonGrid > :nth-child(2) .media {
+  border-radius: 0 2.8rem 2.8rem 0;
+}
+
+@media (max-width: 1023px) {
+  .renderSecondaryGrid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .renderSecondaryGrid > :last-child {
+    grid-column: 1 / -1;
+    width: calc(50% - 0.625rem);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 639px) {
+  .renderLeadGrid,
+  .renderSecondaryGrid {
+    grid-template-columns: 1fr;
+  }
+
+  .renderSecondaryGrid > :last-child {
+    grid-column: auto;
+    width: auto;
+  }
+
+  .comparisonGrid {
+    grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  .comparisonRowFacade .comparisonMedia,
+  .comparisonRowStair .comparisonMedia,
+  .comparisonRowLiving .comparisonMedia {
+    aspect-ratio: auto;
+  }
+
+  .comparisonImage {
+    height: auto;
+  }
+
+  .comparisonGrid > :first-child .media,
+  .comparisonGrid > :nth-child(2) .media {
+    border-radius: 1.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .media img {
+    transition: none;
+  }
+
+  .imageReveal img {
+    transform: none;
+  }
+
+}

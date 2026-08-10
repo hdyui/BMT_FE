@@ -56,17 +56,21 @@ export function TrustIntro() {
         className="text-3xl font-bold uppercase motion-reduce:transform-none sm:text-4xl"
         variants={introItemVariants}
       >
-        Vì sao khách hàng tin chọn BMT Decor?
+        <span className="sm:hidden">Vì sao khách hàng tin chọn</span>
+        <span className="hidden sm:inline">Vì sao khách hàng tin chọn BMT Decor?</span>
       </motion.h2>
       <motion.p
-        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-white/80 motion-reduce:transform-none"
+        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-white/80 motion-reduce:transform-none max-sm:text-base"
         variants={introItemVariants}
       >
-        Với tư duy thiết kế sáng tạo và quy trình thi công bài bản, chúng tôi
-        kiến tạo những không gian hài hòa giữa thẩm mỹ, công năng và giá trị sử
-        dụng bền vững.
+        <span className="sm:hidden">
+          Với tư duy thiết kế luôn đổi mới trong sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo nên những không gian có giá trị thẩm mỹ cao cấp, tối ưu công năng một cách tuyệt đối và có độ bền vững theo thời gian cho không gian sống.
+        </span>
+        <span className="hidden sm:inline">
+          Với tư duy thiết kế sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo những không gian hài hòa giữa thẩm mỹ, công năng và giá trị sử dụng bền vững.
+        </span>
       </motion.p>
-      <div className="relative mx-auto mt-4 h-10 w- max-w-72 overflow-hidden">
+      <div className="relative mx-auto mt-4 h-10 w-full max-w-72 overflow-hidden">
         <Image
           className={`origin-left object-contain object-right transition-transform delay-500 duration-1000 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none ${
             visible ? "scale-x-100" : "scale-x-0"

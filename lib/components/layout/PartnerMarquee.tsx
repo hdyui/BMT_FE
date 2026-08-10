@@ -30,22 +30,22 @@ function PartnerSequence({
     <div className="flex w-1/2 shrink-0" aria-hidden={hidden}>
       {partners.map((partner) => (
         <div
-          className="w-1/8 shrink-0 px-2.5"
+          className="w-1/8 shrink-0 px-2.5 max-sm:px-1.5"
           key={partner.name}
           onPointerEnter={() => onHover(partner.name)}
           onPointerLeave={() => onHover(null)}
         >
           <Image
-            className={`block h-auto w-full transition-[filter,opacity,transform] duration-500 ease-out ${
+            className={`block h-auto w-full transition-[filter,opacity,transform] duration-500 ease-out max-sm:mx-auto max-sm:w-[88%] ${
               hovered === partner.name
                 ? "scale-[1.025] opacity-100 [filter:grayscale(0)_contrast(1)]"
-                : "opacity-90 [filter:grayscale(1)_contrast(1.25)]"
+                : "opacity-90 [filter:grayscale(1)_contrast(1.25)] max-sm:[filter:none]"
             }`}
             src={partner.image}
             alt={hidden ? "" : partner.name}
             width={293}
             height={234}
-            sizes="(max-width: 640px) 50vw, 25vw"
+            sizes="(max-width: 640px) 30vw, 25vw"
           />
         </div>
       ))}
@@ -67,7 +67,7 @@ export function PartnerMarquee() {
       }}
     >
       <div
-        className="flex w-[400%] [animation:partner-marquee_28s_linear_infinite] motion-reduce:animate-none"
+        className="flex w-[400%] [animation:partner-marquee_28s_linear_infinite] motion-reduce:animate-none max-sm:w-[533.333%]"
         style={{ animationPlayState: paused ? "paused" : "running" }}
       >
         <PartnerSequence hovered={hovered} onHover={setHovered} />

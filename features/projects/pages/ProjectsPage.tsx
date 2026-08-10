@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Search } from "lucide-react";
 import {
   AnimatePresence,
@@ -14,13 +15,23 @@ import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import { Reveal } from "@/lib/components/shared/Reveal";
-import styles from "./ProjectsPage.module.css";
+import { ProjectsHero } from "@/features/projects/components/ProjectsHero";
 
 type Category =
   | "Nhà ở"
   | "Văn phòng"
   | "Thẩm mỹ viện, showroom"
   | "Nhà hàng, khách sạn";
+
+type ProjectCardData = {
+  title: string;
+};
+
+const TEMP_PROJECT_DETAIL_SLUG = "nha-pho-2-tang-quan-9";
+
+const card = (title: string): ProjectCardData => ({
+  title,
+});
 
 const categories: {
   label: Category;
@@ -66,53 +77,53 @@ const projectImages = [
   "/images/projects/project-09.png",
 ];
 
-const projectTitles: Record<Category, string[]> = {
+const projectCards: Record<Category, ProjectCardData[]> = {
   "Nhà ở": [
-    "Nhà Phú Nhuận",
-    "Nhà Bình Thạnh",
-    "Căn hộ 2 PN cao cấp",
-    "Chung cư La Astoria Q.2",
-    "Căn hộ The Opera Residence",
-    "Nhà phố 2 tầng Quận 9",
-    "Nhà phố Bình Chánh",
-    "Căn hộ chung cư Q9",
-    "Căn hộ chung cư Q7",
-    "Nhà phố Thủ Đức",
-    "Biệt thự sân vườn Đồng Nai",
-    "Căn hộ Midtown Phú Mỹ Hưng",
+    card("Nhà phố 2 tầng Quận 9"),
+    card("Nhà Bình Thạnh"),
+    card("Căn hộ 2 PN cao cấp"),
+    card("Chung cư La Astoria Q.2"),
+    card("Căn hộ The Opera Residence"),
+    card("Nhà phố 2 tầng Quận 9"),
+    card("Nhà phố Bình Chánh"),
+    card("Căn hộ chung cư Q9"),
+    card("Căn hộ chung cư Q7"),
+    card("Nhà phố Thủ Đức"),
+    card("Biệt thự sân vườn Đồng Nai"),
+    card("Căn hộ Midtown Phú Mỹ Hưng"),
   ],
   "Văn phòng": [
-    "Văn phòng BMT Decor",
-    "Văn phòng quận Bình Thạnh",
-    "Không gian làm việc Tân Bình",
-    "Văn phòng điều hành Quận 3",
-    "Studio sáng tạo Phú Nhuận",
-    "Văn phòng công nghệ Thủ Đức",
-    "Trụ sở doanh nghiệp Quận 7",
-    "Văn phòng giao dịch Quận 1",
-    "Không gian co-working Gò Vấp",
+    card("Văn phòng BMT Decor"),
+    card("Văn phòng quận Bình Thạnh"),
+    card("Không gian làm việc Tân Bình"),
+    card("Văn phòng điều hành Quận 3"),
+    card("Studio sáng tạo Phú Nhuận"),
+    card("Văn phòng công nghệ Thủ Đức"),
+    card("Trụ sở doanh nghiệp Quận 7"),
+    card("Văn phòng giao dịch Quận 1"),
+    card("Không gian co-working Gò Vấp"),
   ],
   "Thẩm mỹ viện, showroom": [
-    "Showroom nội thất BMT",
-    "Thẩm mỹ viện Quận 3",
-    "Showroom vật liệu Thủ Đức",
-    "Spa chăm sóc da Phú Nhuận",
-    "Showroom thời trang Quận 1",
-    "Trung tâm làm đẹp Tân Bình",
-    "Showroom thiết bị Quận 7",
-    "Salon cao cấp Bình Thạnh",
-    "Không gian trưng bày Gò Vấp",
+    card("Showroom nội thất BMT"),
+    card("Thẩm mỹ viện Quận 3"),
+    card("Showroom vật liệu Thủ Đức"),
+    card("Spa chăm sóc da Phú Nhuận"),
+    card("Showroom thời trang Quận 1"),
+    card("Trung tâm làm đẹp Tân Bình"),
+    card("Showroom thiết bị Quận 7"),
+    card("Salon cao cấp Bình Thạnh"),
+    card("Không gian trưng bày Gò Vấp"),
   ],
   "Nhà hàng, khách sạn": [
-    "Nhà hàng sân vườn Thủ Đức",
-    "Khách sạn boutique Quận 1",
-    "Nhà hàng gia đình Tân Bình",
-    "Café & Restaurant Quận 3",
-    "Khách sạn nghỉ dưỡng Đồng Nai",
-    "Nhà hàng Nhật Bình Thạnh",
-    "Sảnh tiệc Quận 7",
-    "Café sân thượng Phú Nhuận",
-    "Nhà hàng Á Đông Gò Vấp",
+    card("Nhà hàng sân vườn Thủ Đức"),
+    card("Khách sạn boutique Quận 1"),
+    card("Nhà hàng gia đình Tân Bình"),
+    card("Café & Restaurant Quận 3"),
+    card("Khách sạn nghỉ dưỡng Đồng Nai"),
+    card("Nhà hàng Nhật Bình Thạnh"),
+    card("Sảnh tiệc Quận 7"),
+    card("Café sân thượng Phú Nhuận"),
+    card("Nhà hàng Á Đông Gò Vấp"),
   ],
 };
 
@@ -158,6 +169,73 @@ const projectCardVariants: Variants = {
   },
 };
 
+function ProjectCard({
+  project,
+  index,
+}: {
+  project: ProjectCardData & { image: string };
+  index: number;
+}) {
+  const cardContent = (
+    <motion.article
+      className="absolute inset-0 overflow-hidden rounded-[28px] bg-neutral-100"
+      variants={projectCardVariants}
+      whileHover={{
+        y: -3,
+        scale: 1.006,
+        boxShadow: "0 14px 30px rgba(38, 38, 38, 0.16)",
+        transition: {
+          type: "spring",
+          stiffness: 260,
+          damping: 24,
+        },
+      }}
+      whileTap={{ scale: 0.992 }}
+    >
+      <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.055]">
+        <Image
+          src={project.image}
+          alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
+          fill
+          priority={index < 3}
+          sizes="(min-width: 1024px) 381px, (min-width: 640px) 48vw, 100vw"
+          className="object-cover"
+        />
+      </div>
+      <div
+        className="absolute inset-0 bg-white/0 transition-colors duration-500 group-hover:bg-white/38"
+        aria-hidden="true"
+      />
+      <span
+        className="absolute top-[43%] left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 scale-90 place-items-center text-charcoal opacity-0 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100 group-focus-visible:scale-100 group-focus-visible:opacity-100"
+        aria-hidden="true"
+      >
+        <Search className="size-10 stroke-[1.8]" />
+      </span>
+      <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-2 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
+        <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
+          Thiết kế thi công nội thất
+        </p>
+        <h3 className="mt-[7px] whitespace-nowrap text-[clamp(14px,1.5vw,21px)] leading-none font-bold uppercase tracking-[-0.04em]">
+          {project.title}
+        </h3>
+      </div>
+    </motion.article>
+  );
+
+  const wrapperClassName =
+    "group relative aspect-[1.04/1] rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand";
+  return (
+    <Link
+      href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
+      className={wrapperClassName}
+      aria-label={`Xem chi tiết dự án ${project.title}`}
+    >
+      {cardContent}
+    </Link>
+  );
+}
+
 export function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("Nhà ở");
   const [activePage, setActivePage] = useState(0);
@@ -169,10 +247,11 @@ export function ProjectsPage() {
   const visibleProjects = useMemo(
     () =>
       projectImages.map((image, index) => {
-        const titles = projectTitles[activeCategory];
+        const cards = projectCards[activeCategory];
+        const project = cards[(index + activePage * 3) % cards.length];
         return {
           image: projectImages[(index + activePage * 2) % projectImages.length],
-          title: titles[(index + activePage * 3) % titles.length],
+          ...project,
         };
       }),
     [activeCategory, activePage],
@@ -187,110 +266,7 @@ export function ProjectsPage() {
     <>
       <SiteHeader />
       <main className="relative overflow-hidden bg-[#f2f2f4] pt-[60px]">
-        <section
-          className={`relative z-[1] isolate min-h-[650px] overflow-hidden bg-[#f2f2f4] lg:h-[calc(39.0625vw+40px)] lg:min-h-0 lg:overflow-visible ${styles.heroSection}`}
-        >
-          <Image
-            src="/images/projects/hero-blueprint.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={`pointer-events-none z-0 hidden object-fill lg:block ${styles.heroBackdrop}`}
-            aria-hidden="true"
-          />
-
-          <Image
-            src="/images/projects/hero-blueprint.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={`pointer-events-none z-[5] hidden object-fill lg:block ${styles.heroHeaderTail}`}
-            aria-hidden="true"
-          />
-
-          <Image
-            src="/images/projects/hero-blueprint.png"
-            alt=""
-            fill
-            priority
-            sizes="100vw"
-            className={`pointer-events-none z-[2] hidden object-fill lg:block ${styles.heroDotOverlay}`}
-            aria-hidden="true"
-          />
-
-          <div
-            className={`pointer-events-none absolute top-[6%] left-[3.6%] z-[1] hidden h-[68%] w-[30%] rounded-tl-[4.5rem] bg-[#d5d5d5] lg:block ${styles.heroGrayBlock}`}
-            aria-hidden="true"
-          />
-
-          <div className="pointer-events-none absolute top-[9%] left-[9.2%] z-10 hidden aspect-[2000/1700] w-[37.7%] overflow-hidden rounded-tl-[5.4rem] rounded-br-[5.4rem] lg:block">
-            <Image
-              src="/images/projects/hero-plans.png"
-              alt="Kiến trúc sư làm việc trên bản vẽ công trình"
-              fill
-              priority
-              sizes="38vw"
-              className={`object-cover ${styles.heroPhoto}`}
-            />
-          </div>
-
-          <div
-            className={`pointer-events-none absolute top-[57.6%] left-[33.2%] z-[15] hidden h-[38.2%] w-[18.5%] lg:block ${styles.heroOutline}`}
-            aria-hidden="true"
-          >
-            <span className={styles.heroOutlineFrame} />
-            <span className={styles.heroOutlineDot} />
-          </div>
-
-          <div className="mx-auto grid min-h-[650px] w-[min(1380px,calc(100%-2.25rem))] items-center gap-10 py-12 lg:block lg:min-h-0 lg:w-full lg:py-0">
-            <div
-              className={`relative aspect-[1.12/1] overflow-hidden rounded-tl-[4.5rem] rounded-br-[4.5rem] lg:hidden ${styles.heroArtwork}`}
-            >
-              <Image
-                src="/images/projects/hero-plans.png"
-                alt="Kiến trúc sư làm việc trên bản vẽ công trình"
-                fill
-                priority
-                sizes="100vw"
-                className="object-cover"
-              />
-            </div>
-
-            <div className="relative z-30 text-right text-charcoal lg:absolute lg:top-[28.7%] lg:left-[56.2%] lg:w-[42%]">
-              <h1
-                className={`text-[clamp(34px,2.8vw,68px)] leading-[1.12] font-bold tracking-[-0.04em] ${styles.heroTitle}`}
-              >
-                MỖI CÔNG TRÌNH
-                <br />
-                MỘT CAM KẾT CHẤT LƯỢNG
-              </h1>
-              <Image
-                src="/images/projects/section-rule.png"
-                alt=""
-                width={1388}
-                height={128}
-                className={`mt-[4.4%] ml-auto h-auto w-[48%] -scale-x-100 ${styles.heroRule}`}
-                aria-hidden="true"
-              />
-              <p
-                className={`mt-[3.3%] ml-auto max-w-[44rem] text-[clamp(17px,1.12vw,28px)] leading-[1.38] font-normal tracking-[-0.018em] ${styles.heroCopy}`}
-              >
-                Mỗi dự án là minh chứng cho năng lực{" "}
-                <strong className="font-bold">thiết kế thi công</strong> và sự
-                tận tâm của <strong className="font-bold">BMT Decor.</strong> Từ
-                những công trình xây mới đến các dự án{" "}
-                <strong className="font-bold">
-                  cải tạo trọn gói, thi công nội thất và sửa chữa nhà,
-                </strong>{" "}
-                chúng tôi luôn đồng hành cùng khách hàng từ ý tưởng đến hoàn
-                thiện, tạo nên những không gian bền vững, thẩm mỹ và phù hợp với
-                nhu cầu sử dụng thực tế.
-              </p>
-            </div>
-          </div>
-        </section>
+        <ProjectsHero />
 
         <section className="bg-white pt-[62px] pb-[108px]" id="du-an">
           <div className="mx-auto w-[min(1202px,calc(100%-2.25rem))]">
@@ -408,51 +384,11 @@ export function ProjectsPage() {
                     aria-live="polite"
                   >
                     {visibleProjects.map((project, index) => (
-                      <motion.article
-                        className="group relative aspect-[1.04/1] overflow-hidden rounded-[28px] bg-neutral-100"
-                        variants={projectCardVariants}
-                        whileHover={{
-                          y: -3,
-                          scale: 1.006,
-                          boxShadow: "0 14px 30px rgba(38, 38, 38, 0.16)",
-                          transition: {
-                            type: "spring",
-                            stiffness: 260,
-                            damping: 24,
-                          },
-                        }}
-                        whileTap={{ scale: 0.992 }}
+                      <ProjectCard
+                        project={project}
+                        index={index}
                         key={`${activePage}-${index}-${project.title}`}
-                      >
-                        <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.055]">
-                          <Image
-                            src={project.image}
-                            alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
-                            fill
-                            priority={index < 3}
-                            sizes="(min-width: 1024px) 381px, (min-width: 640px) 48vw, 100vw"
-                            className="object-cover"
-                          />
-                        </div>
-                        <div
-                          className="absolute inset-0 bg-white/0 transition-colors duration-500 group-hover:bg-white/38"
-                          aria-hidden="true"
-                        />
-                        <span
-                          className="absolute top-[43%] left-1/2 grid size-12 -translate-x-1/2 -translate-y-1/2 scale-90 place-items-center text-charcoal opacity-0 drop-shadow-[0_1px_1px_rgba(255,255,255,0.9)] transition-[opacity,transform] duration-300 group-hover:scale-100 group-hover:opacity-100"
-                          aria-hidden="true"
-                        >
-                          <Search className="size-10 stroke-[1.8]" />
-                        </span>
-                        <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-2 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
-                          <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
-                            Thiết kế thi công nội thất
-                          </p>
-                          <h3 className="mt-[7px] whitespace-nowrap text-[clamp(14px,1.5vw,21px)] leading-none font-bold uppercase tracking-[-0.04em]">
-                            {project.title}
-                          </h3>
-                        </div>
-                      </motion.article>
+                      />
                     ))}
                   </motion.div>
                 </AnimatePresence>
