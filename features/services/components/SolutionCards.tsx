@@ -38,7 +38,7 @@ export function SolutionCards({
 
         return (
           <Reveal
-            className="group/card overflow-hidden rounded-[32px] bg-white shadow-[0_4px_20px_rgb(36_33_34/.08)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] lg:h-[560px]"
+            className="group/card overflow-hidden rounded-[1.5rem] bg-white shadow-[0_4px_20px_rgb(36_33_34/.08)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] lg:h-140 lg:rounded-[2rem]"
             delay={index * 160}
             from="fade"
             key={card.number}
@@ -61,17 +61,17 @@ export function SolutionCards({
               {/* Khối 1, 3 (imageFirst) trượt từ phải qua trái; khối 2, 4
                   trượt từ trái qua phải, ngay sau khi khối fade in. */}
               <Reveal
-                className="flex flex-col justify-center p-7 lg:p-10 lg:[direction:ltr]"
+                className="flex flex-col justify-center p-5 sm:p-7 lg:p-10 lg:[direction:ltr]"
                 delay={index * 160 + 120}
                 from={imageFirst ? "right" : "left"}
               >
                 <div className="flex items-start gap-4">
-                  <span className="text-6xl leading-none font-extrabold text-neutral-400 sm:text-[72px]">
+                  <span className="text-4xl leading-none font-extrabold text-neutral-400 sm:text-6xl lg:text-[4.5rem]">
                     {card.number}.
                   </span>
                   {/* Tiền tố và nhóm công trình chảy nối tiếp nhau như mockup,
                       chỉ xuống dòng khi hết chỗ. */}
-                  <h3 className="font-heading mt-1 text-2xl leading-tight font-extrabold uppercase sm:text-[28px]">
+                  <h3 className="font-heading mt-1 text-xl leading-tight font-extrabold uppercase sm:text-2xl lg:text-[1.75rem]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
                     <br />
                     <span className="text-brand">{card.titleCategory}</span>
@@ -81,7 +81,7 @@ export function SolutionCards({
 
                 {ruleImage ? (
                   <Image
-                    className="mt-3 mb-4 h-[3px] w-[140px] object-fill"
+                    className="mt-3 mb-4 h-[0.1875rem] w-25 max-w-full object-fill sm:w-35"
                     src={ruleImage}
                     alt=""
                     width={587}

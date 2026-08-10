@@ -1,280 +1,58 @@
+/**
+ * Chỉ còn giữ những thứ Tailwind KHÔNG diễn đạt được:
+ *   - @keyframes và các lớp animation dùng lại nhiều nơi
+ *   - vài selector con (input, h1, label...) bên trong khối đã có class
+ *
+ * Toàn bộ kích thước / khoảng cách / cỡ chữ đã chuyển sang Tailwind ngay trong
+ * JSX (xem QuotationHero.tsx, QuotationEstimator.tsx) để layout co giãn theo
+ * breakpoint thay vì px cứng như trước.
+ */
+
 .page {
   --quotation-orange: #ef7b30;
   --quotation-charcoal: #231f20;
-  min-height: 100dvh;
-  overflow-x: clip;
-  background: #fff;
-  color: var(--quotation-charcoal);
 }
 
-.srOnly,
-.unitInput + .srOnly {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border: 0;
-}
+/* ---------- Animation ---------- */
 
-/* Hero assets 01-18 */
-.hero {
-  position: relative;
-  min-height: 562px;
-  overflow: hidden;
-  background: #f6f6f6;
-}
-
-.heroDesktopArt,
-.heroMobileArt {
-  position: absolute;
-  inset: 0;
-}
-
-.heroMobileArt,
-.heroTabletBase {
-  display: none;
-}
-
-.heroGradient {
-  z-index: 0;
-  object-fit: cover;
-}
-
-.heroDecoration {
-  position: absolute;
-  z-index: 1;
-  object-fit: contain;
-  mix-blend-mode: multiply;
+.animFade {
   opacity: 0;
   animation: quotationFade 620ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.heroGrayLeft {
-  left: 0;
-  bottom: 0;
-  width: 29.2%;
-  height: 100%;
-  object-fit: fill;
-}
-
-.heroGrayPill {
-  right: 0;
-  bottom: 2.2%;
-  width: 28.6%;
-}
-
-.heroGraySquareBottom {
-  right: 31.2%;
-  bottom: 7%;
-  width: 1.7%;
-}
-
-.heroGraySquareMiddle {
-  right: 27.5%;
-  bottom: 19.2%;
-  width: 1.15%;
-}
-
-.heroOrangeLarge {
-  top: 1.3%;
-  right: 6%;
-  width: 9.1%;
-}
-
-.heroOrangeSmall {
-  top: 21%;
-  right: 3.5%;
-  width: 2.3%;
-}
-
-.heroDotsRight {
-  top: 31%;
-  right: 5.2%;
-  width: 6.2%;
-}
-
-.heroOrangeBottom {
-  right: 28.8%;
-  bottom: 12.5%;
-  width: 2.7%;
-}
-
-.heroDotsBottom {
-  bottom: 2.7%;
-  left: 43.5%;
-  width: 5.7%;
-}
-
-.heroDotsLeftTop {
-  top: 18%;
-  left: 4.3%;
-  width: 1.5%;
-}
-
-.heroDotsLeftBottom {
-  bottom: 9.5%;
-  left: 4.3%;
-  width: 1.5%;
-}
-
-.heroPhotoFrame {
-  position: absolute;
-  z-index: 3;
-  top: 12.5%;
-  left: 8.8%;
-  width: 34.2%;
-  aspect-ratio: 3064 / 2574;
-  overflow: hidden;
-  border-radius: 26px;
+.animUp {
   opacity: 0;
-  animation: quotationPhotoFrame 760ms 180ms cubic-bezier(0.16, 1, 0.3, 1)
-    forwards;
+  animation: quotationUp 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.heroPhoto {
-  object-fit: cover;
-  transform: translate(-0.75%, -0.3%) scale(1.18);
-  animation: quotationPhotoZoom 900ms 260ms cubic-bezier(0.16, 1, 0.3, 1);
-  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-.heroPhotoFrame:hover .heroPhoto {
-  transform: translate(-0.75%, -0.3%) scale(1.22);
-}
-
-.heroCopy {
-  position: relative;
-  z-index: 5;
-  width: min(620px, 44.5%);
-  margin-left: 46.4%;
-  padding-top: 88px;
-}
-
-.heroVerticalLine {
-  position: absolute;
-  top: 91px;
-  left: -20px;
-  width: 2px;
-  height: 350px;
-  object-fit: cover;
-  object-position: center;
-}
-
-.heroEyebrow {
-  margin-bottom: 8px;
-  font-size: clamp(22px, 2.05vw, 35px);
-  line-height: 1.08;
-  opacity: 0;
-  animation: quotationUp 650ms 300ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.heroCopy h1 {
-  margin: 0;
-  font-size: clamp(42px, 4.2vw, 66px);
-  line-height: 1.06;
-  font-weight: 800;
-  letter-spacing: -0.035em;
-  opacity: 0;
-  animation: quotationUp 700ms 390ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-.heroDescription {
-  display: flex;
-  align-items: flex-start;
-  max-width: 590px;
-  margin-top: 16px;
-  mix-blend-mode: multiply;
+.animFromRight {
   opacity: 0;
   animation: quotationFromRight 680ms 650ms cubic-bezier(0.16, 1, 0.3, 1)
     forwards;
 }
 
-.heroDescription img {
-  width: 16px;
-  height: 17px;
-  margin-top: 2px;
-  object-fit: contain;
-  filter: url("#quotation-remove-white");
-}
-
-.heroDescription p {
-  margin: 0;
-  font-size: 14px;
-  line-height: 1.22;
-}
-
-.heroCta {
-  position: relative;
-  display: grid;
-  width: 236px;
-  height: 52px;
-  margin-top: 14px;
-  place-items: center;
-  overflow: hidden;
-  border-radius: 999px;
-  color: #fff;
+.animCtaFade {
   opacity: 0;
   animation: quotationFade 560ms 900ms ease forwards;
-  transition:
-    transform 260ms ease,
-    filter 260ms ease;
 }
 
-.heroCta img {
-  z-index: -1;
-  object-fit: cover;
+.animPhotoFrame {
+  opacity: 0;
+  animation: quotationPhotoFrame 760ms 180ms cubic-bezier(0.16, 1, 0.3, 1)
+    forwards;
 }
 
-.heroCta span {
-  margin-right: 32px;
-  font-size: 20px;
-  font-weight: 800;
+.animPhotoZoom {
+  transform: translate(0%, -0.3%) scale(1.26);
+  animation: quotationPhotoZoom 900ms 260ms cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 650ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.heroCta:hover {
-  transform: translateY(-4px);
-  filter: brightness(1.08) drop-shadow(0 12px 15px rgb(159 77 24 / 24%));
-}
-
-/* Estimator assets 23-33 */
-.estimator {
-  width: min(920px, calc(100% - 2rem));
-  min-height: 510px;
-  margin-inline: auto;
-  padding-top: 25px;
-  background: #fff;
-}
-
-.progress {
-  position: relative;
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  align-items: center;
-  min-height: 42px;
-}
-
-.progress::after {
-  position: absolute;
-  z-index: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  height: 5px;
-  content: "";
-  background: #f0f0f1;
+.heroPhotoFrame:hover .animPhotoZoom {
+  transform: translate(0%, -0.3%) scale(1.3);
 }
 
 .progressItem {
-  position: relative;
-  z-index: 1;
-  display: flex;
-  align-items: center;
-  align-self: stretch;
-  min-width: 0;
   opacity: 0;
   transform: translateX(-16px);
 }
@@ -283,417 +61,68 @@
   animation: quotationProgress 520ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.progressItem button {
-  position: relative;
-  z-index: 2;
-  display: flex;
-  height: 100%;
-  align-items: center;
-  padding: 0 0 5px;
-  border: 0;
-  background: transparent;
-  color: #3c3839;
-  font-size: 14px;
-  white-space: nowrap;
-}
-
-.progressItem button:disabled {
-  cursor: default;
-  opacity: 1;
-}
-
-.progressItem button span {
-  margin-right: 4px;
-}
-
-.progressItem .progressActive {
-  color: var(--quotation-orange);
-}
-
-.progressConnector {
-  position: relative;
-  display: block;
-  flex: 1;
-  min-width: 25px;
-  height: 2px;
-  margin-left: 12px;
-  margin-right: 8px;
-  background: #171415;
-}
-
-.progressUnderline {
-  position: absolute;
-  z-index: 3;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  height: 5px;
-  object-fit: fill;
-}
-
-.stepPanel {
-  padding: 28px 0 54px;
-  text-align: center;
+.animStepPanel {
   animation: quotationUp 560ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.stepPanel h2 {
-  margin: 0;
-  font-size: clamp(30px, 3vw, 40px);
-  line-height: 1.1;
-  font-weight: 800;
-}
-
-.stepDescription {
-  margin: 13px 0 0;
-  font-size: 15px;
-}
-
-.headingRule {
-  width: 250px;
-  height: 23px;
-  margin: 8px auto 22px;
-  object-fit: fill;
+.animRule {
   transform-origin: left;
   animation: quotationRule 680ms 180ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.optionGrid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 13px 18px;
-}
-
-.option {
-  position: relative;
-  display: flex;
-  align-items: center;
-  min-height: 68px;
-  padding: 0 29px;
-  overflow: hidden;
-  border: 2px solid #ededee;
-  border-radius: 999px;
-  background: #fff;
-  text-align: left;
+.animOption {
   opacity: 0;
   transform: translateY(18px);
   animation: quotationOption 500ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
-  transition:
-    border-color 240ms ease,
-    background-color 240ms ease;
 }
 
-.option span:not(.tick) {
-  position: relative;
-  z-index: 1;
-  font-size: 15px;
+.animInputBlock {
+  animation: quotationOption 560ms 100ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.option:hover,
-.optionSelected {
-  border-color: var(--quotation-orange);
-  background: #f2f2f4;
-}
-
-.tick {
-  position: relative;
-  z-index: 1;
-  display: block;
-  width: 15px;
-  height: 27px;
-  margin-left: auto;
-  border-right: 2px solid var(--quotation-orange);
-  border-bottom: 2px solid var(--quotation-orange);
+.animTick {
   opacity: 0;
   transform: translate(-5px, -3px) rotate(45deg);
 }
 
-.optionSelected .tick {
+.optionSelected .animTick {
   animation: quotationFade 300ms 80ms ease forwards;
 }
 
-.inputBlock {
-  width: 100%;
-  max-width: 900px;
-  margin: 0 auto;
-  text-align: left;
-  animation: quotationOption 560ms 100ms cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-.inputBlock > label {
-  display: block;
-  margin: 0 0 7px 25px;
-  font-size: 13px;
-  font-weight: 700;
-}
-
-.unitInput {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 68px;
-  overflow: hidden;
-  border: 2px solid var(--quotation-orange);
-  border-radius: 999px;
-  background: #f2f2f4;
-  transition:
-    border-color 240ms ease,
-    background-color 240ms ease;
-}
-
-.unitInput:focus-within,
-.inputValid {
-  border-color: var(--quotation-orange);
-  background: #f2f2f4;
-}
-
-.unitInput.inputError {
-  border-color: #d92d20;
-}
-
-.unitInput input {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  padding: 0 68px 0 28px;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--quotation-charcoal);
-  font: inherit;
-}
-
-.unitInput > span {
-  position: absolute;
-  z-index: 1;
-  right: 28px;
-  font-size: 15px;
-}
-
-.errorMessage {
-  margin: 7px 0 0 25px;
-  color: #b42318;
-  font-size: 13px;
-  animation: quotationFade 260ms ease both;
-}
-
-.resultWrap {
-  margin-top: 0;
-}
-
-.resultCard {
-  position: relative;
-  display: grid;
-  width: 100%;
-  height: 76px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid transparent;
-  border-radius: 999px;
-  background: #f2f2f4;
+.animResult {
   animation: quotationResult 620ms 80ms cubic-bezier(0.16, 1, 0.3, 1) both;
-  transition:
-    border-color 250ms ease,
-    background-color 250ms ease;
 }
 
-.resultCard > img {
-  z-index: 0;
-  object-fit: fill;
-}
-
-.resultCard strong {
-  position: relative;
-  z-index: 1;
-  font-size: clamp(28px, 3.2vw, 43px);
-  line-height: 1;
-}
-
-.resultCard:hover {
-  border-color: var(--quotation-orange);
-  background: #ececee;
-}
-
-.resultCurtain {
-  position: absolute;
-  z-index: 2;
-  inset: 0;
-  background: #fff;
+.animCurtain {
   animation: quotationCurtain 900ms 420ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-.resultCaption {
-  margin: 20px 0 0;
-  font-size: 15px;
+.animResultCaption {
   opacity: 0;
   animation: quotationUp 540ms 1150ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.stepActions {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 35px;
+.animError {
+  animation: quotationFade 260ms ease both;
 }
 
-.stepButton {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 165px;
-  height: 58px;
-  padding: 0 22px;
-  overflow: hidden;
-  border: 0;
-  border-radius: 999px;
-  background: #fff;
-  color: var(--quotation-charcoal);
-  gap: 10px;
-  transition:
-    color 250ms ease,
-    transform 250ms ease;
-}
+/* ---------- Vài selector con ---------- */
 
-.stepButton > img:not(.buttonHoverFill) {
-  position: relative;
-  z-index: 2;
-  width: 31px;
-  height: 31px;
-  object-fit: cover;
-  border-radius: 50%;
-}
-
-.stepButton span {
-  position: relative;
-  z-index: 2;
-  font-size: 15px;
-}
-
-.buttonHoverFill {
-  z-index: 1;
-  object-fit: fill;
-  opacity: 0;
-  transition: opacity 250ms ease;
-}
-
-.stepButton:hover:not(:disabled),
-.stepButton:focus-visible:not(:disabled) {
-  color: #fff;
-  transform: translateY(-2px);
-}
-
+/* Ảnh nền phủ nút chỉ hiện khi hover/focus — Tailwind không đặt được biến thể
+   này lên phần tử con của chính nó khi nút là <button> lồng nhiều lớp ảnh. */
 .stepButton:hover:not(:disabled) .buttonHoverFill,
 .stepButton:focus-visible:not(:disabled) .buttonHoverFill {
   opacity: 1;
 }
 
-.stepButtonNext {
-  justify-content: center;
+/* Bỏ thanh cuộn ngang của dải tiến trình trên mobile (Tailwind không có
+   utility cho ::-webkit-scrollbar). */
+.progressScroller {
+  scrollbar-width: none;
 }
 
-/* Contact assets 28, 34-36 */
-.contactBand {
-  position: relative;
-  min-height: 322px;
-  overflow: hidden;
-  color: #fff;
-}
-
-.contactBackground {
-  z-index: 0;
-  object-fit: cover;
-  object-position: center top;
-}
-
-.contactForm {
-  position: relative;
-  z-index: 1;
-  width: min(900px, calc(100% - 2rem));
-  margin-inline: auto;
-  padding: 100px 0 45px;
-}
-
-.contactForm h2 {
-  margin: 0;
-  font-size: 29px;
-  line-height: 1.1;
-  font-weight: 800;
-}
-
-.contactForm > p {
-  margin: 6px 0 0;
-  font-size: 14px;
-}
-
-.contactRule {
-  width: 100%;
-  height: 2px;
-  margin: 14px 0 14px;
-  object-fit: fill;
-}
-
-.contactFields {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 50px;
-}
-
-.contactFields label,
-.contactSubmit {
-  position: relative;
-  height: 38px;
-  overflow: hidden;
-  border-radius: 999px;
-}
-
-.contactFields label > img,
-.contactSubmit > img {
-  z-index: 0;
-  object-fit: fill;
-}
-
-.contactFields input {
-  position: relative;
-  z-index: 1;
-  width: 100%;
-  height: 100%;
-  padding: 0 18px;
-  border: 0;
-  outline: 0;
-  background: transparent;
-  color: var(--quotation-charcoal);
-  font: inherit;
-}
-
-.contactFields label:focus-within {
-  outline: 2px solid #fff;
-  outline-offset: 3px;
-}
-
-.contactSubmit {
-  display: grid;
-  width: 100%;
-  margin-top: 12px;
-  place-items: center;
-  border: 0;
-  background: var(--quotation-charcoal);
-  color: #fff;
-  transition:
-    transform 240ms ease,
-    filter 240ms ease;
-}
-
-.contactSubmit span {
-  position: relative;
-  z-index: 1;
-  font-weight: 700;
-}
-
-.contactSubmit:hover {
-  transform: translateY(-2px);
-  filter: brightness(1.18);
+.progressScroller::-webkit-scrollbar {
+  display: none;
 }
 
 @keyframes quotationFade {
@@ -740,10 +169,10 @@
 
 @keyframes quotationPhotoZoom {
   from {
-    transform: translate(-0.75%, -0.3%) scale(1.22);
+    transform: translate(0%, -0.3%) scale(1.3);
   }
   to {
-    transform: translate(-0.75%, -0.3%) scale(1.18);
+    transform: translate(0%, -0.3%) scale(1.26);
   }
 }
 
@@ -798,198 +227,6 @@
   to {
     transform: translateX(102%);
   }
-}
-
-@media (max-width: 1199px) and (min-width: 768px) {
-  .heroGradient,
-  .heroGrayLeft,
-  .heroGraySquareTop,
-  .heroGrayPill,
-  .heroGraySquareBottom,
-  .heroGraySquareMiddle {
-    display: none;
-  }
-
-  .heroTabletBase {
-    display: block;
-    z-index: 0;
-    object-fit: cover;
-  }
-
-  .heroCopy {
-    width: 49%;
-    margin-left: 47%;
-  }
-
-  .heroCopy h1 {
-    font-size: clamp(38px, 5.2vw, 52px);
-  }
-
-  .heroDescription p {
-    font-size: 12px;
-  }
-}
-
-@media (max-width: 767px) {
-  .hero {
-    min-height: 0;
-    padding-top: min(62vw, 310px);
-    background: #fff;
-  }
-
-  .heroDesktopArt {
-    display: none;
-  }
-
-  .heroMobileArt {
-    display: block;
-    bottom: auto;
-    height: min(62vw, 310px) !important;
-    object-fit: cover;
-    object-position: left center;
-  }
-
-  .heroCopy {
-    width: calc(100% - 2rem);
-    margin: 0 auto;
-    padding: 28px 0 38px 14px;
-  }
-
-  .heroVerticalLine {
-    top: 30px;
-    left: 0;
-    height: 220px;
-  }
-
-  .heroEyebrow {
-    font-size: 18px;
-  }
-
-  .heroCopy h1 {
-    font-size: clamp(36px, 11.2vw, 51px);
-  }
-
-  .heroDescription p {
-    font-size: 13px;
-  }
-
-  .heroCta {
-    width: 205px;
-    height: 46px;
-  }
-
-  .heroCta span {
-    font-size: 17px;
-  }
-
-  .estimator {
-    min-height: 520px;
-    padding-top: 12px;
-  }
-
-  .progress {
-    display: flex;
-    align-items: flex-start;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: none;
-  }
-
-  .progress::-webkit-scrollbar {
-    display: none;
-  }
-
-  .progressItem {
-    flex: 0 0 auto;
-    scroll-snap-align: start;
-  }
-
-  .progressItem button {
-    font-size: 12px;
-  }
-
-  .progressConnector {
-    width: 34px;
-    flex: 0 0 34px;
-  }
-
-  .stepPanel {
-    padding: 25px 0 38px;
-  }
-
-  .stepPanel h2 {
-    font-size: 29px;
-  }
-
-  .stepDescription {
-    min-height: 36px;
-    font-size: 14px;
-  }
-
-  .headingRule {
-    width: 215px;
-  }
-
-  .optionGrid {
-    grid-template-columns: 1fr;
-    gap: 11px;
-  }
-
-  .option,
-  .unitInput {
-    min-height: 58px;
-    height: 58px;
-  }
-
-  .inputBlock > label {
-    margin-left: 20px;
-  }
-
-  .resultCard {
-    height: 68px;
-  }
-
-  .resultCard strong {
-    font-size: clamp(21px, 6.3vw, 30px);
-  }
-
-  .resultCaption {
-    font-size: 13px;
-    line-height: 1.45;
-  }
-
-  .stepActions {
-    margin-top: 25px;
-  }
-
-  .stepButton {
-    min-width: 140px;
-    height: 52px;
-    padding: 0 14px;
-  }
-
-  .stepButton > img:not(.buttonHoverFill) {
-    width: 28px;
-    height: 28px;
-  }
-
-  .contactBand {
-    min-height: 390px;
-  }
-
-  .contactForm {
-    padding-top: 88px;
-  }
-
-  .contactForm h2 {
-    font-size: 25px;
-  }
-
-  .contactFields {
-    grid-template-columns: 1fr;
-    gap: 12px;
-  }
-
 }
 
 @media (prefers-reduced-motion: reduce) {

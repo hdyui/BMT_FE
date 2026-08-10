@@ -29,7 +29,11 @@ export const solutionCards = [
     tagline: "Nâng Cấp Không Gian Sống Mà Không Cần Xây Mới",
     description:
       "Khi nhu cầu sử dụng thay đổi hoặc công trình xuống cấp, cải tạo nhà ở là giải pháp giúp tối ưu công năng và nâng cao chất lượng không gian với chi phí hợp lý. BMT Decor triển khai từ sửa chữa đến cải tạo tổng thể, đảm bảo thi công an toàn, đúng tiến độ và hạn chế ảnh hưởng đến sinh hoạt của gia đình.",
-    checklist: ["Cải tạo nhà phố", "Cải tạo biệt thự", "Cải tạo nội thất căn hộ"],
+    checklist: [
+      "Cải tạo nhà phố",
+      "Cải tạo biệt thự",
+      "Cải tạo nội thất căn hộ",
+    ],
     cta: "KHÁM PHÁ DỰ ÁN NHÀ Ở",
     ctaImage: "/images/cai-tao-sua-chua/btn-pill-nha-o.png",
     ctaImageWidth: 1408,
@@ -90,24 +94,24 @@ export const solutionCards = [
 export const processSteps = [
   {
     number: "01",
-    title: "Tiếp nhận &",
-    subtitle: "Khảo sát hiện trạng",
+    title: "Tiếp nhận & Khảo",
+    subtitle: "sát hiện trạng",
     icon: "/images/cai-tao-sua-chua/icon-process-1.png",
     description:
       "Tiếp nhận nhu cầu, khảo sát công trình và đánh giá hiện trạng để đề xuất phương án cải tạo phù hợp.",
   },
   {
     number: "02",
-    title: "Tư vấn &",
-    subtitle: "Thiết kế cải tạo",
+    title: "Tư vấn & Thiết kế",
+    subtitle: "cải tạo",
     icon: "/images/cai-tao-sua-chua/icon-process-2.png",
     description:
       "Lên ý tưởng, tối ưu công năng và hoàn thiện phương án thiết kế phù hợp với hiện trạng, ngân sách và nhu cầu sử dụng.",
   },
   {
     number: "03",
-    title: "Báo giá &",
-    subtitle: "Lập kế hoạch thi công",
+    title: "Báo giá & Lập kế",
+    subtitle: "hoạch thi công",
     icon: "/images/cai-tao-sua-chua/icon-process-3.png",
     description:
       "Lập báo giá chi tiết, thống nhất vật liệu, tiến độ và phương án triển khai trước khi thi công.",

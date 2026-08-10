@@ -6,7 +6,7 @@ const CARD_ASPECT = "1486/1048";
 
 export function ProcessStepsGrid() {
   return (
-    <div className="mx-auto w-[min(920px,calc(100%-2.25rem))]">
+    <div className="mx-auto w-[min(57.5rem,calc(100%-2.25rem))]">
       {[0, 3].map((rowStart) => (
         <div className="relative" key={rowStart}>
           <div className="grid gap-x-[7%] gap-y-8 sm:grid-cols-2 lg:grid-cols-3">
@@ -16,7 +16,7 @@ export function ProcessStepsGrid() {
               return (
                 <Reveal delay={index * 110} from="fade" key={step.number}>
                   <div
-                    className="group/step relative w-full transition-[transform,filter] duration-300 ease-out hover:-translate-y-1.5 hover:drop-shadow-[0_18px_28px_rgb(36_33_34/.16)]"
+                    className="group/step @container relative w-full transition-[transform,filter] duration-300 ease-out hover:-translate-y-1.5 hover:drop-shadow-[0_18px_28px_rgb(36_33_34/.16)]"
                     style={{ aspectRatio: CARD_ASPECT }}
                   >
                     {/* Nền card là layer gốc khách hàng cung cấp. */}
@@ -29,9 +29,12 @@ export function ProcessStepsGrid() {
                       aria-hidden="true"
                     />
 
-                    {/* Số thứ tự trượt ngang độc lập, đồng thời đổi cam khi hover. */}
+                    {/* Số thứ tự trượt ngang độc lập, đồng thời đổi cam khi hover.
+                        `right-56` cũ là 224px cứng nên số chạy lệch hẳn ra ngoài
+                        card khi card rộng hơn (tablet/mobile); đổi sang % để bám
+                        đúng vị trí desktop ở mọi bề rộng. */}
                     <Reveal
-                      className="absolute top-[35%] right-56 h-[52%] w-[18%]"
+                      className="absolute top-[35%] left-[-3%] h-[52%] w-[18%]"
                       delay={index * 110 + 80}
                       from="left"
                     >
@@ -77,10 +80,12 @@ export function ProcessStepsGrid() {
                       </span>
 
                       <div className="absolute top-[28%] right-[17%] bottom-[8%] left-[27%]">
-                        <h3 className="font-heading pr-[20%] text-[12px] leading-tight font-bold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[13px]">
+                        {/* Cỡ chữ theo bề rộng card (cqw) để chữ luôn cân với
+                            khung nền; từ lg chốt lại đúng 13px/11px như cũ. */}
+                        <h3 className="font-heading pr-[20%] text-[4.93cqw] leading-tight font-bold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[0.8125rem]">
                           {step.title}
                         </h3>
-                        <p className="mt-2 text-[10px] leading-snug text-muted-foreground text-pretty lg:text-[11px]">
+                        <p className="mt-2 text-[4.17cqw] leading-snug text-muted-foreground text-pretty lg:text-[0.6875rem]">
                           {step.copy}
                         </p>
                       </div>

@@ -40,16 +40,16 @@ function ProcessBlockShape() {
 
 export function ConstructionProcessList() {
   return (
-    <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+    <div className="relative mx-auto w-[min(65rem,calc(100%-2.25rem))]">
       {/* Thanh dọc màu xám chạy suốt danh sách, canh theo cột thứ hai */}
       <span
-        className="absolute top-0 bottom-10 left-[16.3%] hidden w-[8px] -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
+        className="absolute top-0 bottom-10 left-[16.3%] hidden w-2 -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
         aria-hidden="true"
       >
         <span className="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rounded-full bg-[#C9C9C9]" />
       </span>
 
-      <div className="flex flex-col gap-6 md:gap-10">
+      <div className="flex flex-col gap-6 md:gap-8">
         {processSteps.map((step, index) => {
           const base = index * 220;
 
@@ -64,7 +64,7 @@ export function ConstructionProcessList() {
                 delay={base}
                 from="zoom"
               >
-                <div className="relative grid aspect-square w-[110px] place-items-center md:w-full">
+                <div className="relative grid aspect-square w-20 place-items-center sm:w-27.5 md:w-full">
                   <Image
                     className="absolute inset-0 size-full object-contain"
                     src="/images/thi-cong-xay-dung/circle-ring.png"
@@ -73,7 +73,7 @@ export function ConstructionProcessList() {
                     height={300}
                     aria-hidden="true"
                   />
-                  <span className="relative text-7xl leading-none font-normal text-charcoal ">
+                  <span className="relative text-5xl leading-none font-normal text-charcoal sm:text-7xl md:text-6xl">
                     {step.number}
                   </span>
                 </div>
@@ -82,8 +82,8 @@ export function ConstructionProcessList() {
               {/* 2. Chấm tròn cam trên thanh timeline */}
               <div className="hidden justify-center md:flex ml-4">
                 <Reveal delay={base} from="zoom">
-                  <span className="grid size-[42px] place-items-center rounded-full border-1 border-brand bg-[#F2F2F3]">
-                    <span className="block size-[26px] rounded-full bg-brand" />
+                  <span className="grid size-9 place-items-center rounded-full border-1 border-brand bg-[#F2F2F3]">
+                    <span className="block size-5.5 rounded-full bg-brand" />
                   </span>
                 </Reveal>
               </div>
@@ -94,7 +94,7 @@ export function ConstructionProcessList() {
                 delay={base + 120}
                 from="left"
               >
-                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand md:text-xl">
+                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand md:text-lg">
                   {step.title}
                   <br className="hidden md:block" />{" "}
                   {step.subtitle}
@@ -112,7 +112,7 @@ export function ConstructionProcessList() {
                 from="bottom"
               >
                 <Image
-                  className="size-[80px] object-contain md:size-full"
+                  className="size-14 object-contain sm:size-20 md:size-full"
                   src={step.icon}
                   alt={step.title}
                   width={300}
@@ -126,7 +126,7 @@ export function ConstructionProcessList() {
               <Reveal delay={base + 360} from="left">
                 <div className="relative isolate transition-[filter] duration-300 group-hover/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)]">
                   <ProcessBlockShape />
-                  <p className="px-6 py-5 text-sm leading-relaxed text-justify text-white md:px-7 md:py-6">
+                  <p className="px-6 py-5 text-sm leading-relaxed text-justify text-white md:px-6 md:py-5">
                     {step.description}
                   </p>
                 </div>

@@ -6,7 +6,9 @@ import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 
 export function QuotationPage() {
   return (
-    <div className={styles.page}>
+    <div
+      className={`min-h-dvh overflow-x-clip bg-white text-[#231f20] ${styles.page}`}
+    >
       <SiteHeader />
       <main>
         <QuotationHero />

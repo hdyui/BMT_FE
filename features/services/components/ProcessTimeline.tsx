@@ -19,8 +19,8 @@ const SECOND_GROUP_DELAY = 560;
    Mọi kích thước bên trong đều tính bằng calc() trên --frame-h nên chỉ cần
    sửa một con số là cả cụm co giãn theo đúng tỉ lệ. */
 const TIMELINE_STYLE = {
-  "--frame-h": "146px",
-  "--step-h": "calc(var(--frame-h) + 20px)",
+  "--frame-h": "9.125rem",
+  "--step-h": "calc(var(--frame-h) + 1.25rem)",
 } as CSSProperties;
 
 type ProcessStep = (typeof processSteps)[number];
@@ -38,7 +38,7 @@ function TimelineStep({
 
   return (
     <Reveal from={isLeft ? "right" : "left"} delay={delay}>
-      <article className="group/step relative min-h-[205px] rounded-[24px] bg-white p-5 pt-16 shadow-[0_10px_28px_rgb(36_33_34/.08)] lg:h-(--step-h) lg:min-h-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
+      <article className="group/step relative min-h-[12.8125rem] rounded-[1.5rem] bg-white p-4 pt-14 sm:p-5 sm:pt-16 shadow-[0_10px_28px_rgb(36_33_34/.08)] lg:h-(--step-h) lg:min-h-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
         {/* Ảnh `fill` tự set inline width/height/inset = 100%, nên bắt buộc
             phải bọc trong một span đã định vị sẵn; đặt w-[65%] thẳng lên
             <Image> sẽ bị inline style của next/image đè mất và khung kéo dài
@@ -124,7 +124,7 @@ function TimelineStep({
               : "lg:right-[17%] lg:left-[36%]"
           }`}
         >
-          <h3 className="font-heading text-3xl leading-tight font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
+          <h3 className="font-heading text-xl leading-tight sm:text-3xl font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
             {step.title}
           </h3>
           <p className="mt-2 text-xs leading-relaxed text-pretty lg:mt-[calc(var(--frame-h)*0.035)] lg:text-[calc(var(--frame-h)*0.0652)] lg:leading-[1.4]">
@@ -142,15 +142,17 @@ export function ProcessTimeline() {
 
   return (
     <div
-      className="relative mx-auto flex w-[min(820px,calc(100%-2.25rem))] justify-center"
+      className="relative mx-auto flex w-[min(51.25rem,calc(100%-2.25rem))] justify-center"
       style={TIMELINE_STYLE}
     >
       {/* 3 chấm trên process-axis.png nằm ở 14.79% / 50.10% / 85.09% chiều cao
           ảnh (đo trực tiếp từ file). Muốn chấm rơi đúng tâm từng hàng thì
           khoảng cách 2 chấm ngoài (70.30% ảnh) phải bằng 2 x --step-h:
             cao ảnh = 2 x --step-h / 0.7030 = --step-h x 2.845
-            top     = --frame-h/2 - 0.1479 x cao ảnh = --frame-h/2 - --step-h x 0.4208 */}
-      <div className="pointer-events-none absolute left-1/2 z-10 hidden w-12 -translate-x-1/2 lg:block lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.4208)] lg:h-[calc(var(--step-h)*2.845)]">
+            top     = --frame-h/2 - 0.1479 x cao ảnh = --frame-h/2 - --step-h x 0.4208
+          Hạ chủ động xuống 2.6 (thay vì 2.845 đúng toán học) để ảnh đỡ bị kéo
+          dãn dọc quá mức; chấm lệch tâm hàng một chút nhưng không đáng kể. */}
+      <div className="pointer-events-none absolute left-1/2 z-10 hidden w-12 -translate-x-1/2 lg:block lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.3845)] lg:h-[calc(var(--step-h)*2.6)]">
         <Image
           className="size-full object-fill"
           src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"

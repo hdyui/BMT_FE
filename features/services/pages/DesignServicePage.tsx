@@ -49,9 +49,23 @@ export function DesignServicePage() {
         {/* Bản vẽ wireframe nền trái. `object-contain` nên bề rộng thật của
             hình = 0.698 x chiều cao banner, KHÔNG phải w-[38%]. Kéo sang trái
             -8% để mép phải bản vẽ dừng ở ~19.6vw đúng như mockup, chừa khoảng
-            trắng cho khối chữ thay vì để nét vẽ chạy xuyên qua chữ. */}
+            trắng cho khối chữ thay vì để nét vẽ chạy xuyên qua chữ.
+
+            Bản vẽ neo đáy (`bottom-0` + `object-left-bottom`) nên `-top-` vừa là
+            núm phóng to vừa là núm nâng/hạ: giảm số thì bản vẽ vừa nhỏ lại vừa
+            tụt xuống.
+
+            File `hero-wireframe-original.png` có LỀ RỖNG: 2,9% ở đáy và 14,1% ở
+            phải (đo trên file 2257x3235). Nên hai chỉnh dưới đây:
+              - `-bottom-[1.25rem]`: khung tràn 20px xuống dưới đáy banner, vừa
+                đúng phần lề rỗng, nhờ vậy NÉT VẼ chạm đáy banner thay vì hở.
+              - `-left-[7%]`: nhích sang phải. Nét vẽ thật chỉ tới x=293px chứ
+                không phải mép khung, nên vẫn chưa đụng chữ (chữ bắt đầu x=328px).
+                Hai số `-top-` và `-left-` phải đi cùng nhau: thu nhỏ bản vẽ thì
+                mép phải nét vẽ tự lùi trái, muốn giữ nguyên chỗ đó thì phải nhích
+                `-left-` lên tương ứng. */}
         <Reveal
-          className="absolute inset-y-0 -left-[8%] -z-10 hidden w-[38%] lg:block"
+          className="absolute -top-[7%] -bottom-[1.25rem] -left-[5.5%] -z-10 hidden w-[46%] lg:block"
           delay={100}
           from="fade"
         >
@@ -68,15 +82,20 @@ export function DesignServicePage() {
 
         {/* Layout mới: Trái là Text (Max Width), Phải là Gallery bám sát viền */}
         {/* Màn nhỏ: chữ dồn lên trên, cụm ảnh nằm dưới -> không chồng lên nhau. */}
-        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 lg:items-center lg:pt-0">
+        {/* `lg:pt-24` khớp với mốc 96px của bản vẽ nền và cụm ảnh, để khối chữ
+            canh giữa theo đúng vùng còn lại chứ không canh giữa cả banner. */}
+        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 lg:items-center lg:pt-24">
           {/* Cụm Text Bên Trái */}
-          {/* Bề rộng khối chữ đi theo cỡ chữ (28vw ≈ 14.3 lần font-size) nên
+          {/* Bề rộng khối chữ đi theo cỡ chữ (33vw ≈ 14.3 lần font-size) nên
               tiêu đề luôn ngắt đúng 2 dòng như mockup và mép phải dừng trước
-              cụm ảnh nghiêng ở mọi bề rộng màn hình. */}
-          <div className="relative z-10 w-full max-w-[500px] shrink-0 pl-4 sm:pl-8 ml-4 sm:ml-6 lg:ml-[20%] lg:max-w-[min(580px,calc(28vw_+_40px))] lg:pl-10">
+              cụm ảnh nghiêng ở mọi bề rộng màn hình. Cỡ chữ tiêu đề đã tăng lên
+              để đồng bộ với các trang dịch vụ khác (2.2rem thay vì 1.85rem cũ)
+              nên công thức này được nhân lại theo đúng tỉ lệ (x1.19): 580->690,
+              28vw->33vw, 40px->48px — giữ nguyên tỉ lệ 14.3 lần font-size. */}
+          <div className="relative z-10 w-full max-w-[500px] shrink-0 pl-4 sm:pl-8 ml-4 sm:ml-6 lg:ml-[20%] lg:max-w-[min(690px,calc(33vw_+_48px))] lg:pl-10">
             {" "}
             <Reveal
-              className="absolute -top-5 -bottom-5 left-0 w-1.5"
+              className="absolute -top-5 -bottom-5 left-0 w-0.5 sm:w-1"
               delay={110}
               from="fade"
             >
@@ -92,14 +111,14 @@ export function DesignServicePage() {
             <Reveal>
               {/* Mockup dùng cỡ chữ ~1.89vw; 2.15vw cũ làm tiêu đề tràn khỏi
                   khối chữ và đè lên bản vẽ nền. */}
-              <h1 className="font-heading text-2xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.9vw,2.3rem)]">
-                DỊCH VỤ THIẾT KẾ KIẾN TRÚC &
+              <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
+                DỊCH VỤ THIẾT KẾ KIẾN TRÚC&nbsp;&
                 <br />
                 NỘI THẤT CHUYÊN NGHIỆP
               </h1>
             </Reveal>
             <Reveal
-              className="mt-4 w-[110px] sm:w-[125px]"
+              className="mt-4 w-28"
               delay={180}
               from="left"
             >
@@ -113,7 +132,7 @@ export function DesignServicePage() {
               />
             </Reveal>
             <Reveal delay={300} from="left">
-              <p className="mt-2 max-w-[250px] text-pretty text-sm leading-relaxed sm:text-base">
+              <p className="mt-2 max-w-[250px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                 Kiến tạo không gian hài hòa giữa
                 <br className="hidden sm:inline" /> thẩm mỹ và công năng
               </p>
@@ -230,8 +249,7 @@ export function DesignServicePage() {
       >
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
-            {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
-            <h2 className="font-heading flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
+            <h2 className="font-heading flex flex-wrap items-center justify-center gap-x-3 gap-y-2 text-4xl font-extrabold">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"

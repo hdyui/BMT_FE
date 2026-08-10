@@ -141,7 +141,7 @@ export function ProjectCarousel({
       >
         <div
           className={cn(
-            "flex w-max items-center gap-6 sm:gap-8 lg:gap-[50px]",
+            "flex w-max items-center gap-4 sm:gap-8 lg:gap-[3.125rem]",
             animate && "transition-transform duration-500 ease-out",
           )}
           style={{ transform: `translateX(${offset}px)` }}
@@ -156,7 +156,7 @@ export function ProjectCarousel({
                   cardRefs.current[index] = element;
                 }}
                 className={cn(
-                  "relative aspect-[3334/2653] w-[42vw] max-w-[600px] shrink-0 overflow-hidden rounded-[32px] transition-[transform,opacity] duration-500 ease-out",
+                  "relative aspect-3334/2653 w-[78vw] max-w-150 shrink-0 overflow-hidden rounded-[1.25rem] sm:w-[60vw] sm:rounded-[1.5rem] lg:w-[42vw] lg:rounded-[2rem] transition-[transform,opacity] duration-500 ease-out",
                   isActive
                     ? "z-10 scale-100 opacity-100"
                     : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
@@ -176,7 +176,7 @@ export function ProjectCarousel({
                   src={project.image}
                   alt={project.title}
                   fill
-                  sizes="42vw"
+                  sizes="(max-width: 640px) 78vw, (max-width: 1024px) 60vw, 42vw"
                   priority={index === 0}
                 />
 
@@ -186,10 +186,10 @@ export function ProjectCarousel({
                 />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
-                  <p className="mb-1 text-[11px] font-semibold tracking-wider uppercase sm:text-xs">
+                  <p className="mb-1 text-[0.6875rem] font-semibold tracking-wider uppercase sm:text-xs">
                     {project.tag}
                   </p>
-                  <h3 className="font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[26px]">
+                  <h3 className="font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]">
                     {project.title}
                   </h3>
                 </div>
@@ -217,7 +217,7 @@ export function ProjectCarousel({
             />
           ) : (
             <svg
-              className="ml-[-2px]"
+              className="ml-[-0.125rem]"
               width="14"
               height="16"
               viewBox="0 0 14 16"
@@ -245,7 +245,7 @@ export function ProjectCarousel({
             />
           ) : (
             <svg
-              className="mr-[-2px]"
+              className="mr-[-0.125rem]"
               width="14"
               height="16"
               viewBox="0 0 14 16"
