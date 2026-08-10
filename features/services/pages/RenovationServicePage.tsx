@@ -20,6 +20,7 @@ import {
   SERVICE_SOLUTION_CARDS_CLASS_NAME,
   SERVICE_SOLUTION_HEADING_CLASS_NAME,
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
+  SERVICE_PILL_CTA_TEXT_CLASS_NAME,
 } from "@/features/services/config/layout";
 
 // Import Data
@@ -29,12 +30,68 @@ import {
   processSteps,
 } from "@/features/services/data/cai-tao-sua-chua";
 
+/**
+ * Hai vệt bóng ở mép phải banner. Ảnh nền `hero-background.png` (file -06) không
+ * có sẵn hai vệt này nên phải dựng bằng CSS; toạ độ đo trên mockup -07
+ * (8000x3468): vệt trên y 0%..48,6%, vệt dưới y 61,7%..100%, cả hai bám mép phải.
+ * Góc bo chỉ ở phía trong (dưới-trái của vệt trên, trên-trái của vệt dưới) vì hai
+ * đầu còn lại bị cạnh banner cắt.
+ */
+const EDGE_SHADOWS = [
+  {
+    key: "top",
+    className:
+      "top-0 h-[48.6%] rounded-bl-[2rem] animate-[hero-shadow-drift_13s_ease-in-out_infinite_alternate]",
+  },
+  {
+    key: "bottom",
+    // Thời lượng lẻ so với vệt trên (17s vs 13s) nên hai vệt không bao giờ trùng
+    // pha; `-4s` cho nó vào giữa chu kỳ ngay khi tải, khỏi khởi động cùng lúc.
+    className:
+      "top-[61.7%] bottom-0 rounded-tl-[2rem] animate-[hero-shadow-drift_17s_ease-in-out_-4s_infinite_alternate]",
+  },
+] as const;
+
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />
       {/* SECTION 1: BANNER */}
       <section className={SERVICE_HERO_CLASS_NAME}>
+        {/* Ảnh nền do thiết kế cung cấp, đã có sẵn các vệt xám loang — dùng thẳng
+            thay vì tự vẽ bóng bằng CSS. File gốc 8000x3468 (tỉ lệ 2.31) nhưng chỉ
+            120KB vì là gradient trơn; `object-cover` cắt nhẹ hai bên cho khớp tỉ
+            lệ banner (2.57). Next tự resize theo `sizes` nên không tải cả 8000px. */}
+        {/* `object-bottom` + `origin-bottom`: ảnh tỉ lệ 2.31 còn banner 2.57 nên
+            `object-cover` phải cắt 64px chiều cao. Mặc định nó cắt đều 32px trên
+            và 32px dưới, ăn mất vệt bóng ở đáy ảnh — neo về đáy thì cắt trọn 64px
+            ở trên, phần dưới hiện đủ. `origin-bottom` để animation phóng ảnh
+            hướng lên, giữ mép đáy đứng yên, không thì vừa neo xong lại bị scale
+            đẩy ra ngoài. */}
+        <Image
+          className="-z-20 origin-bottom object-cover object-bottom animate-[hero-bg-drift_24s_ease-in-out_infinite_alternate] motion-reduce:animate-none"
+          src="/images/cai-tao-sua-chua/hero-background.png"
+          alt=""
+          fill
+          sizes="100vw"
+          priority
+          aria-hidden="true"
+        />
+
+        {/* Hai vệt bóng ở mép phải — ảnh nền -06 không có, đo trên mockup -07:
+            dải loang ngang bắt đầu ở x=95,31%, đậm nhất 232 rồi nhạt dần về đúng
+            màu nền 242 ở x=97,5%. Trên nền #F2F2F3 thì 232 tương đương đen 4,1%
+            alpha, nên tô bằng gradient đen mờ dần thay vì màu xám đặc — cách này
+            đúng cả khi ảnh nền phía dưới đổi màu.
+            Vệt trên chạy từ đỉnh banner tới 48,6%; vệt dưới từ 61,7% tới đáy. */}
+        {EDGE_SHADOWS.map((shadow) => (
+          <div
+            key={shadow.key}
+            className={`pointer-events-none absolute right-0 -z-10 hidden w-[4.7%] bg-[linear-gradient(to_right,rgb(0_0_0/.042),transparent_47%)] motion-reduce:animate-none lg:block ${shadow.className}`}
+            aria-hidden="true"
+          />
+        ))}
+
         {/* Bản phác thảo nhà, nền bên trái */}
         <Reveal
           className="pointer-events-none absolute inset-y-0 left-0 hidden w-[42%] lg:block"
@@ -52,7 +109,7 @@ export function RenovationServicePage() {
         </Reveal>
 
         {/* Lưới 45/55 */}
-        <div className="mx-auto grid h-full w-[min(1200px,calc(100%-2.25rem))] items-center gap-10 py-16 lg:grid-cols-[45%_55%] lg:gap-6 lg:py-10 xl:gap-8">
+        <div className="mx-auto grid h-full w-[min(75rem,calc(100%-2.25rem))] items-center gap-8 py-10 sm:gap-10 sm:py-16 lg:grid-cols-[45%_55%] lg:gap-6 lg:py-10 xl:gap-8">
           {/* NỘI DUNG BÊN TRÁI
 
               Bản vẽ wireframe nền là `object-contain` nên bề rộng thật của nó
@@ -65,9 +122,12 @@ export function RenovationServicePage() {
               cách trừ đi phần lề trái của container — viết dạng cộng với
               `min(-1.125rem, 600px - 50vw)` (tương đương trừ `max(...)`) để
               Tailwind không sinh ra `-1*max(...)`. Giá trị bị chặn bởi
-              `calc(100% - 345px)` để cụm chữ không bao giờ tràn sang cột ảnh
-              khi màn hình hẹp. */}
-          <div className="relative z-10 mt-32 flex flex-col justify-center pl-8 lg:mt-[150px] lg:pl-[min(calc(28vw_+_min(-1.125rem,600px_-_50vw)),calc(100%_-_345px))] xl:mt-[250px]">
+              `calc(100% - 27rem)` để cụm chữ không bao giờ tràn sang cột ảnh
+              khi màn hình hẹp — 27rem = thanh cam (0.25rem) + gap (tối đa
+              1.75rem ở xl) + bề rộng tối đa của khối chữ (25rem, xem
+              `lg:max-w-` bên dưới). Đổi bên này mà quên đổi
+              `lg:max-w-` là tràn ngay, hai số phải đi cùng nhau. */}
+          <div className="relative z-10 mt-16 flex translate-x-4 flex-col justify-center pl-4 sm:mt-32 sm:translate-x-6 sm:pl-8 lg:mt-[9.375rem] lg:translate-x-8 lg:pl-[min(calc(28vw+min(-1.125rem,37.5rem-50vw)),calc(100%-27rem))] xl:mt-[15.625rem] xl:translate-x-10">
             {/* Khối chứa thanh cam và Text */}
             <div className="relative mt-2 flex gap-5 sm:gap-6 xl:gap-7">
               {/* HOA VĂN CHẤM CAM: 
@@ -75,10 +135,10 @@ export function RenovationServicePage() {
               <Reveal
                 delay={520}
                 from="fade"
-                className="absolute -top-[60px] left-[100px] -z-10 lg:left-[100px] xl:-top-[170px] xl:left-[250px]"
+                className="absolute top-[-2.5rem] left-[55%] -z-10 sm:top-[-3.75rem] sm:left-[6.25rem] lg:left-[6.25rem] xl:top-[-10.625rem] xl:left-[15.625rem]"
               >
                 <Image
-                  className="w-[45px] object-contain xl:w-[50px]"
+                  className="w-8 object-contain sm:w-[2.8125rem] xl:w-[3.125rem]"
                   src="/images/cai-tao-sua-chua/dots-pattern.png"
                   alt=""
                   width={288}
@@ -90,7 +150,7 @@ export function RenovationServicePage() {
               {/* Thanh cam dọc */}
               <Reveal className="mt-1 shrink-0" from="fade">
                 <Image
-                  className="h-[170px] w-[4px] rounded-full object-cover sm:w-[5px] xl:h-[200px]"
+                  className="h-[7.5rem] w-0.5 rounded-full object-cover sm:h-[10.625rem] sm:w-1 xl:h-[12.5rem]"
                   src="/images/cai-tao-sua-chua/accent-tick.png"
                   alt=""
                   width={25}
@@ -99,21 +159,32 @@ export function RenovationServicePage() {
                 />
               </Reveal>
 
-              {/* Khối Text */}
-              <div className="flex flex-col justify-center lg:max-w-[clamp(210px,17vw,320px)]">
-                {/* Tiêu đề */}
+              {/* Khối Text
+
+                  `lg:max-w-`: đo trực tiếp từ file font (OpenSans-ExtraBold)
+                  dòng dài nhất "SỬA CHỮA TRỌN GÓI" rộng 10.807em. Ở cỡ chữ nhỏ
+                  nhất lg (1.6rem) cần ~17.3rem, ở cỡ lớn nhất (2.2rem) cần
+                  ~23.8rem — clamp(18.25rem,22vw,25rem) dưới đây luôn rộng hơn
+                  mức cần một chút ở mọi bề rộng màn hình từ lg trở lên. Set
+                  hẹp hơn (bản cũ 13.125rem-20rem) làm trình duyệt tự bẻ thêm
+                  một dòng nữa dù đã có `<br/>`, tràn khỏi cụm thanh cam. */}
+              <div className="flex flex-col justify-center lg:max-w-[clamp(18.25rem,22vw,25rem)]">
+                {/* Tiêu đề. `whitespace-nowrap` để mỗi dòng KHÔNG tự bẻ thêm —
+                    `<br/>` vẫn tách 2 dòng bình thường (không bị nowrap chặn),
+                    đây chỉ là lưới an toàn cho đúng 2 dòng như mockup. */}
                 <Reveal from="bottom">
-                  <h1 className="text-2xl font-extrabold leading-[1.12] text-brand uppercase sm:text-[clamp(1.375rem,1.78vw,2.1rem)]">
+                  <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand uppercase whitespace-nowrap sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
                     DỊCH VỤ CẢI TẠO &
                     <br />
                     SỬA CHỮA TRỌN GÓI
                   </h1>
                 </Reveal>
 
-                {/* Đường line đen */}
+                {/* Đường line đen. mt-4 khớp với Construction/Design page (bản
+                    cũ mt-5/xl:mt-6 khiến khoảng cách dòng to hơn 3 trang kia). */}
                 <Reveal delay={220} from="left">
                   <Image
-                    className="mt-5 h-[16px] w-auto object-contain object-left xl:mt-6 xl:h-[20px]"
+                    className="mt-4 h-auto w-28 max-w-full object-contain object-left"
                     src="/images/cai-tao-sua-chua/icon-building-divider.png"
                     alt=""
                     width={571}
@@ -124,7 +195,7 @@ export function RenovationServicePage() {
 
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
-                  <p className="mt-2 max-w-[310px] text-pretty text-sm font-normal leading-relaxed sm:text-base">
+                  <p className="mt-2 max-w-[19.375rem] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                     Cải Tạo Không Gian – Nâng Tầm
                     <br className="hidden sm:block" />
                     Giá Trị Công Trình
@@ -134,28 +205,31 @@ export function RenovationServicePage() {
             </div>
           </div>
 
-          {/* CỤM 3 ẢNH BÊN PHẢI */}
-          <div className="relative">
-            {/* Khối trang trí nền: mảng bo tròn mờ nhô ra sau cụm ảnh */}
-            <Reveal
-              className="pointer-events-none absolute -top-6 -right-6 -bottom-10 -left-4 -z-10 hidden rounded-[48px] bg-black/[0.04] lg:block lg:-right-10 xl:-right-14"
-              from="fade"
-              delay={260}
-            />
+          {/* CỤM 3 ẢNH BÊN PHẢI
 
+              Từ lg: neo từ trên xuống (`self-start` + `mt-[4.5625rem]`) thay vì
+              canh giữa. Canh giữa làm đỉnh cụm rơi vào y=40px, tức nằm sau
+              SiteHeader (85px) nên mép trên hai ảnh trái bị che.
+
+              73px = 40px (`lg:py-10` của lưới) trừ đi rồi cộng: đỉnh cụm nằm ở
+              y=113px, tức cách đáy header (85px) đúng 28px — bằng khoảng cách từ
+              đáy cụm xuống đáy banner. Hai lề này cùng là px cố định nên bằng
+              nhau ở mọi bề rộng. Chiều cao cụm đã trừ sẵn cả hai, xem
+              RenovationHeroGallery. */}
+          <div className="relative lg:mt-[4.5625rem] lg:self-start">
             <Reveal from="right">
               <RenovationHeroGallery
                 large={{
-                  image: "/images/cai-tao-sua-chua/hero-large.png",
-                  alt: "Cải tạo mặt tiền nhà",
+                  image: "/images/cai-tao-sua-chua/hero-correct-large.png",
+                  alt: "Mặt tiền nhà cải tạo với kiến trúc vòm",
                 }}
                 top={{
-                  image: "/images/cai-tao-sua-chua/hero-top.png",
-                  alt: "Cải tạo phòng khách",
+                  image: "/images/cai-tao-sua-chua/hero-correct-top.png",
+                  alt: "Phòng khách cải tạo với nội thất hiện đại",
                 }}
                 bottom={{
-                  image: "/images/cai-tao-sua-chua/hero-bottom.png",
-                  alt: "Cải tạo không gian sống",
+                  image: "/images/cai-tao-sua-chua/hero-correct-bottom.png",
+                  alt: "Không gian phòng khách sau cải tạo",
                 }}
               />
             </Reveal>
@@ -167,24 +241,29 @@ export function RenovationServicePage() {
       <section className={SERVICE_PROJECT_SECTION_CLASS_NAME}>
         <div className={SERVICE_PROJECT_HEADING_CLASS_NAME}>
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
               Giải Pháp Cải Tạo Phù Hợp Cho Mọi Công Trình
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-6 max-w-[1180px] text-sm leading-relaxed text-pretty">
+            <p className="mx-auto mt-6 max-w-[73.75rem] text-sm leading-relaxed text-pretty">
               BMT Decor cung cấp dịch vụ{" "}
               <strong className="font-bold">cải tạo nhà ở</strong>,{" "}
               <strong className="font-bold">cải tạo văn phòng</strong>,{" "}
               <strong className="font-bold">cải tạo showroom</strong>,{" "}
-              <strong className="font-bold">cải tạo nhà hàng</strong>, sửa chữa
-              nhà và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục
-              các hạng mục xuống cấp, tối ưu công năng và nâng cao giá trị sử
-              dụng với chi phí hợp lý.
+              <strong className="font-bold">cải tạo nhà hàng</strong>,{" "}
+              <strong className="font-bold">
+                sửa chữa
+                <br className="hidden lg:inline" /> nhà
+              </strong>{" "}
+              và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục các
+              hạng mục xuống cấp, tối ưu công năng và nâng
+              <br className="hidden lg:inline" /> cao giá trị sử dụng với chi
+              phí hợp lý.
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-5 h-8 max-w-[250px]"
+            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             delay={300}
           />
@@ -206,7 +285,7 @@ export function RenovationServicePage() {
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
-            textClassName="!text-[24px]"
+            textClassName={SERVICE_PILL_CTA_TEXT_CLASS_NAME}
           />
         </Reveal>
       </section>
@@ -218,7 +297,7 @@ export function RenovationServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="mb-12 text-center">
             <Reveal from="bottom">
-              <h2 className="text-3xl uppercase sm:text-4xl">
+              <h2 className="font-heading text-3xl uppercase sm:text-4xl">
                 <span className="font-normal">CẢI TẠO & SỬA CHỮA</span>
                 <br />
                 <span className="font-bold">
@@ -253,7 +332,7 @@ export function RenovationServicePage() {
       <section className="py-16">
         {/* <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
-            <h2 className="text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
               Quy Trình Cải Tạo & Sửa Chữa Tại BMT Decor
             </h2>
           </Reveal>

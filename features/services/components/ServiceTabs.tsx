@@ -8,14 +8,34 @@ import { cn } from "@/lib/utils";
 
 const FADE_DURATION = 240;
 
+/**
+ * Khoảng cách ngang từ `node` tới `container`, tính theo layout (bỏ qua mọi
+ * `transform` đang chạy). Cộng dồn theo chuỗi offsetParent để vẫn đúng nếu sau
+ * này có lớp bọc trung gian được đặt `position: relative`.
+ */
+function offsetLeftWithin(node: HTMLElement, container: HTMLElement) {
+  let left = 0;
+  let current: HTMLElement | null = node;
+
+  while (current && current !== container) {
+    left += current.offsetLeft;
+    current = current.offsetParent as HTMLElement | null;
+  }
+
+  return left;
+}
+
 export function ServiceTabs() {
   const [active, setActive] = useState(0);
   const [shown, setShown] = useState(0);
   const [faded, setFaded] = useState(false);
   const [indicator, setIndicator] = useState({ left: 0, width: 0 });
+  /* Vạch ngang dưới hàng tab: bắt đầu đúng ở chữ đầu của tab 1 và kết thúc
+     đúng ở chữ cuối của tab 4, thay vì kéo hết bề rộng container như trước. */
+  const [rule, setRule] = useState({ left: 0, width: 0 });
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
-  const buttonRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const labelRefs = useRef<Array<HTMLSpanElement | null>>([]);
 
   useEffect(
     () => () => {
@@ -26,22 +46,34 @@ export function ServiceTabs() {
 
   useEffect(() => {
     const container = tabsRef.current;
-    const button = buttonRefs.current[active];
-    if (!container || !button) return;
+    const activeLabel = labelRefs.current[active];
+    const firstLabel = labelRefs.current[0];
+    const lastLabel = labelRefs.current[serviceTabs.length - 1];
+    if (!container || !activeLabel || !firstLabel || !lastLabel) return;
 
-    const updateIndicator = () => {
-      const gridItem = button.parentElement;
-      if (!gridItem) return;
-
+    /* Đo bằng offsetLeft/offsetWidth chứ KHÔNG dùng getBoundingClientRect:
+       <Reveal from="left"> trượt nhãn vào bằng `transform`, mà rect thì tính cả
+       transform — nên lần đo đầu tiên (lúc hiệu ứng chưa chạy xong) sẽ ra vị
+       trí lệch sang trái 32px. offsetLeft là vị trí layout, không dính
+       transform, nên đúng ngay từ khung hình đầu. */
+    const measure = () => {
       setIndicator({
-        left: gridItem.offsetLeft + button.offsetLeft,
-        width: button.offsetWidth,
+        left: offsetLeftWithin(activeLabel, container),
+        width: activeLabel.offsetWidth,
+      });
+
+      const first = offsetLeftWithin(firstLabel, container);
+      setRule({
+        left: first,
+        width:
+          offsetLeftWithin(lastLabel, container) + lastLabel.offsetWidth - first,
       });
     };
 
-    const frame = requestAnimationFrame(updateIndicator);
-    const resizeObserver = new ResizeObserver(updateIndicator);
+    const frame = requestAnimationFrame(measure);
+    const resizeObserver = new ResizeObserver(measure);
     resizeObserver.observe(container);
+    labelRefs.current.forEach((label) => label && resizeObserver.observe(label));
 
     return () => {
       cancelAnimationFrame(frame);
@@ -66,7 +98,7 @@ export function ServiceTabs() {
     <>
       <div
         ref={tabsRef}
-        className="relative grid border-b-4 border-neutral-300 sm:grid-cols-2 lg:grid-cols-4"
+        className="relative grid border-b-4 border-neutral-300 sm:grid-cols-2 lg:grid-cols-4 lg:border-transparent"
         role="tablist"
         aria-label="Các dịch vụ"
       >
@@ -74,27 +106,43 @@ export function ServiceTabs() {
           <Reveal delay={index * 110} from="left" key={service.label}>
             <button
               className={cn(
-                "w-full px-3 py-4 text-center text-sm font-medium transition-colors duration-300 hover:text-brand",
+                // Cùng font / độ đậm / viết hoa với tiêu đề trong phần nội dung
+                // bên dưới (font-heading + font-extrabold + uppercase).
+                "w-full px-3 py-4 text-center font-heading text-sm font-extrabold uppercase transition-colors duration-300 hover:text-brand",
                 index === active && "text-brand",
               )}
               onClick={() => select(index)}
-              ref={(element) => {
-                buttonRefs.current[index] = element;
-              }}
               type="button"
               role="tab"
               aria-selected={index === active}
             >
-              {service.label.toUpperCase()}
+              <span
+                className="inline-block"
+                ref={(element) => {
+                  labelRefs.current[index] = element;
+                }}
+              >
+                {service.label.toUpperCase()}
+              </span>
             </button>
           </Reveal>
         ))}
 
+        {/* Vạch xám: từ lg trở lên chỉ chạy đúng từ chữ đầu tab 1 tới chữ cuối
+            tab 4. Dưới lg các tab xếp chồng nên vẫn dùng border full width. */}
+        {rule.width > 0 && (
+          <span
+            className="pointer-events-none absolute -bottom-1 hidden h-1 bg-neutral-300 lg:block"
+            style={rule}
+            aria-hidden="true"
+          />
+        )}
+
         {/* Một gạch chân duy nhất trượt sang tab được chọn thay vì thu về 0
-            rồi phóng lại ở tab mới. */}
+            rồi phóng lại ở tab mới. Bề rộng bám đúng chữ của tab đó. */}
         {indicator.width > 0 && (
           <span
-            className="pointer-events-none absolute -bottom-1 h-1 bg-brand transition-[left,width] duration-500 ease-out"
+            className="pointer-events-none absolute -bottom-1 z-[1] h-1 bg-brand transition-[left,width] duration-500 ease-out"
             style={indicator}
             aria-hidden="true"
           />
@@ -103,7 +151,7 @@ export function ServiceTabs() {
 
       <div
         className={cn(
-          "grid items-center gap-12 pt-12 transition-opacity ease-out lg:grid-cols-2 lg:gap-20",
+          "grid items-center gap-8 pt-8 transition-opacity ease-out sm:gap-12 sm:pt-12 lg:grid-cols-2 lg:gap-20",
           faded ? "opacity-0 duration-200" : "opacity-100 duration-500",
         )}
       >
@@ -119,14 +167,14 @@ export function ServiceTabs() {
           />
         </Reveal>
 
-        <div className="max-w-[510px]">
+        <div className="max-w-[31.875rem]">
           <Reveal from="left">
-            <span className="block text-7xl leading-none font-extrabold text-neutral-400">
+            <span className="block text-5xl leading-none font-extrabold text-neutral-400 sm:text-7xl">
               {String(shown + 1).padStart(2, "0")}.
             </span>
           </Reveal>
           <Reveal delay={120}>
-            <h2 className="mt-3 text-4xl font-extrabold uppercase">
+            <h2 className="mt-3 font-heading text-2xl font-extrabold uppercase sm:text-3xl lg:text-4xl">
               {detail.label}
             </h2>
           </Reveal>
