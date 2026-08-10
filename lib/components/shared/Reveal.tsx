@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 
 type RevealProps = React.ComponentProps<"div"> & {
   delay?: number;
+  duration?: number;
   from?: "bottom" | "left" | "right" | "zoom" | "fade";
 };
 
@@ -12,6 +13,7 @@ export function Reveal({
   children,
   className,
   delay = 0,
+  duration = 700,
   from = "bottom",
   style,
   ...props
@@ -47,6 +49,7 @@ export function Reveal({
   return (
     <div
       ref={ref}
+      data-visible={visible}
       className={cn(
         "transition-[opacity,translate,scale] duration-700 ease-out motion-reduce:translate-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
         visible
@@ -54,7 +57,11 @@ export function Reveal({
           : cn(hiddenDirection, "opacity-0"),
         className,
       )}
-      style={{ transitionDelay: `${Math.min(delay, 1500)}ms`, ...style }}
+      style={{
+        transitionDelay: `${Math.min(delay, 1500)}ms`,
+        transitionDuration: `${Math.min(duration, 2000)}ms`,
+        ...style,
+      }}
       {...props}
     >
       {children}

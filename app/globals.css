@@ -324,3 +324,11 @@
     font-size: 24px;
   }
 }
+
+@media (max-width: 639px) {
+  .home-contact-cta {
+    width: 158px;
+    min-height: 40px;
+    font-size: 17px;
+  }
+}

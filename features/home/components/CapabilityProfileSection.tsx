@@ -20,7 +20,7 @@ const portfolioSlices = [
 function PortfolioBooks() {
   return (
     <div
-      className="group relative mx-auto aspect-[1546/1221] w-full max-w-[560px] transition-transform duration-500 ease-out hover:scale-[1.035]"
+      className="group relative mx-auto aspect-[1546/1221] w-full max-w-[560px] transition-transform duration-500 ease-out hover:scale-[1.035] max-sm:max-w-[300px]"
       role="img"
       aria-label="Bộ hồ sơ năng lực BMT Decor gồm ba quyển portfolio"
     >
@@ -47,26 +47,26 @@ function PortfolioBooks() {
 
 export function CapabilityProfileSection() {
   return (
-    <section className="py-16 lg:py-20">
-      <div className="mx-auto grid w-[min(1200px,calc(100%-2.25rem))] items-center gap-10 lg:grid-cols-[1.12fr_0.88fr] lg:gap-6">
+    <section className="py-16 max-sm:pt-12 lg:py-20">
+      <div className="mx-auto grid w-[min(1200px,calc(100%-2.25rem))] items-center gap-10 lg:grid-cols-[1.12fr_0.88fr] lg:gap-6 max-sm:w-[calc(100%-2rem)] max-sm:gap-4">
         <div>
           <Reveal>
-            <h2 className="text-[clamp(2rem,3.6vw,3.25rem)] font-extrabold uppercase leading-none tracking-[-0.035em] text-charcoal">
+            <h2 className="text-[clamp(2rem,3.6vw,3.25rem)] font-extrabold uppercase leading-none tracking-[-0.035em] text-charcoal max-sm:text-[26px]">
               Hồ sơ năng lực
             </h2>
           </Reveal>
 
           <Reveal delay={130}>
-            <p className="mt-3 text-base leading-relaxed text-charcoal/80 sm:text-lg lg:text-xl">
+            <p className="mt-3 text-base leading-relaxed text-charcoal/80 sm:text-lg lg:text-xl max-sm:text-[15px] max-sm:leading-[1.25]">
               Đơn vị thiết kế thi công kiến trúc và nội thất, ngoại thất chuyên
               nghiệp tại Việt Nam
             </p>
           </Reveal>
 
-          <Reveal className="mt-8" delay={240} from="left">
-            <p className="max-w-2xl text-xl leading-[1.62] text-charcoal/85 sm:text-lg">
+          <Reveal className="mt-8 max-sm:mt-4" delay={240} from="left">
+            <p className="max-w-2xl text-xl leading-[1.62] text-charcoal/85 sm:text-lg max-sm:text-[15px] max-sm:leading-[1.12]">
               <Image
-                className="float-left mr-3 size-7 object-contain"
+                className="float-left mr-3 size-7 object-contain max-sm:mt-[2px] max-sm:mr-2 max-sm:size-[14px]"
                 src="/images/home/building-mark.png"
                 alt=""
                 width={28}
@@ -79,7 +79,7 @@ export function CapabilityProfileSection() {
             </p>
           </Reveal>
 
-          <Reveal className="mt-8" delay={360}>
+          <Reveal className="mt-8 max-sm:mt-6" delay={360}>
             <Link className="home-contact-cta" href="/ho-so-nang-luc">
               <span className="inline-flex h-full w-4/5 items-center justify-center">
                 XEM THÊM

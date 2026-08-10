@@ -62,15 +62,15 @@ const news = [
 function SectionHeading({ title, copy }: { title: string; copy?: string }) {
   return (
     <Reveal className="text-center">
-      <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
+      <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
         {title}
       </h2>
       {copy && (
-        <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-[17px]">
+        <p className="mx-auto mt-3 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-[17px] max-sm:text-sm">
           {copy}
         </p>
       )}
-      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand" />
+      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]" />
     </Reveal>
   );
 }
@@ -79,12 +79,12 @@ function ProjectSectionHeading() {
   return (
     <div className="text-center">
       <Reveal>
-        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
+        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
           Dự án tiêu biểu
         </h2>
       </Reveal>
       <Reveal delay={140}>
-        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
           Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công,
           khẳng định năng lực và chất lượng trong từng hạng mục.
         </p>
@@ -97,17 +97,17 @@ function ServiceSectionHeading() {
   return (
     <div className="text-center">
       <Reveal>
-        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl">
+        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[30px] max-sm:leading-tight">
           Dịch vụ nổi bật
         </h2>
       </Reveal>
       <Reveal delay={140}>
-        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground">
+        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
           BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa
           dạng nhu cầu từ nhà ở đến không gian kinh doanh.
         </p>
       </Reveal>
-      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand" />
+      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]" />
     </div>
   );
 }
@@ -134,16 +134,18 @@ export function HomePage() {
 
             <div className="mt-9 hidden h-44 lg:block" aria-hidden="true" />
 
-            <div className="mt-9 grid gap-6 pb-12 sm:grid-cols-2 lg:hidden">
+            <div className="mt-9 grid gap-6 pb-12 sm:grid-cols-2 lg:hidden max-sm:relative max-sm:left-1/2 max-sm:w-screen max-sm:-translate-x-1/2 max-sm:gap-4 max-sm:px-4 max-sm:text-charcoal max-sm:before:absolute max-sm:before:inset-x-0 max-sm:before:top-36 max-sm:before:bottom-0 max-sm:before:bg-white">
               {trustReasons.map((reason, index) => (
                 <TrustCardReveal
-                  className="group/card-lift relative z-0 hover:z-10"
+                  className="group/card-lift relative z-0 hover:z-10 sm:h-full"
                   delay={index * 180}
                   key={reason.title}
-                  motionClassName="origin-[center_176px] [transform:scale(1)] transition-transform duration-300 ease-in-out group-hover/card-lift:[transform:scale(1.015)]"
+                  motionClassName="origin-[center_176px] [transform:scale(1)] transition-transform duration-300 ease-in-out group-hover/card-lift:[transform:scale(1.015)] sm:h-full"
                 >
-                  <article className="group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)]">
-                    <div className="relative h-44 overflow-hidden">
+                  <article
+                    className="group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)] sm:flex sm:h-[410px] sm:flex-col max-sm:z-10 max-sm:shadow-[0_6px_18px_rgb(36_33_34/.16)]"
+                  >
+                    <div className="relative h-44 overflow-hidden sm:shrink-0 max-sm:h-36">
                       <Image
                         className="object-cover"
                         src={reason.image}
@@ -152,8 +154,8 @@ export function HomePage() {
                         sizes="(max-width:640px) 100vw, 50vw"
                       />
                     </div>
-                    <div className="relative px-6 pt-11 pb-7">
-                      <span className="absolute -top-8 left-6 grid size-16 place-items-center rounded-lg bg-white shadow-lg transition-colors duration-[700ms] group-hover/card:bg-brand">
+                    <div className="relative px-6 pt-11 pb-7 sm:min-h-0 sm:flex-1 max-sm:px-4 max-sm:pt-9 max-sm:pb-4">
+                      <span className="absolute -top-8 left-6 z-20 grid size-16 place-items-center rounded-lg bg-white shadow-lg transition-colors duration-[700ms] group-hover/card:bg-brand max-sm:left-4">
                         <Image
                           className="size-9 object-contain transition-opacity duration-[700ms] group-hover/card:opacity-0"
                           src={reason.icon}
@@ -169,10 +171,10 @@ export function HomePage() {
                           height={44}
                         />
                       </span>
-                      <h3 className="text-lg font-bold leading-snug">
+                      <h3 className="text-lg font-bold leading-snug sm:line-clamp-1 max-sm:text-[20px] max-sm:font-extrabold max-sm:leading-[1.12] max-sm:tracking-[-0.025em]">
                         {reason.title}
                       </h3>
-                      <p className="mt-3 text-xl leading-relaxed text-muted-foreground">
+                      <p className="mt-3 text-xl leading-relaxed text-muted-foreground sm:line-clamp-4 sm:text-[17px] sm:leading-[1.55] max-sm:mt-1.5 max-sm:text-[14px] max-sm:font-medium max-sm:leading-[1.3] max-sm:tracking-[-0.012em] max-sm:text-charcoal/90">
                         {reason.copy}
                       </p>
                     </div>
@@ -274,14 +276,22 @@ export function HomePage() {
         />
 
         <div className="relative">
-          <section className="py-16">
-            <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+          <section className="relative overflow-hidden py-16 max-sm:bg-white">
+            <div
+              className="pointer-events-none absolute inset-0 bg-top bg-repeat-y opacity-35 mix-blend-multiply max-sm:hidden"
+              style={{
+                backgroundImage: "url('/images/home/blueprint-background.png')",
+                backgroundSize: "1922px 440px",
+              }}
+              aria-hidden="true"
+            />
+            <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
               <ServiceSectionHeading />
               <ServiceShowcase />
             </div>
           </section>
 
-          <section className="py-14">
+          <section className="py-14 max-sm:pt-10 max-sm:pb-4">
             <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
               <SectionHeading title="Đối tác của BMT Decor" />
               <Reveal delay={120}>
@@ -294,8 +304,16 @@ export function HomePage() {
         </div>
       </div>
 
-      <section className="bg-white py-16">
-        <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+      <section className="relative overflow-hidden bg-neutral-100 py-16">
+        <div
+          className="pointer-events-none absolute inset-0 bg-top bg-repeat-y opacity-35 mix-blend-multiply"
+          style={{
+            backgroundImage: "url('/images/home/blueprint-background.png')",
+            backgroundSize: "1922px 440px",
+          }}
+          aria-hidden="true"
+        />
+        <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
           <SectionHeading title="Tin nổi bật" />
           <div className="mt-9 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
             <Reveal>
@@ -315,7 +333,7 @@ export function HomePage() {
                 <h3 className="mt-5 text-xl font-bold transition-colors group-hover:text-brand">
                   Bí quyết kiến tạo không gian sống hiện đại và bền vững
                 </h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground max-sm:line-clamp-2 max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
                   Cập nhật xu hướng thiết kế, kinh nghiệm thi công và các giải
                   pháp hữu ích từ đội ngũ BMT Decor.
                 </p>
@@ -325,10 +343,10 @@ export function HomePage() {
               {news.map((item, index) => (
                 <Reveal delay={index * 100} key={item.title}>
                   <Link
-                    className="group grid grid-cols-[148px_1fr] items-center gap-5"
+                    className="group grid grid-cols-[148px_1fr] items-center gap-5 max-sm:grid-cols-[46%_1fr] max-sm:gap-4"
                     href="/tin-tuc"
                   >
-                    <div className="relative aspect-square overflow-hidden rounded-2xl">
+                    <div className="relative aspect-square overflow-hidden rounded-2xl max-sm:aspect-[1.75/1]">
                       <Image
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
                         src={item.image}
@@ -338,10 +356,10 @@ export function HomePage() {
                       />
                     </div>
                     <div className="min-w-0">
-                      <h3 className="text-lg font-extrabold leading-snug text-charcoal transition-colors group-hover:text-brand">
+                      <h3 className="text-lg font-extrabold leading-snug text-charcoal transition-colors group-hover:text-brand max-sm:line-clamp-2 max-sm:text-[16px] max-sm:font-bold max-sm:leading-[1.12] max-sm:text-charcoal max-sm:group-hover:text-charcoal">
                         {item.title}
                       </h3>
-                      <p className="mt-2 line-clamp-3 text-sm leading-[1.45] text-muted-foreground">
+                      <p className="mt-2 line-clamp-3 text-sm leading-[1.45] text-muted-foreground max-sm:mt-1.5 max-sm:line-clamp-2 max-sm:text-[13px] max-sm:font-normal max-sm:leading-[1.3] max-sm:text-charcoal/80">
                         {item.copy}
                       </p>
                     </div>
@@ -369,7 +387,7 @@ export function HomePage() {
       </section>
 
       <ContactForm />
-      <SiteFooter />
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }
