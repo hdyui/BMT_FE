@@ -27,10 +27,50 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal">
-      <SiteHeader />
+    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip">
+      <SiteHeader mobileServiceMockup />
 
-      <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>
+      <section
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:h-[154vw] max-md:min-h-0 md:h-[55vw] md:min-h-0`}
+      >
+        <Image
+          className="absolute inset-0 -z-10 h-auto w-full md:hidden"
+          src="/images/xay-dung-tron-goi/mobile/hero-artwork.png"
+          alt=""
+          width={3884}
+          height={5972}
+          sizes="100vw"
+          priority
+          aria-hidden="true"
+        />
+
+        <div className="relative z-10 px-[10.5%] pt-[5.35rem] md:hidden">
+          <Reveal>
+            <h1 className="font-heading text-[clamp(1.05rem,4.7vw,2.25rem)] font-extrabold leading-[1.14] text-brand">
+              DỊCH VỤ THIẾT KẾ THI CÔNG
+              <br />&amp; XÂY DỰNG TRỌN GÓI
+            </h1>
+          </Reveal>
+          <BuildingRule
+            className="mt-4 block h-5 w-[52%] max-w-none before:absolute before:inset-x-0 before:bottom-0.5 before:h-0.5 before:bg-charcoal before:content-[''] [&_img]:object-contain [&_img]:object-right"
+            src="/images/xay-dung-tron-goi/rule-dark.png"
+            delay={160}
+          />
+          <Reveal delay={260} from="left">
+            <p className="mt-3 flex items-start gap-1.5 text-[clamp(0.6875rem,2.95vw,0.875rem)] leading-relaxed">
+              <Image
+                className="mt-[0.18em] size-[1.05em] shrink-0 object-contain"
+                src="/images/services/icon-house.png"
+                alt=""
+                width={90}
+                height={95}
+                aria-hidden="true"
+              />
+              <span>Kiến tạo công trình bền vững từ thiết kế đến thi công</span>
+            </p>
+          </Reveal>
+        </div>
+
         <Image
           className="absolute top-[9%] right-0 -z-10 hidden h-[91%] w-[18%] object-contain object-right-bottom opacity-90 md:block"
           src="/images/xay-dung-tron-goi/dong%20goi%20trang%20dich%20vu%20-%20xay%20dung%20tron%20goi%20web%20BMT%20decor-01.png"
@@ -40,7 +80,7 @@ export function FullConstructionServicePage() {
           priority
         />
 
-        <div className="mx-auto grid w-[min(92%,47.5rem)] items-center gap-10 py-12 md:block md:h-full md:w-full md:max-w-none md:py-0">
+        <div className="mx-auto hidden w-[min(92%,47.5rem)] items-center gap-10 py-12 md:block md:h-full md:w-full md:max-w-none md:py-0">
           {/* BƯỚC 1 — scale giảm đều các cạnh.
 
               Trước đây kích thước cụm ăn theo BỀ RỘNG (`w-[55vw]` / clamp) nên
@@ -126,7 +166,7 @@ export function FullConstructionServicePage() {
 
       {/* SECTION 2 */}
       <section
-        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 lg:!py-16`}
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate max-md:!pt-12 max-md:!pb-6 md:!py-12 lg:!py-16`}
       >
         <Image
           className="-z-10 object-cover"
@@ -140,14 +180,14 @@ export function FullConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
         >
           <Reveal>
-            <h2 className="font-heading text-xl font-bold sm:text-3xl lg:text-[2rem] text-center">
+            <h2 className="font-heading text-[clamp(1.05rem,4.7vw,1.5rem)] font-extrabold sm:text-3xl md:font-bold lg:text-[2rem] text-center">
               TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-center">
-              Dịch vụ <span className="font-bold">thiết kế thi công</span> và{" "}
-              <span className="font-bold">xây dựng trọn gói</span> giúp chủ đầu
+              Dịch vụ <span className="font-normal md:font-bold">thiết kế thi công</span> và{" "}
+              <span className="font-normal md:font-bold">xây dựng trọn gói</span> giúp chủ đầu
               tư triển khai công trình một cách đồng bộ, từ ý tưởng,
               <br className="hidden lg:inline" /> thiết kế đến thi công hoàn
               thiện. Thay vì làm việc với nhiều đơn vị, khách hàng chỉ cần một
@@ -158,7 +198,7 @@ export function FullConstructionServicePage() {
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
+            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             delay={300}
           />
@@ -172,11 +212,12 @@ export function FullConstructionServicePage() {
             projects={featuredProjects}
             prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
             nextIcon="/images/cai-tao-sua-chua/nav-next.png"
+            mobileMockup
           />
         </Reveal>
 
         <Reveal
-          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 lg:!mt-12 flex justify-center w-full`}
+          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} max-md:!mt-4 lg:!mt-12 flex justify-center w-full`}
           delay={200}
         >
           <PillCtaButton
@@ -195,10 +236,9 @@ export function FullConstructionServicePage() {
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="text-center">
             <Reveal>
-              <h2 className="font-heading text-3xl uppercase sm:text-[2rem]">
-                <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
-                <br />
-                <span className="font-bold">
+              <h2 className="font-heading text-[clamp(1.05rem,4.7vw,1.5rem)] uppercase sm:text-[2rem]">
+                <span className="block whitespace-nowrap font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
+                <span className="block whitespace-nowrap font-bold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -209,7 +249,7 @@ export function FullConstructionServicePage() {
               </p>
             </Reveal>
             <BuildingRule
-              className="mx-auto mt-3 mb-8 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
+              className="mx-auto mt-3 mb-8 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
               src="/images/xay-dung-tron-goi/rule-orange.png"
               delay={300}
             />
@@ -217,16 +257,16 @@ export function FullConstructionServicePage() {
         </div>
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
-          <SolutionCards cards={solutionCards} />
+          <SolutionCards cards={solutionCards} mobileMockup />
         </div>
       </section>
 
-      <section className="bg-[#f2f2f3] py-12 lg:py-14">
+      <section className="bg-[#f2f2f3] pt-12 pb-0 md:pb-12 lg:py-14">
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="font-heading text-3xl font-extrabold sm:text-[2rem]">
-              QUY TRÌNH THIẾT KẾ THI CÔNG &
-              <br /> XÂY NHÀ TRỌN GÓI
+            <h2 className="font-heading text-[clamp(1.05rem,4.7vw,1.5rem)] font-extrabold sm:text-[2rem]">
+              <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
+              <span className="block whitespace-nowrap">XÂY NHÀ TRỌN GÓI</span>
             </h2>
           </Reveal>
           <Reveal delay={140}>
@@ -235,17 +275,17 @@ export function FullConstructionServicePage() {
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
+            className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             delay={300}
           />
         </div>
 
-        <ProcessStepsGrid />
+        <ProcessStepsGrid mobileMockup />
       </section>
 
-      <ContactForm />
-      <SiteFooter />
+      <ContactForm mobileServiceMockup />
+      <SiteFooter mobileServiceMockup />
     </div>
   );
 }

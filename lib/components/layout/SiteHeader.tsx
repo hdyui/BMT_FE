@@ -18,14 +18,27 @@ import {
 import { navigation } from "@/config/site";
 import { cn } from "@/lib/utils";
 
-export function SiteHeader() {
+export function SiteHeader({
+  mobileServiceMockup = false,
+}: {
+  mobileServiceMockup?: boolean;
+} = {}) {
   const pathname = usePathname();
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[85px] opacity-85 bg-charcoal text-white shadow-md">
+    <header
+      className={cn(
+        "fixed inset-x-0 top-0 z-50 h-[85px] bg-charcoal text-white opacity-85 shadow-md",
+        mobileServiceMockup &&
+          "max-md:h-[3.75rem] max-md:opacity-100 max-md:shadow-none",
+      )}
+    >
       <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5">
         <BrandLogo
-          className="w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]"
+          className={cn(
+            "w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]",
+            mobileServiceMockup && "max-md:w-[7.25rem]",
+          )}
           inverted
         />
 
@@ -105,8 +118,21 @@ export function SiteHeader() {
 
         <Sheet>
           <SheetTrigger
-            className="ml-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 xl:hidden"
+            className={cn(
+              "ml-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 xl:hidden",
+              mobileServiceMockup &&
+                "max-md:border-white max-md:bg-white max-md:text-charcoal",
+            )}
             aria-label="Mở menu"
+            style={
+              mobileServiceMockup
+                ? {
+                    backgroundColor: "white",
+                    borderColor: "white",
+                    color: "#242122",
+                  }
+                : undefined
+            }
           >
             <Menu />
           </SheetTrigger>

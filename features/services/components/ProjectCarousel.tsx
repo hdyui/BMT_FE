@@ -23,6 +23,7 @@ type ProjectCarouselProps = {
   backgroundImage?: string;
   prevIcon?: string;
   nextIcon?: string;
+  mobileMockup?: boolean;
 };
 
 const DRAG_THRESHOLD = 50;
@@ -32,6 +33,7 @@ export function ProjectCarousel({
   backgroundImage,
   prevIcon,
   nextIcon,
+  mobileMockup = false,
 }: ProjectCarouselProps) {
   const count = featuredProjects.length;
   /* Nhân bản danh sách 3 lần để lướt vòng: luôn còn thẻ ở cả hai phía nên
@@ -46,6 +48,7 @@ export function ProjectCarousel({
   const viewportRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const dragStartX = useRef<number | null>(null);
+  const logicalActive = ((active % count) + count) % count;
 
   const move = useCallback((direction: number) => {
     setAnimate(true);
@@ -122,7 +125,10 @@ export function ProjectCarousel({
 
       <div
         ref={viewportRef}
-        className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6"
+        className={cn(
+          "relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6",
+          mobileMockup && "max-md:py-0",
+        )}
         tabIndex={0}
         role="group"
         aria-label="Dự án tiêu biểu"
@@ -157,6 +163,8 @@ export function ProjectCarousel({
                 }}
                 className={cn(
                   "relative aspect-3334/2653 w-[78vw] max-w-150 shrink-0 overflow-hidden rounded-[1.25rem] sm:w-[60vw] sm:rounded-[1.5rem] lg:w-[42vw] lg:rounded-[2rem] transition-[transform,opacity] duration-500 ease-out",
+                  mobileMockup &&
+                    "max-md:w-[86vw] max-md:rounded-[1.75rem]",
                   isActive
                     ? "z-10 scale-100 opacity-100"
                     : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
@@ -186,7 +194,7 @@ export function ProjectCarousel({
                 />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
-                  <p className="mb-1 text-[0.6875rem] font-semibold tracking-wider uppercase sm:text-xs">
+                  <p className="mb-1 text-[0.6875rem] font-normal tracking-wider uppercase sm:text-xs md:font-semibold">
                     {project.tag}
                   </p>
                   <h3 className="font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]">
@@ -199,7 +207,71 @@ export function ProjectCarousel({
         </div>
       </div>
 
-      <div className="relative z-10 mt-6 flex items-center justify-center gap-4">
+      {mobileMockup && (
+        <>
+          <button
+            className="absolute top-1/2 left-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden"
+            onClick={() => move(-1)}
+            aria-label="Dự án trước"
+            type="button"
+          >
+            {prevIcon ? (
+              <Image
+                className="size-full object-cover"
+                src={prevIcon}
+                alt=""
+                width={48}
+                height={48}
+                aria-hidden="true"
+              />
+            ) : (
+              <span aria-hidden="true">‹</span>
+            )}
+          </button>
+          <button
+            className="absolute top-1/2 right-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden"
+            onClick={() => move(1)}
+            aria-label="Dự án tiếp theo"
+            type="button"
+          >
+            {nextIcon ? (
+              <Image
+                className="size-full object-cover"
+                src={nextIcon}
+                alt=""
+                width={48}
+                height={48}
+                aria-hidden="true"
+              />
+            ) : (
+              <span aria-hidden="true">›</span>
+            )}
+          </button>
+          <div
+            className="mt-3 flex items-center justify-center gap-3 md:hidden"
+            aria-hidden="true"
+          >
+            {Array.from({ length: 4 }, (_, index) => (
+              <span
+                className={cn(
+                  "size-5 rounded-full border-2",
+                  index === logicalActive
+                    ? "border-brand bg-brand shadow-[inset_0_0_0_3px_white]"
+                    : "border-charcoal bg-white",
+                )}
+                key={index}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div
+        className={cn(
+          "relative z-10 mt-6 flex items-center justify-center gap-4",
+          mobileMockup && "max-md:hidden",
+        )}
+      >
         <button
           className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
           onClick={() => move(-1)}

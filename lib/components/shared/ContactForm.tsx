@@ -17,9 +17,13 @@ type ContactFormProps = {
   /** Bo góc phải phía trên: nửa trái nhô lên, nửa phải để lộ nền section trên.
    *  Tắt khi section phía trên đã tự thò xuống che phần này. */
   topNotch?: boolean;
+  mobileServiceMockup?: boolean;
 };
 
-export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
+export function ContactForm({
+  topNotch = true,
+  mobileServiceMockup = false,
+}: ContactFormProps = {}) {
   const [errors, setErrors] = useState<Errors>({});
 
   function clearFieldError(field: FieldName) {
@@ -58,25 +62,49 @@ export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
     "h-12 rounded-full border-2 border-transparent bg-white px-5 text-base text-charcoal shadow-sm placeholder:text-neutral-500 transition-[border-color,box-shadow] duration-300 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:shadow-[0_0_0_4px_rgb(255_255_255/.2),0_12px_30px_rgb(36_33_34/.22)] aria-invalid:border-red-600 aria-invalid:ring-4 aria-invalid:ring-red-950/15";
 
   return (
-    <section className="relative bg-brand py-14 text-white" id="contact-form">
+    <section
+      className={`relative bg-brand py-14 text-white ${
+        mobileServiceMockup ? "max-md:py-10" : ""
+      }`}
+      id="contact-form"
+    >
       {/* Dải cam nhô lên khỏi mép trên, phủ nửa trái và bo lõm ở góc phải
           (đường tròn bán kính 44px tâm tại góc phải-trên của dải) nên phần
           còn lại vẫn để lộ nền của section phía trên. */}
       {topNotch && (
-        <span
-          className="pointer-events-none absolute bottom-full left-0 z-20 hidden h-11 w-[calc(50%+2.75rem)] bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))] lg:block"
-          aria-hidden="true"
-        />
+        <>
+          <span
+            className="pointer-events-none absolute bottom-full left-0 z-20 hidden h-11 w-[calc(50%+2.75rem)] bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))] lg:block"
+            aria-hidden="true"
+          />
+          {mobileServiceMockup && (
+            <span
+              className="pointer-events-none absolute bottom-full left-0 z-20 h-4 w-[calc(50%+1rem)] bg-[radial-gradient(circle_at_top_right,transparent_1rem,var(--brand)_calc(1rem+0.5px))] md:hidden"
+              aria-hidden="true"
+            />
+          )}
+        </>
       )}
 
       <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
         <div className="block w-full">
           <Reveal>
-            <h2 className="mb-2 text-3xl font-bold uppercase sm:text-[32px]">
+            <h2
+              className={`mb-2 text-3xl font-bold uppercase sm:text-[32px] ${
+                mobileServiceMockup ? "max-md:text-2xl" : ""
+              }`}
+            >
               Liên hệ tư vấn
             </h2>
           </Reveal>
-          <BuildingRule className="max-w-none" light fullWidth delay={180} />
+          <BuildingRule
+            className={`max-w-none ${
+              mobileServiceMockup ? "max-md:hidden" : ""
+            }`}
+            light
+            fullWidth
+            delay={180}
+          />
         </div>
         <form className="mt-7" onSubmit={handleSubmit} noValidate>
           <Reveal delay={220}>
@@ -130,7 +158,9 @@ export function ContactForm({ topNotch = true }: ContactFormProps = {}) {
 
           <Reveal delay={380}>
             <Button
-              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm"
+              className={`mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm ${
+                mobileServiceMockup ? "max-md:ml-auto max-md:block max-md:w-32" : ""
+              }`}
               type="submit"
             >
               Gửi ngay
