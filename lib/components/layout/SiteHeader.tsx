@@ -26,14 +26,8 @@ export function SiteHeader({
   const pathname = usePathname();
 
   return (
-    <header
-      className={cn(
-        "fixed inset-x-0 top-0 z-50 h-[85px] bg-charcoal text-white opacity-85 shadow-md",
-        mobileServiceMockup &&
-          "max-md:h-[3.75rem] max-md:opacity-100 max-md:shadow-none",
-      )}
-    >
-      <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5">
+    <header className="fixed inset-x-0 top-0 z-50 h-[85px] opacity-85 bg-charcoal text-white shadow-md max-sm:bg-charcoal/85 max-sm:opacity-100">
+      <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5 max-sm:w-[calc(100%-1.5rem)]">
         <BrandLogo
           className={cn(
             "w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]",
@@ -118,11 +112,7 @@ export function SiteHeader({
 
         <Sheet>
           <SheetTrigger
-            className={cn(
-              "ml-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 xl:hidden",
-              mobileServiceMockup &&
-                "max-md:border-white max-md:bg-white max-md:text-charcoal",
-            )}
+            className="ml-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 xl:hidden max-sm:size-12 max-sm:border-white max-sm:bg-white max-sm:text-charcoal max-sm:shadow-md"
             aria-label="Mở menu"
             style={
               mobileServiceMockup

@@ -56,8 +56,6 @@
 }
 
 .heroBackdrop {
-  /* Cut two decorative regions out of the base image so each can be
-     restacked independently without showing duplicate artwork. */
   clip-path: polygon(
     0 0,
     39.5% 0,
@@ -74,8 +72,6 @@
 }
 
 .heroHeaderTail {
-  /* Repaint only the U-shaped header decoration. The banner itself is
-     40px taller on desktop, so the tail grows with the real hero canvas. */
   clip-path: inset(0 40.5% 45% 39.5%);
   transform: translate3d(0, -60px, 0);
   backface-visibility: hidden;
@@ -83,7 +79,6 @@
 }
 
 .heroDotOverlay {
-  /* Keep only the upper copy of the bottom-left orange dot matrix. */
   clip-path: inset(63% 90.5% 0 0);
   animation: decor-fade 0.72s 0.3s ease-out both;
 }
@@ -112,12 +107,8 @@
   right: calc(var(--outline-dot-size) / -2);
   width: var(--outline-dot-size);
   height: var(--outline-dot-size);
-  border: 0;
   border-radius: 50%;
-  outline: 0;
   background: #f47a2a;
-  box-shadow: none;
-  background-clip: padding-box;
   transform: translate3d(0, -50%, 0);
   backface-visibility: hidden;
 }

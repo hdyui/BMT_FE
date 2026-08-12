@@ -59,54 +59,38 @@ export function ContactForm({
   }
 
   const inputClassName =
-    "h-12 rounded-full border-2 border-transparent bg-white px-5 text-base text-charcoal shadow-sm placeholder:text-neutral-500 transition-[border-color,box-shadow] duration-300 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:shadow-[0_0_0_4px_rgb(255_255_255/.2),0_12px_30px_rgb(36_33_34/.22)] aria-invalid:border-red-600 aria-invalid:ring-4 aria-invalid:ring-red-950/15";
+    "h-12 rounded-full border-2 border-transparent bg-white px-5 text-base text-charcoal shadow-sm placeholder:text-neutral-500 transition-[border-color,box-shadow] duration-300 focus-visible:border-white focus-visible:ring-4 focus-visible:ring-white/40 focus-visible:shadow-[0_0_0_4px_rgb(255_255_255/.2),0_12px_30px_rgb(36_33_34/.22)] aria-invalid:border-red-600 aria-invalid:ring-4 aria-invalid:ring-red-950/15 max-sm:h-10 max-sm:px-4 max-sm:text-[14px]";
 
   return (
     <section
-      className={`relative bg-brand py-14 text-white ${
-        mobileServiceMockup ? "max-md:py-10" : ""
-      }`}
+      className="relative bg-brand py-14 text-white max-sm:pt-6 max-sm:pb-[46px]"
       id="contact-form"
     >
       {/* Dải cam nhô lên khỏi mép trên, phủ nửa trái và bo lõm ở góc phải
           (đường tròn bán kính 44px tâm tại góc phải-trên của dải) nên phần
           còn lại vẫn để lộ nền của section phía trên. */}
       {topNotch && (
-        <>
-          <span
-            className="pointer-events-none absolute bottom-full left-0 z-20 hidden h-11 w-[calc(50%+2.75rem)] bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))] lg:block"
-            aria-hidden="true"
-          />
-          {mobileServiceMockup && (
-            <span
-              className="pointer-events-none absolute bottom-full left-0 z-20 h-4 w-[calc(50%+1rem)] bg-[radial-gradient(circle_at_top_right,transparent_1rem,var(--brand)_calc(1rem+0.5px))] md:hidden"
-              aria-hidden="true"
-            />
-          )}
-        </>
+        <span
+          className="pointer-events-none absolute bottom-[calc(100%-1px)] left-0 z-20 h-4 w-1/2 bg-[radial-gradient(circle_at_top_right,transparent_1rem,var(--brand)_calc(1rem+0.5px))] sm:hidden lg:bottom-full lg:block lg:h-11 lg:w-[calc(50%+2.75rem)] lg:bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))]"
+          aria-hidden="true"
+        />
       )}
 
       <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
         <div className="block w-full">
           <Reveal>
-            <h2
-              className={`mb-2 text-3xl font-bold uppercase sm:text-[32px] ${
-                mobileServiceMockup ? "max-md:text-2xl" : ""
-              }`}
-            >
+            <h2 className="mb-2 text-3xl font-bold uppercase sm:text-[32px] max-sm:text-[24px] max-sm:font-extrabold max-sm:leading-none">
               Liên hệ tư vấn
             </h2>
           </Reveal>
           <BuildingRule
-            className={`max-w-none ${
-              mobileServiceMockup ? "max-md:hidden" : ""
-            }`}
+            className="max-w-none max-sm:h-5 max-sm:[&>span:last-child]:h-5 max-sm:[&>span:last-child]:w-7 max-sm:[&>span:last-child>img]:h-5"
             light
             fullWidth
             delay={180}
           />
         </div>
-        <form className="mt-7" onSubmit={handleSubmit} noValidate>
+        <form className="mt-7 max-sm:mt-4" onSubmit={handleSubmit} noValidate>
           <Reveal delay={220}>
             <div className="grid gap-4 sm:grid-cols-2 sm:gap-x-8">
               <label>
@@ -158,9 +142,7 @@ export function ContactForm({
 
           <Reveal delay={380}>
             <Button
-              className={`mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm ${
-                mobileServiceMockup ? "max-md:ml-auto max-md:block max-md:w-32" : ""
-              }`}
+              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm max-sm:ml-auto max-sm:block max-sm:h-10 max-sm:w-[152px] max-sm:min-w-0 max-sm:text-[14px] max-sm:font-bold"
               type="submit"
             >
               Gửi ngay

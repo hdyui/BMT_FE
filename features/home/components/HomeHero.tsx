@@ -170,7 +170,7 @@ export function HomeHero() {
                 unoptimized
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent max-sm:bg-gradient-to-t max-sm:from-black/80 max-sm:via-black/45 max-sm:to-black/10" />
 
             <div className="relative mx-auto flex h-full w-[min(1380px,calc(100%-2.5rem))] items-end pb-20 sm:pb-24 lg:pb-28">
               <motion.div
@@ -180,13 +180,13 @@ export function HomeHero() {
                 variants={contentContainerVariants}
               >
                 <motion.h1
-                  className="text-[36px] leading-[1.12] font-extrabold text-balance uppercase drop-shadow-lg sm:text-[40px]"
+                  className="text-[36px] leading-[1.12] font-extrabold text-balance uppercase drop-shadow-lg sm:text-[40px] max-sm:text-[32px]"
                   variants={titleVariants}
                 >
                   {slide.title}
                 </motion.h1>
                 <motion.p
-                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90"
+                  className="mt-5 max-w-xl text-xl leading-relaxed text-white/90 max-sm:text-base"
                   variants={bodyItemVariants}
                 >
                   <Image
@@ -220,7 +220,7 @@ export function HomeHero() {
         );
       })}
 
-      <div className="absolute inset-x-0 bottom-7 z-20 flex justify-center gap-2">
+      <div className="absolute inset-x-0 bottom-7 z-20 flex justify-center gap-2 max-sm:hidden">
         {slides.map((slide, index) => (
           <button
             className={`size-3 rounded-full border border-white transition-all duration-300 ${
