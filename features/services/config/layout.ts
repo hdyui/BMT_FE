@@ -5,12 +5,8 @@
  * Quy ước: KHÔNG dùng px cứng. Mọi kích thước đi theo viewport (vw / clamp) hoặc
  * theo thang spacing của Tailwind để layout co giãn được ở mọi khổ màn hình.
  */
-// Banner mẫu (banner-chuan.png, 720×994) cao hơn hẳn so với công thức 92vw cũ.
-// min-h ở đây chỉ còn là SÀN tối thiểu cho đẹp mắt — cụm ảnh giờ nằm trong
-// luồng thường (xem ServicesOverviewPage) nên dù số liệu ở đây có lệch cũng
-// không còn khiến ảnh đè lên chữ. base (dải md-lg) và lg giữ nguyên như cũ.
 export const SERVICE_HERO_CLASS_NAME =
-  "relative isolate min-h-[clamp(28rem,92vw,47.5rem)] overflow-hidden bg-[#F2F2F3] max-md:min-h-[clamp(34rem,159vw,42rem)] lg:h-[clamp(35rem,38.9vw,47.5rem)] lg:min-h-0";
+  "relative isolate min-h-[clamp(28rem,92vw,47.5rem)] overflow-hidden bg-[#F2F2F3] lg:h-[clamp(35rem,38.9vw,47.5rem)] lg:min-h-0";
 
 export const SERVICE_PROJECT_SECTION_CLASS_NAME =
   "relative isolate overflow-hidden py-10 sm:py-12 lg:py-16";
