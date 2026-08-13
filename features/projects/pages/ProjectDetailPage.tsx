@@ -13,7 +13,10 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
   return (
     <>
       <SiteHeader />
-      <main className="bg-white pt-[60px] text-charcoal">
+      <main
+        className="bg-white pt-[60px] text-charcoal xl:pt-[68px]"
+        data-scroll-snap-page
+      >
         <ProjectsHero />
         <ProjectOverview project={project} />
         <ProjectEditorialGallery project={project} />

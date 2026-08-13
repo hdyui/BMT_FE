@@ -9,10 +9,10 @@ export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
   return (
     <section className="bg-white pb-[clamp(68px,8vw,120px)]" aria-labelledby="result-title">
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-        <ProjectSectionHeading delay={180} duration={900}>
+        <ProjectSectionHeading delay={80} duration={950}>
           <span id="result-title">Thành quả bàn giao căn nhà:</span>
         </ProjectSectionHeading>
-        <Reveal delay={380} duration={850}>
+        <Reveal delay={140} distance="long" duration={950}>
           <p className="mt-1 text-lg font-bold">Trước và sau thi công:</p>
         </Reveal>
 
@@ -31,8 +31,9 @@ export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
                 {[comparison.before, comparison.after].map((image, imageIndex) => (
                   <Reveal
                     className={`min-w-0 ${styles.imageReveal}`}
-                    delay={520 + imageIndex * 140}
-                    duration={950}
+                    delay={160 + imageIndex * 90}
+                    distance="long"
+                    duration={1050}
                     from="fade"
                     key={image.src}
                   >
@@ -69,12 +70,12 @@ export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
         </div>
 
         <div className="mt-[clamp(54px,6vw,90px)]">
-          <Reveal delay={180} duration={900}>
+          <Reveal delay={80} distance="long" duration={950}>
             <h2 className="text-[clamp(28px,3vw,46px)] leading-[1.05] font-bold tracking-[-0.04em] text-brand uppercase text-balance">
               Bạn yêu thích không gian này?
             </h2>
           </Reveal>
-          <Reveal delay={400} duration={850} from="left">
+          <Reveal delay={160} distance="long" duration={950} from="left">
             <p className="mt-3 max-w-[1180px] text-[clamp(15px,1.2vw,19px)] leading-[1.5]">
               <ProjectRichText
                 text={project.ctaDescription}

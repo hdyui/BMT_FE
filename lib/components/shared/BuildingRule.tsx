@@ -82,7 +82,10 @@ export function BuildingRule({
               alt=""
               width={1388}
               height={128}
-              sizes="48px"
+              decoding="sync"
+              loading="eager"
+              sizes={compact ? "217px" : "434px"}
+              unoptimized
             />
           </span>
         </>
