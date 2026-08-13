@@ -58,6 +58,7 @@ export function JourneyTimeline() {
   const dragRef = useRef({ startX: 0, startScroll: 0, isDragging: false });
   const [isVisible, setIsVisible] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [isAutoPaused, setIsAutoPaused] = useState(false);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -79,6 +80,24 @@ export function JourneyTimeline() {
       if (revealTimer) window.clearTimeout(revealTimer);
     };
   }, []);
+
+  useEffect(() => {
+    const scroller = scrollerRef.current;
+    if (!scroller || !isVisible || isDragging || isAutoPaused) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+    const timer = window.setInterval(() => {
+      const maxScroll = scroller.scrollWidth - scroller.clientWidth;
+      const nextLeft =
+        scroller.scrollLeft >= maxScroll - 12
+          ? 0
+          : Math.min(scroller.scrollLeft + 368, maxScroll);
+
+      scroller.scrollTo({ left: nextLeft, behavior: "smooth" });
+    }, 3600);
+
+    return () => window.clearInterval(timer);
+  }, [isAutoPaused, isDragging, isVisible]);
 
   function scrollTimeline(direction: -1 | 1) {
     const scroller = scrollerRef.current;
@@ -120,11 +139,15 @@ export function JourneyTimeline() {
   }
 
   return (
-    <section className="bg-white py-24 sm:py-28 lg:py-32" ref={sectionRef}>
+    <section
+      className="bg-white py-24 max-sm:py-12 sm:py-28 lg:py-32"
+      id="hanh-trinh"
+      ref={sectionRef}
+    >
       <div className="mx-auto w-[min(1380px,calc(100%-2.25rem))]">
         <div className="mx-auto flex flex-col items-center text-center">
           <h2
-            className={`max-w-full text-balance text-4xl sm:text-5xl font-extrabold uppercase leading-none tracking-[-0.025em] text-charcoal transition-[opacity,translate] delay-150 duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+            className={`max-w-full text-balance text-4xl sm:text-5xl font-extrabold uppercase leading-none tracking-[-0.025em] text-charcoal transition-[opacity,translate] delay-150 duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 max-sm:text-[26px] ${
               isVisible
                 ? "translate-y-0 opacity-100"
                 : "translate-y-20 opacity-0"
@@ -133,7 +156,7 @@ export function JourneyTimeline() {
             Hành trình của BMT Decor
           </h2>
           <div
-            className={`relative mt-5 h-7 w-full max-w-[390px] origin-left transition-[opacity,scale] delay-[420ms] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
+            className={`relative mt-5 h-7 w-full max-w-[390px] origin-left transition-[opacity,scale] delay-[420ms] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 max-sm:mt-2 max-sm:h-5 max-sm:max-w-[140px] ${
               isVisible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
             }`}
             aria-hidden="true"
@@ -148,7 +171,103 @@ export function JourneyTimeline() {
           </div>
         </div>
 
-        <div className="group relative mt-12 sm:px-16 lg:mt-16">
+        <div className="relative mt-8 sm:hidden">
+          <ol>
+            {milestones.map((milestone, index) => {
+              const isLeft = index % 2 === 0;
+              const isFirst = index === 0;
+              return (
+                <li
+                  className={`relative grid min-h-[170px] border-t-2 border-dashed border-neutral-300 px-4 transition-[opacity,translate] duration-700 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                    isVisible
+                      ? "translate-y-0 opacity-100"
+                      : "translate-y-10 opacity-0"
+                  }`}
+                  style={{ transitionDelay: `${180 + index * 90}ms` }}
+                  key={milestone.year}
+                >
+                  <span
+                    className={`absolute bottom-0 top-0 border-l-2 border-dashed border-neutral-300 ${
+                      isLeft ? "left-0" : "right-0"
+                    }`}
+                    aria-hidden="true"
+                  />
+                  {isFirst ? (
+                    <span
+                      className="absolute left-0 top-0 z-10 grid size-5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-brand"
+                      aria-hidden="true"
+                    >
+                      <span className="size-2 rounded-full bg-charcoal" />
+                    </span>
+                  ) : (
+                    <>
+                      <span
+                        className="absolute left-0 top-0 z-10 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-charcoal"
+                        aria-hidden="true"
+                      />
+                      <span
+                        className="absolute right-0 top-0 z-10 size-2.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-charcoal"
+                        aria-hidden="true"
+                      />
+                    </>
+                  )}
+
+                  <article
+                    className={`grid h-full min-w-0 gap-3 py-5 ${
+                      isLeft
+                        ? "grid-cols-[38px_minmax(0,1fr)] text-left"
+                        : "grid-cols-[minmax(0,1fr)_38px] text-right"
+                    }`}
+                  >
+                    <span
+                      className={`flex self-stretch items-center justify-center text-[27px] font-extrabold leading-none tabular-nums ${
+                        isLeft ? "col-start-1" : "col-start-2"
+                      } ${isFirst ? "text-brand" : "text-neutral-400"}`}
+                    >
+                      <span className="[writing-mode:vertical-rl] rotate-180">
+                        {milestone.year}
+                      </span>
+                    </span>
+
+                    <div className={isLeft ? "col-start-2" : "col-start-1 row-start-1"}>
+                      <div
+                        className={`relative mb-2 size-12 overflow-hidden rounded-full bg-white ${
+                          isLeft ? "mr-auto" : "ml-auto"
+                        }`}
+                      >
+                        <Image
+                          className="object-cover"
+                          src={milestone.image}
+                          alt=""
+                          fill
+                          sizes="48px"
+                        />
+                      </div>
+                      <h3 className="text-[14px] font-extrabold uppercase leading-[1.15] text-charcoal">
+                        {milestone.title}
+                      </h3>
+                      <p className="mt-1.5 text-[13px] leading-[1.35] text-neutral-600">
+                        {milestone.description}
+                      </p>
+                    </div>
+                  </article>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        <div
+          className="group relative mt-12 hidden sm:block sm:px-16 lg:mt-16"
+          onPointerEnter={() => setIsAutoPaused(true)}
+          onPointerLeave={() => setIsAutoPaused(false)}
+          onFocusCapture={() => setIsAutoPaused(true)}
+          onBlurCapture={(event) => {
+            if (!event.currentTarget.contains(event.relatedTarget)) {
+              setIsAutoPaused(false);
+            }
+          }}
+        >
           <button
             className="pointer-events-none absolute left-0 top-1/2 z-30 hidden size-12 -translate-y-1/2 place-items-center rounded-full bg-brand text-white opacity-0 shadow-[0_10px_28px_rgba(244,122,42,.32)] transition-[opacity,scale,background-color] duration-300 hover:scale-110 hover:bg-brand-dark group-hover:pointer-events-auto group-hover:opacity-100 focus-visible:pointer-events-auto focus-visible:opacity-100 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand sm:grid"
             type="button"
@@ -167,7 +286,7 @@ export function JourneyTimeline() {
           </button>
 
           <div
-            className={`relative select-none overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
+            className={`relative snap-x snap-proximity select-none overflow-x-auto overscroll-x-contain scroll-smooth [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${
               isDragging ? "cursor-grabbing" : "cursor-grab"
             }`}
             ref={scrollerRef}
@@ -179,7 +298,7 @@ export function JourneyTimeline() {
             onPointerUp={endDrag}
             onPointerCancel={endDrag}
           >
-            <div className="relative flex w-max gap-7 px-1 pb-8 pt-4">
+            <div className="relative flex w-max gap-7 pt-4 pr-10 pb-8 pl-1">
               <span
                 className={`absolute left-0 right-0 top-[30px] origin-left border-t-2 border-dashed border-neutral-300 transition-[opacity,transform] delay-[520ms] duration-1000 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
                   isVisible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"

@@ -11,6 +11,7 @@ import { AboutHero } from "@/features/about/components/AboutHero";
 import { CapabilitiesSection } from "@/features/about/components/CapabilitiesSection";
 import { JourneyTimeline } from "@/features/about/components/JourneyTimeline";
 import { VisionMissionValues } from "@/features/about/components/VisionMissionValues";
+import { PartnerSection } from "@/features/home/components/PartnerSection";
 import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
@@ -107,7 +108,7 @@ const capabilities = [
   },
   {
     number: "03",
-    title: "Triển Khai Đa Loại Hình Công Trình",
+    title: "Triển Khai Đa Loại Hình",
     description:
       "Kinh nghiệm thực hiện nhà ở, văn phòng, showroom, nhà hàng, khách sạn và các công trình thương mại với giải pháp phù hợp cho từng quy mô dự án.",
     image: `${imageRoot}/capability-target.png`,
@@ -167,7 +168,7 @@ export function AboutPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden">
+      <main className="overflow-hidden" data-scroll-snap-page>
         <AboutHero />
         <JourneyTimeline />
         <VisionMissionValues />
@@ -375,7 +376,9 @@ export function AboutPage() {
           </div>
         </section>
 
-        <section className="relative py-24 sm:py-28 lg:py-32">
+        <PartnerSection className="sm:hidden mb-14" />
+
+        <section className="relative hidden py-24 sm:block sm:py-28 lg:py-32">
           <div
             className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 z-0 overflow-hidden bg-[#f6f6f6] sm:-bottom-11 lg:-bottom-12"
             aria-hidden="true"
@@ -416,10 +419,9 @@ export function AboutPage() {
           </div>
         </section>
 
-        {/* Section đối tác đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
-        <ContactForm topNotch={false} />
+        <ContactForm />
       </main>
-      <SiteFooter />
+      <SiteFooter showTopBorder={false} />
     </>
   );
 }

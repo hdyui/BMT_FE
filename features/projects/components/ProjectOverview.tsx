@@ -18,27 +18,39 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
     <>
       <section className="bg-white pt-[clamp(56px,7vw,120px)]" aria-labelledby="project-overview-title">
         <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-          <div className="grid overflow-hidden rounded-[2.5rem] bg-[#f1f1f1] lg:grid-cols-[1fr_.96fr] lg:rounded-[4rem]">
+          <div className="relative isolate grid rounded-[2.5rem] lg:grid-cols-[1fr_.96fr] lg:rounded-[4rem]">
             <Reveal
-              className={`min-h-[310px] lg:min-h-[530px] ${styles.imageReveal}`}
+              className="pointer-events-none absolute inset-0 z-0 rounded-[2.5rem] bg-[#f1f1f1] lg:rounded-[4rem]"
+              delay={220}
+              duration={1050}
+              from="fade"
+              aria-hidden="true"
+            />
+            <Reveal
+              className={`relative z-20 min-h-[310px] lg:mr-[-2rem] lg:min-h-[530px] ${styles.imageReveal}`}
               from="left"
               delay={180}
-              duration={950}
+              distance="long"
+              duration={1100}
             >
-              <div className={`h-full min-h-[310px] lg:min-h-[530px] ${styles.media}`}>
-                <Image
-                  src={project.heroImage.src}
-                  alt={project.heroImage.alt}
-                  fill
-                  priority
-                  sizes="(min-width: 1024px) 55vw, 100vw"
-                  className="object-cover"
-                />
+              <div
+                className={`h-full min-h-[310px] rounded-[2.5rem] lg:min-h-[530px] lg:rounded-[4rem] ${styles.media} ${styles.overscanViewport}`}
+              >
+                <div className={styles.overscanLayer}>
+                  <Image
+                    src={project.heroImage.src}
+                    alt={project.heroImage.alt}
+                    fill
+                    priority
+                    sizes="(min-width: 1024px) 55vw, 100vw"
+                    className={`object-cover ${styles.overscanImage}`}
+                  />
+                </div>
               </div>
             </Reveal>
 
-            <div className="flex flex-col justify-center px-6 py-9 sm:px-10 lg:px-12 lg:py-11">
-              <Reveal delay={250} duration={900}>
+            <div className="relative z-10 flex flex-col justify-center px-6 py-9 sm:px-10 lg:py-11 lg:pr-12 lg:pl-[calc(3rem+2rem)]">
+              <Reveal delay={220} distance="long" duration={950}>
                 <Image
                   src="/images/projects/detail/moc-mien-wordmark.png"
                   alt={project.displayName}
@@ -61,7 +73,7 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
                   />
                 </h2>
               </Reveal>
-              <Reveal from="left" delay={440} duration={850}>
+              <Reveal from="left" delay={320} distance="long" duration={950}>
                 <dl className="mt-5 grid gap-1.5 text-[clamp(15px,1.2vw,19px)] leading-[1.35]">
                   <div className="grid grid-cols-[112px_1fr] gap-2">
                     <dt className="font-bold">Tên dự án:</dt>
@@ -75,7 +87,7 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
                   ))}
                 </dl>
               </Reveal>
-              <Reveal from="left" delay={620} duration={850}>
+              <Reveal from="left" delay={420} distance="long" duration={950}>
                 <Image
                   src="/images/projects/detail/long-divider.png"
                   alt=""
@@ -97,15 +109,16 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
 
       <section className="bg-white py-[clamp(64px,8vw,130px)]" aria-labelledby="survey-title">
         <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-          <ProjectSectionHeading className="mb-7" delay={180} duration={900}>
+          <ProjectSectionHeading className="mb-7" delay={180} duration={950}>
             <span id="survey-title">Khảo sát hiện trạng và lên phương án</span>
           </ProjectSectionHeading>
           <div className="grid gap-4 sm:grid-cols-3 sm:gap-5">
             {project.survey.map((image, index) => (
               <Reveal
                 className={styles.imageReveal}
-                delay={420 + index * 140}
-                duration={950}
+                delay={260 + index * 100}
+                distance="long"
+                duration={1050}
                 from="fade"
                 key={image.src}
               >
@@ -121,7 +134,7 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
               </Reveal>
             ))}
           </div>
-          <Reveal delay={900} duration={850} from="left">
+          <Reveal delay={360} distance="long" duration={950} from="left">
             <p className="mt-6 text-[clamp(15px,1.2vw,19px)] leading-[1.48] tracking-[-0.02em]">
               <ProjectRichText
                 text={project.surveyDescription}

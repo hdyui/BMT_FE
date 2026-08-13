@@ -7,6 +7,84 @@
   }
 }
 
+.mobilePresentation {
+  display: none;
+}
+
+@media (max-width: 639px) {
+  .careersHero {
+    aspect-ratio: 3884 / 5972;
+    container-type: inline-size;
+  }
+
+  .mobilePresentation {
+    position: absolute;
+    inset: 0;
+    display: block;
+  }
+
+  .mobileArtwork {
+    z-index: 0;
+    object-fit: contain;
+    object-position: top center;
+  }
+
+  .mobileCopy {
+    position: absolute;
+    top: 17.72%;
+    left: 10.84%;
+    z-index: 1;
+    width: 77.68%;
+    color: #242122;
+  }
+
+  .mobileHeading {
+    margin: 0;
+    font-size: clamp(19px, 5.84cqw, 32px);
+    font-weight: 800;
+    line-height: 0.88;
+    letter-spacing: -0.045em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .mobileHeading > span { display: block; }
+
+  .mobileWordmark {
+    display: block;
+    width: 31.44cqw;
+    height: auto;
+    margin-top: 0.9cqw;
+  }
+
+  .mobileDivider {
+    display: block;
+    width: 35.62cqw;
+    height: auto;
+    margin-top: 2.5cqw;
+  }
+
+  .mobileDescription {
+    max-width: 77.68cqw;
+    margin-top: 1.9cqw;
+    font-size: clamp(9.5px, 2.58cqw, 14px);
+    font-weight: 400;
+    line-height: 1.16;
+    letter-spacing: -0.018em;
+    text-align: justify;
+    text-align-last: left;
+    text-justify: inter-character;
+  }
+
+  .mobileBuildingMark {
+    display: inline-block;
+    width: auto;
+    height: 2.1cqw;
+    margin-right: 0.38em;
+    vertical-align: -0.16em;
+  }
+}
+
 .careersHeroCta {
   display: inline-flex;
   width: clamp(190px, 17.2vw, 330px);
@@ -30,6 +108,14 @@
     box-shadow 0.3s,
     transform 0.3s;
   animation: cta-fade-in 0.85s 0.76s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.careersHeroCtaLabel {
+  display: inline-flex;
+  width: 80%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .careersHeroCta:hover {

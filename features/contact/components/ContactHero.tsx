@@ -17,6 +17,16 @@ export function ContactHero() {
     <section className={styles.hero} aria-labelledby="contact-hero-title">
       <div className={styles.heroCanvas}>
         <Image
+          className={styles.mobileArtwork}
+          src="/images/contact/mobile/hero-artwork.png"
+          alt=""
+          width={3884}
+          height={5972}
+          preload
+          sizes="(max-width: 880px) min(100vw, 640px), 1px"
+          aria-hidden="true"
+        />
+        <Image
           className={styles.backgroundTexture}
           src="/images/contact/decorations/hero-background.jpg"
           alt=""
@@ -50,6 +60,8 @@ export function ContactHero() {
                 height={287}
                 unoptimized
               />
+              <Image className={styles.mobileBrandLogo} src="/images/contact/mobile/brand-wordmark.png" alt="BMT Decor" width={1230} height={214} sizes="(max-width: 880px) 235px, 1px" />
+              <Image className={styles.mobileTitleDivider} src="/images/contact/mobile/hero-title-divider.png" alt="" width={1388} height={128} sizes="(max-width: 880px) 240px, 1px" aria-hidden="true" />
             </h1>
 
             <p className={styles.description}>
@@ -62,15 +74,14 @@ export function ContactHero() {
                 sizes="24px"
                 aria-hidden="true"
               />
+              <Image className={styles.mobileDescriptionIcon} src="/images/contact/mobile/description-icon.png" alt="" width={86} height={91} sizes="14px" aria-hidden="true" />
               Hãy chia sẻ nhu cầu về thiết kế kiến trúc, thiết kế nội thất, xây dựng,
               cải tạo hoặc sửa chữa nhà để đội ngũ BMT Decor tư vấn giải pháp phù hợp
               với không gian và ngân sách của bạn.
             </p>
 
             <a className={styles.cta} href="#contact-form">
-              <span className="inline-flex h-full w-4/5 items-center justify-center">
-                LIÊN HỆ NGAY
-              </span>
+              <span>LIÊN HỆ NGAY</span>
             </a>
           </div>
 

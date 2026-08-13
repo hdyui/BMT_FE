@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
+import { BmtCta } from "@/lib/components/shared/BmtCta";
 import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
@@ -11,8 +12,8 @@ const cardContainerVariants: Variants = {
   hidden: {},
   visible: {
     transition: {
-      staggerChildren: 0.12,
-      delayChildren: 0.05,
+      staggerChildren: 0,
+      delayChildren: 0,
     },
   },
 };
@@ -23,7 +24,7 @@ const cardItemVariants: Variants = {
     opacity: 1,
     y: 0,
     scale: 1,
-    transition: { duration: 0.55, ease: [0.16, 1, 0.3, 1] },
+    transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
 
@@ -257,7 +258,7 @@ export function ProjectShowcase() {
         {categories.map((item, index) => (
           <Reveal delay={index * 120} key={item.slug}>
             <button
-              className={`group relative flex w-full flex-col items-center gap-3 pb-4 text-[11px] font-semibold transition-[color,translate] duration-300 max-sm:gap-2 max-sm:px-0 max-sm:text-[9px] ${
+              className={`group relative flex w-full flex-col items-center gap-3 pb-4 text-[11px] font-extrabold transition-[color,translate] duration-300 max-sm:gap-2 max-sm:px-0 max-sm:text-[9px] ${
                 selectedCategory === index
                   ? "text-brand"
                   : "hover:-translate-y-1 hover:text-brand"
@@ -275,14 +276,14 @@ export function ProjectShowcase() {
               type="button"
             >
               <span
-                className={`grid size-12 place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 max-sm:size-10 ${
+                className={`grid size-[58px] place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 max-sm:size-11 sm:size-16 ${
                   selectedCategory === index
                     ? "scale-110 border-[#df641c] bg-[#e86f25] shadow-[0_8px_24px_rgb(223_100_28/.32)] group-hover:bg-[#df641c]"
                     : "border-brand group-hover:border-[#df641c] group-hover:bg-[#df641c]"
                 }`}
               >
                 <Image
-                  className={`size-7 object-contain transition-[filter] duration-300 max-sm:size-6 ${
+                  className={`size-8 object-contain transition-[filter] duration-300 max-sm:size-7 sm:size-9 ${
                     selectedCategory === index
                       ? "brightness-0 invert"
                       : "group-hover:brightness-0 group-hover:invert"
@@ -293,7 +294,7 @@ export function ProjectShowcase() {
                   height={44}
                 />
               </span>
-              <span className="max-w-40 leading-snug max-sm:flex max-sm:h-9 max-sm:w-full max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:text-center max-sm:text-[10px] max-sm:font-extrabold max-sm:leading-[1.05] max-sm:tracking-[-0.025em] sm:whitespace-nowrap sm:text-[13px] sm:font-extrabold sm:leading-none lg:whitespace-normal lg:text-[11px] lg:font-semibold lg:leading-snug">
+              <span className="max-w-40 leading-snug max-sm:flex max-sm:h-9 max-sm:w-full max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:text-center max-sm:text-[10px] max-sm:font-extrabold max-sm:leading-[1.05] max-sm:tracking-[-0.025em] sm:whitespace-nowrap sm:text-[13px] sm:font-extrabold sm:leading-none lg:whitespace-normal lg:text-[12px] lg:font-extrabold lg:leading-snug">
                 {item.label}
               </span>
             </button>
@@ -327,11 +328,14 @@ export function ProjectShowcase() {
                     src={mobileProject.image}
                     alt={mobileProject.title}
                     fill
+                    decoding="sync"
+                    loading="eager"
                     sizes="(max-width: 639px) 46vw, 50vw"
+                    unoptimized={mobileProject.image === projectImages[3]}
                   />
                 </div>
                 <div className="flex flex-col justify-center bg-brand p-4 text-white sm:p-7">
-                  <h3 className="text-lg font-extrabold uppercase leading-tight max-sm:overflow-visible max-sm:pt-0.5 max-sm:text-[14px] max-sm:leading-[1.22] max-sm:tracking-[-0.015em] sm:line-clamp-2 sm:text-[23px] sm:leading-[1.05]">
+                  <h3 className="text-lg font-extrabold uppercase leading-tight max-sm:line-clamp-2 max-sm:text-[15px] max-sm:leading-[1.08] max-sm:tracking-[-0.02em] sm:line-clamp-2 sm:text-[23px] sm:leading-[1.05]">
                     {mobileProject.title}
                   </h3>
                   <BuildingRule
@@ -369,19 +373,15 @@ export function ProjectShowcase() {
                     <Image src="/images/home/project-next.png" alt="" fill sizes="(max-width: 639px) 36px, 56px" />
                   </button>
                 </div>
-                <CardMoreLink
-                  className="rounded-full bg-brand px-4 py-2 text-[12px] font-extrabold text-white no-underline shadow-sm hover:text-white focus-visible:text-white sm:px-7 sm:py-3 sm:text-[20px]"
-                  href="/du-an"
-                  label="TÌM HIỂU THÊM"
-                />
+                <BmtCta href="/du-an" variant="compact">TÌM HIỂU THÊM</BmtCta>
               </div>
             </div>
           )}
         </div>
 
-        <div className="relative hidden lg:mx-auto lg:block lg:w-fit lg:max-w-full">
+        <div className="relative hidden lg:mx-auto lg:block lg:w-full lg:max-w-full">
           <motion.div
-            className="grid gap-4 sm:grid-cols-2 lg:flex lg:h-[360px] lg:items-stretch lg:justify-center"
+            className="grid gap-4 sm:grid-cols-2 lg:flex lg:h-[410px] lg:w-full lg:items-stretch lg:justify-center"
             initial="hidden"
             key={`${activeCategory}-${page}`}
             whileInView="visible"
@@ -393,8 +393,8 @@ export function ProjectShowcase() {
 
               return (
                 <motion.article
-                  className={`group relative min-h-80 overflow-hidden rounded-3xl bg-charcoal shadow-lg transition-[width,box-shadow] duration-500 ease-in-out hover:shadow-[0_22px_48px_rgb(47_38_34/.24)] sm:min-h-[340px] lg:flex-none ${
-                    isExpanded ? "lg:w-[500px]" : "lg:w-[220px]"
+                  className={`group relative min-h-80 overflow-hidden rounded-3xl bg-charcoal shadow-lg transition-[flex-basis,flex-grow,box-shadow] duration-500 ease-in-out hover:shadow-[0_22px_48px_rgb(47_38_34/.24)] sm:min-h-[340px] lg:min-w-0 lg:shrink ${
+                    isExpanded ? "lg:basis-[45%] lg:grow-0" : "lg:basis-0 lg:grow"
                   }`}
                   key={project.id}
                   variants={cardItemVariants}
@@ -409,32 +409,30 @@ export function ProjectShowcase() {
                   onMouseLeave={() => setExpandedCard(null)}
                   tabIndex={0}
                 >
-                  <div className="pointer-events-none absolute inset-y-0 left-1/2 w-[500px] -translate-x-1/2">
+                  <div className="pointer-events-none absolute inset-y-0 left-1/2 w-[600px] -translate-x-1/2">
                     <Image
                       className="object-cover [transform:scale(1)] transition-transform duration-500 ease-in-out will-change-transform group-hover:[transform:scale(1.25)] group-focus:[transform:scale(1.25)] group-focus-within:[transform:scale(1.25)]"
                       src={project.image}
                       alt={project.title}
                       fill
-                      sizes="500px"
+                      decoding="sync"
+                      loading="eager"
+                      sizes="600px"
+                      unoptimized={project.image === projectImages[3]}
                     />
                   </div>
 
                   <div
-                    className={`absolute inset-0 bg-[#ff9858]/90 mix-blend-multiply transition-opacity duration-500 ${
+                    className={`absolute inset-0 bg-[#c85a24]/90 transition-opacity duration-500 ${
                       isExpanded ? "opacity-100" : "opacity-0"
                     }`}
                   />
 
                   <div
-                    className={`absolute inset-0 flex flex-col justify-end p-6 text-left text-white transition-[opacity,translate] duration-500 ${
-                      isExpanded
-                        ? "translate-y-0 opacity-100"
-                        : "pointer-events-none translate-y-5 opacity-0"
+                    className={`absolute inset-0 flex flex-col justify-end p-7 text-left text-white transition-opacity duration-300 ${
+                      isExpanded ? "opacity-100 delay-150" : "pointer-events-none opacity-0 delay-0"
                     }`}
                   >
-                    <span className="mb-auto text-xs font-extrabold tracking-[0.18em] text-white">
-                      0{page * PROJECTS_PER_PAGE + index + 1}
-                    </span>
                     <h3 className="max-w-md text-xl font-bold uppercase leading-snug">
                       {project.title}
                     </h3>
