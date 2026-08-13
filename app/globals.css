@@ -325,6 +325,19 @@
   }
 }
 
+@media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
+  html:has([data-scroll-snap-page]) {
+    scroll-padding-top: 68px;
+    scroll-snap-type: y proximity;
+  }
+
+  body:has([data-scroll-snap-page]) section,
+  body:has([data-scroll-snap-page]) footer {
+    scroll-margin-top: 68px;
+    scroll-snap-align: start;
+  }
+}
+
 @media (max-width: 639px) {
   .home-contact-cta {
     width: 158px;

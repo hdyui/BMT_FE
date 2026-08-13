@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
+import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import styles from "./VisionMissionValues.module.css";
 
 const imageRoot = "/images/about/source";
@@ -9,31 +10,37 @@ const imageRoot = "/images/about/source";
 const coreValues: {
   title: string;
   description: string;
+  image: string;
 }[] = [
   {
     title: "Chất lượng là cam kết",
     description:
       "Chúng tôi đặt chất lượng thiết kế, vật liệu và thi công làm tiêu chuẩn trong mọi công trình. Mỗi hạng mục đều được kiểm soát chặt chẽ để đảm bảo tính thẩm mỹ, độ bền và giá trị sử dụng lâu dài.",
+    image: `${imageRoot}/core-value-quality.png`,
   },
   {
     title: "Khách hàng là trọng tâm",
     description:
       "Lắng nghe nhu cầu, thấu hiểu mong muốn và đưa ra giải pháp phù hợp là cách BMT Decor tạo nên những không gian đáp ứng cả công năng lẫn thẩm mỹ của từng khách hàng.",
+    image: `${imageRoot}/core-value-customer.png`,
   },
   {
     title: "Sáng tạo là giá trị",
     description:
       "Không ngừng cập nhật xu hướng thiết kế và đổi mới tư duy, chúng tôi mang đến những giải pháp phù hợp với từng không gian, tạo nên dấu ấn riêng cho mỗi công trình.",
+    image: `${imageRoot}/core-value-creativity.png`,
   },
   {
     title: "Chuyên nghiệp là nền tảng",
     description:
       "Quy trình làm việc rõ ràng, minh bạch và kiểm soát chặt chẽ từ thiết kế đến thi công giúp đảm bảo tiến độ, chất lượng và sự đồng bộ trong từng dự án.",
+    image: `${imageRoot}/core-value-professionalism.png`,
   },
   {
     title: "Tận tâm là trách nhiệm",
     description:
       "Chúng tôi đồng hành cùng khách hàng trong suốt quá trình thực hiện, luôn sẵn sàng tư vấn, hỗ trợ và xử lý nhanh chóng mọi vấn đề để mang đến trải nghiệm tốt nhất.",
+    image: `${imageRoot}/core-value-dedication.png`,
   },
 ];
 
@@ -41,19 +48,21 @@ function AnimatedHeading({
   children,
   isVisible,
   delay,
-  ruleWidth = 285,
   fullWidthRule = false,
 }: {
   children: React.ReactNode;
   isVisible: boolean;
   delay: number;
-  ruleWidth?: number;
   fullWidthRule?: boolean;
 }) {
+  const ruleWidthClass = fullWidthRule
+    ? "max-w-[340px] max-sm:max-w-[155px]"
+    : "max-w-[285px] max-sm:max-w-[128px]";
+
   return (
     <div>
       <h3
-        className={`text-2xl sm:text-3xl font-bold uppercase leading-none text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+        className={`text-2xl sm:text-3xl font-bold uppercase leading-none text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 max-sm:text-[21px] ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
         }`}
         style={{ transitionDelay: `${delay}ms` }}
@@ -61,39 +70,164 @@ function AnimatedHeading({
         {children}
       </h3>
       <div
-        className={`relative mt-3 h-6 w-full origin-left transition-[opacity,scale] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 ${
+        className={`relative mt-3 h-6 w-full origin-left transition-[opacity,scale] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 max-sm:mt-2 max-sm:h-5 ${ruleWidthClass} ${
           isVisible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"
         }`}
         style={{
-          maxWidth: `${ruleWidth}px`,
           transitionDelay: `${delay + 220}ms`,
         }}
         aria-hidden="true"
       >
         {fullWidthRule ? (
-          <>
-            <span className="absolute inset-x-0 bottom-0 h-0.5 bg-brand" />
-            <span className="absolute right-0 bottom-0 h-6 w-9 overflow-hidden">
-              <Image
-                className="absolute right-0 bottom-0 h-6 w-auto max-w-none"
-                src="/images/home/section-rule.png"
-                alt=""
-                width={1388}
-                height={128}
-                sizes="36px"
-              />
-            </span>
-          </>
-        ) : (
-          <Image
-            className="object-contain object-left"
-            src="/images/home/section-rule.png"
-            alt=""
-            fill
-            sizes={`${ruleWidth}px`}
+          <BuildingRule
+            className="h-full max-w-none text-brand sm:[&>span:last-child]:h-6 sm:[&>span:last-child]:w-9 sm:[&>span:last-child>img]:h-6"
+            compact
+            fullWidth
           />
+        ) : (
+          <>
+            <BuildingRule
+              className="h-full max-w-none text-brand sm:hidden"
+              compact
+              fullWidth
+            />
+            <Image
+              className="hidden object-contain object-left sm:block"
+              src="/images/home/section-rule.png"
+              alt=""
+              fill
+              sizes="285px"
+            />
+          </>
         )}
       </div>
+    </div>
+  );
+}
+
+function CoreValuesList({
+  activeValue,
+  isVisible,
+  mobile,
+  onChange,
+}: {
+  activeValue: number;
+  isVisible: boolean;
+  mobile: boolean;
+  onChange: (index: number) => void;
+}) {
+  return (
+    <div
+      className={
+        mobile
+          ? "mt-4 flex flex-col sm:hidden"
+          : "mt-7 hidden space-y-2 sm:block"
+      }
+    >
+      {coreValues.map(({ title, description }, index) => {
+        const isActive = activeValue === index;
+        const mobileOrder =
+          mobile && index === 3
+            ? "order-5"
+            : mobile && index === 4
+              ? "order-4"
+              : "";
+
+        return (
+          <div
+            className={`transition-[opacity,translate] duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${mobileOrder} ${
+              isVisible
+                ? "translate-x-0 opacity-100"
+                : "translate-x-20 opacity-0"
+            }`}
+            style={{ transitionDelay: `${620 + index * 120}ms` }}
+            key={title}
+          >
+            <button
+              className="group/value grid w-full grid-cols-[30px_22px_1fr] items-center gap-2.5 py-2 text-left max-sm:grid-cols-[24px_16px_1fr] max-sm:gap-2 max-sm:py-1.5"
+              type="button"
+              onClick={() => onChange(index)}
+              aria-expanded={isActive}
+            >
+              <span
+                className="grid size-[30px] place-items-center max-sm:size-6"
+                aria-hidden="true"
+              >
+                <span
+                  className={`rounded-full transition-[width,height,background-color,border-color,box-shadow,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/value:scale-110 group-hover/value:border-white group-hover/value:bg-brand group-hover/value:shadow-[0_0_0_1.5px_#f47a2a] ${
+                    isActive
+                      ? "size-[26px] border-2 border-white bg-brand shadow-[0_0_0_1.5px_#f47a2a] max-sm:size-5"
+                      : "size-[18px] border-[3px] border-charcoal bg-charcoal shadow-none max-sm:size-3.5 max-sm:border-2"
+                  }`}
+                />
+              </span>
+              <span
+                className={`h-px w-full transition-colors duration-400 ${isActive ? "bg-brand" : "bg-charcoal"}`}
+                aria-hidden="true"
+              />
+              <span
+                className={`text-[17px] font-bold uppercase leading-tight transition-colors duration-400 group-hover/value:text-brand max-sm:text-[14px] ${
+                  isActive ? "text-brand" : "text-charcoal"
+                }`}
+              >
+                {title}
+              </span>
+            </button>
+
+            <div
+              className={`grid pl-[30px] transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] max-sm:pl-6 ${
+                isActive
+                  ? "grid-rows-[1fr] opacity-100"
+                  : "grid-rows-[0fr] opacity-0"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="pb-3 text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] max-sm:pb-2 max-sm:text-[13px] max-sm:leading-[1.45]">
+                  {description}
+                </p>
+              </div>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function CoreValueIllustration({
+  activeValue,
+  mobile,
+}: {
+  activeValue: number;
+  mobile: boolean;
+}) {
+  const active = coreValues[activeValue];
+
+  return (
+    <div
+      className={
+        mobile
+          ? "relative mx-auto aspect-[2199/1792] w-full max-w-[285px] sm:hidden"
+          : "relative mx-auto hidden aspect-[2199/1792] w-full max-w-[520px] sm:block"
+      }
+      role="img"
+      aria-label={`Minh hoạ cho giá trị ${active.title}`}
+    >
+      {coreValues.map((value, index) => (
+        <Image
+          className={`object-contain transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
+            activeValue === index
+              ? "scale-100 opacity-100 blur-0"
+              : "pointer-events-none scale-[.965] opacity-0 blur-[2px]"
+          }`}
+          src={value.image}
+          alt=""
+          fill
+          sizes={mobile ? "285px" : "(max-width: 1024px) 42vw, 520px"}
+          aria-hidden="true"
+          key={value.image}
+        />
+      ))}
     </div>
   );
 }
@@ -101,7 +235,8 @@ function AnimatedHeading({
 export function VisionMissionValues() {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [activeValue, setActiveValue] = useState(0);
+  const [activeMobileValue, setActiveMobileValue] = useState(0);
+  const [activeDesktopValue, setActiveDesktopValue] = useState(0);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -122,7 +257,8 @@ export function VisionMissionValues() {
 
   return (
     <section
-      className="relative isolate overflow-hidden bg-[#f4f4f4] py-24 sm:py-28 lg:py-32"
+      className="relative isolate overflow-hidden bg-[#f4f4f4] py-24 max-sm:py-12 sm:py-28 lg:py-24"
+      id="tam-nhin-su-menh"
       ref={sectionRef}
     >
       <Image
@@ -133,14 +269,14 @@ export function VisionMissionValues() {
         sizes="100vw"
       />
 
-      <div className="mx-auto grid w-[min(1380px,calc(100%-2.25rem))] items-start gap-14 lg:grid-cols-[.9fr_1.25fr_1fr] lg:gap-10">
-        <div className="space-y-14 lg:space-y-16">
+      <div className="mx-auto grid w-[min(1240px,calc(100%-3rem))] items-start gap-14 max-sm:w-[calc(100%-2.25rem)] max-sm:gap-8 lg:grid-cols-[.92fr_1.05fr_1.08fr] lg:gap-8">
+        <div className="space-y-14 max-sm:order-3 max-sm:space-y-8 lg:space-y-16">
           <div>
             <AnimatedHeading isVisible={isVisible} delay={100}>
               Tầm nhìn
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
+              className={`mt-5 max-w-[410px] text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[14px] max-sm:leading-5 ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"
@@ -159,7 +295,7 @@ export function VisionMissionValues() {
               Sứ mệnh
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
+              className={`mt-5 max-w-[410px] text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[14px] max-sm:leading-5 ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"
@@ -175,92 +311,44 @@ export function VisionMissionValues() {
         </div>
 
         <div
-          className={`order-first transition-[opacity,scale] duration-1000 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:scale-100 motion-reduce:opacity-100 lg:order-none ${
+          className={`order-first transition-[opacity,scale] duration-1000 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:scale-100 motion-reduce:opacity-100 max-sm:order-1 lg:order-none ${
             isVisible ? "scale-100 opacity-100" : "scale-[.92] opacity-0"
           }`}
           style={{ transitionDelay: "430ms" }}
         >
           <div className={styles.illustrationFloat}>
-            <Image
-              className="mx-auto h-auto w-full max-w-[640px]"
-              src={`${imageRoot}/architect-isometric.png`}
-              alt="Kiến trúc sư BMT Decor phát triển phương án thiết kế"
-              width={1739}
-              height={1417}
-              sizes="(max-width: 1024px) 90vw, 42vw"
+            <CoreValueIllustration
+              activeValue={activeMobileValue}
+              mobile
+            />
+            <CoreValueIllustration
+              activeValue={activeDesktopValue}
+              mobile={false}
             />
           </div>
         </div>
 
-        <div className="lg:pt-0">
+        <div className="max-sm:order-2 lg:pt-0">
           <AnimatedHeading
             isVisible={isVisible}
             delay={260}
-            ruleWidth={340}
             fullWidthRule
           >
             Giá trị cốt lõi
           </AnimatedHeading>
 
-          <div className="mt-7 space-y-2">
-            {coreValues.map(({ title, description }, index) => {
-              const isActive = activeValue === index;
-
-              return (
-                <div
-                  className={`transition-[opacity,translate] duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
-                    isVisible
-                      ? "translate-x-0 opacity-100"
-                      : "translate-x-20 opacity-0"
-                  }`}
-                  style={{ transitionDelay: `${620 + index * 120}ms` }}
-                  key={title}
-                >
-                  <button
-                    className="group/value grid w-full grid-cols-[30px_22px_1fr] items-center gap-2.5 py-2 text-left"
-                    type="button"
-                    onClick={() => setActiveValue(index)}
-                    aria-expanded={isActive}
-                  >
-                    <span className="grid size-[30px] place-items-center" aria-hidden="true">
-                      <span
-                        className={`rounded-full transition-[width,height,background-color,border-color,box-shadow,scale] duration-500 ease-[cubic-bezier(.22,1,.36,1)] group-hover/value:scale-110 group-hover/value:border-white group-hover/value:bg-brand group-hover/value:shadow-[0_0_0_1.5px_#f47a2a] ${
-                        isActive
-                          ? "size-[26px] border-2 border-white bg-brand shadow-[0_0_0_1.5px_#f47a2a]"
-                          : "size-[18px] border-[3px] border-charcoal bg-charcoal shadow-none"
-                      }`}
-                      />
-                    </span>
-                    <span
-                      className={`h-px w-full transition-colors duration-400 ${isActive ? "bg-brand" : "bg-charcoal"}`}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className={`text-xl font-bold uppercase leading-tight transition-colors duration-400 group-hover/value:text-brand ${
-                        isActive ? "text-brand" : "text-charcoal"
-                      }`}
-                    >
-                      {title}
-                    </span>
-                  </button>
-
-                  <div
-                    className={`grid pl-[30px] transition-[grid-template-rows,opacity] duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
-                      isActive
-                        ? "grid-rows-[1fr] opacity-100"
-                        : "grid-rows-[0fr] opacity-0"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      <p className="pb-3 text-justify text-xl leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character]">
-                        {description}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <CoreValuesList
+            activeValue={activeMobileValue}
+            isVisible={isVisible}
+            mobile
+            onChange={setActiveMobileValue}
+          />
+          <CoreValuesList
+            activeValue={activeDesktopValue}
+            isVisible={isVisible}
+            mobile={false}
+            onChange={setActiveDesktopValue}
+          />
         </div>
       </div>
     </section>
