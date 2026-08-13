@@ -5,6 +5,7 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/lib/components/ui/accordion";
+import { Reveal } from "@/lib/components/shared/Reveal";
 import { processSteps } from "@/features/services/data/overview";
 
 const arrowMask = {
@@ -20,10 +21,45 @@ const arrowMask = {
 
 export function ProcessAccordion() {
   return (
-    <Accordion
-      className="mx-auto w-[min(75rem,calc(100%-2.25rem))]"
-      defaultValue={["step-1"]}
-    >
+    <>
+      {/* Bản mobile trong mockup không có tương tác thu/mở: cả 6 bước hiện
+          hết, mỗi bước là ảnh full-width + số + tiêu đề + mô tả, phân cách
+          bằng đường kẻ. Giữ Accordion tương tác nguyên vẹn cho lg trở lên. */}
+      <div className="mx-auto w-[calc(100%-2.25rem)] lg:hidden">
+        {processSteps.map((step, index) => (
+          <Reveal
+            className="border-b border-neutral-300 py-6 first:pt-0 last:border-b-0"
+            delay={Math.min(index * 60, 300)}
+            key={step.title}
+          >
+            <div className="relative h-[clamp(9.5rem,51vw,13rem)] w-full overflow-hidden rounded-2xl">
+              <Image
+                className="object-cover"
+                src={step.imageOpen}
+                alt=""
+                fill
+                sizes="100vw"
+                loading="eager"
+              />
+            </div>
+
+            <span className="mt-5 block text-sm text-neutral-500">
+              {String(index + 1).padStart(2, "0")}.
+            </span>
+            <h3 className="mt-1 font-heading text-2xl font-extrabold uppercase sm:text-3xl">
+              {step.title}
+            </h3>
+            <p className="mt-3 text-sm leading-relaxed text-pretty">
+              {step.copy}
+            </p>
+          </Reveal>
+        ))}
+      </div>
+
+      <Accordion
+        className="mx-auto hidden w-[min(75rem,calc(100%-2.25rem))] lg:block"
+        defaultValue={["step-1"]}
+      >
       {processSteps.map((step, index) => (
         <AccordionItem
           className="group/step border-b border-neutral-300"
@@ -70,6 +106,7 @@ export function ProcessAccordion() {
           </div>
         </AccordionItem>
       ))}
-    </Accordion>
+      </Accordion>
+    </>
   );
 }

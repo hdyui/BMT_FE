@@ -10,6 +10,7 @@ export function BuildingRule({
   light = false,
   fullWidth = false,
   compact = false,
+  align = "right",
   src = "/images/home/section-rule.png",
 }: {
   className?: string;
@@ -17,6 +18,10 @@ export function BuildingRule({
   light?: boolean;
   fullWidth?: boolean;
   compact?: boolean;
+  /** Vị trí neo ảnh khi co theo `object-contain`. Mặc định "right" giữ đúng
+   * hành vi cũ; đổi sang "center" cho các ảnh rule vốn được thiết kế để nằm
+   * giữa khung (vd. các file có hậu tố "-center"). */
+  align?: "right" | "center";
   src?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
@@ -87,7 +92,8 @@ export function BuildingRule({
       ) : (
         <Image
           className={cn(
-            "origin-left object-contain object-right transition-[scale] duration-700 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none",
+            "origin-left object-contain transition-[scale] duration-700 ease-out motion-reduce:scale-x-100 motion-reduce:transition-none",
+            align === "center" ? "object-center" : "object-right",
             visible ? "scale-x-100" : "scale-x-0",
             light && "brightness-0 invert",
           )}

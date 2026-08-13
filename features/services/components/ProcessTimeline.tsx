@@ -25,6 +25,77 @@ const TIMELINE_STYLE = {
 
 type ProcessStep = (typeof processSteps)[number];
 
+const MOBILE_ROWS = [
+  [processSteps[0], processSteps[3]],
+  [processSteps[1], processSteps[4]],
+  [processSteps[2], processSteps[5]],
+] as const;
+
+function MobileProcessTimeline() {
+  return (
+    <div className="relative mx-auto aspect-[3593/4648] w-[calc(100%-1.25rem)] origin-top scale-[0.95] overflow-hidden md:hidden">
+      <Image
+        className="absolute inset-0 size-full object-fill"
+        src="/images/thiet-ke-kien-truc-noi-that/mobile/process-framework.png"
+        alt=""
+        fill
+        sizes="100vw"
+        aria-hidden="true"
+      />
+
+      {MOBILE_ROWS.map((row, rowIndex) =>
+        row.map((step, columnIndex) => {
+          const isLeft = columnIndex === 0;
+
+          return (
+            <article
+              className="absolute h-1/3 w-1/2"
+              style={{
+                top: `${rowIndex * 33.333}%`,
+                left: isLeft ? 0 : "50%",
+              }}
+              key={step.number}
+            >
+              <span
+                className={`absolute top-[1.5%] text-[clamp(1.9rem,8.6vw,2.6rem)] leading-none font-extrabold text-[#b8babc] ${
+                  isLeft ? "right-[37%]" : "left-[37%]"
+                }`}
+                aria-hidden="true"
+              >
+                {step.number}.
+              </span>
+
+              <div
+                className={`absolute top-[37%] bottom-0 flex flex-col ${
+                  isLeft ? "right-[8%] left-[14%]" : "right-[14%] left-[8%]"
+                }`}
+              >
+                <h3
+                  className={`font-heading text-[clamp(0.55rem,2.72vw,0.83rem)] leading-none font-extrabold whitespace-nowrap text-brand uppercase ${
+                    isLeft ? "text-right" : "text-left"
+                  }`}
+                >
+                  {step.title}
+                </h3>
+                <p
+                  className="mt-1 text-[clamp(0.55rem,2.5vw,0.75rem)] leading-[1.15] text-charcoal"
+                  style={{
+                    textAlign: "justify",
+                    textAlignLast: isLeft ? "right" : "left",
+                    textJustify: "inter-word",
+                  }}
+                >
+                  {step.copy.replace(/\n/g, " ")}
+                </p>
+              </div>
+            </article>
+          );
+        }),
+      )}
+    </div>
+  );
+}
+
 function TimelineStep({
   step,
   side,
@@ -38,13 +109,13 @@ function TimelineStep({
 
   return (
     <Reveal from={isLeft ? "right" : "left"} delay={delay}>
-      <article className="group/step relative min-h-[12.8125rem] rounded-[1.5rem] bg-white p-4 pt-14 sm:p-5 sm:pt-16 shadow-[0_10px_28px_rgb(36_33_34/.08)] lg:h-(--step-h) lg:min-h-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
+      <article className="group/step relative min-h-[12.8125rem] rounded-[1.5rem] bg-white p-4 pt-14 shadow-[0_10px_28px_rgb(36_33_34/.08)] max-md:h-56 max-md:min-h-0 max-md:rounded-none max-md:bg-transparent max-md:p-0 max-md:shadow-none sm:p-5 sm:pt-16 lg:h-(--step-h) lg:min-h-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none">
         {/* Ảnh `fill` tự set inline width/height/inset = 100%, nên bắt buộc
             phải bọc trong một span đã định vị sẵn; đặt w-[65%] thẳng lên
             <Image> sẽ bị inline style của next/image đè mất và khung kéo dài
             full ô, trùm luôn lên vòng tròn cam. */}
         <span
-          className={`pointer-events-none absolute top-0 hidden h-(--frame-h) w-[65%] lg:block ${
+          className={`pointer-events-none absolute top-0 hidden h-(--frame-h) w-[65%] max-md:block max-md:h-52 max-md:w-[calc(100%+0.5rem)] lg:block ${
             isLeft ? "left-0" : "right-0"
           }`}
         >
@@ -66,21 +137,21 @@ function TimelineStep({
             (0.067 x khung) và lệch trái để phần rìa phải của vòng tròn số luôn
             dừng trước mép trái khối chữ (17%) — không bao giờ đè lên tiêu đề. */}
         <span
-          className={`absolute top-3 grid size-11 place-items-center text-sm font-bold text-white lg:top-[calc(var(--frame-h)*-0.097)] lg:size-[calc(var(--frame-h)*0.329)] ${
+          className={`absolute top-3 grid size-11 place-items-center text-sm font-bold text-white max-md:top-0 max-md:size-auto max-md:text-[2.25rem] max-md:leading-none max-md:text-[#b8babc] lg:top-[calc(var(--frame-h)*-0.097)] lg:size-[calc(var(--frame-h)*0.329)] ${
             isLeft
-              ? "left-3 lg:left-[1.2%]"
-              : "left-3 lg:right-[1.2%] lg:left-auto"
+              ? "left-3 max-md:right-16 max-md:left-auto lg:left-[1.2%]"
+              : "left-3 max-md:left-16 lg:right-[1.2%] lg:left-auto"
           }`}
         >
           <Image
-            className="absolute inset-0 size-full object-contain"
+            className="absolute inset-0 size-full object-contain max-md:hidden"
             src="/images/thiet-ke-kien-truc-noi-that/process-number-bg.png"
             alt=""
             fill
             sizes="64px"
             aria-hidden="true"
           />
-          <span className="relative text-2xl font-extrabold lg:text-[calc(var(--frame-h)*0.125)]">
+          <span className="relative text-2xl font-extrabold max-md:text-[2.25rem] lg:text-[calc(var(--frame-h)*0.125)]">
             {step.number}
           </span>
         </span>
@@ -90,8 +161,10 @@ function TimelineStep({
             65%, vòng tròn chạy 68.5% -> 112.7% (tràn vào khoảng hở hướng trục
             giữa, còn chừa 4px trước vạch trục). */}
         <span
-          className={`absolute top-3 right-4 grid size-14 place-items-center lg:top-[calc(var(--frame-h)/2)] lg:h-auto lg:aspect-square lg:w-(--frame-h) lg:-translate-y-1/2 ${
-            isLeft ? "lg:right-[-12.7%]" : "lg:right-auto lg:left-[-12.7%]"
+          className={`absolute top-3 right-4 grid size-14 place-items-center max-md:top-0 lg:top-[calc(var(--frame-h)/2)] lg:h-auto lg:aspect-square lg:w-(--frame-h) lg:-translate-y-1/2 ${
+            isLeft
+              ? "max-md:-right-2 lg:right-[-12.7%]"
+              : "max-md:right-auto max-md:-left-2 lg:right-auto lg:left-[-12.7%]"
           }`}
         >
           <Image
@@ -118,16 +191,16 @@ function TimelineStep({
             dài tiêu đề. Canh giữa dọc để bài dài ngắn khác nhau đều nằm gọn
             trong khung. */}
         <div
-          className={`lg:absolute lg:top-[calc(var(--frame-h)/2)] lg:-translate-y-1/2 ${
+          className={`max-md:absolute max-md:top-[4.5rem] lg:absolute lg:top-[calc(var(--frame-h)/2)] lg:-translate-y-1/2 ${
             isLeft
-              ? "lg:right-[36%] lg:left-[17%]"
-              : "lg:right-[17%] lg:left-[36%]"
+              ? "max-md:right-4 max-md:left-5 max-md:text-right lg:right-[36%] lg:left-[17%]"
+              : "max-md:right-5 max-md:left-4 max-md:text-left lg:right-[17%] lg:left-[36%]"
           }`}
         >
-          <h3 className="font-heading text-xl leading-tight sm:text-3xl font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
+          <h3 className="font-heading text-xl leading-tight font-extrabold text-brand uppercase transition-colors duration-300 group-hover/step:text-[#ff934a] max-md:text-[0.78rem] max-md:leading-tight sm:text-3xl lg:text-[calc(var(--frame-h)*0.0767)] lg:leading-[1.15] lg:whitespace-nowrap">
             {step.title}
           </h3>
-          <p className="mt-2 text-xs leading-relaxed text-pretty lg:mt-[calc(var(--frame-h)*0.035)] lg:text-[calc(var(--frame-h)*0.0652)] lg:leading-[1.4]">
+          <p className="mt-2 text-xs leading-relaxed text-pretty max-md:mt-1 max-md:leading-[1.22] lg:mt-[calc(var(--frame-h)*0.035)] lg:text-[calc(var(--frame-h)*0.0652)] lg:leading-[1.4]">
             {step.copy}
           </p>
         </div>
@@ -141,29 +214,26 @@ export function ProcessTimeline() {
   const secondGroup = processSteps.slice(3, 6);
 
   return (
-    <div
-      className="relative mx-auto flex w-[min(51.25rem,calc(100%-2.25rem))] justify-center"
-      style={TIMELINE_STYLE}
-    >
-      {/* 3 chấm trên process-axis.png nằm ở 14.79% / 50.10% / 85.09% chiều cao
-          ảnh (đo trực tiếp từ file). Muốn chấm rơi đúng tâm từng hàng thì
-          khoảng cách 2 chấm ngoài (70.30% ảnh) phải bằng 2 x --step-h:
-            cao ảnh = 2 x --step-h / 0.7030 = --step-h x 2.845
-            top     = --frame-h/2 - 0.1479 x cao ảnh = --frame-h/2 - --step-h x 0.4208
-          Hạ chủ động xuống 2.6 (thay vì 2.845 đúng toán học) để ảnh đỡ bị kéo
-          dãn dọc quá mức; chấm lệch tâm hàng một chút nhưng không đáng kể. */}
-      <div className="pointer-events-none absolute left-1/2 z-10 hidden w-12 -translate-x-1/2 lg:block lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.3845)] lg:h-[calc(var(--step-h)*2.6)]">
-        <Image
-          className="size-full object-fill"
-          src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"
-          alt=""
-          fill
-          sizes="48px" // Bạn có thể giảm sizes này xuống tương ứng cho chuẩn (ví dụ w-12 là 48px)
-          aria-hidden="true"
-        />
-      </div>
-      <div className="grid w-full gap-4 lg:grid-cols-2 lg:gap-40">
-        <div className="grid gap-4 lg:gap-0">
+    <>
+      <MobileProcessTimeline />
+      <div
+        className="relative mx-auto hidden w-[min(51.25rem,calc(100%-2.25rem))] justify-center md:flex"
+        style={TIMELINE_STYLE}
+      >
+      <span
+        className="pointer-events-none absolute left-1/2 z-10 hidden w-px -translate-x-1/2 bg-charcoal lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.3845)] lg:block lg:h-[calc(var(--step-h)*2.6)]"
+        aria-hidden="true"
+      >
+        {[14.79, 50.1, 85.09].map((position) => (
+          <span
+            className="absolute left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black"
+            style={{ top: `${position}%` }}
+            key={position}
+          />
+        ))}
+      </span>
+      <div className="grid w-full gap-4 max-md:grid-cols-2 max-md:gap-14 lg:grid-cols-2 lg:gap-40">
+        <div className="grid gap-4 max-md:gap-0 lg:gap-0">
           {firstGroup.map((step, index) => (
             <TimelineStep
               step={step}
@@ -174,7 +244,7 @@ export function ProcessTimeline() {
           ))}
         </div>
 
-        <div className="grid gap-4 lg:gap-0">
+        <div className="grid gap-4 max-md:gap-0 lg:gap-0">
           {secondGroup.map((step, index) => (
             <TimelineStep
               step={step}
@@ -185,6 +255,7 @@ export function ProcessTimeline() {
           ))}
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 }

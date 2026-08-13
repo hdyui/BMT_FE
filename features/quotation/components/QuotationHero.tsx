@@ -63,7 +63,7 @@ const DECORATION_CLASS =
 export function QuotationHero() {
   return (
     <section
-      className="relative overflow-hidden bg-white pt-[min(62vw,19.375rem)] md:mt-[5.3125rem] md:min-h-[35.125rem] md:bg-[#f6f6f6] md:pt-0"
+      className="relative overflow-hidden bg-white pt-[42.5vw] md:mt-[5.3125rem] md:min-h-[35.125rem] md:bg-[#f6f6f6] md:pt-0"
       aria-labelledby="quotation-title"
     >
       <div className="absolute inset-0 max-md:hidden" aria-hidden="true">
@@ -118,30 +118,30 @@ export function QuotationHero() {
 
       {/* Ảnh mobile: neo trên đỉnh, cao đúng phần padding-top của section. */}
       <Image
-        className="absolute inset-x-0 top-0 bottom-auto !h-[min(62vw,19.375rem)] object-cover object-left md:hidden"
+        className="absolute inset-x-0 top-0 bottom-auto !h-[42.5vw] object-cover md:hidden"
         src="/images/bao-gia/decor-18.jpg"
         alt="Kiến trúc sư BMT Decor đang tính toán phương án thiết kế"
         fill
         sizes="100vw"
       />
 
-      <div className="relative z-[5] mx-auto w-[calc(100%-2rem)] pt-7 pb-[2.375rem] pl-3.5 md:mx-0 md:ml-[47%] md:w-[49%] md:px-0 md:pt-22 md:pb-0 min-[75rem]:ml-[46.4%] min-[75rem]:w-[min(38.75rem,44.5%)]">
+      <div className="relative z-[5] mx-auto w-[calc(100%_-_2rem)] pt-5 pb-7 pl-3 md:mx-0 md:ml-[47%] md:w-[49%] md:px-0 md:pt-22 md:pb-0 min-[75rem]:ml-[46.4%] min-[75rem]:w-[min(38.75rem,44.5%)]">
         <Image
-          className="absolute top-[1.875rem] left-0 h-55 w-0.5 object-cover object-center md:top-[5.6875rem] md:left-[-1.25rem] md:h-[21.875rem]"
+          className="absolute top-5 left-0 h-[12.75rem] w-0.5 object-cover object-center md:top-[5.6875rem] md:left-[-1.25rem] md:h-[21.875rem]"
           src="/images/bao-gia/decor-15.jpg"
           alt=""
           width={9}
           height={1997}
         />
         <p
-          className={`mb-2 text-lg leading-[1.08] md:mb-3 md:text-[clamp(1.375rem,2.05vw,2.1875rem)] ${styles.animUp}`}
+          className={`mb-1.5 text-[clamp(0.875rem,4vw,1rem)] leading-[1.15] md:mb-3 md:text-[clamp(1.375rem,2.05vw,2.1875rem)] md:leading-[1.08] ${styles.animUp}`}
           style={{ animationDelay: "300ms" }}
         >
           BÁO GIÁ DỊCH VỤ BMT DECOR
         </p>
         <h1
           id="quotation-title"
-          className={`m-0 text-[clamp(2.25rem,11.2vw,3.1875rem)] leading-[1.06] font-extrabold tracking-[-0.035em] md:text-[clamp(2.375rem,5.2vw,3.25rem)] min-[75rem]:text-[clamp(2.625rem,4.2vw,4.125rem)] ${styles.animUp}`}
+          className={`m-0 max-w-full text-[clamp(1.875rem,9.25vw,2.25rem)] leading-[1.04] font-extrabold tracking-[-0.04em] md:text-[clamp(2.375rem,5.2vw,3.25rem)] md:leading-[1.06] md:tracking-[-0.035em] min-[75rem]:text-[clamp(2.625rem,4.2vw,4.125rem)] ${styles.animUp}`}
           style={{ animationDelay: "390ms" }}
         >
           MINH BẠCH VÀ
@@ -149,7 +149,7 @@ export function QuotationHero() {
           TỐI ƯU CHI PHÍ
         </h1>
         <p
-          className={`m-0 mt-4 max-w-[36.875rem] text-[0.8125rem] leading-[1.22] mix-blend-multiply md:mt-5 md:text-xs md:leading-[1.55] min-[75rem]:text-sm ${styles.animFromRight}`}
+          className={`m-0 mt-3 max-w-[36.875rem] text-[0.6875rem] leading-[1.35] mix-blend-multiply md:mt-5 md:text-xs md:leading-[1.55] min-[75rem]:text-sm ${styles.animFromRight}`}
         >
           <Image
             className="mr-1.5 mb-0.5 inline-block h-[1.0625rem] w-4 object-contain align-middle"
@@ -164,7 +164,7 @@ export function QuotationHero() {
           tiết theo nhu cầu thực tế, giúp khách hàng tối ưu ngân sách.
         </p>
         <Link
-          className={`relative mt-3.5 grid h-[2.875rem] w-[12.8125rem] place-items-center overflow-hidden rounded-full text-white transition-[transform,filter] duration-[260ms] ease-out hover:-translate-y-1 hover:brightness-[1.08] hover:drop-shadow-[0_12px_15px_rgb(159_77_24/.24)] md:mt-5 md:h-13 md:w-59 ${styles.animCtaFade}`}
+          className={`relative mt-3 grid h-10 w-[11.25rem] place-items-center overflow-hidden rounded-full text-white transition-[transform,filter] duration-[260ms] ease-out hover:-translate-y-1 hover:brightness-[1.08] hover:drop-shadow-[0_12px_15px_rgb(159_77_24/.24)] md:mt-5 md:h-13 md:w-59 ${styles.animCtaFade}`}
           href="/lien-he"
         >
           <Image
@@ -174,7 +174,7 @@ export function QuotationHero() {
             fill
             sizes="240px"
           />
-          <span className="mr-8 text-[1.0625rem] font-extrabold md:text-xl">
+          <span className="mr-7 text-[0.9375rem] font-extrabold md:mr-8 md:text-xl">
             LIÊN HỆ NGAY
           </span>
         </Link>

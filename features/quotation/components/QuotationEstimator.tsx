@@ -46,7 +46,7 @@ const stepCopy = [
 ] as const;
 
 /** Ô chọn / ô nhập dùng chung một chiều cao: 58px ở mobile, 68px từ md. */
-const PILL_HEIGHT = "h-[3.625rem] md:h-[4.25rem]";
+const PILL_HEIGHT = "h-11 md:h-[4.25rem]";
 
 function digitsOnly(value: string) {
   return /^\d+$/.test(value);
@@ -168,7 +168,7 @@ export function QuotationEstimator() {
   return (
     <>
       <section
-        className={`mx-auto min-h-[32.5rem] w-[min(57.5rem,calc(100%-2rem))] bg-white pt-3 md:pt-[1.5625rem] ${
+        className={`mx-auto min-h-[22.5rem] w-[calc(100%_-_2rem)] bg-white pt-3 md:min-h-[32.5rem] md:w-[min(57.5rem,calc(100%_-_2rem))] md:pt-[1.5625rem] ${
           inView ? styles.estimatorVisible : ""
         }`}
         ref={sectionRef}
@@ -176,21 +176,19 @@ export function QuotationEstimator() {
       >
         {/* Mobile: dải tiến trình cuộn ngang có snap; từ md giãn đều 5 cột. */}
         <div
-          className={`relative flex min-h-[2.625rem] items-start overflow-x-auto after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-[0.3125rem] after:bg-[#f0f0f1] after:content-[''] md:grid md:grid-cols-5 md:items-center md:overflow-visible ${styles.progressScroller}`}
-          style={{ scrollSnapType: "x mandatory" }}
+          className={`relative grid min-h-[2.625rem] grid-cols-5 items-stretch after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-[0.25rem] after:bg-[#f0f0f1] after:content-[''] md:items-center md:after:h-[0.3125rem] ${styles.progressScroller}`}
           aria-label="Tiến trình báo giá"
         >
           {steps.map((label, index) => (
             <div
-              className={`relative z-[1] flex min-w-0 shrink-0 items-center self-stretch md:shrink ${styles.progressItem}`}
+              className={`relative z-[1] flex min-w-0 items-center justify-center self-stretch md:justify-start ${styles.progressItem}`}
               style={{
                 animationDelay: `${index * 90}ms`,
-                scrollSnapAlign: "start",
               }}
               key={label}
             >
               <button
-                className={`relative z-[2] flex h-full items-center border-0 bg-transparent pb-[0.3125rem] text-xs whitespace-nowrap disabled:cursor-default disabled:opacity-100 md:text-sm ${
+                className={`relative z-[2] flex h-full min-w-0 items-center justify-center border-0 bg-transparent px-0.5 pb-1 text-[0.5rem] leading-none whitespace-nowrap disabled:cursor-default disabled:opacity-100 min-[390px]:text-[0.5625rem] md:justify-start md:px-0 md:pb-[0.3125rem] md:text-sm md:leading-normal ${
                   index === step ? "text-[#ef7b30]" : "text-[#3c3839]"
                 }`}
                 type="button"
@@ -198,7 +196,7 @@ export function QuotationEstimator() {
                 aria-current={index === step ? "step" : undefined}
                 disabled={index > step}
               >
-                <span className="mr-1">
+                <span className="mr-0.5 md:mr-1">
                   {String(index + 1).padStart(2, "0")}
                 </span>{" "}
                 {label}
@@ -213,7 +211,7 @@ export function QuotationEstimator() {
                 )}
               </button>
               <span
-                className="relative block h-0.5 w-[2.125rem] flex-none bg-[#171415] md:w-auto md:min-w-[1.5625rem] md:flex-1"
+                className="relative hidden h-0.5 w-[2.125rem] flex-none bg-[#171415] md:block md:w-auto md:min-w-[1.5625rem] md:flex-1"
                 style={{ marginLeft: "0.75rem", marginRight: "0.5rem" }}
                 aria-hidden="true"
               />
@@ -222,18 +220,18 @@ export function QuotationEstimator() {
         </div>
 
         <div
-          className={`pt-[1.5625rem] pb-[2.375rem] text-center md:pt-7 md:pb-[3.375rem] ${styles.animStepPanel}`}
+          className={`pt-5 pb-7 text-center md:pt-7 md:pb-[3.375rem] ${styles.animStepPanel}`}
           key={step}
         >
           {step < 4 ? (
             <>
               <h2
                 id="estimator-title"
-                className="m-0 text-[1.8125rem] leading-[1.1] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)]"
+                className="m-0 text-[1.5rem] leading-[1.08] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)] md:leading-[1.1]"
               >
                 {stepCopy[step][0]}
               </h2>
-              <p className="mt-[0.8125rem] mb-0 min-h-9 text-sm md:min-h-0 md:text-[0.9375rem]">
+              <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[19rem] text-[0.6875rem] leading-[1.35] md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
                 {stepCopy[step][1]}
               </p>
               <HeadingRule />
@@ -242,7 +240,7 @@ export function QuotationEstimator() {
             <>
               <h2
                 id="estimator-title"
-                className="m-0 text-[1.8125rem] leading-[1.1] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)]"
+                className="m-0 text-[1.5rem] leading-[1.08] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)] md:leading-[1.1]"
               >
                 ƯỚC TÍNH CỦA BẠN
               </h2>
@@ -326,7 +324,7 @@ export function QuotationEstimator() {
             </div>
           )}
 
-          <div className="mt-[1.5625rem] flex items-center justify-between md:mt-[2.1875rem]">
+          <div className="mt-5 flex items-center justify-between md:mt-[2.1875rem]">
             <StepButton onClick={previous} label="Quay lại" icon="left" />
             {step < 4 && (
               <StepButton onClick={next} label="Tiếp tục" icon="right" />
@@ -395,7 +393,7 @@ export function QuotationEstimator() {
 function HeadingRule() {
   return (
     <Image
-      className={`mx-auto mt-2 mb-[1.375rem] h-[1.4375rem] w-[13.4375rem] max-w-full object-fill md:w-62.5 ${styles.animRule}`}
+      className={`mx-auto mt-1.5 mb-4 h-[1.125rem] w-[10.5rem] max-w-full object-fill md:mt-2 md:mb-[1.375rem] md:h-[1.4375rem] md:w-62.5 ${styles.animRule}`}
       src="/images/bao-gia/decor-27.jpg"
       alt=""
       width={1388}
@@ -459,7 +457,7 @@ function StepButton({
 
   return (
     <button
-      className={`relative flex h-13 min-w-35 items-center justify-center gap-2.5 overflow-hidden rounded-full border-0 bg-white px-3.5 text-[#231f20] transition-[color,transform] duration-[250ms] hover:-translate-y-0.5 hover:text-white focus-visible:-translate-y-0.5 focus-visible:text-white md:h-[3.625rem] md:min-w-[10.3125rem] md:px-[1.375rem] ${styles.stepButton}`}
+      className={`relative flex h-10 min-w-[7.25rem] items-center justify-center gap-2 overflow-hidden rounded-full border-0 px-3 text-[#231f20] transition-[color,transform] duration-[250ms] hover:-translate-y-0.5 focus-visible:-translate-y-0.5 md:h-[3.625rem] md:min-w-[10.3125rem] md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "bg-[#231f20] text-white" : "bg-white"} ${styles.stepButton}`}
       type="button"
       onClick={onClick}
     >
@@ -486,14 +484,14 @@ type OptionGridProps = {
 function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
   return (
     <div
-      className="grid grid-cols-1 gap-[0.6875rem] md:grid-cols-2 md:gap-x-[1.125rem] md:gap-y-[0.8125rem]"
+      className="grid grid-cols-2 gap-2 md:gap-x-[1.125rem] md:gap-y-[0.8125rem]"
       role="radiogroup"
     >
       {options.map((option, index) => {
         const checked = selected === option;
         return (
           <button
-            className={`relative flex ${PILL_HEIGHT} items-center overflow-hidden rounded-full border-2 bg-white px-5 text-left transition-[border-color,background-color] duration-[240ms] hover:border-[#ef7b30] hover:bg-[#f2f2f4] md:px-[1.8125rem] ${
+            className={`relative flex ${PILL_HEIGHT} min-w-0 items-center overflow-hidden rounded-full border bg-white px-3 text-left transition-[border-color,background-color] duration-[240ms] hover:border-[#ef7b30] hover:bg-[#f2f2f4] md:border-2 md:px-[1.8125rem] ${
               checked
                 ? `border-[#ef7b30] bg-[#f2f2f4] ${styles.optionSelected}`
                 : "border-[#ededee]"
@@ -505,11 +503,11 @@ function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
             onClick={() => onSelect(option)}
             key={option}
           >
-            <span className="relative z-[1] text-sm md:text-[0.9375rem]">
+            <span className="relative z-[1] text-[0.625rem] leading-[1.2] md:text-[0.9375rem] md:leading-normal">
               {option}
             </span>
             <span
-              className={`relative z-[1] ml-auto block h-[1.6875rem] w-[0.9375rem] border-r-2 border-b-2 border-[#ef7b30] ${styles.animTick}`}
+              className={`relative z-[1] ml-auto block h-[1.125rem] w-[0.625rem] shrink-0 border-r border-b border-[#ef7b30] md:h-[1.6875rem] md:w-[0.9375rem] md:border-r-2 md:border-b-2 ${styles.animTick}`}
               aria-hidden="true"
             />
           </button>
