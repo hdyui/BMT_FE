@@ -3,6 +3,7 @@ import { QuotationHero } from "@/features/quotation/components/QuotationHero";
 import styles from "@/features/quotation/quotation.module.css";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
+import { ContactForm } from "@/lib/components/shared/ContactForm";
 
 export function QuotationPage() {
   return (
@@ -13,6 +14,7 @@ export function QuotationPage() {
       <main>
         <QuotationHero />
         <QuotationEstimator />
+        <ContactForm />
       </main>
       <SiteFooter />
     </div>

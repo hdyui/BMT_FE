@@ -22,8 +22,14 @@
   touch-action: auto;
 }
 
-@media (max-width: 48rem) {
+@media (max-width: 55rem) {
   .section {
-    aspect-ratio: 1.35 / 1;
+    aspect-ratio: 1.7 / 1;
+  }
+}
+
+@media (max-width: 34rem) {
+  .section {
+    aspect-ratio: 1.42 / 1;
   }
 }

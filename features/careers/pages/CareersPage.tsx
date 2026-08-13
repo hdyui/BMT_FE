@@ -8,12 +8,12 @@ export function CareersPage() {
   return (
     <>
       <SiteHeader />
-      <main className="overflow-hidden">
+      <main className="overflow-hidden" data-scroll-snap-page>
         <CareersHero />
         <CareerOpenings />
         <ContactForm />
       </main>
-      <SiteFooter />
+      <SiteFooter showTopBorder={false} />
     </>
   );
 }
