@@ -147,7 +147,7 @@ export function DesignHeroGallery() {
     // chiều cao tấm nhân tỉ lệ file ảnh, đều tính theo chiều cao cụm) — cái thay
     // đổi là ba tấm dàn xa nhau hơn theo phương ngang. Đây là chỗ phải canh: dàn
     // quá thì ba tấm hở mép, mất kiểu xếp nan quạt của bản thiết kế.
-    <div className="pointer-events-none absolute right-0 bottom-0 aspect-[29/20] h-[45%] max-md:hidden sm:h-[55%] lg:top-[5.25rem] lg:-bottom-[0.3125rem] lg:aspect-[31/20] lg:h-auto">
+    <div className="pointer-events-none absolute right-0 bottom-0 aspect-[29/20] h-[45%] sm:h-[55%] lg:top-[5.25rem] lg:-bottom-[0.3125rem] lg:aspect-[31/20] lg:h-auto">
       {/* CẢ 3 TẤM BÌA vẽ trước để nằm DƯỚI cả 3 ảnh chính. Nhờ vậy bìa của
           khung sau bị ảnh của khung trước che, chỉ ló ra đúng ở khe hở và ở
           những chỗ không có ảnh nào phía trước — giống hệt bản thiết kế. */}
