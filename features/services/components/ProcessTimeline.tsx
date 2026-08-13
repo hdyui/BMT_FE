@@ -31,24 +31,9 @@ const MOBILE_ROWS = [
   [processSteps[2], processSteps[5]],
 ] as const;
 
-const MOBILE_COPY: Record<string, string> = {
-  "01":
-    "Tiếp nhận thông tin từ chủ\nđầu tư, tìm hiểu nhu cầu sử\ndụng, mục tiêu, ngân sách và\ncác yêu cầu đặc thù của dự án\nđể làm cơ sở triển khai\nthiết kế.",
-  "02":
-    "Khảo sát thực tế khu đất\nhoặc công trình, thu thập số\nliệu về hiện trạng, địa hình,\nhạ tầng và các yếu tố liên\nquan nhằm đảm bảo phương\nán thiết kế phù hợp.",
-  "03":
-    "Đề xuất ý tưởng, bố trí mặt\nbằng, công năng và phong\ncách kiến trúc phù hợp với\nnhu cầu sử dụng, đồng thời\ntối ưu tính thẩm mỹ, chi phí\nvà khả năng thi công.",
-  "04":
-    "Hoàn thiện hồ sơ thiết kế\ngồm bản vẽ kiến trúc, kết\ncấu, điện nước (MEP), nội\nthất (nếu có) và các tài liệu kỹ\nthuật phục vụ thi công.",
-  "05":
-    "Rà soát, kiểm tra tính chính\nxác và sự phù hợp của hồ sơ\ntheo quy chuẩn, quy định\nhiện hành; tiếp thu ý kiến từ\nchủ đầu tư để hoàn thiện và\nphê duyệt.",
-  "06":
-    "Bàn giao đầy đủ hồ sơ thiết\nkế và các tài liệu liên quan\ncho chủ đầu tư hoặc đơn vị\nthi công, đảm bảo sẵn sàng\ntriển khai dự án.",
-};
-
 function MobileProcessTimeline() {
   return (
-    <div className="relative mx-auto aspect-[3593/4648] w-[calc(100%-1.25rem)] overflow-hidden md:hidden">
+    <div className="relative mx-auto aspect-[3593/4648] w-[calc(100%-1.25rem)] origin-top scale-[0.95] overflow-hidden md:hidden">
       <Image
         className="absolute inset-0 size-full object-fill"
         src="/images/thiet-ke-kien-truc-noi-that/mobile/process-framework.png"
@@ -61,41 +46,46 @@ function MobileProcessTimeline() {
       {MOBILE_ROWS.map((row, rowIndex) =>
         row.map((step, columnIndex) => {
           const isLeft = columnIndex === 0;
-          const top = `${rowIndex * 33.333}%`;
 
           return (
             <article
               className="absolute h-1/3 w-1/2"
-              style={{ top, left: isLeft ? 0 : "50%" }}
+              style={{
+                top: `${rowIndex * 33.333}%`,
+                left: isLeft ? 0 : "50%",
+              }}
               key={step.number}
             >
               <span
-                className={`absolute text-[clamp(1.75rem,7.8vw,2.35rem)] leading-none font-extrabold text-[#b8babc] ${
-                  isLeft ? "right-[34%]" : "left-[34%]"
+                className={`absolute top-[1.5%] text-[clamp(1.9rem,8.6vw,2.6rem)] leading-none font-extrabold text-[#b8babc] ${
+                  isLeft ? "right-[37%]" : "left-[37%]"
                 }`}
-                style={{ top: "2%" }}
                 aria-hidden="true"
               >
                 {step.number}.
               </span>
 
               <div
-                className={`absolute top-[31%] bottom-[6%] ${
+                className={`absolute top-[37%] bottom-0 flex flex-col ${
                   isLeft ? "right-[8%] left-[14%]" : "right-[14%] left-[8%]"
                 }`}
               >
                 <h3
-                  className={`font-heading text-[clamp(0.48rem,2.15vw,0.67rem)] leading-none font-extrabold whitespace-nowrap text-brand uppercase ${
+                  className={`font-heading text-[clamp(0.55rem,2.72vw,0.83rem)] leading-none font-extrabold whitespace-nowrap text-brand uppercase ${
                     isLeft ? "text-right" : "text-left"
                   }`}
                 >
                   {step.title}
                 </h3>
                 <p
-                  className="mt-[3%] text-justify text-[clamp(0.5rem,2.15vw,0.65rem)] leading-[1.12] whitespace-pre-line text-charcoal"
-                  style={{ textAlignLast: isLeft ? "right" : "left" }}
+                  className="mt-1 text-[clamp(0.55rem,2.5vw,0.75rem)] leading-[1.15] text-charcoal"
+                  style={{
+                    textAlign: "justify",
+                    textAlignLast: isLeft ? "right" : "left",
+                    textJustify: "inter-word",
+                  }}
                 >
-                  {MOBILE_COPY[step.number]}
+                  {step.copy.replace(/\n/g, " ")}
                 </p>
               </div>
             </article>

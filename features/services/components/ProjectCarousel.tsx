@@ -24,6 +24,7 @@ type ProjectCarouselProps = {
   prevIcon?: string;
   nextIcon?: string;
   mobileMockup?: boolean;
+  mobileInitialIndex?: number;
 };
 
 const DRAG_THRESHOLD = 50;
@@ -34,6 +35,7 @@ export function ProjectCarousel({
   prevIcon,
   nextIcon,
   mobileMockup = false,
+  mobileInitialIndex,
 }: ProjectCarouselProps) {
   const count = featuredProjects.length;
   /* Nhân bản danh sách 3 lần để lướt vòng: luôn còn thẻ ở cả hai phía nên
@@ -49,6 +51,22 @@ export function ProjectCarousel({
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const dragStartX = useRef<number | null>(null);
   const logicalActive = ((active % count) + count) % count;
+
+  useEffect(() => {
+    if (
+      mobileInitialIndex === undefined ||
+      !window.matchMedia("(max-width: 767px)").matches
+    ) {
+      return;
+    }
+
+    const safeIndex = Math.min(Math.max(mobileInitialIndex, 0), count - 1);
+    const frame = requestAnimationFrame(() => {
+      setAnimate(false);
+      setActive(count + safeIndex);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [count, mobileInitialIndex]);
 
   const move = useCallback((direction: number) => {
     setAnimate(true);
@@ -148,6 +166,7 @@ export function ProjectCarousel({
         <div
           className={cn(
             "flex w-max items-center gap-4 sm:gap-8 lg:gap-[3.125rem]",
+            mobileInitialIndex !== undefined && "max-md:gap-[20vw]",
             animate && "transition-transform duration-500 ease-out",
           )}
           style={{ transform: `translateX(${offset}px)` }}
@@ -165,6 +184,7 @@ export function ProjectCarousel({
                   "relative aspect-3334/2653 w-[78vw] max-w-150 shrink-0 overflow-hidden rounded-[1.25rem] sm:w-[60vw] sm:rounded-[1.5rem] lg:w-[42vw] lg:rounded-[2rem] transition-[transform,opacity] duration-500 ease-out",
                   mobileMockup &&
                     "max-md:w-[86vw] max-md:rounded-[1.75rem]",
+                  mobileInitialIndex !== undefined && "max-md:!w-[86vw]",
                   isActive
                     ? "z-10 scale-100 opacity-100"
                     : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
@@ -194,10 +214,22 @@ export function ProjectCarousel({
                 />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
-                  <p className="mb-1 text-[0.6875rem] font-normal tracking-wider uppercase sm:text-xs md:font-semibold">
+                  <p
+                    className={cn(
+                      "mb-1 text-[0.6875rem] font-normal tracking-wider uppercase sm:text-xs md:font-semibold",
+                      mobileInitialIndex !== undefined &&
+                        "max-md:text-[clamp(0.68rem,2.8vw,1.05rem)]",
+                    )}
+                  >
                     {project.tag}
                   </p>
-                  <h3 className="font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]">
+                  <h3
+                    className={cn(
+                      "font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]",
+                      mobileInitialIndex !== undefined &&
+                        "max-md:text-[clamp(1.1rem,4vw,1.55rem)]",
+                    )}
+                  >
                     {project.title}
                   </h3>
                 </div>
@@ -210,7 +242,11 @@ export function ProjectCarousel({
       {mobileMockup && (
         <>
           <button
-            className="absolute top-1/2 left-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden"
+            className={cn(
+              "absolute top-1/2 left-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden",
+              mobileInitialIndex !== undefined &&
+                "max-md:!size-[clamp(1.75rem,6.4vw,2.5rem)]",
+            )}
             onClick={() => move(-1)}
             aria-label="Dự án trước"
             type="button"
@@ -229,7 +265,11 @@ export function ProjectCarousel({
             )}
           </button>
           <button
-            className="absolute top-1/2 right-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden"
+            className={cn(
+              "absolute top-1/2 right-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden",
+              mobileInitialIndex !== undefined &&
+                "max-md:!size-[clamp(1.75rem,6.4vw,2.5rem)]",
+            )}
             onClick={() => move(1)}
             aria-label="Dự án tiếp theo"
             type="button"
@@ -255,6 +295,8 @@ export function ProjectCarousel({
               <span
                 className={cn(
                   "size-5 rounded-full border-2",
+                  mobileInitialIndex !== undefined &&
+                    "max-md:!size-[clamp(1.1rem,4.2vw,1.65rem)]",
                   index === logicalActive
                     ? "border-brand bg-brand shadow-[inset_0_0_0_3px_white]"
                     : "border-charcoal bg-white",

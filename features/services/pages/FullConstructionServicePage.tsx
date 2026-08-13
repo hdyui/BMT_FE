@@ -30,11 +30,16 @@ export function FullConstructionServicePage() {
     <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip">
       <SiteHeader mobileServiceMockup />
 
+      {/* `hero-artwork.png` là ảnh ghép sẵn cụm lục giác, chỉ chừa ~34,5%
+          chiều cao rỗng phía trên cho khối chữ. Section cao hơn ảnh đúng
+          2.5rem (`154vw` -> `calc(154vw+2.5rem)`), ảnh neo đáy (`bottom-0`
+          thay cho `inset-0`) giữ nguyên kích thước gốc — phần dư ra thành
+          khoảng trắng thật ở đỉnh cho khối chữ `pt-32`, không đè lên ảnh. */}
       <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:h-[154vw] max-md:min-h-0 md:h-[55vw] md:min-h-0`}
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:h-[calc(154vw+2.5rem)] max-md:min-h-0 md:h-[55vw] md:min-h-0`}
       >
         <Image
-          className="absolute inset-0 -z-10 h-auto w-full md:hidden"
+          className="absolute inset-x-0 bottom-0 -z-10 h-auto w-full md:hidden"
           src="/images/xay-dung-tron-goi/mobile/hero-artwork.png"
           alt=""
           width={3884}
@@ -44,22 +49,26 @@ export function FullConstructionServicePage() {
           aria-hidden="true"
         />
 
-        <div className="relative z-10 px-[10.5%] pt-[5.35rem] md:hidden">
+        {/* `pt-32` (128px) khớp khoảng cách header->tiêu đề chuẩn lấy từ
+            RenovationMobileHero (~85px header + ~41px khoảng trắng riêng),
+            thay cho `pt-[5.35rem]` cũ gần như sát luôn header không chừa
+            khoảng trắng. */}
+        <div className="relative z-10 px-[10.5%] pt-32 md:hidden">
           <Reveal>
-            <h1 className="font-heading text-[clamp(1.05rem,4.7vw,2.25rem)] font-extrabold leading-[1.14] text-brand">
+            <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] font-extrabold leading-[1.12] text-brand">
               DỊCH VỤ THIẾT KẾ THI CÔNG
               <br />&amp; XÂY DỰNG TRỌN GÓI
             </h1>
           </Reveal>
           <BuildingRule
-            className="mt-4 block h-5 w-[52%] max-w-none before:absolute before:inset-x-0 before:bottom-0.5 before:h-0.5 before:bg-charcoal before:content-[''] [&_img]:object-contain [&_img]:object-right"
-            src="/images/xay-dung-tron-goi/rule-dark.png"
+            className="mt-2 h-5 w-[45%] max-w-none [&_img]:object-contain [&_img]:object-right"
+            src="/images/services/rule-dark.png"
             delay={160}
           />
-          <Reveal delay={260} from="left">
-            <p className="mt-3 flex items-start gap-1.5 text-[clamp(0.6875rem,2.95vw,0.875rem)] leading-relaxed">
+          <Reveal delay={300} from="left">
+            <p className="mt-2 flex items-center gap-2 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed">
               <Image
-                className="mt-[0.18em] size-[1.05em] shrink-0 object-contain"
+                className="size-3 shrink-0 object-contain"
                 src="/images/services/icon-house.png"
                 alt=""
                 width={90}
@@ -133,8 +142,8 @@ export function FullConstructionServicePage() {
                 </h1>
               </Reveal>
               <BuildingRule
-                className="mt-3 block mr-auto ml-0 w-full max-w-[7rem]"
-                src="/images/xay-dung-tron-goi/rule-dark.png"
+                className="mt-3 block mr-auto ml-0 w-full max-w-85"
+                src="/images/services/rule-dark.png"
                 delay={200}
               />
               <Reveal delay={320} from="left">
@@ -285,7 +294,7 @@ export function FullConstructionServicePage() {
       </section>
 
       <ContactForm mobileServiceMockup />
-      <SiteFooter mobileServiceMockup />
+      <SiteFooter />
     </div>
   );
 }

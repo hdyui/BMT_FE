@@ -32,18 +32,26 @@ export function DesignServicePage() {
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
           theo 38.9vw nên tỉ lệ giữ nguyên ở mọi bề rộng màn hình và mọi mức
           zoom. Cụm ảnh bên phải scale theo chiều cao này. */}
+      {/* `hero-artwork.png` là ảnh ghép sẵn cụm ảnh nghiêng, chỉ chừa ~37%
+          chiều cao rỗng phía trên cho khối chữ. Mobile section cao hơn ảnh
+          đúng 2.5rem (thay `aspect-[3884/5972]` bằng `calc(153.76vw+2.5rem)`,
+          153.76vw = 5972/3884 quy đổi theo bề rộng), ảnh nhét trong khung con
+          khớp đúng tỉ lệ gốc và neo đáy (`bottom-0`) — phần dư ra thành
+          khoảng trắng thật ở đỉnh cho khối chữ `pt-32`, không đè lên ảnh. */}
       <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:!aspect-[3884/5972] max-md:!h-auto max-md:!min-h-0`}
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(153.76vw+2.5rem)] max-md:!min-h-0`}
       >
-        <Image
-          className="absolute inset-0 -z-10 size-full object-fill md:hidden"
-          src="/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png"
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          aria-hidden="true"
-        />
+        <div className="absolute inset-x-0 bottom-0 -z-10 aspect-3884/5972 w-full md:hidden">
+          <Image
+            className="size-full object-fill"
+            src="/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png"
+            alt=""
+            fill
+            sizes="100vw"
+            priority
+            aria-hidden="true"
+          />
+        </div>
 
         {/* Ảnh Nền Banner */}
         <Reveal className="absolute inset-0 -z-20 max-md:hidden" from="fade">
@@ -96,7 +104,10 @@ export function DesignServicePage() {
         {/* Màn nhỏ: chữ dồn lên trên, cụm ảnh nằm dưới -> không chồng lên nhau. */}
         {/* `lg:pt-24` khớp với mốc 96px của bản vẽ nền và cụm ảnh, để khối chữ
             canh giữa theo đúng vùng còn lại chứ không canh giữa cả banner. */}
-        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 max-md:!pt-24 lg:items-center lg:pt-24">
+        {/* `max-md:!pt-32` khớp khoảng cách header->tiêu đề chuẩn lấy từ
+            RenovationMobileHero (~85px header + ~41px khoảng trắng riêng =
+            ~128px), thay cho `pt-24` cũ (96px, chỉ chừa ~11px dưới header). */}
+        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 max-md:!pt-32 lg:items-center lg:pt-24">
           {/* Cụm Text Bên Trái */}
           {/* Bề rộng khối chữ đi theo cỡ chữ (33vw ≈ 14.3 lần font-size) nên
               tiêu đề luôn ngắt đúng 2 dòng như mockup và mép phải dừng trước
@@ -135,30 +146,25 @@ export function DesignServicePage() {
                 </span>
               </h1>
             </Reveal>
-            <Reveal
-              className="mt-4 w-28 max-md:mt-2 max-md:w-42"
+            <BuildingRule
+              className="mt-4 w-full max-w-85 max-md:mt-2 max-md:w-[45%]"
+              src="/images/services/rule-dark.png"
               delay={180}
+            />
+            <Reveal
+              className="flex items-start gap-2 max-md:items-center"
+              delay={300}
               from="left"
             >
               <Image
-                className="h-auto w-full"
-                src="/images/thiet-ke-kien-truc-noi-that/hero-title-rule.png"
-                alt=""
-                width={571}
-                height={128}
-                aria-hidden="true"
-              />
-            </Reveal>
-            <Reveal className="flex items-start gap-2" delay={300} from="left">
-              <Image
-                className="mt-[0.7rem] hidden size-3 shrink-0 object-contain max-md:block"
+                className="mt-[0.7rem] hidden size-3 shrink-0 object-contain max-md:mt-0 max-md:block"
                 src="/images/thiet-ke-kien-truc-noi-that/icon-building.png"
                 alt=""
                 width={160}
                 height={169}
                 aria-hidden="true"
               />
-              <p className="mt-2 max-w-[250px] text-pretty text-sm font-normal leading-relaxed max-md:mt-1 sm:text-base">
+              <p className="mt-2 max-w-[250px] text-pretty text-sm font-normal leading-relaxed max-md:mt-0 max-md:max-w-none max-md:whitespace-nowrap max-md:text-[clamp(0.55rem,2.85vw,0.7rem)] sm:text-base">
                 Kiến tạo không gian hài hòa giữa
                 <br className="hidden sm:inline" /> thẩm mỹ và công năng
               </p>
@@ -240,7 +246,7 @@ export function DesignServicePage() {
       </section>
 
       <section
-        className={`bg-neutral-100 ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}
+        className={`bg-neutral-100 max-md:!bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}
       >
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="text-center">
@@ -291,12 +297,12 @@ export function DesignServicePage() {
                 height={207}
               />
             </h2>
-            <h2 className="font-heading text-center text-[clamp(0.85rem,3.9vw,0.95rem)] leading-[1.08] font-extrabold md:hidden">
+            <h2 className="font-heading text-center text-[clamp(1.1rem,5vw,1.25rem)] leading-[1.08] font-extrabold md:hidden">
               <span className="block">QUY TRÌNH THIẾT KẾ</span>
               <span className="flex items-center justify-center gap-1">
                 TẠI
                 <Image
-                  className="h-3 w-auto"
+                  className="h-[1.28rem] w-auto"
                   src="/images/thiet-ke-kien-truc-noi-that/process-brand-logo.png"
                   alt="BMT Decor"
                   width={1196}
@@ -306,7 +312,7 @@ export function DesignServicePage() {
             </h2>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-0.5 h-4 w-24 md:hidden"
+            className="mx-auto mt-1 h-5 w-36 md:hidden"
             src="/images/thiet-ke-kien-truc-noi-that/rule-orange.png"
           />
         </div>

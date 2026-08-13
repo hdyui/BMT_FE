@@ -61,11 +61,11 @@ export function ProcessStepsGrid({
                             }}
                             aria-hidden="true"
                           />
-                          <div className="absolute top-[21%] right-[8%] bottom-[7%] left-[16%]">
+                          <div className="absolute top-[21%] right-[15%] bottom-[7%] left-[8%]">
                             <h3 className="font-heading pr-[25%] text-[7.1cqw] leading-[1.08] font-bold whitespace-pre-line">
                               {step.title}
                             </h3>
-                            <p className="mt-[4cqw] text-[6.1cqw] leading-[1.18] text-charcoal">
+                            <p className="mt-[4cqw] text-justify text-[6.1cqw] leading-[1.18] text-charcoal">
                               {step.copy}
                             </p>
                           </div>
