@@ -209,12 +209,12 @@ export function ServiceTabs() {
 
         <div className="max-w-[31.875rem]">
           <Reveal from="left">
-            <span className="block text-[clamp(2rem,9vw,3rem)] leading-none font-extrabold text-neutral-400 lg:text-7xl">
+            <span className="block text-[clamp(2rem,9vw,3rem)] leading-none font-extrabold text-neutral-400 transition-colors duration-300 hover:text-brand lg:text-7xl">
               {String(shown + 1).padStart(2, "0")}.
             </span>
           </Reveal>
           <Reveal delay={120}>
-            <h2 className="mt-2 font-heading text-[clamp(1.125rem,4.6vw,1.75rem)] font-extrabold uppercase lg:mt-3 lg:text-4xl">
+            <h2 className="mt-2 font-heading text-[clamp(1.125rem,4.6vw,1.75rem)] font-extrabold uppercase lg:mt-3 lg:text-4xl lg:text-pretty">
               <span className="lg:hidden">
                 {DETAIL_TITLE_LINES[shown].map((line, lineIndex) => (
                   <span key={line}>

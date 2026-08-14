@@ -68,7 +68,7 @@ export function ServicesOverviewPage() {
                 ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty sm:text-base">
-                <p className="leading-normal">
+                <p className="leading-normal lg:w-full lg:text-justify">
                   <Image
                     className="inline-block size-4 mr-0.5 my-1 align-sub object-contain"
                     src="/images/services/icon-house.png"

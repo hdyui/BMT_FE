@@ -96,7 +96,7 @@ export function ProcessAccordion() {
                 </AccordionTrigger>
 
                 <AccordionContent className="pt-2 pb-0 pl-13.5 sm:pl-16 lg:pl-24">
-                  <span className="block w-full max-w-125 animate-in fade-in slide-in-from-bottom-2 text-[0.9375rem] leading-relaxed text-pretty duration-500 ease-out lg:text-base">
+                  <span className="block w-full max-w-125 animate-in fade-in slide-in-from-bottom-2 text-[0.9375rem] leading-relaxed text-pretty duration-500 ease-out lg:text-base lg:text-justify">
                     {step.copy}
                   </span>
                 </AccordionContent>
