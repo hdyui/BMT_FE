@@ -205,6 +205,7 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
+      {/* Panel FAQ đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
       <ContactForm />
       <SiteFooter />
     </div>

@@ -1,8 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Menu } from "lucide-react";
 import { usePathname } from "next/navigation";
 import { BrandLogo } from "@/lib/components/shared/BrandLogo";
 import { buttonVariants } from "@/lib/components/ui/button";
@@ -18,37 +18,61 @@ import {
 import { navigation } from "@/config/site";
 import { cn } from "@/lib/utils";
 
+const mobileNavigation = [
+  ...navigation,
+  { label: "LIÊN HỆ", href: "/lien-he" },
+] as const;
+
 export function SiteHeader({
   mobileServiceMockup = false,
 }: {
   mobileServiceMockup?: boolean;
 } = {}) {
   const pathname = usePathname();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const isRouteActive = (href: string, isServiceGroup = false) =>
+    isServiceGroup && pathname.startsWith("/dich-vu")
+      ? true
+      : href === "/"
+        ? pathname === "/"
+        : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[85px] opacity-85 bg-charcoal text-white shadow-md max-sm:bg-charcoal/85 max-sm:opacity-100">
-      <div className="mx-auto flex h-full w-[min(1510px,calc(100%-2.5rem))] items-center gap-5 max-sm:w-[calc(100%-1.5rem)]">
+    <header className="fixed inset-x-0 top-0 z-50 h-[68px] bg-[#2b2b2b] text-white max-xl:h-[60px] max-xl:bg-charcoal/90 max-xl:shadow-md max-xl:backdrop-blur-[2px]">
+      <span
+        className="absolute inset-y-0 right-[clamp(16px,1.45vw,28px)] left-[clamp(16px,1.45vw,28px)] hidden bg-charcoal/95 shadow-md backdrop-blur-[2px] xl:block"
+        aria-hidden="true"
+      />
+      <div className="relative mx-auto flex h-full w-[min(1510px,calc(100%-3.5rem))] items-center max-xl:w-[calc(100%-1.5rem)] xl:grid xl:grid-cols-[186px_minmax(0,1fr)_186px] 2xl:grid-cols-[210px_minmax(0,1fr)_210px]">
         <BrandLogo
-          className={cn(
-            "w-[180px] shrink-0 xl:mr-12 xl:w-[210px] 2xl:mr-20 2xl:w-[232px]",
-            mobileServiceMockup && "max-md:w-[7.25rem]",
-          )}
+          className="hidden w-[172px] shrink-0 justify-self-start xl:block 2xl:w-[186px]"
           inverted
         />
+        <Link
+          className={cn(
+            "relative block w-[112px] shrink-0 sm:w-[126px] xl:hidden",
+            mobileServiceMockup && "max-md:w-[116px]",
+          )}
+          href="/"
+          aria-label="BMT Decor - Trang chủ"
+        >
+          <Image
+            className="h-auto w-full object-contain"
+            src="/images/contact/mobile/header-logo.png"
+            alt="BMT Decor"
+            width={1066}
+            height={186}
+            preload
+            sizes="(max-width: 639px) 112px, 126px"
+          />
+        </Link>
 
         <nav
-          className="hidden h-full items-center gap-6 xl:flex 2xl:gap-8"
+          className="hidden h-full items-center justify-self-center gap-5 xl:flex 2xl:gap-7"
           aria-label="Điều hướng chính"
         >
           {navigation.map((item) => {
-            const isActive =
-              "children" in item && pathname.startsWith("/dich-vu")
-                ? true
-                : item.href === "/"
-                  ? pathname === "/"
-                  : pathname === item.href ||
-                    pathname.startsWith(`${item.href}/`);
-
+            const isActive = isRouteActive(item.href, "children" in item);
             return (
               <div
                 className="group relative flex h-full items-center"
@@ -56,14 +80,14 @@ export function SiteHeader({
               >
                 <Link
                   className={cn(
-                    "flex items-center text-[16px] font-extrabold whitespace-nowrap transition-colors duration-200 hover:text-brand",
+                    "flex items-center text-[14px] font-extrabold whitespace-nowrap transition-colors duration-200 hover:text-brand",
                     isActive && "text-brand",
                   )}
                   href={item.href}
                 >
                   <span
                     className={cn(
-                      "relative py-1 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300 hover:after:scale-x-100",
+                      "relative py-1 after:absolute after:inset-x-0 after:-bottom-0.5 after:h-0.5 after:origin-left after:scale-x-0 after:bg-brand after:transition-transform after:duration-300",
                       isActive && "after:scale-x-100",
                     )}
                   >
@@ -71,10 +95,10 @@ export function SiteHeader({
                   </span>
                 </Link>
                 {"children" in item && (
-                  <div className="invisible absolute top-[85px] left-0 w-[380px] -translate-y-2 overflow-hidden rounded-b-[28px] bg-white text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
+                  <div className="invisible absolute top-[68px] left-0 w-[360px] -translate-y-2 overflow-hidden rounded-b-[24px] bg-white text-charcoal opacity-0 shadow-2xl transition-all duration-300 ease-out group-hover:visible group-hover:translate-y-0 group-hover:opacity-100">
                     {item.children.map((service, index) => (
                       <Link
-                        className="flex h-[50px] translate-y-2 items-center gap-4 px-6 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-charcoal/85 hover:text-white"
+                        className="flex h-[46px] translate-y-2 items-center gap-4 px-6 opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100 hover:bg-charcoal/85 hover:text-white"
                         href={service.href}
                         style={{ transitionDelay: `${index * 70}ms` }}
                         key={service.href}
@@ -88,7 +112,7 @@ export function SiteHeader({
                             height={40}
                           />
                         </span>
-                        <span className="text-[16px] font-extrabold uppercase leading-none tracking-[-0.015em]">
+                        <span className="text-[14px] font-extrabold uppercase leading-none tracking-[-0.015em]">
                           {service.label}
                         </span>
                       </Link>
@@ -103,33 +127,63 @@ export function SiteHeader({
         <Link
           className={cn(
             buttonVariants({ size: "sm" }),
-            "ml-auto hidden h-[49px] min-w-[190px] rounded-full bg-orange-500 px-8 text-[16px] font-extrabold text-white shadow-none transition-all duration-300 hover:bg-brand-dark hover:text-white hover:shadow-xl xl:inline-flex",
+            "hidden h-[42px] min-w-[164px] justify-self-end rounded-full bg-brand px-7 text-[14px] font-extrabold text-white shadow-none transition-[color,background-color,box-shadow,transform] duration-300 hover:scale-[1.04] hover:bg-brand hover:text-charcoal hover:shadow-[0_12px_28px_rgb(0_0_0/.28)] active:translate-y-px active:scale-[.97] active:shadow-md xl:inline-flex",
           )}
           href="/lien-he"
         >
           LIÊN HỆ
         </Link>
 
-        <Sheet>
+        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger
-            className="ml-auto inline-flex size-10 items-center justify-center rounded-full border border-white/20 xl:hidden max-sm:size-12 max-sm:border-white max-sm:bg-white max-sm:text-charcoal max-sm:shadow-md"
+            className="relative ml-auto inline-flex size-9 items-center justify-center rounded-full xl:hidden"
             aria-label="Mở menu"
-            style={
-              mobileServiceMockup
-                ? {
-                    backgroundColor: "white",
-                    borderColor: "white",
-                    color: "#242122",
-                  }
-                : undefined
-            }
           >
-            <Menu />
+            <Image
+              className="object-contain"
+              src="/images/contact/mobile/menu-circle.png"
+              alt=""
+              fill
+              sizes="36px"
+              unoptimized
+            />
+            <Image
+              className="relative z-10 h-auto w-[18px] object-contain"
+              src="/images/contact/mobile/menu-hamburger.png"
+              alt=""
+              width={155}
+              height={134}
+              sizes="18px"
+              unoptimized
+            />
           </SheetTrigger>
           <SheetContent
             className="w-[88vw] max-w-sm bg-charcoal text-white"
             side="right"
+            showCloseButton={false}
           >
+            <SheetClose
+              className="absolute top-3 right-3 z-10 inline-flex size-9 items-center justify-center rounded-full"
+              aria-label="Đóng menu"
+            >
+              <Image
+                className="object-contain"
+                src="/images/contact/mobile/menu-circle.png"
+                alt=""
+                fill
+                sizes="36px"
+                unoptimized
+              />
+              <Image
+                className="relative z-10 h-auto w-[17px] object-contain"
+                src="/images/contact/mobile/menu-close.png"
+                alt=""
+                width={112}
+                height={112}
+                sizes="17px"
+                unoptimized
+              />
+            </SheetClose>
             <SheetHeader className="border-b border-white/10">
               <SheetTitle className="text-white">BMT DECOR</SheetTitle>
               <SheetDescription className="text-white/60">
@@ -137,39 +191,47 @@ export function SiteHeader({
               </SheetDescription>
             </SheetHeader>
             <nav className="grid px-4">
-              {navigation.map((item) => (
-                <div className="border-b border-white/10" key={item.href}>
-                  <SheetClose
-                    nativeButton={false}
-                    render={
-                      <Link
-                        className="block py-4 font-extrabold hover:text-brand"
-                        href={item.href}
-                      />
-                    }
-                  >
-                    {item.label}
-                  </SheetClose>
-                  {"children" in item && (
-                    <div className="grid pb-3 pl-4">
-                      {item.children.map((service) => (
-                        <SheetClose
-                          nativeButton={false}
-                          render={
+              {mobileNavigation.map((item) => {
+                const isActive = isRouteActive(item.href, "children" in item);
+                return (
+                  <div className="border-b border-white/10" key={item.href}>
+                    <Link
+                      className={cn(
+                        "block py-4 font-extrabold transition-colors hover:text-brand",
+                        isActive && "text-brand",
+                      )}
+                      href={item.href}
+                      aria-current={isActive ? "page" : undefined}
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      {item.label}
+                    </Link>
+                    {"children" in item && (
+                      <div className="grid pb-3 pl-4">
+                        {item.children.map((service) => {
+                          const isServiceActive = isRouteActive(service.href);
+                          return (
                             <Link
-                              className="py-2 text-sm text-white/65 hover:text-brand"
+                              className={cn(
+                                "py-2 text-sm text-white/65 transition-colors hover:text-brand",
+                                isServiceActive && "text-brand",
+                              )}
                               href={service.href}
-                            />
-                          }
-                          key={service.href}
-                        >
-                          {service.label}
-                        </SheetClose>
-                      ))}
-                    </div>
-                  )}
-                </div>
-              ))}
+                              aria-current={
+                                isServiceActive ? "page" : undefined
+                              }
+                              onClick={() => setMobileMenuOpen(false)}
+                              key={service.href}
+                            >
+                              {service.label}
+                            </Link>
+                          );
+                        })}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </nav>
           </SheetContent>
         </Sheet>

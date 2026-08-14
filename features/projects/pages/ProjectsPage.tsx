@@ -38,30 +38,55 @@ const categories: {
   icon: string;
   activeIcon: string;
   iconClassName: string;
+  mobileIcon: string;
+  mobileActiveIcon: string;
+  mobileIconClassName: string;
+  mobileIconWidth: number;
+  mobileIconHeight: number;
 }[] = [
   {
     label: "Nhà ở",
     icon: "/images/projects/category-house-active.png",
     activeIcon: "/images/projects/category-house-active.png",
     iconClassName: "w-[44px]",
+    mobileIcon: "/images/projects/mobile/category-house.png",
+    mobileActiveIcon: "/images/projects/mobile/category-house-active.png",
+    mobileIconClassName: "w-[32px]",
+    mobileIconWidth: 257,
+    mobileIconHeight: 199,
   },
   {
     label: "Văn phòng",
     icon: "/images/projects/category-office.png",
     activeIcon: "/images/projects/category-office-active.png",
     iconClassName: "w-[39px]",
+    mobileIcon: "/images/projects/mobile/category-office.png",
+    mobileActiveIcon: "/images/projects/mobile/category-office-active.png",
+    mobileIconClassName: "w-[27px]",
+    mobileIconWidth: 188,
+    mobileIconHeight: 223,
   },
   {
     label: "Thẩm mỹ viện, showroom",
     icon: "/images/projects/category-showroom.png",
     activeIcon: "/images/projects/category-showroom-active.png",
     iconClassName: "w-[48px]",
+    mobileIcon: "/images/projects/mobile/category-showroom.png",
+    mobileActiveIcon: "/images/projects/mobile/category-showroom-active.png",
+    mobileIconClassName: "w-[35px]",
+    mobileIconWidth: 308,
+    mobileIconHeight: 199,
   },
   {
     label: "Nhà hàng, khách sạn",
     icon: "/images/projects/category-hospitality.png",
     activeIcon: "/images/projects/category-hospitality-active.png",
     iconClassName: "w-[43px]",
+    mobileIcon: "/images/projects/mobile/category-hospitality.png",
+    mobileActiveIcon: "/images/projects/mobile/category-hospitality-active.png",
+    mobileIconClassName: "w-[31px]",
+    mobileIconWidth: 225,
+    mobileIconHeight: 235,
   },
 ];
 
@@ -79,7 +104,7 @@ const projectImages = [
 
 const projectCards: Record<Category, ProjectCardData[]> = {
   "Nhà ở": [
-    card("Nhà phố 2 tầng Quận 9"),
+    card("Nhà Phú Nhuận"),
     card("Nhà Bình Thạnh"),
     card("Căn hộ 2 PN cao cấp"),
     card("Chung cư La Astoria Q.2"),
@@ -172,17 +197,17 @@ const projectCardVariants: Variants = {
 function ProjectCard({
   project,
   index,
+  hiddenOnMobile = false,
 }: {
   project: ProjectCardData & { image: string };
   index: number;
+  hiddenOnMobile?: boolean;
 }) {
   const cardContent = (
     <motion.article
-      className="absolute inset-0 overflow-hidden rounded-[28px] bg-neutral-100"
+      className="absolute inset-0 overflow-hidden rounded-[28px] bg-neutral-100 max-sm:rounded-[31px]"
       variants={projectCardVariants}
       whileHover={{
-        y: -3,
-        scale: 1.006,
         boxShadow: "0 14px 30px rgba(38, 38, 38, 0.16)",
         transition: {
           type: "spring",
@@ -212,19 +237,29 @@ function ProjectCard({
       >
         <Search className="size-10 stroke-[1.8]" />
       </span>
-      <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-2 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white">
-        <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em]">
-          Thiết kế thi công nội thất
-        </p>
-        <h3 className="mt-[7px] whitespace-nowrap text-[clamp(14px,1.5vw,21px)] leading-none font-bold uppercase tracking-[-0.04em]">
-          {project.title}
-        </h3>
+      <div className="absolute inset-x-0 bottom-0 grid min-h-[76px] content-center bg-white/86 px-2 py-[10px] text-center text-charcoal transition-[min-height,background-color,color] duration-300 ease-out group-hover:min-h-[92px] group-hover:bg-brand group-hover:text-white max-sm:h-[62px] max-sm:min-h-0 max-sm:bg-transparent max-sm:p-0 max-sm:group-hover:min-h-0 max-sm:group-hover:bg-transparent max-sm:group-hover:text-charcoal">
+        <Image
+          src="/images/projects/mobile/card-strip-white.png"
+          alt=""
+          width={3600}
+          height={632}
+          sizes="(max-width: 639px) min(500px, calc(100vw - 20px)), 1px"
+          className="pointer-events-none absolute inset-x-0 bottom-0 z-0 hidden h-auto w-full max-sm:block"
+          aria-hidden="true"
+        />
+        <div className="relative z-10 grid h-full content-center">
+          <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em] max-sm:text-[13px] max-sm:tracking-[-0.025em]">
+            Thiết kế thi công nội thất
+          </p>
+          <h3 className="mt-[7px] text-[clamp(14px,1.5vw,21px)] leading-none font-bold text-balance uppercase tracking-[-0.04em] max-sm:mt-[5px] max-sm:px-2 max-sm:text-[20px] max-sm:font-extrabold max-sm:tracking-[-0.045em]">
+            {project.title}
+          </h3>
+        </div>
       </div>
     </motion.article>
   );
 
-  const wrapperClassName =
-    "group relative aspect-[1.04/1] rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand";
+  const wrapperClassName = `group relative aspect-[1.04/1] rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-sm:aspect-[1.28/1] max-sm:rounded-[24px] ${hiddenOnMobile ? "max-sm:hidden" : ""}`;
   return (
     <Link
       href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
@@ -239,6 +274,7 @@ function ProjectCard({
 export function ProjectsPage() {
   const [activeCategory, setActiveCategory] = useState<Category>("Nhà ở");
   const [activePage, setActivePage] = useState(0);
+  const [mobileExpanded, setMobileExpanded] = useState(false);
   const projectGridRef = useRef<HTMLDivElement>(null);
   const projectGridEntered = useInView(projectGridRef, {
     once: true,
@@ -260,28 +296,45 @@ export function ProjectsPage() {
   function selectCategory(category: Category) {
     setActiveCategory(category);
     setActivePage(0);
+    setMobileExpanded(false);
   }
 
   return (
     <>
       <SiteHeader />
-      <main className="relative overflow-hidden bg-[#f2f2f4] pt-[60px]">
+      <main
+        className="relative overflow-hidden bg-[#f2f2f4] pt-0 sm:pt-[60px] max-sm:overflow-visible xl:pt-[68px]"
+        data-scroll-snap-page
+      >
         <ProjectsHero />
 
-        <section className="bg-white pt-[62px] pb-[108px]" id="du-an">
-          <div className="mx-auto w-[min(1202px,calc(100%-2.25rem))]">
+        <section
+          className="relative bg-white pt-[62px] pb-[108px] max-sm:pt-[24px] max-sm:pb-[60px]"
+          id="du-an"
+        >
+          <div className="mx-auto w-[min(1202px,calc(100%-2.25rem))] max-sm:w-[calc(100%-1.25rem)] max-sm:max-w-[500px]">
             <header className="mx-auto text-center">
               <Reveal>
-                <div className="text-[clamp(34px,2.5vw,48px)] leading-none font-bold tracking-[-0.035em] text-charcoal">
-                  <h3 className="flex flex-wrap items-end justify-center gap-x-[0.18em] gap-y-3 sm:flex-nowrap">
+                <div className="text-[clamp(34px,2.5vw,48px)] leading-none font-bold tracking-[-0.035em] text-charcoal max-sm:text-[22px] max-sm:font-extrabold max-sm:tracking-[-0.045em]">
+                  <h3 className="flex flex-nowrap items-end justify-center gap-x-[0.18em] gap-y-3 whitespace-nowrap">
                     <span className="text-[0.8em] leading-none">DỰ ÁN</span>
                     <Image
+                      src="/images/projects/mobile/bmt-decor-wordmark.png"
+                      alt=""
+                      width={948}
+                      height={165}
+                      className="mb-[2px] h-auto w-[5.35em] shrink-0 sm:hidden"
+                      aria-hidden="true"
+                    />
+                    <Image
                       src="/images/projects/bmt-decor-wordmark.png"
-                      alt="BMT Decor"
+                      alt=""
                       width={1202}
                       height={209}
-                      className="mb-1 h-auto w-[5.05em] shrink-0"
+                      className="mb-1 hidden h-auto w-[5.05em] shrink-0 sm:block"
+                      aria-hidden="true"
                     />
+                    <span className="sr-only">BMT Decor</span>
                     <span className="text-[0.8em] leading-none">
                       ĐÃ THI CÔNG
                     </span>
@@ -289,14 +342,14 @@ export function ProjectsPage() {
                 </div>
               </Reveal>
               <Reveal delay={180}>
-                <p className="mx-auto mt-[22px] max-w-[780px] text-[20px] leading-[1.38] font-normal tracking-[-0.015em] text-charcoal">
+                <p className="mx-auto mt-[22px] max-w-[780px] text-[20px] leading-[1.38] font-normal tracking-[-0.015em] text-charcoal max-sm:mt-[9px] max-sm:max-w-[355px] max-sm:text-[11px] max-sm:leading-[1.25]">
                   Khám phá những công trình do BMT Decor trực tiếp thiết kế và
                   thi công, khẳng định năng lực và chất lượng trong từng hạng
                   mục.
                 </p>
               </Reveal>
               <Reveal
-                className="mx-auto mt-[18px] w-fit"
+                className="mx-auto mt-[18px] w-fit max-sm:mt-[8px]"
                 delay={360}
                 from="left"
               >
@@ -305,25 +358,38 @@ export function ProjectsPage() {
                   alt=""
                   width={1388}
                   height={128}
-                  className="h-auto w-[335px] max-w-[70vw]"
+                  className="h-auto w-[335px] max-w-[70vw] max-sm:w-[150px]"
                   aria-hidden="true"
                 />
               </Reveal>
             </header>
 
-            <div className="mt-[33px] grid grid-cols-2 gap-x-8 gap-y-8 sm:grid-cols-4 sm:gap-x-[74px]">
+            <div className="mt-[33px] grid grid-cols-4 gap-x-[6px] sm:gap-x-[74px] max-sm:mt-[17px]">
               {categories.map(
-                ({ label, icon, activeIcon, iconClassName }, categoryIndex) => {
+                (
+                  {
+                    label,
+                    icon,
+                    activeIcon,
+                    iconClassName,
+                    mobileIcon,
+                    mobileActiveIcon,
+                    mobileIconClassName,
+                    mobileIconWidth,
+                    mobileIconHeight,
+                  },
+                  categoryIndex,
+                ) => {
                   const isActive = activeCategory === label;
                   return (
                     <Reveal delay={120 + categoryIndex * 90} key={label}>
                       <button
-                        className="group w-full text-center"
+                        className="group w-full min-w-0 text-center focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
                         type="button"
                         onClick={() => selectCategory(label)}
                         aria-pressed={isActive}
                       >
-                        <span className="relative mx-auto grid size-[82px] place-items-center">
+                        <span className="relative mx-auto grid size-[82px] place-items-center max-sm:size-[48px]">
                           <Image
                             src={
                               isActive
@@ -333,7 +399,19 @@ export function ProjectsPage() {
                             alt=""
                             fill
                             sizes="82px"
-                            className="object-contain"
+                            className="hidden object-contain sm:block"
+                            aria-hidden="true"
+                          />
+                          <Image
+                            src={
+                              isActive
+                                ? "/images/projects/mobile/category-circle-active.png"
+                                : "/images/projects/mobile/category-circle.png"
+                            }
+                            alt=""
+                            fill
+                            sizes="48px"
+                            className="object-contain sm:hidden"
                             aria-hidden="true"
                           />
                           <Image
@@ -341,7 +419,7 @@ export function ProjectsPage() {
                             alt=""
                             width={247}
                             height={188}
-                            className={`relative z-10 h-auto object-contain ${iconClassName}`}
+                            className={`relative z-10 hidden h-auto object-contain sm:block ${iconClassName}`}
                             style={
                               !isActive && label === "Nhà ở"
                                 ? {
@@ -352,16 +430,32 @@ export function ProjectsPage() {
                             }
                             aria-hidden="true"
                           />
+                          <Image
+                            src={isActive ? mobileActiveIcon : mobileIcon}
+                            alt=""
+                            width={mobileIconWidth}
+                            height={mobileIconHeight}
+                            className={`relative z-10 h-auto object-contain sm:hidden ${mobileIconClassName}`}
+                            aria-hidden="true"
+                          />
                         </span>
-                        <span className="mt-[11px] block min-h-[18px] whitespace-nowrap text-[15px] leading-none font-semibold uppercase tracking-[-0.03em] text-charcoal">
+                        <span className="mt-[11px] block min-h-[18px] text-[15px] leading-none font-semibold uppercase tracking-[-0.03em] text-charcoal max-sm:mt-[6px] max-sm:min-h-[25px] max-sm:text-[10px] max-sm:leading-[1.05] max-sm:font-extrabold max-sm:tracking-[-0.025em] max-sm:text-balance">
                           {label}
                         </span>
+                        <Image
+                          src="/images/projects/mobile/category-underline.png"
+                          alt=""
+                          width={542}
+                          height={8}
+                          className="mx-auto mt-[5px] h-[2px] w-[42%] object-fill sm:hidden"
+                          aria-hidden="true"
+                        />
                         <Image
                           src="/images/projects/category-underline.png"
                           alt=""
                           width={684}
                           height={9}
-                          className="mt-[12px] h-[2px] w-full object-fill"
+                          className="mt-[12px] hidden h-[2px] w-full object-fill sm:block"
                           aria-hidden="true"
                         />
                       </button>
@@ -387,6 +481,7 @@ export function ProjectsPage() {
                       <ProjectCard
                         project={project}
                         index={index}
+                        hiddenOnMobile={index > 3 && !mobileExpanded}
                         key={`${activePage}-${index}-${project.title}`}
                       />
                     ))}
@@ -395,8 +490,26 @@ export function ProjectsPage() {
               </div>
             </MotionConfig>
 
+            {!mobileExpanded && (
+              <button
+                className="mx-auto mt-[24px] hidden items-center gap-2 text-[16px] text-charcoal transition-colors duration-200 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-sm:flex"
+                type="button"
+                onClick={() => setMobileExpanded(true)}
+              >
+                Xem thêm
+                <Image
+                  src="/images/projects/mobile/view-more-arrow.png"
+                  alt=""
+                  width={237}
+                  height={237}
+                  className="size-[20px]"
+                  aria-hidden="true"
+                />
+              </button>
+            )}
+
             <div
-              className="mt-[42px] flex justify-center gap-[10px]"
+              className="mt-[42px] flex justify-center gap-[10px] max-sm:hidden"
               aria-label="Phân trang dự án"
             >
               {Array.from({ length: pageCount }, (_, page) => (
@@ -414,7 +527,7 @@ export function ProjectsPage() {
         </section>
       </main>
       <ContactForm />
-      <SiteFooter />
+      <SiteFooter showTopBorder={false} />
     </>
   );
 }
