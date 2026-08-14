@@ -93,13 +93,13 @@ export function ServicesOverviewPage() {
           <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full">
             {heroCards.map((card, index) => (
               <Reveal
-                className={`absolute w-[31.5%] hover:z-50 ${cardPositions[index]}`}
+                className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
                 delay={(heroCards.length - 1 - index) * 130}
                 from="right"
                 key={card.image}
               >
                 <Image
-                  className="h-auto w-full transition-transform duration-500 ease-out hover:scale-105"
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
                   src={card.image}
                   alt={card.alt}
                   width={800}
@@ -159,11 +159,11 @@ export function ServicesOverviewPage() {
           Khe hở ở góc cong phía trên sẽ được lấp bằng một khối div phụ ẩn phía sau. */}
       <section className="grid lg:grid-cols-2">
         <Reveal
-          className="relative z-20 min-h-[clamp(15rem,67vw,20rem)] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
+          className="group/photo relative z-20 min-h-[clamp(15rem,67vw,20rem)] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
           from="left"
         >
           <Image
-            className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover/photo:scale-105 group-active/photo:scale-105"
             src="/images/services/faq-photo.webp"
             alt="Góc thư giãn trong công trình do BMT Decor thực hiện"
             fill
@@ -205,8 +205,7 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
-      {/* Panel FAQ đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
-      <ContactForm topNotch={false} />
+      <ContactForm />
       <SiteFooter />
     </div>
   );

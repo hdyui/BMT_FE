@@ -1,8 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import {
+  FormEvent,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import styles from "@/features/quotation/quotation.module.css";
+import { ContactForm } from "@/lib/components/shared/ContactForm";
 
 /**
  * Khung ước tính báo giá + dải liên hệ.
@@ -46,7 +54,7 @@ const stepCopy = [
 ] as const;
 
 /** Ô chọn / ô nhập dùng chung một chiều cao: 58px ở mobile, 68px từ md. */
-const PILL_HEIGHT = "h-11 md:h-[4.25rem]";
+const PILL_HEIGHT = "h-12 md:h-[4.25rem]";
 
 function digitsOnly(value: string) {
   return /^\d+$/.test(value);
@@ -58,6 +66,9 @@ function formatNumber(value: number) {
 
 export function QuotationEstimator() {
   const sectionRef = useRef<HTMLElement>(null);
+  const progressRef = useRef<HTMLDivElement>(null);
+  const mobileTrackRef = useRef<HTMLSpanElement>(null);
+  const stepButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [inView, setInView] = useState(false);
   const [step, setStep] = useState(0);
   const [building, setBuilding] = useState(buildingTypes[0]);
@@ -85,6 +96,31 @@ export function QuotationEstimator() {
     observer.observe(node);
     return () => observer.disconnect();
   }, []);
+
+  useLayoutEffect(() => {
+    const progress = progressRef.current;
+    const track = mobileTrackRef.current;
+    const activeButton = stepButtonRefs.current[step];
+    if (!progress || !track || !activeButton) return;
+
+    const updateTrack = () => {
+      const progressRect = progress.getBoundingClientRect();
+      const buttonRect = activeButton.getBoundingClientRect();
+      const activeStart = Math.max(0, buttonRect.left - progressRect.left);
+      const activeEnd = Math.min(
+        progressRect.width,
+        buttonRect.right - progressRect.left,
+      );
+
+      track.style.background = `linear-gradient(to right, #f0f0f1 0 ${activeStart}px, #ef7b30 ${activeStart}px ${activeEnd}px, #f0f0f1 ${activeEnd}px 100%)`;
+    };
+
+    updateTrack();
+    const resizeObserver = new ResizeObserver(updateTrack);
+    resizeObserver.observe(progress);
+    resizeObserver.observe(activeButton);
+    return () => resizeObserver.disconnect();
+  }, [step]);
 
   const estimate = useMemo(() => {
     const squareMeters = digitsOnly(area) ? Number(area) : 80;
@@ -168,7 +204,7 @@ export function QuotationEstimator() {
   return (
     <>
       <section
-        className={`mx-auto min-h-[22.5rem] w-[calc(100%_-_2rem)] bg-white pt-3 md:min-h-[32.5rem] md:w-[min(57.5rem,calc(100%_-_2rem))] md:pt-[1.5625rem] ${
+        className={`mx-auto min-h-[20rem] w-[calc(100%_-_2rem)] bg-white pt-6 md:min-h-[32.5rem] md:w-[min(57.5rem,calc(100%_-_2rem))] md:pt-[1.5625rem] ${
           inView ? styles.estimatorVisible : ""
         }`}
         ref={sectionRef}
@@ -176,25 +212,35 @@ export function QuotationEstimator() {
       >
         {/* Mobile: dải tiến trình cuộn ngang có snap; từ md giãn đều 5 cột. */}
         <div
-          className={`relative grid min-h-[2.625rem] grid-cols-5 items-stretch after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:h-[0.25rem] after:bg-[#f0f0f1] after:content-[''] md:items-center md:after:h-[0.3125rem] ${styles.progressScroller}`}
+          className={`relative flex min-h-7 items-center after:absolute after:inset-x-0 after:bottom-0 after:z-0 after:hidden after:h-[0.3125rem] after:bg-[#f0f0f1] after:content-[''] md:grid md:min-h-[2.625rem] md:grid-cols-5 md:after:block ${styles.progressScroller}`}
+          ref={progressRef}
           aria-label="Tiến trình báo giá"
         >
+          <span
+            className="absolute inset-x-0 bottom-0 z-[1] h-[0.1875rem] md:hidden"
+            ref={mobileTrackRef}
+            aria-hidden="true"
+          />
           {steps.map((label, index) => (
             <div
-              className={`relative z-[1] flex min-w-0 items-center justify-center self-stretch md:justify-start ${styles.progressItem}`}
+              className={`contents md:relative md:z-[1] md:flex md:min-w-0 md:items-center md:justify-start md:self-stretch ${styles.progressItem}`}
               style={{
                 animationDelay: `${index * 90}ms`,
               }}
               key={label}
             >
               <button
-                className={`relative z-[2] flex h-full min-w-0 items-center justify-center border-0 bg-transparent px-0.5 pb-1 text-[0.5rem] leading-none whitespace-nowrap disabled:cursor-default disabled:opacity-100 min-[390px]:text-[0.5625rem] md:justify-start md:px-0 md:pb-[0.3125rem] md:text-sm md:leading-normal ${
+                className={`relative z-[2] flex h-auto min-w-0 shrink-0 items-center justify-center border-0 bg-transparent px-0 pb-0 text-[0.5625rem] leading-none whitespace-nowrap disabled:cursor-default min-[480px]:text-[0.625rem] md:h-full md:shrink md:justify-start md:px-0 md:pb-[0.3125rem] md:text-sm md:leading-normal md:disabled:opacity-100 ${styles.progressMobileItem} ${
                   index === step ? "text-[#ef7b30]" : "text-[#3c3839]"
                 }`}
+                ref={(node) => {
+                  stepButtonRefs.current[index] = node;
+                }}
                 type="button"
                 onClick={() => index <= step && setStep(index)}
                 aria-current={index === step ? "step" : undefined}
                 disabled={index > step}
+                style={{ animationDelay: `${index * 90}ms` }}
               >
                 <span className="mr-0.5 md:mr-1">
                   {String(index + 1).padStart(2, "0")}
@@ -202,7 +248,7 @@ export function QuotationEstimator() {
                 {label}
                 {index === step && (
                   <Image
-                    className="absolute bottom-0 left-0 z-[3] h-[0.3125rem] w-full object-fill"
+                    className="absolute bottom-0 left-0 z-[3] hidden h-[0.3125rem] w-full object-fill md:block"
                     src="/images/bao-gia/decor-24.jpg"
                     alt=""
                     width={459}
@@ -211,8 +257,8 @@ export function QuotationEstimator() {
                 )}
               </button>
               <span
-                className="relative hidden h-0.5 w-[2.125rem] flex-none bg-[#171415] md:block md:w-auto md:min-w-[1.5625rem] md:flex-1"
-                style={{ marginLeft: "0.75rem", marginRight: "0.5rem" }}
+                className={`relative mx-[0.1875rem] h-px min-w-1 flex-1 self-center bg-[#171415] md:mr-2 md:ml-3 md:h-0.5 md:min-w-[1.5625rem] ${styles.progressMobileItem} ${index === steps.length - 1 ? "hidden md:block" : "block"}`}
+                style={{ animationDelay: `${index * 90}ms` }}
                 aria-hidden="true"
               />
             </div>
@@ -220,7 +266,7 @@ export function QuotationEstimator() {
         </div>
 
         <div
-          className={`pt-5 pb-7 text-center md:pt-7 md:pb-[3.375rem] ${styles.animStepPanel}`}
+          className={`pt-5 pb-6 text-center md:pt-7 md:pb-[3.375rem] ${styles.animStepPanel}`}
           key={step}
         >
           {step < 4 ? (
@@ -231,7 +277,7 @@ export function QuotationEstimator() {
               >
                 {stepCopy[step][0]}
               </h2>
-              <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[19rem] text-[0.6875rem] leading-[1.35] md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
+              <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[26rem] text-[0.8125rem] leading-[1.35] md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
                 {stepCopy[step][1]}
               </p>
               <HeadingRule />
@@ -297,7 +343,7 @@ export function QuotationEstimator() {
           {step === 4 && (
             <div>
               <div
-                className={`group/result relative grid h-[4.25rem] w-full place-items-center overflow-hidden rounded-full border border-transparent bg-[#f2f2f4] transition-[border-color,background-color] duration-[250ms] hover:border-[#ef7b30] hover:bg-[#ececee] md:h-19 ${styles.animResult}`}
+                className={`group/result relative grid h-[3.25rem] w-full place-items-center overflow-hidden rounded-full border border-transparent bg-[#f2f2f4] transition-[border-color,background-color] duration-[250ms] hover:border-[#ef7b30] hover:bg-[#ececee] md:h-19 ${styles.animResult}`}
               >
                 <Image
                   className="z-0 object-fill"
@@ -333,7 +379,11 @@ export function QuotationEstimator() {
         </div>
       </section>
 
-      <section className="relative min-h-[24.375rem] overflow-hidden text-white md:min-h-[20.125rem]">
+      <div className="md:hidden">
+        <ContactForm />
+      </div>
+
+      <section className="relative hidden min-h-[24.375rem] overflow-hidden text-white md:block md:min-h-[20.125rem]">
         <Image
           className="z-0 object-cover object-top"
           src="/images/bao-gia/decor-28.jpg"
@@ -392,13 +442,15 @@ export function QuotationEstimator() {
 
 function HeadingRule() {
   return (
-    <Image
-      className={`mx-auto mt-1.5 mb-4 h-[1.125rem] w-[10.5rem] max-w-full object-fill md:mt-2 md:mb-[1.375rem] md:h-[1.4375rem] md:w-62.5 ${styles.animRule}`}
-      src="/images/bao-gia/decor-27.jpg"
-      alt=""
-      width={1388}
-      height={127}
-    />
+    <span className="mx-auto mt-1.5 mb-4 block h-[1.125rem] w-[10.5rem] max-w-full -translate-y-[10px] md:mt-2 md:mb-[1.375rem] md:h-[1.4375rem] md:w-62.5 md:translate-y-0">
+      <Image
+        className={`size-full object-fill ${styles.animRule}`}
+        src="/images/bao-gia/decor-27.jpg"
+        alt=""
+        width={1388}
+        height={127}
+      />
+    </span>
   );
 }
 
@@ -457,7 +509,7 @@ function StepButton({
 
   return (
     <button
-      className={`relative flex h-10 min-w-[7.25rem] items-center justify-center gap-2 overflow-hidden rounded-full border-0 px-3 text-[#231f20] transition-[color,transform] duration-[250ms] hover:-translate-y-0.5 focus-visible:-translate-y-0.5 md:h-[3.625rem] md:min-w-[10.3125rem] md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "bg-[#231f20] text-white" : "bg-white"} ${styles.stepButton}`}
+      className={`relative flex h-12 items-center gap-2 overflow-hidden rounded-full border-0 text-[#231f20] transition-[color,transform] duration-[250ms] hover:-translate-y-0.5 focus-visible:-translate-y-0.5 md:h-[3.625rem] md:min-w-[10.3125rem] md:justify-center md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "min-w-[8.5rem] justify-center bg-[#231f20] px-3 text-white" : "min-w-0 justify-start bg-white px-0"} ${styles.stepButton}`}
       type="button"
       onClick={onClick}
     >
@@ -484,7 +536,7 @@ type OptionGridProps = {
 function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
   return (
     <div
-      className="grid grid-cols-2 gap-2 md:gap-x-[1.125rem] md:gap-y-[0.8125rem]"
+      className="grid grid-cols-1 gap-2.5 md:grid-cols-2 md:gap-x-[1.125rem] md:gap-y-[0.8125rem]"
       role="radiogroup"
     >
       {options.map((option, index) => {
@@ -503,7 +555,7 @@ function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
             onClick={() => onSelect(option)}
             key={option}
           >
-            <span className="relative z-[1] text-[0.625rem] leading-[1.2] md:text-[0.9375rem] md:leading-normal">
+            <span className="relative z-[1] text-[0.8125rem] leading-[1.2] md:text-[0.9375rem] md:leading-normal">
               {option}
             </span>
             <span

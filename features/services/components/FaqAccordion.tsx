@@ -49,7 +49,7 @@ export function FaqAccordion() {
             className="border-b border-neutral-300"
             value={`faq-${index + 1}`}
           >
-            <AccordionTrigger className="w-full rounded-none py-2.5 text-left text-[0.9375rem] font-normal text-pretty hover:text-brand hover:no-underline group-aria-expanded/accordion-trigger:text-brand **:data-[slot=accordion-trigger-icon]:hidden">
+            <AccordionTrigger className="w-full rounded-none py-2.5 text-left text-[0.9375rem] font-normal text-pretty hover:text-brand active:text-brand hover:no-underline group-aria-expanded/accordion-trigger:text-brand **:data-[slot=accordion-trigger-icon]:hidden">
               <span className="flex items-start gap-3 font-bold ">
                 <span
                   className="mt-1.5 size-2.5 shrink-0 rounded-full border border-charcoal transition-colors duration-300 group-aria-expanded/accordion-trigger:border-charcoal group-aria-expanded/accordion-trigger:bg-charcoal"

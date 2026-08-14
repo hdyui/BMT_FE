@@ -45,6 +45,10 @@ export function Reveal({
     zoom: "scale-75",
     fade: "",
   }[from];
+  const visibleState =
+    from === "fade"
+      ? "opacity-100"
+      : "translate-x-0 translate-y-0 scale-100 opacity-100";
 
   return (
     <div
@@ -52,9 +56,7 @@ export function Reveal({
       data-visible={visible}
       className={cn(
         "transition-[opacity,translate,scale] duration-700 ease-out motion-reduce:translate-0 motion-reduce:scale-100 motion-reduce:opacity-100 motion-reduce:transition-none",
-        visible
-          ? "translate-x-0 translate-y-0 scale-100 opacity-100"
-          : cn(hiddenDirection, "opacity-0"),
+        visible ? visibleState : cn(hiddenDirection, "opacity-0"),
         className,
       )}
       style={{

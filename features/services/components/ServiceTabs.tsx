@@ -198,7 +198,7 @@ export function ServiceTabs() {
           from="left"
         >
           <Image
-            className="object-cover transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.03] lg:drop-shadow-md lg:group-hover:drop-shadow-2xl"
+            className="object-cover transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.03] group-active:scale-[1.03] lg:drop-shadow-md lg:group-hover:drop-shadow-2xl lg:group-active:drop-shadow-2xl"
             src={detail.image}
             alt={detail.label}
             fill

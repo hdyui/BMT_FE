@@ -188,7 +188,7 @@ export function ProjectCarousel({
                   isActive
                     ? "z-10 scale-100 opacity-100"
                     : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
-                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100",
+                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100 active:opacity-100",
                 )}
                 key={`${project.id}-${index}`}
                 // THÊM SỰ KIỆN onClick TẠI ĐÂY

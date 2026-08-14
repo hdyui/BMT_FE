@@ -1,111 +1,98 @@
 import Image from "next/image";
-import Link from "next/link";
 
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
-import {
-  processSteps,
-  solutionCards,
-} from "@/features/services/data/thi-cong-xay-dung";
+import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
+import { processSteps } from "@/features/services/data/thi-cong-xay-dung";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";
 
-const mobileCards = [
+const mobileHeroDiamonds = [
   {
-    background: `${MOBILE_ROOT}/solution-house.webp`,
-    backgroundWidth: 3721,
-    backgroundHeight: 5259,
-    line1: "THI CÔNG XÂY DỰNG",
-    line2: "NHÀ Ở",
-    checklist: [
-      "Xây dựng phần thô nhà phố",
-      "Xây dựng phần thô biệt thự",
-      "Thi công xây dựng và hoàn thiện nhà ở",
-    ],
-    button: `${MOBILE_ROOT}/btn-house.png`,
-    buttonWidth: 1668,
-    buttonHeight: 253,
-    buttonPercent: 49,
+    key: "top",
+    src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
+    alt: "Thi công nhà hàng",
+    left: "41.5%",
+    top: "53.9%",
+    size: "31.8%",
+    zIndex: 10,
   },
   {
-    background: `${MOBILE_ROOT}/solution-office.webp`,
-    backgroundWidth: 3721,
-    backgroundHeight: 5525,
-    line1: "THI CÔNG",
-    line2: "VĂN PHÒNG",
-    checklist: [
-      "Thi công xây dựng văn phòng",
-      "Xây dựng phần thô và hoàn thiện văn phòng",
-      "Cải tạo văn phòng",
-    ],
-    button: `${MOBILE_ROOT}/btn-office.png`,
-    buttonWidth: 1978,
-    buttonHeight: 253,
-    buttonPercent: 66,
+    key: "right",
+    src: "/images/thi-cong-xay-dung/hero-diamond-right.webp",
+    alt: "Thi công thẩm mỹ viện",
+    left: "86.5%",
+    top: "66%",
+    size: "19.4%",
+    zIndex: 20,
   },
   {
-    background: `${MOBILE_ROOT}/solution-showroom.webp`,
-    backgroundWidth: 3721,
-    backgroundHeight: 5305,
-    line1: "THI CÔNG",
-    line1Accent: "SHOWROOM &",
-    line2: "THẨM MỸ VIỆN",
-    checklist: ["Thi công showroom, cửa hàng", "Thi công spa, thẩm mỹ viện"],
-    button: `${MOBILE_ROOT}/btn-showroom.png`,
-    buttonWidth: 2682,
-    buttonHeight: 253,
-    buttonPercent: 92,
+    key: "bottom",
+    src: "/images/thi-cong-xay-dung/hero-diamond-bottom.webp",
+    alt: "Thi công nhà ở",
+    left: "60.9%",
+    top: "88%",
+    size: "24.8%",
+    zIndex: 40,
   },
   {
-    background: `${MOBILE_ROOT}/solution-hospitality.webp`,
-    backgroundWidth: 3738,
-    backgroundHeight: 5334,
-    line1: "THI CÔNG",
-    line1Accent: "NHÀ HÀNG &",
-    line2: "KHÁCH SẠN",
-    checklist: [
-      "Thi công nhà hàng, khách sạn, quán café",
-      "Thi công sảnh, phòng lưu trú và không gian dịch vụ",
-    ],
-    button: `${MOBILE_ROOT}/btn-hospitality.png`,
-    buttonWidth: 2939,
-    buttonHeight: 253,
-    buttonPercent: 88,
+    key: "left",
+    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
+    alt: "Thi công văn phòng",
+    left: "16.7%",
+    top: "79.4%",
+    size: "20.2%",
+    zIndex: 30,
   },
 ] as const;
-
-const processTitles = [
-  "Khảo sát công trình & tiếp nhận hồ sơ",
-  "Lập biện pháp & tiến độ thi công",
-  "Thi công xây dựng phần thô",
-  "Thi công hoàn thiện công trình",
-  "Nghiệm thu & Bàn giao",
-] as const;
-
-const processTitleTops = [5.9, 25.55, 45.25, 64.95, 84.65] as const;
-const processDescriptionTops = [14.55, 34.25, 53.95, 73.65, 93.35] as const;
 
 export function ConstructionMobileHero() {
   return (
-    // Ảnh `hero-artwork.webp` là MỘT tấm PNG dẹt đã ghép sẵn cụm ảnh kim
-    // cương, chỉ chừa đúng ~32,5% chiều cao rỗng phía trên cho khối chữ.
-    // Trước đây khối chữ nằm ĐÈ lên ảnh (absolute + top-%) nên chừa thêm
-    // khoảng trắng dưới header = đẩy chữ xuống sâu hơn vào đúng vùng ảnh có
-    // nội dung -> chữ đè lên ảnh. Sửa bằng cách KHÔNG co giãn ảnh nữa: section
-    // cao hơn ảnh đúng 2.5rem (40px), ảnh neo đáy (`bottom-0`) giữ nguyên
-    // kích thước/tỉ lệ gốc, phần dư ra tự nhiên thành khoảng trắng THẬT ở
-    // đỉnh — chữ dùng `top-32` (128px, khớp 3 banner còn lại) rơi gọn vào
-    // khoảng trắng đó thay vì tính theo % của một khối đã bị nới cao.
-    <section className="relative h-[calc(153.76vw+2.5rem)] w-full overflow-hidden bg-[#F2F2F3] md:hidden">
-      <div className="absolute inset-x-0 bottom-0 aspect-3884/5972 w-full">
+    <section className="relative aspect-3884/5972 w-full overflow-hidden bg-[#F2F2F3] md:hidden">
+      <Reveal
+        className="pointer-events-none absolute inset-x-0 top-[22%] -bottom-[22%]"
+        delay={80}
+        from="fade"
+      >
         <Image
-          className="object-contain object-top"
-          src={`${MOBILE_ROOT}/hero-artwork.webp`}
-          alt="Các công trình thi công xây dựng của BMT Decor"
+          className="object-cover object-right-bottom opacity-75 mix-blend-multiply"
+          src={`${MOBILE_ROOT}/hero-blueprint.png`}
+          alt=""
           fill
           sizes="100vw"
           priority
+          aria-hidden="true"
         />
+      </Reveal>
+
+      <Reveal
+        className="pointer-events-none absolute top-[32%] right-[34%] w-[8%]"
+        delay={160}
+        from="fade"
+      >
+        <Image
+          className="h-auto w-full object-contain"
+          src="/images/thi-cong-xay-dung/dots-pattern.png"
+          alt=""
+          width={288}
+          height={207}
+          aria-hidden="true"
+        />
+      </Reveal>
+
+      <div className="absolute inset-0">
+        {mobileHeroDiamonds.map((diamond, index) => (
+          <DiamondPhotoFrame
+            key={diamond.key}
+            src={diamond.src}
+            alt={diamond.alt}
+            left={diamond.left}
+            top={diamond.top}
+            size={diamond.size}
+            zIndex={diamond.zIndex}
+            delay={160 + index * 160}
+          />
+        ))}
       </div>
 
       {/* `top-32` (128px) khớp khoảng cách header->tiêu đề chuẩn lấy từ
@@ -119,7 +106,7 @@ export function ConstructionMobileHero() {
         </Reveal>
         <div className="min-w-0 pt-[0.4vw]">
           <Reveal>
-            <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] leading-[1.12] font-extrabold whitespace-nowrap text-brand uppercase">
+            <h1 className="font-heading text-[4vw] leading-[1.12] font-extrabold whitespace-nowrap text-brand uppercase">
               Dịch vụ thi công xây dựng
             </h1>
           </Reveal>
@@ -151,108 +138,19 @@ export function ConstructionMobileHero() {
   );
 }
 
-// Ảnh nền chỉ có phần chụp công trình ở ~51.5% phía trên; nửa dưới vốn đã là
-// khoảng trắng bỏ trống trong file (không phải panel vẽ sẵn cố định). Thay vì
-// đè chữ lên khoảng trắng đó bằng toạ độ % (chiều cao card cố định, chữ dài
-// ra là tràn khung), tách hẳn thành 2 khối như cách `SolutionCards` dùng ở
-// trang xây dựng trọn gói / thiết kế nội thất: khối ảnh cắt đúng phần chụp
-// (tỉ lệ cố định), khối chữ là khung trắng CSS thật, cao theo đúng nội dung.
-const PHOTO_RATIO = 0.515;
+const processTitles = [
+  "Khảo sát công trình & tiếp nhận hồ sơ",
+  "Lập biện pháp & tiến độ thi công",
+  "Thi công xây dựng phần thô",
+  "Thi công hoàn thiện công trình",
+  "Nghiệm thu & Bàn giao",
+] as const;
 
-export function ConstructionMobileSolutionCards() {
-  return (
-    <div className="mx-auto grid w-[93%] gap-[2.6vw] md:hidden">
-      {mobileCards.map((mobileCard, index) => {
-        const card = solutionCards[index];
-
-        return (
-          <article
-            className="overflow-hidden rounded-[1.75rem] bg-white shadow-[0_5px_14px_rgb(36_33_34/.28)]"
-            key={card.number}
-          >
-            <div
-              className="relative w-full overflow-hidden"
-              style={{
-                aspectRatio: `${mobileCard.backgroundWidth} / ${mobileCard.backgroundHeight * PHOTO_RATIO}`,
-              }}
-            >
-              {/* File gốc chừa viền trắng mỏng quanh khung ảnh minh hoạ; phóng
-                  nhẹ để cắt bỏ viền trắng đó, cho ảnh sát mép khung thẻ. */}
-              <Image
-                className="scale-110 object-cover object-top"
-                src={mobileCard.background}
-                alt={card.titleCategory}
-                fill
-                sizes="93vw"
-              />
-            </div>
-
-            <div className="px-[7.5%] pt-4 pb-6 text-charcoal">
-              <div className="flex min-w-0 items-start gap-3">
-                <span className="shrink-0 text-[clamp(2.25rem,11vw,3.5rem)] leading-none font-extrabold text-[#b8babc]">
-                  {card.number}.
-                </span>
-                <h3 className="font-heading mt-1 min-w-0 text-[clamp(0.8125rem,4vw,1.25rem)] leading-tight font-extrabold uppercase">
-                  <span>{mobileCard.line1}</span>{" "}
-                  {"line1Accent" in mobileCard ? (
-                    <span className="text-brand">{mobileCard.line1Accent}</span>
-                  ) : null}
-                  <br />
-                  <span className="text-brand">{mobileCard.line2}</span>
-                </h3>
-              </div>
-
-              <p className="mt-2 text-sm font-bold">{card.tagline}</p>
-              <span className="mt-3 mb-4 block h-0.75 w-24 bg-brand" />
-
-              <p className="text-sm leading-relaxed text-justify">
-                {card.description}
-              </p>
-
-              <p className="mt-5 text-sm font-bold">BMT Decor cung cấp:</p>
-              <ul className="mt-2 grid gap-1.5">
-                {mobileCard.checklist.map((item) => (
-                  <li className="flex items-start gap-2 text-sm" key={item}>
-                    <Image
-                      className="mt-0.5 size-4 shrink-0 object-contain"
-                      src="/images/thi-cong-xay-dung/icon-house.png"
-                      alt=""
-                      width={90}
-                      height={95}
-                      aria-hidden="true"
-                    />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-
-              <Link
-                className="relative mt-6 block transition-transform active:scale-[0.98]"
-                href="/du-an"
-                style={{
-                  width: `${mobileCard.buttonPercent}%`,
-                  aspectRatio: `${mobileCard.buttonWidth} / ${mobileCard.buttonHeight}`,
-                }}
-              >
-                <Image
-                  className="object-fill"
-                  src={mobileCard.button}
-                  alt=""
-                  fill
-                  sizes="80vw"
-                  aria-hidden="true"
-                />
-                <span className="absolute inset-0 flex items-center justify-center pr-[11%] pl-[2%] text-[clamp(0.58rem,2.42vw,1.14rem)] leading-none font-extrabold whitespace-nowrap text-white uppercase">
-                  {card.cta}
-                </span>
-              </Link>
-            </div>
-          </article>
-        );
-      })}
-    </div>
-  );
-}
+// Tâm thực của năm vòng tròn cam trong `process-timeline.webp`. Giữ tọa độ
+// số độc lập với tiêu đề để cả hai có thể được căn quang học chính xác.
+const processNumberTops = [6.55, 25.6, 44.64, 63.67, 84.11] as const;
+const processTitleTops = [5.9, 25.55, 45.25, 64.6, 84.65] as const;
+const processDescriptionTops = [14.55, 34.25, 53.95, 73.65, 93.35] as const;
 
 export function ConstructionMobileProcess() {
   return (
@@ -269,8 +167,8 @@ export function ConstructionMobileProcess() {
       {processSteps.map((step, index) => (
         <div className="contents" key={step.number}>
           <span
-            className="absolute left-[1.1%] flex w-[18.5%] -translate-y-1/2 items-center justify-center font-heading text-[clamp(2.6rem,10.8vw,5.1rem)] leading-none font-extrabold text-black"
-            style={{ top: `${processTitleTops[index]}%` }}
+            className="absolute left-0 flex w-[20.6%] -translate-y-1/2 items-center justify-center font-heading text-[clamp(2.45rem,10.2vw,4.8rem)] leading-none font-extrabold text-black"
+            style={{ top: `${processNumberTops[index]}%` }}
           >
             {step.number}
           </span>

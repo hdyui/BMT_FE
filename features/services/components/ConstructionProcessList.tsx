@@ -94,7 +94,7 @@ export function ConstructionProcessList() {
                 delay={base + 120}
                 from="left"
               >
-                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand md:text-lg">
+                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand group-active/step:text-brand md:text-lg">
                   {step.title}
                   <br className="hidden md:block" />{" "}
                   {step.subtitle}
@@ -124,7 +124,7 @@ export function ConstructionProcessList() {
 
               {/* 5. Khối nội dung cam: trượt từ trái sang phải, đổ bóng khi hover */}
               <Reveal delay={base + 360} from="left">
-                <div className="relative isolate transition-[filter] duration-300 group-hover/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)]">
+                <div className="relative isolate transition-[filter] duration-300 group-hover/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)] group-active/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)]">
                   <ProcessBlockShape />
                   <p className="px-6 py-5 text-sm leading-relaxed text-justify text-white md:px-6 md:py-5">
                     {step.description}

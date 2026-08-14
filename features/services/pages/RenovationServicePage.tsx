@@ -185,7 +185,7 @@ export function RenovationServicePage() {
                 {/* Đường line đen. mt-4 khớp với Construction/Design page (bản
                     cũ mt-5/xl:mt-6 khiến khoảng cách dòng to hơn 3 trang kia). */}
                 <BuildingRule
-                  className="mt-4 w-28"
+                  className="mt-4 w-full max-w-85"
                   src="/images/services/rule-dark.png"
                   delay={220}
                 />

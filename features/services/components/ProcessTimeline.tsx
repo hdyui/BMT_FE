@@ -48,8 +48,10 @@ function MobileProcessTimeline() {
           const isLeft = columnIndex === 0;
 
           return (
-            <article
-              className="absolute h-1/3 w-1/2"
+            <Reveal
+              className="group/step absolute h-1/3 w-1/2 transition-transform duration-300 ease-out active:scale-[.98]"
+              delay={(rowIndex * 2 + columnIndex) * STEP_DELAY}
+              from={isLeft ? "right" : "left"}
               style={{
                 top: `${rowIndex * 33.333}%`,
                 left: isLeft ? 0 : "50%",
@@ -71,7 +73,7 @@ function MobileProcessTimeline() {
                 }`}
               >
                 <h3
-                  className={`font-heading text-[clamp(0.55rem,2.72vw,0.83rem)] leading-none font-extrabold whitespace-nowrap text-brand uppercase ${
+                  className={`font-heading text-[clamp(0.55rem,2.72vw,0.83rem)] leading-none font-extrabold whitespace-nowrap text-brand uppercase transition-colors duration-300 group-active/step:text-[#ff934a] ${
                     isLeft ? "text-right" : "text-left"
                   }`}
                 >
@@ -88,7 +90,7 @@ function MobileProcessTimeline() {
                   {step.copy.replace(/\n/g, " ")}
                 </p>
               </div>
-            </article>
+            </Reveal>
           );
         }),
       )}

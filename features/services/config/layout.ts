@@ -27,10 +27,10 @@ export const SERVICE_PROJECT_CTA_CLASS_NAME =
 export const SERVICE_SOLUTION_SECTION_CLASS_NAME = "py-10 sm:py-12 lg:py-16";
 
 export const SERVICE_SOLUTION_HEADING_CLASS_NAME =
-  "mx-auto w-[min(75rem,calc(100%-2.25rem))] text-center mb-8 lg:mb-10";
+  "mx-auto mb-8 w-[min(29rem,calc(100%-2rem))] text-center md:w-[min(75rem,calc(100%-2.25rem))] lg:mb-10";
 
 export const SERVICE_SOLUTION_CARDS_CLASS_NAME =
-  "mx-auto w-[min(65rem,calc(100%-2.25rem))]";
+  "mx-auto w-[min(29rem,calc(100%-2rem))] md:w-[min(65rem,calc(100%-2.25rem))]";
 
 /**
  * Cỡ chữ cho nút pill "TƯ VẤN MIỄN PHÍ" — trước đây fix cứng 24px ở mọi khổ màn

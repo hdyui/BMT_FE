@@ -5,7 +5,6 @@ import {
   AccordionItem,
   AccordionTrigger,
 } from "@/lib/components/ui/accordion";
-import { Reveal } from "@/lib/components/shared/Reveal";
 import { processSteps } from "@/features/services/data/overview";
 
 const arrowMask = {
@@ -21,57 +20,22 @@ const arrowMask = {
 
 export function ProcessAccordion() {
   return (
-    <>
-      {/* Bản mobile trong mockup không có tương tác thu/mở: cả 6 bước hiện
-          hết, mỗi bước là ảnh full-width + số + tiêu đề + mô tả, phân cách
-          bằng đường kẻ. Giữ Accordion tương tác nguyên vẹn cho lg trở lên. */}
-      <div className="mx-auto w-[calc(100%-2.25rem)] lg:hidden">
-        {processSteps.map((step, index) => (
-          <Reveal
-            className="border-b border-neutral-300 py-6 first:pt-0 last:border-b-0"
-            delay={Math.min(index * 60, 300)}
-            key={step.title}
-          >
-            <div className="relative h-[clamp(9.5rem,51vw,13rem)] w-full overflow-hidden rounded-2xl">
-              <Image
-                className="object-cover"
-                src={step.imageOpen}
-                alt=""
-                fill
-                sizes="100vw"
-                loading="eager"
-              />
-            </div>
-
-            <span className="mt-5 block text-sm text-neutral-500">
-              {String(index + 1).padStart(2, "0")}.
-            </span>
-            <h3 className="mt-1 font-heading text-2xl font-extrabold uppercase sm:text-3xl">
-              {step.title}
-            </h3>
-            <p className="mt-3 text-sm leading-relaxed text-pretty">
-              {step.copy}
-            </p>
-          </Reveal>
-        ))}
-      </div>
-
-      <Accordion
-        className="mx-auto hidden w-[min(75rem,calc(100%-2.25rem))] lg:block"
-        defaultValue={["step-1"]}
-      >
+    <Accordion
+      className="mx-auto w-[min(75rem,calc(100%-2.25rem))]"
+      defaultValue={["step-1"]}
+    >
       {processSteps.map((step, index) => (
         <AccordionItem
           className="group/step border-b border-neutral-300"
           value={`step-${index + 1}`}
           key={step.title}
         >
-          <div className="grid grid-cols-[3.5rem_1fr] items-center gap-3 py-4 sm:grid-cols-[13.75rem_1fr] lg:grid-cols-[21.25rem_1fr] lg:gap-6">
+          <div className="grid grid-cols-[5.5rem_1fr] items-center gap-3 py-4 sm:grid-cols-[13.75rem_1fr] lg:grid-cols-[21.25rem_1fr] lg:gap-6">
             {/* Chỉ khung ảnh cao lên; object-cover luôn bị giới hạn theo chiều
                 ngang nên ảnh giữ nguyên tỉ lệ, chỉ lộ thêm phần trên dưới.
                 Chiều cao = bề rộng cột × 320/1420 (thu gọn) và × 639/1420 (mở);
                 bo góc bằng CSS vì lúc thu gọn phần bo sẵn trong ảnh bị cắt mất. */}
-            <AccordionTrigger className="relative block h-4.25 w-full overflow-hidden rounded-[0.1875rem] transition-[height] duration-300 ease-out group-data-open/step:h-[2.125rem] sm:h-[3.125rem] sm:rounded-[0.5625rem] sm:group-data-open/step:h-[6.1875rem] lg:h-[4.8125rem] lg:rounded-[0.875rem] lg:group-data-open/step:h-[9.5625rem]">
+            <AccordionTrigger className="relative block h-8 w-full overflow-hidden rounded-[0.375rem] transition-[height] duration-300 ease-out group-data-open/step:h-20 sm:h-[3.125rem] sm:rounded-[0.5625rem] sm:group-data-open/step:h-[6.1875rem] lg:h-[4.8125rem] lg:rounded-[0.875rem] lg:group-data-open/step:h-[9.5625rem]">
               <Image
                 className="object-cover"
                 src={step.imageOpen}
@@ -106,7 +70,6 @@ export function ProcessAccordion() {
           </div>
         </AccordionItem>
       ))}
-      </Accordion>
-    </>
+    </Accordion>
   );
 }

@@ -13,7 +13,6 @@ import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFr
 import {
   ConstructionMobileHero,
   ConstructionMobileProcess,
-  ConstructionMobileSolutionCards,
 } from "@/features/services/components/ConstructionMobileContent";
 import {
   SERVICE_HERO_CLASS_NAME,
@@ -93,17 +92,6 @@ const HERO_DIAMONDS = [
     zIndex: 20,
   },
   {
-    key: "left",
-    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
-    alt: "Thi công văn phòng",
-    // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
-    // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
-    left: "9.4%",
-    top: "64.7%",
-    size: "39.5%",
-    zIndex: 30,
-  },
-  {
     key: "bottom",
     src: "/images/thi-cong-xay-dung/hero-diamond-bottom.webp",
     alt: "Thi công nhà ở",
@@ -113,6 +101,17 @@ const HERO_DIAMONDS = [
     top: "72.6%",
     size: "44.6%",
     zIndex: 40,
+  },
+  {
+    key: "left",
+    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
+    alt: "Thi công văn phòng",
+    // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
+    // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
+    left: "9.4%",
+    top: "64.7%",
+    size: "39.5%",
+    zIndex: 30,
   },
 ] as const;
 
@@ -343,12 +342,15 @@ export function ConstructionServicePage() {
             không đổi, chỉ nhỏ lại. */}
         <div className="relative mx-auto aspect-1254/530 w-full max-w-140 lg:absolute lg:inset-0 lg:mx-0 lg:aspect-auto lg:h-full lg:w-full lg:max-w-none">
           {/* NHÓM 1: vẽ trước 4 ảnh nên nằm dưới. */}
-          {HERO_BACKDROPS.map((shadow) => {
+          {HERO_BACKDROPS.map((shadow, index) => {
             const base =
               "from" in shadow ? DIAMOND_BY_KEY[shadow.from] : shadow;
             return (
-              <div
+              <Reveal
                 className="pointer-events-none absolute z-[1] aspect-square"
+                delay={80 + index * 90}
+                duration={650}
+                from="fade"
                 style={{
                   left: base.left,
                   top: base.top,
@@ -361,12 +363,12 @@ export function ConstructionServicePage() {
                 <div
                   className={`size-full rotate-45 rounded-[16%] ${shadow.tone} ${shadow.blur}`}
                 />
-              </div>
+              </Reveal>
             );
           })}
 
           {/* Dải bóng bám cạnh — vẫn nằm dưới 4 ảnh. */}
-          {HERO_EDGE_CASTS.map((cast) => {
+          {HERO_EDGE_CASTS.map((cast, index) => {
             const host = DIAMOND_BY_KEY[cast.from];
             const axis = cast.dir[0]; // "u" | "v"
             const out = cast.dir[1] === "-" ? -1 : 1;
@@ -407,8 +409,11 @@ export function ConstructionServicePage() {
                     width: size,
                   };
             return (
-              <div
+              <Reveal
                 className="pointer-events-none absolute z-[1] aspect-square -translate-x-1/2 -translate-y-1/2"
+                delay={220 + index * 90}
+                duration={650}
+                from="fade"
                 style={{ left: host.left, top: host.top, height: host.size }}
                 key={cast.key}
                 aria-hidden="true"
@@ -424,7 +429,7 @@ export function ConstructionServicePage() {
                     }}
                   />
                 </div>
-              </div>
+              </Reveal>
             );
           })}
 
@@ -443,11 +448,14 @@ export function ConstructionServicePage() {
 
           {/* NHÓM 2: vẽ sau 4 ảnh, mỗi vết bị khung của chính hình nhận bóng cắt
               nên không loang ra nền. */}
-          {HERO_OVERLAP_SHADOWS.map((shadow) => {
+          {HERO_OVERLAP_SHADOWS.map((shadow, index) => {
             const host = DIAMOND_BY_KEY[shadow.on];
             return (
-              <div
+              <Reveal
                 className="pointer-events-none absolute aspect-square -translate-x-1/2 -translate-y-1/2"
+                delay={520 + index * 90}
+                duration={650}
+                from="fade"
                 style={{
                   left: host.left,
                   top: host.top,
@@ -472,7 +480,7 @@ export function ConstructionServicePage() {
                     />
                   </div>
                 </div>
-              </div>
+              </Reveal>
             );
           })}
         </div>
@@ -501,7 +509,7 @@ export function ConstructionServicePage() {
               </Reveal>
 
               <BuildingRule
-                className="-mt-2 h-2 w-28"
+                className="mt-4 w-full max-w-85"
                 src="/images/services/rule-dark.png"
                 delay={220}
               />
@@ -584,6 +592,8 @@ export function ConstructionServicePage() {
         <Reveal
           className={`${SERVICE_PROJECT_CAROUSEL_CLASS_NAME} !mt-8 max-md:!mt-4 lg:!mt-10 w-full`}
           delay={120}
+          duration={850}
+          from="bottom"
         >
           <ProjectCarousel
             projects={featuredProjects}
@@ -597,6 +607,8 @@ export function ConstructionServicePage() {
         <Reveal
           className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 max-md:!mt-4 lg:!mt-12 flex justify-center w-full`}
           delay={200}
+          duration={800}
+          from="bottom"
         >
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
@@ -615,13 +627,14 @@ export function ConstructionServicePage() {
       </section>
 
       {/* SECTION 3: THEO LOẠI HÌNH CÔNG TRÌNH */}
-      <section className={`bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}>
-        <div
-          className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-[3vw]`}
-        >
-          <div className="mb-0 text-center md:mb-12">
+      <section
+        id="solution-cards"
+        className={`bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME} max-md:!pt-7 max-md:!pb-8`}
+      >
+        <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
+          <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[4.4vw] leading-[1.1] uppercase md:text-4xl">
+              <h2 className="font-heading text-[clamp(0.75rem,3.8vw,1.25rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">THI CÔNG XÂY DỰNG</span>
                 <br />
                 <span className="font-bold">
@@ -630,33 +643,34 @@ export function ConstructionServicePage() {
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
-              <p className="mx-auto mt-3 max-w-xl text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed md:mt-4 md:text-sm">
+              <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
                 Giải pháp thiết kế tối ưu cho từng không gian
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
-                src="/images/thi-cong-xay-dung/rule-orange-center.png"
+                className="mx-auto mt-3 h-auto w-[43%] md:mt-5 md:w-auto"
+                src="/images/cai-tao-sua-chua/rule-orange-center.png"
                 align="center"
               />
             </Reveal>
           </div>
         </div>
 
-        <ConstructionMobileSolutionCards />
-
-        <div className={`${SERVICE_SOLUTION_CARDS_CLASS_NAME} max-md:hidden`}>
+        <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
             cards={solutionCards}
-            checkIcon="/images/thi-cong-xay-dung/icon-house.png"
-            ruleImage="/images/thi-cong-xay-dung/rule-short.png"
+            checkIcon="/images/cai-tao-sua-chua/icon-house.png"
+            ruleImage="/images/cai-tao-sua-chua/rule-short.png"
           />
         </div>
       </section>
 
       {/* SECTION 4: QUY TRÌNH THI CÔNG */}
-      <section className="relative isolate overflow-hidden bg-[#F2F2F3] py-16 max-md:pt-12 max-md:pb-8">
+      <section
+        className="relative isolate scroll-mt-[85px] overflow-hidden bg-[#F2F2F3] py-16 max-md:pt-12 max-md:pb-8"
+        id="construction-process"
+      >
         <Image
           className="-z-10 object-cover"
           src="/images/thi-cong-xay-dung/process-background.png"

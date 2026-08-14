@@ -5,6 +5,7 @@ import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { DesignHeroGallery } from "@/features/services/components/DesignHeroGallery";
+import { MobileHeroArtwork } from "@/features/services/components/MobileHeroArtwork";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
@@ -27,7 +28,7 @@ import {
 export function DesignServicePage() {
   return (
     <div className="min-h-screen bg-white text-charcoal">
-      <SiteHeader />
+      <SiteHeader mobileServiceMockup />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
           theo 38.9vw nên tỉ lệ giữ nguyên ở mọi bề rộng màn hình và mọi mức
@@ -39,19 +40,9 @@ export function DesignServicePage() {
           khớp đúng tỉ lệ gốc và neo đáy (`bottom-0`) — phần dư ra thành
           khoảng trắng thật ở đỉnh cho khối chữ `pt-32`, không đè lên ảnh. */}
       <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(153.76vw+2.5rem)] max-md:!min-h-0`}
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+140.16vw)] max-md:!min-h-0`}
       >
-        <div className="absolute inset-x-0 bottom-0 -z-10 aspect-3884/5972 w-full md:hidden">
-          <Image
-            className="size-full object-fill"
-            src="/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png"
-            alt=""
-            fill
-            sizes="100vw"
-            priority
-            aria-hidden="true"
-          />
-        </div>
+        <MobileHeroArtwork variant="design" />
 
         {/* Ảnh Nền Banner */}
         <Reveal className="absolute inset-0 -z-20 max-md:hidden" from="fade">
@@ -107,7 +98,57 @@ export function DesignServicePage() {
         {/* `max-md:!pt-32` khớp khoảng cách header->tiêu đề chuẩn lấy từ
             RenovationMobileHero (~85px header + ~41px khoảng trắng riêng =
             ~128px), thay cho `pt-24` cũ (96px, chỉ chừa ~11px dưới header). */}
-        <div className="relative mx-auto flex h-full w-full max-w-none items-start pt-14 max-md:!pt-32 lg:items-center lg:pt-24">
+        <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
+          <Reveal
+            className="absolute top-[4.7%] bottom-[75.5%] left-[6.55%] w-0.5"
+            delay={90}
+            from="fade"
+          >
+            <Image
+              className="size-full object-fill"
+              src="/images/thiet-ke-kien-truc-noi-that/hero-accent-line.png"
+              alt=""
+              fill
+              sizes="2px"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          <div className="absolute top-[4.9%] left-[10.2%] w-[86%]">
+            <Reveal>
+              <h1 className="font-heading text-[clamp(1.2rem,5.2vw,1.35rem)] font-extrabold leading-[1.12] text-brand">
+                DỊCH VỤ THIẾT KẾ KIẾN TRÚC
+                <br />&amp; NỘI THẤT CHUYÊN NGHIỆP
+              </h1>
+            </Reveal>
+          </div>
+
+          <BuildingRule
+            className="absolute top-[16.2%] left-[10.2%] h-[4.2%] w-[40%] max-w-none [&_img]:object-contain [&_img]:object-right"
+            src="/images/services/rule-dark.png"
+            delay={160}
+          />
+
+          <Reveal
+            className="absolute top-[20.35%] left-[10.2%] flex items-center gap-1.5"
+            delay={280}
+            from="left"
+          >
+            <Image
+              className="size-3 shrink-0 object-contain"
+              src="/images/thiet-ke-kien-truc-noi-that/icon-building.png"
+              alt=""
+              width={160}
+              height={169}
+              aria-hidden="true"
+            />
+            <p className="whitespace-nowrap text-[clamp(0.55rem,2.75vw,0.68rem)] leading-relaxed">
+              Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
+            </p>
+          </Reveal>
+        </div>
+
+        <div className="relative mx-auto hidden h-full w-full max-w-none items-start pt-14 md:flex lg:items-center lg:pt-24">
           {/* Cụm Text Bên Trái */}
           {/* Bề rộng khối chữ đi theo cỡ chữ (33vw ≈ 14.3 lần font-size) nên
               tiêu đề luôn ngắt đúng 2 dòng như mockup và mép phải dừng trước
@@ -246,36 +287,39 @@ export function DesignServicePage() {
       </section>
 
       <section
-        className={`bg-neutral-100 max-md:!bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}
+        id="solution-cards"
+        className={`bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME} max-md:!pt-7 max-md:!pb-8`}
       >
-        <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
-          <div className="text-center">
-            <Reveal>
+        <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
+          <div className="text-center md:mb-12">
+            <Reveal from="bottom">
               {/* Mockup tách 2 dòng: dòng trên chữ thường, dòng dưới in đậm —
                   giống hệt 3 trang dịch vụ còn lại. */}
-              <h2 className="font-heading text-3xl uppercase max-md:text-[1.35rem] max-md:leading-tight sm:text-4xl">
+              <h2 className="font-heading text-[clamp(0.75rem,3.8vw,1.25rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
                 <br />
                 <span className="font-bold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
               </h2>
             </Reveal>
-            <Reveal delay={140}>
-              <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
+            <Reveal delay={140} from="bottom">
+              <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
                 Giải pháp thiết kế tối ưu cho từng không gian
               </p>
             </Reveal>
-            <BuildingRule
-              className="mx-auto mb-12 mt-5 max-md:mb-8 max-md:h-6 max-md:max-w-42"
-              src="/images/thiet-ke-kien-truc-noi-that/rule-orange.png"
-            />
+            <Reveal delay={250} from="left">
+              <BuildingRule
+                className="mx-auto mt-3 h-auto w-[43%] md:mt-5 md:w-auto"
+                src="/images/cai-tao-sua-chua/rule-orange-center.png"
+              />
+            </Reveal>
           </div>
         </div>
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
             cards={solutionCards}
-            mobileMockup
-            mobileContent="design"
+            checkIcon="/images/cai-tao-sua-chua/icon-house.png"
+            ruleImage="/images/cai-tao-sua-chua/rule-short.png"
           />
         </div>
       </section>

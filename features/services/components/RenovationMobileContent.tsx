@@ -41,22 +41,30 @@ const mobileSolutionCtas = [
 function RenovationMobileHero() {
   return (
     <section className="relative isolate aspect-[932/1293] min-h-[34rem] overflow-hidden bg-[#f2f2f3]">
-      <Image
-        className="-z-20 object-cover object-bottom"
-        src="/images/cai-tao-sua-chua/hero-background.png"
-        alt=""
-        fill
-        sizes="100vw"
-        aria-hidden="true"
-      />
-      <Image
-        className="pointer-events-none absolute bottom-0 left-0 -z-10 h-[72%] w-[54%] object-contain object-left-bottom opacity-70"
-        src="/images/cai-tao-sua-chua/hero-wireframe.png"
-        alt=""
-        width={2721}
-        height={3468}
-        aria-hidden="true"
-      />
+      <Reveal className="absolute inset-0 -z-20" from="fade">
+        <Image
+          className="origin-bottom object-cover object-bottom animate-[hero-bg-drift_24s_ease-in-out_infinite_alternate] motion-reduce:animate-none"
+          src="/images/cai-tao-sua-chua/hero-background.png"
+          alt=""
+          fill
+          sizes="100vw"
+          aria-hidden="true"
+        />
+      </Reveal>
+      <Reveal
+        className="pointer-events-none absolute bottom-0 left-0 -z-10 h-[72%] w-[54%]"
+        delay={100}
+        from="fade"
+      >
+        <Image
+          className="size-full object-contain object-left-bottom opacity-70"
+          src="/images/cai-tao-sua-chua/hero-wireframe.png"
+          alt=""
+          width={2721}
+          height={3468}
+          aria-hidden="true"
+        />
+      </Reveal>
 
       {/* Cỡ chữ/leading/hiệu ứng Reveal đồng bộ với banner thiết kế kiến trúc
           nội thất (DesignServicePage). Khoảng cách từ header xuống tiêu đề
@@ -87,17 +95,23 @@ function RenovationMobileHero() {
         </Reveal>
       </div>
 
-      <Image
-        className="absolute top-[20%] right-[7.5%] h-auto w-[7.2%] object-contain"
-        src="/images/cai-tao-sua-chua/dots-pattern.png"
-        alt=""
-        width={288}
-        height={480}
-        aria-hidden="true"
-      />
+      <Reveal
+        className="absolute top-[20%] right-[7.5%] w-[7.2%]"
+        delay={460}
+        from="fade"
+      >
+        <Image
+          className="h-auto w-full object-contain"
+          src="/images/cai-tao-sua-chua/dots-pattern.png"
+          alt=""
+          width={288}
+          height={480}
+          aria-hidden="true"
+        />
+      </Reveal>
 
       <div className="absolute inset-x-[5.7%] bottom-[4.2%] grid h-[58.6%] grid-cols-2 grid-rows-[1.08fr_0.92fr] gap-[1.7%]">
-        <div className="relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]">
+        <Reveal className="group/frame relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={160} from="right">
           <Image
             className="object-cover"
             src="/images/cai-tao-sua-chua/hero-correct-top.png"
@@ -105,8 +119,8 @@ function RenovationMobileHero() {
             fill
             sizes="45vw"
           />
-        </div>
-        <div className="relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]">
+        </Reveal>
+        <Reveal className="group/frame relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={320} from="right">
           <Image
             className="object-cover"
             src="/images/cai-tao-sua-chua/hero-correct-bottom.png"
@@ -114,8 +128,8 @@ function RenovationMobileHero() {
             fill
             sizes="45vw"
           />
-        </div>
-        <div className="relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]">
+        </Reveal>
+        <Reveal className="group/frame relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={480} from="right">
           <Image
             className="object-cover"
             src="/images/cai-tao-sua-chua/hero-correct-large.png"
@@ -123,7 +137,7 @@ function RenovationMobileHero() {
             fill
             sizes="45vw"
           />
-        </div>
+        </Reveal>
       </div>
     </section>
   );
@@ -162,7 +176,7 @@ function RenovationMobileProjects() {
         />
       </div>
 
-      <div className="mt-2">
+      <Reveal className="mt-2" delay={120} duration={850} from="bottom">
         <ProjectCarousel
           projects={mobileProjects}
           prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
@@ -170,9 +184,9 @@ function RenovationMobileProjects() {
           mobileMockup
           mobileInitialIndex={0}
         />
-      </div>
+      </Reveal>
 
-      <div className="mt-4 flex h-9 justify-center">
+      <Reveal className="mt-4 flex h-9 justify-center" delay={200} duration={800} from="bottom">
         <PillCtaButton
           className="h-full"
           href="#contact-form"
@@ -182,7 +196,7 @@ function RenovationMobileProjects() {
           imageHeight={292}
           textClassName="!text-[clamp(0.72rem,3.1vw,0.9rem)]"
         />
-      </div>
+      </Reveal>
     </section>
   );
 }
@@ -207,14 +221,18 @@ function RenovationMobileSolutions() {
     // được nên hai section trông như dính liền, cùng một nền xám.
     <section className="bg-white px-4 pt-7 pb-8">
       <div className="mx-auto max-w-[29rem] text-center">
-        <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase">
-          <span className="font-normal">Cải tạo &amp; sửa chữa</span>
-          <br />
-          <span className="font-extrabold">theo từng loại hình công trình</span>
-        </h2>
-        <p className="mt-2 text-[clamp(0.72rem,2.9vw,0.86rem)]">
-          Giải Pháp Cải Tạo Theo Từng Loại Hình Công Trình
-        </p>
+        <Reveal from="bottom">
+          <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase">
+            <span className="font-normal">Cải tạo &amp; sửa chữa</span>
+            <br />
+            <span className="font-extrabold">theo từng loại hình công trình</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={140} from="bottom">
+          <p className="mt-2 text-[clamp(0.72rem,2.9vw,0.86rem)]">
+            Giải Pháp Cải Tạo Theo Từng Loại Hình Công Trình
+          </p>
+        </Reveal>
         <BuildingRule
           className="mx-auto mt-3 h-auto w-[43%]"
           src="/images/xay-dung-tron-goi/rule-orange.png"
@@ -228,14 +246,15 @@ function RenovationMobileSolutions() {
 
           return (
           <Reveal
-            className="overflow-hidden rounded-[clamp(1.4rem,6vw,2rem)] bg-white shadow-[0_4px_12px_rgb(36_33_34/.25)]"
+            className="group/card overflow-hidden rounded-[clamp(1.4rem,6vw,2rem)] bg-white shadow-[0_4px_12px_rgb(36_33_34/.25)] transition-[transform,box-shadow] duration-300 ease-out active:-translate-y-1 active:shadow-[0_18px_36px_rgb(36_33_34/.18)]"
             delay={index * 90}
-            from="fade"
+            duration={850}
+            from="bottom"
             key={card.number}
           >
             <div className="relative aspect-[1.255] w-full overflow-hidden">
               <Image
-                className="object-cover"
+                className="object-cover transition-transform duration-500 ease-out group-active/card:scale-105"
                 src={card.image}
                 alt={card.titleCategory}
                 fill
@@ -243,7 +262,12 @@ function RenovationMobileSolutions() {
               />
             </div>
 
-            <div className="px-[7.5%] pt-[5%] pb-[6%]">
+            <Reveal
+              className="px-[7.5%] pt-[5%] pb-[6%]"
+              delay={index * 90 + 140}
+              duration={750}
+              from={index % 2 === 0 ? "right" : "left"}
+            >
               <div className="flex min-w-0 items-start gap-[4%]">
                 <span className="shrink-0 text-[clamp(2.95rem,13vw,4.35rem)] leading-[0.9] font-extrabold text-[#b8babc]">
                   {card.number}.
@@ -296,7 +320,7 @@ function RenovationMobileSolutions() {
                 textClassName="!text-[clamp(0.67rem,2.65vw,0.8rem)]"
                 textPaddingRightPercent={10}
               />
-            </div>
+            </Reveal>
           </Reveal>
           );
         })}
@@ -315,8 +339,11 @@ function MobileProcessStep({
   const isLast = index === processSteps.length - 1;
 
   return (
-    <div
+    <Reveal
       className="absolute left-0 h-[17.738%] w-full"
+      delay={index * 90}
+      duration={850}
+      from={index % 2 === 0 ? "right" : "left"}
       style={{ top: `calc(11.43% + ${index} * 17.738%)` }}
     >
       <div
@@ -369,7 +396,7 @@ function MobileProcessStep({
           <span className="absolute bottom-[-4px] left-1/2 h-0 w-0 -translate-x-1/2 border-x-[4px] border-t-[5px] border-x-transparent border-t-charcoal" />
         </span>
       )}
-    </div>
+    </Reveal>
   );
 }
 
@@ -377,19 +404,21 @@ function RenovationMobileProcess() {
   return (
     <section className="bg-[#f2f2f3]">
       <div className="relative mx-auto aspect-[410/840] w-full max-w-[410px] overflow-hidden bg-[#f2f2f3]">
-        <h2 className="font-heading absolute inset-x-0 top-[1.07%] text-center text-[min(4.35vw,17.8px)] leading-[1.08] font-extrabold uppercase">
-          Quy trình cải tạo &amp; sửa chữa
-          <span className="mt-[0.1%] flex items-center justify-center gap-[0.8%]">
-            Tại
-            <Image
-              className="h-auto w-[24.4%] object-contain"
-              src="/images/cai-tao-sua-chua/logo.png"
-              alt="BMT Decor"
-              width={1196}
-              height={207}
-            />
-          </span>
-        </h2>
+        <Reveal className="absolute inset-x-0 top-[1.07%]" from="bottom">
+          <h2 className="font-heading text-center text-[min(4.35vw,17.8px)] leading-[1.08] font-extrabold uppercase">
+            Quy trình cải tạo &amp; sửa chữa
+            <span className="mt-[0.1%] flex items-center justify-center gap-[0.8%]">
+              Tại
+              <Image
+                className="h-auto w-[24.4%] object-contain"
+                src="/images/cai-tao-sua-chua/logo.png"
+                alt="BMT Decor"
+                width={1196}
+                height={207}
+              />
+            </span>
+          </h2>
+        </Reveal>
 
         <Image
           className="absolute top-[8.69%] left-[32.2%] h-auto w-[35.6%] object-contain"

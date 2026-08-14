@@ -202,11 +202,14 @@ export function SiteFooter({
       id="footer"
     >
       <div className="px-[clamp(16px,4.2vw,24px)] py-8 sm:hidden">
-        <div className="flex justify-center">
+        <Reveal className="flex justify-center">
           <BrandLogo className="w-[160px] mix-blend-multiply" large />
-        </div>
+        </Reveal>
 
-        <div className="mt-7 grid grid-cols-2 gap-5 px-[clamp(8px,2.2vw,12px)]">
+        <Reveal
+          className="mt-7 grid grid-cols-2 gap-5 px-[clamp(8px,2.2vw,12px)]"
+          delay={120}
+        >
           <div>
             <h3 className="mb-2 text-lg font-extrabold uppercase">Dịch vụ:</h3>
             <nav
@@ -261,9 +264,9 @@ export function SiteFooter({
               sizes="45vw"
             />
           </div>
-        </div>
+        </Reveal>
 
-        <div className="mt-8">
+        <Reveal className="mt-8" delay={240}>
           <h3 className="mb-3 pl-6 text-lg font-extrabold uppercase">
             Liên hệ:
           </h3>
@@ -299,9 +302,9 @@ export function SiteFooter({
               <span>Email: {contactInformation.email}</span>
             </p>
           </div>
-        </div>
+        </Reveal>
 
-        <div className="mt-8">
+        <Reveal className="mt-8" delay={360}>
           <h3 className="mb-3 pl-6 text-lg font-extrabold uppercase">
             Chi nhánh và nhà xưởng:
           </h3>
@@ -324,7 +327,7 @@ export function SiteFooter({
               </p>
             ))}
           </div>
-        </div>
+        </Reveal>
       </div>
 
       <div className="mx-auto hidden w-[calc(100%-2.5rem)] max-w-[1500px] gap-10 py-10 sm:grid md:w-[calc(100%-4rem)] md:grid-cols-2 lg:w-[calc(100%-6rem)] lg:grid-cols-[265px_minmax(0,1fr)_300px] lg:gap-x-8 lg:py-10 xl:grid-cols-[275px_minmax(0,1fr)_360px] xl:gap-x-10 2xl:grid-cols-[295px_minmax(0,1fr)_425px] 2xl:gap-x-12">

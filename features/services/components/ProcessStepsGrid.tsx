@@ -32,7 +32,7 @@ export function ProcessStepsGrid({
 
                     return (
                       <Reveal delay={index * 90} from="fade" key={step.number}>
-                        <div className="group/step @container relative aspect-[1534/1350] w-full">
+                        <div className="group/step @container relative aspect-[1534/1350] w-full transition-[transform,filter] duration-300 ease-out active:-translate-y-1 active:drop-shadow-[0_14px_24px_rgb(36_33_34/.14)]">
                           <span
                             className="absolute top-[15%] right-[7%] bottom-[1%] left-0 rounded-br-[7%] bg-[#e9e9e9]"
                             aria-hidden="true"
@@ -45,49 +45,63 @@ export function ProcessStepsGrid({
                             height={1350}
                             aria-hidden="true"
                           />
-                          <span
-                            className={`absolute top-[19%] -left-[9%] h-[30%] w-[18%] origin-center bg-charcoal ${
-                              index === 1 ? "scale-[0.8]" : "scale-[1.12]"
-                            }`}
-                            style={{
-                              maskImage: `url(${step.numeralImage})`,
-                              maskPosition: "center",
-                              maskRepeat: "no-repeat",
-                              maskSize: "contain",
-                              WebkitMaskImage: `url(${step.numeralImage})`,
-                              WebkitMaskPosition: "center",
-                              WebkitMaskRepeat: "no-repeat",
-                              WebkitMaskSize: "contain",
-                            }}
-                            aria-hidden="true"
-                          />
-                          <div className="absolute top-[21%] right-[15%] bottom-[7%] left-[8%]">
+                          <Reveal
+                            className="absolute top-[19%] -left-[9%] h-[30%] w-[18%]"
+                            delay={index * 90 + 80}
+                            from={column === 0 ? "fade" : "left"}
+                          >
+                            <span
+                              className={`block size-full origin-center bg-charcoal transition-colors duration-300 group-active/step:bg-brand ${
+                                index === 1 ? "scale-[0.8]" : "scale-[1.12]"
+                              }`}
+                              style={{
+                                maskImage: `url(${step.numeralImage})`,
+                                maskPosition: "center",
+                                maskRepeat: "no-repeat",
+                                maskSize: "contain",
+                                WebkitMaskImage: `url(${step.numeralImage})`,
+                                WebkitMaskPosition: "center",
+                                WebkitMaskRepeat: "no-repeat",
+                                WebkitMaskSize: "contain",
+                              }}
+                              aria-hidden="true"
+                            />
+                          </Reveal>
+                          <Reveal
+                            className="absolute top-[21%] right-[15%] bottom-[7%] left-[8%]"
+                            delay={index * 90 + 180}
+                            from="bottom"
+                          >
                             <h3 className="font-heading pr-[25%] text-[7.1cqw] leading-[1.08] font-bold whitespace-pre-line">
                               {step.title}
                             </h3>
                             <p className="mt-[4cqw] text-justify text-[6.1cqw] leading-[1.18] text-charcoal">
                               {step.copy}
                             </p>
-                          </div>
+                          </Reveal>
                         </div>
                       </Reveal>
                     );
                   })}
               </div>
 
-              <span
+              <Reveal
                 className="absolute top-[55%] left-[43%] h-0.5 w-[12%] bg-[radial-gradient(circle,#242122_0_1px,transparent_1.5px)] bg-[length:0.5625rem_0.125rem] bg-repeat-x"
+                delay={rowStart * 90 + 300}
+                from="fade"
                 aria-hidden="true"
               />
 
               {rowIndex < 2 && (
-                <div
+                <Reveal
                   className="absolute inset-x-0 bottom-3 h-px bg-white shadow-[0_1px_2px_rgb(36_33_34/.12)]"
+                  delay={rowStart * 90 + 360}
+                  from="fade"
                   aria-hidden="true"
                 >
                   <span className="absolute top-1/2 left-[23%] size-2.5 -translate-y-1/2 rounded-full bg-black" />
                   <span className="absolute top-1/2 right-[23%] size-2.5 -translate-y-1/2 rounded-full bg-black" />
-                </div>
+                </Reveal>
               )}
             </div>
           ))}
