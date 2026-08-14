@@ -182,8 +182,10 @@ export function FullConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
         >
           <Reveal>
-            <h2 className="font-heading text-[clamp(1.05rem,4.7vw,1.5rem)] font-extrabold sm:text-3xl md:font-bold lg:text-[2rem] text-center">
-              TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
+            <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] font-extrabold leading-[1.08] sm:text-3xl md:font-bold md:leading-normal lg:text-[2rem] text-center">
+              TỐI ƯU MÔ HÌNH THIẾT KẾ
+              <br />
+              THI CÔNG TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>
@@ -245,10 +247,10 @@ export function FullConstructionServicePage() {
         <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[clamp(0.75rem,3.8vw,1.25rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
                 <br />
-                <span className="font-bold">
+                <span className="font-extrabold md:font-bold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -279,7 +281,7 @@ export function FullConstructionServicePage() {
       <section className="bg-[#f2f2f3] pt-12 pb-0 md:pb-12 lg:py-14">
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="font-heading text-[clamp(1.05rem,4.7vw,1.5rem)] font-extrabold sm:text-[2rem]">
+            <h2 className="font-heading text-[clamp(0.95rem,4.2vw,1.35rem)] font-extrabold leading-[1.12] sm:text-[1.75rem] md:leading-normal">
               <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
               <span className="block whitespace-nowrap">XÂY NHÀ TRỌN GÓI</span>
             </h2>

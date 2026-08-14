@@ -558,12 +558,12 @@ export function ConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-0 !pb-0 text-center px-4`}
         >
           <Reveal from="bottom">
-            <h2 className="font-heading text-[clamp(1.25rem,5.25vw,2rem)] leading-[1.08] font-bold uppercase md:text-3xl lg:text-4xl text-center">
+            <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase md:text-3xl md:font-bold lg:text-4xl text-center">
               THI CÔNG XÂY DỰNG TỪ PHẦN THÔ ĐẾN HOÀN THIỆN
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-4 max-w-[73.75rem] text-[clamp(0.78rem,2.75vw,1rem)] leading-[1.25] text-pretty text-center md:text-sm md:leading-relaxed">
+            <p className="mx-auto mt-4 max-w-[73.75rem] text-[clamp(0.78rem,2.75vw,1rem)] leading-[1.25] text-pretty text-justify [text-align-last:center] md:text-sm md:leading-relaxed">
               Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ
               của công trình. BMT Decor triển khai{" "}
               <strong className="font-normal lg:font-bold">
@@ -582,7 +582,7 @@ export function ConstructionServicePage() {
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
+            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             align="center"
             delay={300}
@@ -634,10 +634,10 @@ export function ConstructionServicePage() {
         <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[clamp(0.75rem,3.8vw,1.25rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">THI CÔNG XÂY DỰNG</span>
                 <br />
-                <span className="font-bold">
+                <span className="font-extrabold md:font-bold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -668,7 +668,7 @@ export function ConstructionServicePage() {
 
       {/* SECTION 4: QUY TRÌNH THI CÔNG */}
       <section
-        className="relative isolate scroll-mt-[85px] overflow-hidden bg-[#F2F2F3] py-16 max-md:pt-12 max-md:pb-8"
+        className="relative isolate scroll-mt-[85px] overflow-hidden bg-[#F2F2F3] py-16 max-md:pt-8 max-md:pb-8"
         id="construction-process"
       >
         <Image
@@ -679,20 +679,20 @@ export function ConstructionServicePage() {
           sizes="100vw"
           aria-hidden="true"
         />
-        <div className="mx-auto mb-7 w-[calc(100%-2rem)] text-center md:hidden">
+        <div className="mx-auto mb-3 w-[calc(100%-2rem)] text-center md:hidden">
           <Reveal from="bottom">
-            <h2 className="font-heading text-[4.7vw] leading-none font-bold uppercase">
+            <h2 className="font-heading text-[4.7vw] leading-none font-extrabold uppercase">
               QUY TRÌNH THI CÔNG XÂY DỰNG
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-3 text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed">
+            <p className="mx-auto mt-1.5 text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed">
               Triển khai bài bản, giám sát chặt chẽ trong từng giai đoạn
             </p>
           </Reveal>
           <Reveal delay={250} from="left">
             <BuildingRule
-              className="mx-auto mt-4 w-[36vw]"
+              className="mx-auto mt-2 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
               src="/images/thi-cong-xay-dung/rule-orange-center.png"
             />
           </Reveal>
@@ -714,7 +714,7 @@ export function ConstructionServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-5"
+                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
                 src="/images/thi-cong-xay-dung/rule-orange-center.png"
               />
             </Reveal>

@@ -38,7 +38,7 @@ export const solutionCards = [
     ctaImage: "/images/cai-tao-sua-chua/btn-pill-nha-o.png",
     ctaImageWidth: 1408,
     ctaImageHeight: 253,
-    image: "/images/cai-tao-sua-chua/solution-1.png",
+    image: "/images/cai-tao-sua-chua/solution-1-v3.png",
   },
   {
     number: "02",
@@ -56,7 +56,7 @@ export const solutionCards = [
     ctaImage: "/images/cai-tao-sua-chua/btn-pill-van-phong.png",
     ctaImageWidth: 1655,
     ctaImageHeight: 253,
-    image: "/images/cai-tao-sua-chua/solution-2.png",
+    image: "/images/cai-tao-sua-chua/solution-2-landscape.png",
   },
   {
     number: "03",
@@ -70,7 +70,7 @@ export const solutionCards = [
     ctaImage: "/images/cai-tao-sua-chua/btn-pill-showroom.png",
     ctaImageWidth: 2397,
     ctaImageHeight: 253,
-    image: "/images/cai-tao-sua-chua/solution-3.png",
+    image: "/images/cai-tao-sua-chua/solution-3-landscape.png",
   },
   {
     number: "04",
@@ -87,7 +87,7 @@ export const solutionCards = [
     ctaImage: "/images/cai-tao-sua-chua/btn-pill-nha-hang.png",
     ctaImageWidth: 2206,
     ctaImageHeight: 253,
-    image: "/images/cai-tao-sua-chua/solution-4.png",
+    image: "/images/cai-tao-sua-chua/solution-4-landscape.png",
   },
 ];
 

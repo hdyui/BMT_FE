@@ -177,7 +177,7 @@ function RenovationMobileProjects() {
           </h2>
         </Reveal>
         <Reveal delay={100} from="bottom">
-          <p className="mt-3 text-[clamp(0.7rem,2.75vw,0.82rem)] leading-[1.28]">
+          <p className="mt-3 text-[clamp(0.7rem,2.75vw,0.82rem)] leading-[1.28] text-justify [text-align-last:center]">
             BMT Decor cung cấp dịch vụ cải tạo nhà ở, cải tạo văn phòng, cải tạo
             showroom, cải tạo nhà hàng, sửa chữa nhà và nâng cấp không gian theo
             nhu cầu thực tế, giúp khắc phục các hạng mục xuống cấp, tối ưu công
@@ -185,7 +185,7 @@ function RenovationMobileProjects() {
           </p>
         </Reveal>
         <BuildingRule
-          className="mx-auto mt-3 h-auto aspect-600/55 w-[43%]"
+          className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
           src="/images/xay-dung-tron-goi/rule-orange.png"
           delay={180}
         />
@@ -258,7 +258,7 @@ function RenovationMobileSolutions() {
           </p>
         </Reveal>
         <BuildingRule
-          className="mx-auto mt-3 h-auto aspect-600/55 w-[43%]"
+          className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
           src="/images/xay-dung-tron-goi/rule-orange.png"
           delay={120}
         />
@@ -278,7 +278,7 @@ function RenovationMobileSolutions() {
           >
             <div className="relative aspect-[1.255] w-full overflow-hidden">
               <Image
-                className="object-cover transition-transform duration-500 ease-out group-active/card:scale-105"
+                className="object-cover object-center transition-transform duration-500 ease-out group-active/card:scale-105"
                 src={card.image}
                 alt={card.titleCategory}
                 fill
