@@ -155,37 +155,61 @@ const processDescriptionTops = [14.55, 34.25, 53.95, 73.65, 93.35] as const;
 export function ConstructionMobileProcess() {
   return (
     <div className="relative mx-auto aspect-3056/6831 w-[82%] md:hidden">
-      <Image
-        className="object-contain"
-        src={`${MOBILE_ROOT}/process-timeline.webp`}
-        alt=""
-        fill
-        sizes="82vw"
-        aria-hidden="true"
-      />
+      <Reveal className="absolute inset-0" from="fade">
+        <Image
+          className="object-contain"
+          src={`${MOBILE_ROOT}/process-timeline.webp`}
+          alt=""
+          fill
+          sizes="82vw"
+          aria-hidden="true"
+        />
+      </Reveal>
 
-      {processSteps.map((step, index) => (
-        <div className="contents" key={step.number}>
-          <span
-            className="absolute left-0 flex w-[20.6%] -translate-y-1/2 items-center justify-center font-heading text-[clamp(2.45rem,10.2vw,4.8rem)] leading-none font-extrabold text-black"
-            style={{ top: `${processNumberTops[index]}%` }}
-          >
-            {step.number}
-          </span>
-          <h3
-            className="font-heading absolute left-[34.3%] w-[62%] -translate-y-1/2 text-[2.65vw] leading-none font-extrabold whitespace-nowrap text-black"
-            style={{ top: `${processTitleTops[index]}%` }}
-          >
-            {processTitles[index]}
-          </h3>
-          <p
-            className="absolute left-[52.5%] w-[41%] -translate-y-1/2 text-[clamp(0.67rem,2.72vw,1.28rem)] leading-[1.08] text-white"
-            style={{ top: `${processDescriptionTops[index]}%` }}
-          >
-            {step.description}
-          </p>
-        </div>
-      ))}
+      {processSteps.map((step, index) => {
+        const base = index * 160;
+
+        return (
+          <div className="contents" key={step.number}>
+            {/* Số thứ tự: zoom nhẹ kết hợp fade */}
+            <span
+              className="absolute left-0 flex w-[20.6%] -translate-y-1/2 items-center justify-center"
+              style={{ top: `${processNumberTops[index]}%` }}
+            >
+              <Reveal delay={base} from="zoom">
+                <span className="font-heading text-[clamp(2.45rem,10.2vw,4.8rem)] leading-none font-extrabold text-black">
+                  {step.number}
+                </span>
+              </Reveal>
+            </span>
+
+            {/* Tiêu đề: trượt từ trái sang phải và hiện dần */}
+            <div
+              className="absolute left-[34.3%] w-[62%] -translate-y-1/2"
+              style={{ top: `${processTitleTops[index]}%` }}
+            >
+              <Reveal delay={base + 90} from="left">
+                <h3 className="font-heading text-[2.65vw] leading-none font-extrabold whitespace-nowrap text-black">
+                  {processTitles[index]}
+                </h3>
+              </Reveal>
+            </div>
+
+            {/* Khối nội dung màu cam (mô tả đặt trong khối): trượt từ trái
+                sang phải và hiện dần, theo ngay sau tiêu đề. */}
+            <div
+              className="absolute left-[52.5%] w-[41%] -translate-y-1/2"
+              style={{ top: `${processDescriptionTops[index]}%` }}
+            >
+              <Reveal delay={base + 180} from="left">
+                <p className="text-[clamp(0.67rem,2.72vw,1.28rem)] leading-[1.08] text-white">
+                  {step.description}
+                </p>
+              </Reveal>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

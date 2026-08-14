@@ -220,7 +220,7 @@ export function DesignServicePage() {
 
       {/* CÁC SECTION KHÁC BÊN DƯỚI GIỮ NGUYÊN NHƯ CŨ */}
       <section
-        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!py-8 lg:!py-16`}
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!pt-8 max-md:!pb-3 lg:!py-16`}
       >
         <Image
           className="-z-10 object-cover"
@@ -271,17 +271,21 @@ export function DesignServicePage() {
         </Reveal>
 
         <Reveal
-          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 flex w-full justify-center lg:!mt-12`}
+          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 max-md:!mt-3 flex w-full justify-center lg:!mt-12`}
           delay={200}
         >
           <PillCtaButton
-            className="h-full"
+            className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
             label="TƯ VẤN MIỄN PHÍ"
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
-            textClassName="!text-base lg:!text-[24px]"
+            mobileImage="/images/thi-cong-xay-dung/mobile/btn-consult.png"
+            mobileImageWidth={1539}
+            mobileImageHeight={292}
+            mobileTextCentered
+            textClassName="!text-[clamp(0.8rem,3.2vw,1.25rem)] lg:!text-[24px]"
           />
         </Reveal>
       </section>
@@ -308,7 +312,7 @@ export function DesignServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
               />
             </Reveal>

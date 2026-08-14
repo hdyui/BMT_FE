@@ -543,7 +543,7 @@ export function ConstructionServicePage() {
 
       {/* SECTION 2: TỪ PHẦN THÔ ĐẾN HOÀN THIỆN */}
       <section
-        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!pb-6 lg:!py-16`}
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!pb-3 lg:!py-16`}
       >
         <Image
           className="-z-10 object-cover"
@@ -605,7 +605,7 @@ export function ConstructionServicePage() {
         </Reveal>
 
         <Reveal
-          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 max-md:!mt-4 lg:!mt-12 flex justify-center w-full`}
+          className={`${SERVICE_PROJECT_CTA_CLASS_NAME} !mt-8 max-md:!mt-3 lg:!mt-12 flex justify-center w-full`}
           delay={200}
           duration={800}
           from="bottom"
@@ -649,7 +649,7 @@ export function ConstructionServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
                 align="center"
               />

@@ -40,7 +40,7 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-o.png",
     ctaImageMobileWidth: 1668,
     ctaImageMobileHeight: 253,
-    image: "/images/xay-dung-tron-goi/photo-nha-pho.webp",
+    image: "/images/xay-dung-tron-goi/solution-nha-pho.webp",
   },
   {
     number: "02",
@@ -61,7 +61,7 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-van-phong.png",
     ctaImageMobileWidth: 1972,
     ctaImageMobileHeight: 253,
-    image: "/images/xay-dung-tron-goi/solution-van-phong.webp",
+    image: "/images/xay-dung-tron-goi/photo-van-phong.webp",
   },
   {
     number: "03",
@@ -105,7 +105,7 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-hang.png",
     ctaImageMobileWidth: 2682,
     ctaImageMobileHeight: 253,
-    image: "/images/xay-dung-tron-goi/photo-nha-hang.webp",
+    image: "/images/xay-dung-tron-goi/solution-nha-hang.webp",
   },
 ] as const;
 
