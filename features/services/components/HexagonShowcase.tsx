@@ -127,7 +127,7 @@ export function HexagonShowcase() {
       {/* 4 Cụm hình ảnh trung tâm */}
       {clusterLayers.map((layer) => (
         <Reveal
-          className="group/hex absolute inset-0 z-0 hover:z-10"
+          className="group/hex absolute inset-0 z-0 hover:z-10 active:z-10"
           style={{ clipPath: layer.clipPath }}
           delay={380 + layer.order * 130}
           from="left"
@@ -149,7 +149,7 @@ export function HexagonShowcase() {
           >
             {/* ẢNH CHUYỂN ĐỘNG: Chỉ zoom hình bên trong, viền đứng im */}
             <Image
-              className="object-contain transition-transform duration-500 ease-out group-hover/hex:scale-105 will-change-transform"
+              className="object-contain transition-transform duration-500 ease-out group-hover/hex:scale-105 group-active/hex:scale-105 will-change-transform"
               style={{ transformOrigin: layer.transformOrigin }}
               src={CLUSTER}
               alt={layer.alt}

@@ -132,14 +132,14 @@ export function RelatedProjects() {
       aria-labelledby="related-title"
     >
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-        <ProjectSectionHeading centered delay={80} duration={950}>
+        <ProjectSectionHeading centered delay={180} duration={900}>
           <span id="related-title">Tham khảo dự án liên quan</span>
         </ProjectSectionHeading>
 
         <BuildingRule
           className="mx-auto mt-4 max-w-[350px] text-brand"
           fullWidth
-          delay={160}
+          delay={400}
         />
 
         <Carousel
@@ -165,9 +165,8 @@ export function RelatedProjects() {
                 key={project.title}
               >
                 <Reveal
-                  delay={index < visibleProjectCount ? 220 + index * 90 : 0}
-                  distance="long"
-                  duration={1050}
+                  delay={index < visibleProjectCount ? 1120 + index * 140 : 0}
+                  duration={950}
                 >
                   <RelatedProjectCard project={project} />
                 </Reveal>
@@ -209,9 +208,8 @@ export function RelatedProjects() {
 
         <Reveal
           className="mt-7 flex justify-center gap-2"
-          delay={380}
-          distance="long"
-          duration={900}
+          delay={1500}
+          duration={800}
           from="fade"
           aria-label="Chọn trang dự án liên quan"
         >

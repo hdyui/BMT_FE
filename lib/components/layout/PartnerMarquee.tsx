@@ -67,7 +67,7 @@ export function PartnerMarquee() {
       }}
     >
       <div
-        className="flex w-[400%] [animation:partner-marquee_22s_linear_infinite] motion-reduce:animate-none max-sm:w-[533.333%]"
+        className="flex w-[400%] [animation:partner-marquee_28s_linear_infinite] motion-reduce:animate-none max-sm:w-[533.333%]"
         style={{ animationPlayState: paused ? "paused" : "running" }}
       >
         <PartnerSequence hovered={hovered} onHover={setHovered} />

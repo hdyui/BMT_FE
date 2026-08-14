@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BmtCta } from "@/lib/components/shared/BmtCta";
 import { ArrowUpRight } from "lucide-react";
 import {
   useCallback,
@@ -69,8 +68,7 @@ const articles = [
   "Những tiêu chí chọn vật liệu hoàn thiện lâu bền",
 ] as const;
 
-const desktopPageSize = 5;
-const mobileBatchSize = 4;
+const pageSize = 5;
 
 function ArticleReveal({
   children,
@@ -114,93 +112,19 @@ function MoreLink() {
   return (
     <Link className={styles.articleMoreLink} href="#contact-form">
       Xem chi tiết
-      <ArrowUpRight
-        className={styles.articleMoreIconDesktop}
-        aria-hidden="true"
-      />
-      <Image
-        className={styles.articleMoreIconMobile}
-        src="/images/news/mobile/article-link-arrow.png"
-        alt=""
-        width={28}
-        height={97}
-        aria-hidden="true"
-      />
+      <ArrowUpRight aria-hidden="true" />
     </Link>
-  );
-}
-
-function ArticleCard({
-  title,
-  showDivider,
-}: {
-  title: (typeof articles)[number];
-  showDivider: boolean;
-}) {
-  return (
-    <div className={styles.articleEntry}>
-      {showDivider && (
-        <>
-          <Image
-            className={`${styles.articleDivider} ${styles.articleDividerDesktop}`}
-            src="/images/news/article-divider.jpg"
-            alt=""
-            width={5010}
-            height={123}
-            aria-hidden="true"
-          />
-          <Image
-            className={`${styles.articleDivider} ${styles.articleDividerMobile}`}
-            src="/images/news/mobile/article-divider.png"
-            alt=""
-            width={3612}
-            height={12}
-            aria-hidden="true"
-          />
-        </>
-      )}
-      <article className={`group ${styles.articleCard}`}>
-        <div className={styles.articleImageWrap}>
-          <Image
-            className={`${styles.articleImage} ${styles.articleImageDesktop}`}
-            src="/images/news/article-model.jpg"
-            alt="Mô hình kiến trúc minh họa cho bài viết"
-            fill
-            sizes="300px"
-          />
-          <Image
-            className={`${styles.articleImage} ${styles.articleImageMobile}`}
-            src="/images/news/mobile/article-photo.png"
-            alt="Mô hình kiến trúc minh họa cho bài viết"
-            width={3600}
-            height={2160}
-            sizes="calc(100vw - 28px)"
-          />
-        </div>
-        <div className={styles.articleContent}>
-          <h2 className={styles.articleTitle}>{title}</h2>
-          <p className={styles.articleDescription}>
-            BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết kế và thi
-            công, giúp gia chủ chủ động hơn trong từng quyết định về công năng,
-            vật liệu và ngân sách.
-          </p>
-          <div className={styles.articleContentMore}>
-            <MoreLink />
-          </div>
-        </div>
-      </article>
-    </div>
   );
 }
 
 export function NewsPage() {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [selectedSlide, setSelectedSlide] = useState(0);
-  const [mobileVisibleCount, setMobileVisibleCount] =
-    useState(mobileBatchSize);
   const [page, setPage] = useState(0);
   const [pendingPage, setPendingPage] = useState<number | null>(null);
   const [isPageLeaving, setIsPageLeaving] = useState(false);
+  const [featuredSectionEntered, setFeaturedSectionEntered] = useState(false);
+  const featuredSectionRef = useRef<HTMLElement>(null);
 
   const syncSelectedSlide = useCallback((api: NonNullable<CarouselApi>) => {
     setSelectedSlide(api.selectedScrollSnap());
@@ -222,19 +146,30 @@ export function NewsPage() {
     };
   }, [carouselApi, syncSelectedSlide]);
 
+  useEffect(() => {
+    const featuredSection = featuredSectionRef.current;
+    if (!featuredSection) return;
+
+    const revealObserver = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          setFeaturedSectionEntered(true);
+          revealObserver.unobserve(entry.target);
+        });
+      },
+      { rootMargin: "0px 0px -10% 0px", threshold: 0.12 },
+    );
+
+    revealObserver.observe(featuredSection);
+    return () => revealObserver.disconnect();
+  }, []);
+
   const visibleArticles = useMemo(
-    () =>
-      articles.slice(
-        page * desktopPageSize,
-        page * desktopPageSize + desktopPageSize,
-      ),
+    () => articles.slice(page * pageSize, page * pageSize + pageSize),
     [page],
   );
-  const mobileVisibleArticles = useMemo(
-    () => articles.slice(0, mobileVisibleCount),
-    [mobileVisibleCount],
-  );
-  const pageCount = Math.ceil(articles.length / desktopPageSize);
+  const pageCount = Math.ceil(articles.length / pageSize);
 
   useEffect(() => {
     if (!isPageLeaving || pendingPage === null) return;
@@ -265,10 +200,7 @@ export function NewsPage() {
   return (
     <>
       <SiteHeader />
-      <main
-        className="overflow-hidden bg-[#efedef] pt-[60px] xl:pt-[68px]"
-        data-scroll-snap-page
-      >
+      <main className="overflow-hidden bg-[#efedef] pt-[85px]">
         <section className={styles.newsHero}>
           <div className={styles.newsHeroDecorations} aria-hidden="true">
             <span
@@ -309,106 +241,15 @@ export function NewsPage() {
             />
           </div>
 
-          <div className={styles.newsHeroMobileDecorations} aria-hidden="true">
-            <Image
-              className={styles.heroMobileEdgePill}
-              src="/images/news/mobile/hero-edge-pill.png"
-              alt=""
-              width={637}
-              height={363}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileGridCorner}
-              src="/images/news/mobile/hero-grid-corner.png"
-              alt=""
-              width={264}
-              height={264}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileTitleRule}
-              src="/images/news/mobile/hero-title-rule.png"
-              alt=""
-              width={1388}
-              height={128}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileGridTop}
-              src="/images/news/mobile/hero-grid-top.png"
-              alt=""
-              width={703}
-              height={112}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileArchOrange}
-              src="/images/news/mobile/hero-arch-orange.png"
-              alt=""
-              width={872}
-              height={1531}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileArchGray}
-              src="/images/news/mobile/hero-arch-gray.png"
-              alt=""
-              width={399}
-              height={701}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileOutlineSquare}
-              src="/images/news/mobile/hero-outline-square.png"
-              alt=""
-              width={1604}
-              height={1604}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileGrayPanel}
-              src="/images/news/mobile/hero-gray-panel.png"
-              alt=""
-              width={2860}
-              height={1755}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileBottomArch}
-              src="/images/news/mobile/hero-bottom-arch.png"
-              alt=""
-              width={499}
-              height={362}
-              loading="eager"
-            />
-            <Image
-              className={styles.heroMobileGridBottom}
-              src="/images/news/mobile/hero-grid-bottom.png"
-              alt=""
-              width={773}
-              height={123}
-              loading="eager"
-            />
-          </div>
-
           <div className={styles.newsHeroCopy}>
-            <Image
-              className={styles.newsHeroMobileCopyLine}
-              src="/images/news/mobile/hero-copy-line.png"
-              alt=""
-              width={7}
-              height={1008}
-              aria-hidden="true"
-            />
             <p className={styles.newsHeroEyebrow}>KIẾN THỨC</p>
             <h1 className={styles.newsHeroTitle}>
               <span className={styles.newsHeroTitleLine}>THIẾT KẾ &amp;</span>
-              <span className={styles.newsHeroTitleLine}> THI CÔNG</span>
+              <span className={styles.newsHeroTitleLine}>THI CÔNG</span>
             </h1>
             <p className={styles.newsHeroDescription}>
               <Image
-                className={`${styles.newsHeroDescriptionIcon} ${styles.newsHeroDescriptionIconDesktop}`}
+                className={styles.newsHeroDescriptionIcon}
                 src="/images/home/building-mark.png"
                 alt=""
                 width={110}
@@ -416,67 +257,33 @@ export function NewsPage() {
                 sizes="24px"
                 aria-hidden="true"
               />
-              <Image
-                className={`${styles.newsHeroDescriptionIcon} ${styles.newsHeroDescriptionIconMobile}`}
-                src="/images/news/mobile/hero-building-icon.png"
-                alt=""
-                width={86}
-                height={91}
-                aria-hidden="true"
-              />
               Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công
               xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ
               BMT Decor.
             </p>
-            <div className={styles.newsHeroCtaSlot}>
-              <BmtCta className={styles.newsHeroCta} href="/lien-he">
-                LIÊN HỆ NGAY
-              </BmtCta>
-            </div>
+            <Link className={styles.newsHeroCta} href="/lien-he">
+              <span>LIÊN HỆ NGAY</span>
+            </Link>
           </div>
 
           <div className={styles.newsHeroPhoto}>
             <Image
-              className={`${styles.newsHeroPhotoImage} ${styles.newsHeroPhotoImageDesktop}`}
+              className={styles.newsHeroPhotoImage}
               src="/images/news/hero-house.jpg"
               alt="Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế"
               fill
               priority
               sizes="(min-width: 1024px) 50vw, calc(100vw - 36px)"
             />
-            <Image
-              className={styles.newsHeroPhotoImageMobile}
-              src="/images/news/mobile/hero-photo.png"
-              alt="Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế"
-              width={3483}
-              height={3037}
-              priority
-              sizes="calc(100vw - 64px)"
-            />
           </div>
         </section>
 
         <section
-          className={`${styles.featuredSection} ${styles.featuredSectionVisible}`}
+          ref={featuredSectionRef}
+          className={`${styles.featuredSection} ${featuredSectionEntered ? styles.featuredSectionVisible : ""}`}
           aria-labelledby="featured-news-title"
         >
-          <Image
-            className={styles.featuredOrangeShape}
-            src="/images/news/mobile/featured-orange-fade.png"
-            alt=""
-            width={2294}
-            height={2542}
-            aria-hidden="true"
-          />
-          <div className={styles.featuredBackdrop} aria-hidden="true">
-            <Image
-              className={styles.featuredBackdropMobile}
-              src="/images/news/mobile/featured-skyline.png"
-              alt=""
-              width={3884}
-              height={384}
-            />
-          </div>
+          <div className={styles.featuredBackdrop} aria-hidden="true" />
           <div className={styles.featuredInner}>
             <div className={styles.featuredHeadingWrap}>
               <h2 id="featured-news-title" className={styles.featuredHeading}>
@@ -501,36 +308,19 @@ export function NewsPage() {
                       >
                         <div className={styles.featuredImageWrap}>
                           <Image
-                            className={`${styles.featuredCardImage} ${styles.featuredCardImageDesktop}`}
+                            className={styles.featuredCardImage}
                             src="/images/news/article-model.jpg"
                             alt="Mô hình kiến trúc trên bản vẽ thiết kế"
                             fill
                             loading="eager"
                             sizes="(min-width: 1024px) 37vw, 70vw"
                           />
-                          <Image
-                            className={styles.featuredCardImageMobile}
-                            src="/images/news/mobile/featured-photo.png"
-                            alt="Mô hình kiến trúc trên bản vẽ thiết kế"
-                            width={3165}
-                            height={1625}
-                            loading="eager"
-                            sizes="calc(90vw - 32px)"
-                          />
                         </div>
                         <div className={styles.featuredCardBody}>
                           <span
                             className={`${styles.featuredBadge} ${index === selectedSlide ? "" : styles.featuredBadgeHidden}`}
                           >
-                            <Image
-                              className={styles.featuredBadgeAsset}
-                              src="/images/news/mobile/featured-badge.png"
-                              alt=""
-                              fill
-                              sizes="50px"
-                              aria-hidden="true"
-                            />
-                            <span>Nổi bật!</span>
+                            Nổi bật!
                           </span>
                           <h3 className={styles.featuredCardTitle}>
                             {item.title}
@@ -538,27 +328,11 @@ export function NewsPage() {
                           <p className={styles.featuredCardDescription}>
                             {item.description}
                           </p>
-                          <Image
-                            className={styles.featuredDivider}
-                            src="/images/news/mobile/featured-divider.png"
-                            alt=""
-                            width={3176}
-                            height={11}
-                            aria-hidden="true"
-                          />
                           <Link
                             className={styles.featuredMoreLink}
                             href="#contact-form"
                           >
-                            Xem chi tiết
-                            <Image
-                              className={styles.featuredMoreIcon}
-                              src="/images/news/mobile/featured-link-arrow.png"
-                              alt=""
-                              width={27}
-                              height={91}
-                              aria-hidden="true"
-                            />
+                            Xem chi tiết <ArrowUpRight aria-hidden="true" />
                           </Link>
                         </div>
                       </article>
@@ -575,10 +349,10 @@ export function NewsPage() {
                   >
                     <Image
                       className={styles.featuredNavIcon}
-                      src="/images/news/mobile/featured-previous.png"
+                      src="/images/news/featured-previous.jpg"
                       alt=""
-                      width={250}
-                      height={250}
+                      width={208}
+                      height={208}
                       aria-hidden="true"
                     />
                   </button>
@@ -590,10 +364,10 @@ export function NewsPage() {
                   >
                     <Image
                       className={styles.featuredNavIcon}
-                      src="/images/news/mobile/featured-next.png"
+                      src="/images/news/featured-next.jpg"
                       alt=""
-                      width={250}
-                      height={250}
+                      width={208}
+                      height={208}
                       aria-hidden="true"
                     />
                   </button>
@@ -613,30 +387,7 @@ export function NewsPage() {
                         selectedSlide === index ? "true" : undefined
                       }
                       key={item.title}
-                    >
-                      <Image
-                        className={styles.featuredDotRing}
-                        src={
-                          selectedSlide === index
-                            ? "/images/news/mobile/featured-dot-active-ring.png"
-                            : "/images/news/mobile/featured-dot-inactive.png"
-                        }
-                        alt=""
-                        width={113}
-                        height={113}
-                        aria-hidden="true"
-                      />
-                      {selectedSlide === index && (
-                        <Image
-                          className={styles.featuredDotCenter}
-                          src="/images/news/mobile/featured-dot-active-center.png"
-                          alt=""
-                          width={63}
-                          height={63}
-                          aria-hidden="true"
-                        />
-                      )}
-                    </button>
+                    />
                   ))}
                 </div>
               </Carousel>
@@ -648,30 +399,51 @@ export function NewsPage() {
           className={`${styles.articleListSection} bg-white pt-10 pb-20 lg:pt-12 lg:pb-28`}
           aria-label="Danh sách tin tức"
         >
-          <div
-            className={`${styles.articleListInner} mx-auto w-[min(1050px,calc(100%-2.25rem))]`}
-          >
+          <div className="mx-auto w-[min(1050px,calc(100%-2.25rem))]">
             <div
-              className={`${styles.articlePage} ${styles.desktopArticleList} ${isPageLeaving ? styles.articlePageLeaving : ""}`}
+              className={`${styles.articlePage} ${isPageLeaving ? styles.articlePageLeaving : ""}`}
               key={page}
               aria-busy={isPageLeaving}
               aria-live="polite"
             >
               {visibleArticles.map((title, index) => (
                 <ArticleReveal delay={120 + index * 45} key={title}>
-                  <ArticleCard title={title} showDivider={index > 0} />
-                </ArticleReveal>
-              ))}
-            </div>
-
-            <div
-              id="mobile-news-list"
-              className={`${styles.articlePage} ${styles.mobileArticleList}`}
-              aria-live="polite"
-            >
-              {mobileVisibleArticles.map((title, index) => (
-                <ArticleReveal delay={80 + (index % mobileBatchSize) * 45} key={title}>
-                  <ArticleCard title={title} showDivider={index > 0} />
+                  <div className={styles.articleEntry}>
+                    {index > 0 && (
+                      <Image
+                        className={styles.articleDivider}
+                        src="/images/news/article-divider.jpg"
+                        alt=""
+                        width={5010}
+                        height={123}
+                        aria-hidden="true"
+                      />
+                    )}
+                    <article className="group grid gap-6 py-5 sm:grid-cols-[300px_1fr] lg:grid-cols-[300px_1fr] lg:gap-5">
+                      <div className="relative aspect-[1.38/1] overflow-hidden rounded-[20px]">
+                        <Image
+                          className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.055]"
+                          src="/images/news/article-model.jpg"
+                          alt="Mô hình kiến trúc minh họa cho bài viết"
+                          fill
+                          sizes="(min-width: 640px) 300px, 100vw"
+                        />
+                      </div>
+                      <div className="flex flex-col justify-center py-1">
+                        <h2 className="text-[clamp(20px,1.7vw,25px)] leading-[1.08] font-bold tracking-[-0.02em] text-charcoal transition-colors duration-300 group-hover:text-brand">
+                          {title}
+                        </h2>
+                        <p className="mt-4 text-[15px] leading-[1.3] text-neutral-600">
+                          BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết
+                          kế và thi công, giúp gia chủ chủ động hơn trong từng
+                          quyết định về công năng, vật liệu và ngân sách.
+                        </p>
+                        <div className="mt-4">
+                          <MoreLink />
+                        </div>
+                      </div>
+                    </article>
+                  </div>
                 </ArticleReveal>
               ))}
             </div>
@@ -718,34 +490,11 @@ export function NewsPage() {
                 />
               </button>
             </nav>
-
-            {mobileVisibleCount < articles.length && (
-              <button
-                className={styles.articleLoadMore}
-                type="button"
-                onClick={() =>
-                  setMobileVisibleCount((count) =>
-                    Math.min(count + mobileBatchSize, articles.length),
-                  )
-                }
-                aria-controls="mobile-news-list"
-              >
-                <span>Xem thêm</span>
-                <Image
-                  className={styles.articleLoadMoreIcon}
-                  src="/images/news/mobile/load-more-icon.png"
-                  alt=""
-                  width={237}
-                  height={237}
-                  aria-hidden="true"
-                />
-              </button>
-            )}
           </div>
         </section>
       </main>
       <ContactForm />
-      <SiteFooter showTopBorder={false} />
+      <SiteFooter />
     </>
   );
 }

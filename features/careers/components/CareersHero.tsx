@@ -121,32 +121,12 @@ function HeroVisual() {
   );
 }
 
-function MobileCareersHero() {
-  return (
-    <div className={styles.mobilePresentation}>
-      <div className={styles.mobileCopy}>
-        <h1 className={styles.mobileHeading}>
-          <span>Gia nhập đội ngũ</span>
-          <Image className={styles.mobileWordmark} src="/images/careers/mobile/hero-wordmark.png" alt="BMT Decor" width={1230} height={214} sizes="32vw" />
-        </h1>
-        <Image className={styles.mobileDivider} src="/images/careers/mobile/hero-divider.png" alt="" width={1388} height={128} sizes="36vw" aria-hidden="true" />
-        <p className={styles.mobileDescription}>
-          <Image className={styles.mobileBuildingMark} src="/images/careers/mobile/hero-building-mark.png" alt="" width={86} height={91} sizes="10px" aria-hidden="true" />
-          Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm. Nếu bạn yêu thích lĩnh vực thiết kế, kiến trúc và thi công, BMT Decor luôn sẵn sàng chào đón bạn đồng hành trên hành trình phát triển lâu dài.
-        </p>
-      </div>
-      <Image className={styles.mobileArtwork} src="/images/careers/mobile/hero-artwork.png" alt="Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor" fill fetchPriority="high" sizes="100vw" />
-    </div>
-  );
-}
-
 export function CareersHero() {
   return (
-    <section className={`relative isolate overflow-hidden bg-[#f7f7f7] lg:aspect-[8000/3468] ${styles.careersHero}`}>
+    <section className="relative isolate overflow-hidden bg-[#f7f7f7] lg:aspect-[8000/3468]">
       <CareersHeroBackdrop />
-      <MobileCareersHero />
 
-      <div className="relative z-10 mx-auto hidden w-[min(1460px,calc(100%-2.25rem))] gap-12 py-16 sm:grid lg:absolute lg:inset-0 lg:block lg:w-full lg:py-0">
+      <div className="relative z-10 mx-auto grid w-[min(1460px,calc(100%-2.25rem))] gap-12 py-16 lg:absolute lg:inset-0 lg:block lg:w-full lg:py-0">
         <HeroVisual />
 
         <div className="relative mt-10 z-20 max-w-[640px] lg:absolute lg:left-[55%] lg:top-[24%] lg:w-[42%] lg:max-w-none">
@@ -164,7 +144,7 @@ export function CareersHero() {
             </h1>
           </Reveal>
           <Reveal delay={420} from="left">
-            <p className="mt-7 max-w-[620px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] sm:text-lg sm:leading-8">
+            <p className="mt-7 max-w-[620px] text-xl leading-7 text-neutral-700 sm:text-lg sm:leading-8">
               <Image
                 className="mr-[0.38em] inline-block h-[1.05em] w-auto align-[-0.16em] [filter:brightness(0)_saturate(100%)_invert(56%)_sepia(88%)_saturate(2340%)_hue-rotate(343deg)_brightness(100%)_contrast(92%)]"
                 src="/images/home/building-mark.png"
@@ -182,7 +162,9 @@ export function CareersHero() {
           </Reveal>
           <div>
             <Link className={styles.careersHeroCta} href="/lien-he">
-              <span className={styles.careersHeroCtaLabel}>LIÊN HỆ NGAY</span>
+              <span className="inline-flex h-full w-4/5 items-center justify-center">
+                LIÊN HỆ NGAY
+              </span>
             </Link>
           </div>
         </div>

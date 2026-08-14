@@ -15,6 +15,9 @@ export type SolutionCard = {
   ctaImage: string;
   ctaImageWidth: number;
   ctaImageHeight: number;
+  ctaImageMobile?: string;
+  ctaImageMobileWidth?: number;
+  ctaImageMobileHeight?: number;
   image: string;
 };
 
@@ -32,13 +35,13 @@ export function SolutionCards({
   ruleImage,
 }: SolutionCardsProps) {
   return (
-    <div className="grid gap-5">
+    <div className="grid gap-4 md:gap-5">
       {solutionCards.map((card, index) => {
         const imageFirst = index % 2 === 0;
 
         return (
           <Reveal
-            className="group/card overflow-hidden rounded-[1.5rem] bg-white shadow-[0_4px_20px_rgb(36_33_34/.08)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] lg:h-140 lg:rounded-[2rem]"
+            className="group/card overflow-hidden rounded-[clamp(1.4rem,6vw,2rem)] bg-white shadow-[0_4px_12px_rgb(36_33_34/.25)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] active:-translate-y-1 active:shadow-[0_18px_36px_rgb(36_33_34/.18)] md:rounded-[1.5rem] md:shadow-[0_4px_20px_rgb(36_33_34/.08)] lg:min-h-140 lg:rounded-[2rem]"
             delay={index * 160}
             from="fade"
             key={card.number}
@@ -48,9 +51,11 @@ export function SolutionCards({
                 imageFirst ? "" : "lg:[direction:rtl]"
               }`}
             >
-              <div className="relative min-h-56 overflow-hidden lg:min-h-full">
+              <div
+                className="relative aspect-[1.255] w-full overflow-hidden md:aspect-auto md:min-h-56 lg:min-h-full"
+              >
                 <Image
-                  className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-105"
+                  className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
                   src={card.image}
                   alt={card.titleCategory}
                   fill
@@ -61,27 +66,32 @@ export function SolutionCards({
               {/* Khối 1, 3 (imageFirst) trượt từ phải qua trái; khối 2, 4
                   trượt từ trái qua phải, ngay sau khi khối fade in. */}
               <Reveal
-                className="flex flex-col justify-center p-5 sm:p-7 lg:p-10 lg:[direction:ltr]"
+                className="flex min-w-0 flex-col justify-center px-[7.5%] pt-[5%] pb-[6%] md:p-7 lg:p-10 lg:[direction:ltr]"
                 delay={index * 160 + 120}
                 from={imageFirst ? "right" : "left"}
               >
-                <div className="flex items-start gap-4">
-                  <span className="text-4xl leading-none font-extrabold text-neutral-400 sm:text-6xl lg:text-[4.5rem]">
+                <div className="flex min-w-0 items-start gap-[4%] md:gap-4">
+                  <span className="shrink-0 text-[clamp(2.95rem,13vw,4.35rem)] leading-[0.9] font-extrabold text-[#b8babc] md:text-6xl md:leading-none md:text-neutral-400 lg:text-[4.5rem]">
                     {card.number}.
                   </span>
-                  {/* Tiền tố và nhóm công trình chảy nối tiếp nhau như mockup,
-                      chỉ xuống dòng khi hết chỗ. */}
-                  <h3 className="font-heading mt-1 text-xl leading-tight font-extrabold uppercase sm:text-2xl lg:text-[1.75rem]">
+                  {/* Tiền tố và nhóm công trình không tự xuống dòng (mỗi dòng
+                      luôn 1 hàng như mockup); cỡ chữ co theo bề rộng màn hình
+                      để dòng dài nhất vẫn vừa khít, chỉ ngắt dòng ở vị trí <br />. */}
+                  <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(0.875rem,4.15vw,1.45rem)] leading-[1.3] font-extrabold uppercase md:mt-1 md:pt-0 md:text-2xl md:leading-tight md:whitespace-nowrap lg:text-[1.75rem]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
                     <br />
-                    <span className="text-brand">{card.titleCategory}</span>
+                    <span className="text-brand md:whitespace-nowrap">
+                      {card.titleCategory}
+                    </span>
                   </h3>
                 </div>
-                <p className="mt-2 text-sm font-bold">{card.tagline}</p>
+                <p className="mt-2 text-[clamp(0.72rem,3vw,0.88rem)] leading-tight font-extrabold md:text-sm md:font-bold">
+                  {card.tagline}
+                </p>
 
                 {ruleImage ? (
                   <Image
-                    className="mt-3 mb-4 h-[0.1875rem] w-25 max-w-full object-fill sm:w-35"
+                    className="mt-2.5 mb-3 h-0.5 w-[26%] max-w-full object-fill md:mt-3 md:mb-4 md:h-[0.1875rem] md:w-35"
                     src={ruleImage}
                     alt=""
                     width={587}
@@ -89,19 +99,24 @@ export function SolutionCards({
                     aria-hidden="true"
                   />
                 ) : (
-                  <span className="mt-4 mb-4 block h-0.5 w-24 bg-brand" />
+                  <span className="mt-2.5 mb-3 block h-0.5 w-[26%] bg-brand md:mt-4 md:mb-4 md:w-24" />
                 )}
 
-                <p className="text-sm leading-relaxed text-justify">
+                <p className="text-justify text-[clamp(0.69rem,2.72vw,0.82rem)] leading-[1.22] md:text-sm md:leading-relaxed">
                   {card.description}
                 </p>
 
-                <p className="mt-5 text-sm font-bold">BMT Decor cung cấp:</p>
-                <ul className="mt-2 grid gap-1.5">
+                <p className="mt-2 text-[clamp(0.7rem,2.85vw,0.84rem)] font-extrabold md:mt-5 md:text-sm md:font-bold">
+                  BMT Decor cung cấp:
+                </p>
+                <ul className="mt-1 grid gap-0.5 md:mt-2 md:gap-1.5">
                   {card.checklist.map((item) => (
-                    <li className="flex items-start gap-2 text-sm" key={item}>
+                    <li
+                      className="flex items-start gap-2 text-[clamp(0.69rem,2.72vw,0.82rem)] leading-[1.2] md:text-sm md:leading-normal"
+                      key={item}
+                    >
                       <Image
-                        className="mt-0.5 size-4 shrink-0 object-contain"
+                        className="mt-px size-[clamp(0.7rem,3vw,0.9rem)] shrink-0 object-contain md:mt-0.5 md:size-4"
                         src={checkIcon}
                         alt=""
                         width={90}
@@ -112,14 +127,28 @@ export function SolutionCards({
                   ))}
                 </ul>
 
-                <PillCtaButton
-                  className="mt-6 h-11 max-w-full sm:h-12"
-                  href="/du-an"
-                  label={card.cta}
-                  image={card.ctaImage}
-                  imageWidth={card.ctaImageWidth}
-                  imageHeight={card.ctaImageHeight}
-                />
+                <div className="mt-4 h-[clamp(1.6rem,6.5vw,2.05rem)] md:hidden">
+                  <PillCtaButton
+                    className="h-full max-w-full"
+                    href="/du-an"
+                    label={card.cta}
+                    image={card.ctaImageMobile ?? card.ctaImage}
+                    imageWidth={card.ctaImageMobileWidth ?? card.ctaImageWidth}
+                    imageHeight={card.ctaImageMobileHeight ?? card.ctaImageHeight}
+                    textClassName="!text-[clamp(0.67rem,2.65vw,0.8rem)]"
+                    textPaddingRightPercent={10}
+                  />
+                </div>
+                <div className="mt-6 hidden md:block">
+                  <PillCtaButton
+                    className="max-w-full lg:h-12"
+                    href="/du-an"
+                    label={card.cta}
+                    image={card.ctaImage}
+                    imageWidth={card.ctaImageWidth}
+                    imageHeight={card.ctaImageHeight}
+                  />
+                </div>
               </Reveal>
             </div>
           </Reveal>

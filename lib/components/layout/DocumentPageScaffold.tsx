@@ -21,10 +21,7 @@ export function DocumentPageScaffold({
   image = "/images/bmt-hero-interior.png",
 }: DocumentPageScaffoldProps) {
   return (
-    <div
-      className="min-h-screen overflow-x-clip pt-[60px] xl:pt-[68px]"
-      data-scroll-snap-page
-    >
+    <div className="min-h-screen overflow-x-hidden pt-[86px]">
       <SiteHeader />
       <section className="relative isolate min-h-[560px]">
         <Image

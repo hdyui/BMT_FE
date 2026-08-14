@@ -30,12 +30,12 @@ export function ProcessAccordion() {
           value={`step-${index + 1}`}
           key={step.title}
         >
-          <div className="grid grid-cols-[3.5rem_1fr] items-center gap-3 py-4 sm:grid-cols-[13.75rem_1fr] lg:grid-cols-[21.25rem_1fr] lg:gap-6">
+          <div className="grid grid-cols-[5.5rem_1fr] items-center gap-3 py-4 sm:grid-cols-[13.75rem_1fr] lg:grid-cols-[21.25rem_1fr] lg:gap-6">
             {/* Chỉ khung ảnh cao lên; object-cover luôn bị giới hạn theo chiều
                 ngang nên ảnh giữ nguyên tỉ lệ, chỉ lộ thêm phần trên dưới.
                 Chiều cao = bề rộng cột × 320/1420 (thu gọn) và × 639/1420 (mở);
                 bo góc bằng CSS vì lúc thu gọn phần bo sẵn trong ảnh bị cắt mất. */}
-            <AccordionTrigger className="relative block h-4.25 w-full overflow-hidden rounded-[0.1875rem] transition-[height] duration-300 ease-out group-data-open/step:h-[2.125rem] sm:h-[3.125rem] sm:rounded-[0.5625rem] sm:group-data-open/step:h-[6.1875rem] lg:h-[4.8125rem] lg:rounded-[0.875rem] lg:group-data-open/step:h-[9.5625rem]">
+            <AccordionTrigger className="relative block h-8 w-full overflow-hidden rounded-[0.375rem] transition-[height] duration-300 ease-out group-data-open/step:h-20 sm:h-[3.125rem] sm:rounded-[0.5625rem] sm:group-data-open/step:h-[6.1875rem] lg:h-[4.8125rem] lg:rounded-[0.875rem] lg:group-data-open/step:h-[9.5625rem]">
               <Image
                 className="object-cover"
                 src={step.imageOpen}
