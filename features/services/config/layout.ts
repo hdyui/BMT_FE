@@ -5,8 +5,12 @@
  * Quy ước: KHÔNG dùng px cứng. Mọi kích thước đi theo viewport (vw / clamp) hoặc
  * theo thang spacing của Tailwind để layout co giãn được ở mọi khổ màn hình.
  */
+// Banner mẫu (banner-chuan.png, 720×994) cao hơn hẳn so với công thức 92vw cũ.
+// min-h ở đây chỉ còn là SÀN tối thiểu cho đẹp mắt — cụm ảnh giờ nằm trong
+// luồng thường (xem ServicesOverviewPage) nên dù số liệu ở đây có lệch cũng
+// không còn khiến ảnh đè lên chữ. base (dải md-lg) và lg giữ nguyên như cũ.
 export const SERVICE_HERO_CLASS_NAME =
-  "relative isolate min-h-[clamp(28rem,92vw,47.5rem)] overflow-hidden bg-[#F2F2F3] lg:h-[clamp(35rem,38.9vw,47.5rem)] lg:min-h-0";
+  "relative isolate min-h-[clamp(28rem,92vw,47.5rem)] overflow-hidden bg-[#F2F2F3] max-md:min-h-[clamp(34rem,159vw,42rem)] lg:h-[clamp(35rem,38.9vw,47.5rem)] lg:min-h-0";
 
 export const SERVICE_PROJECT_SECTION_CLASS_NAME =
   "relative isolate overflow-hidden py-10 sm:py-12 lg:py-16";
@@ -23,10 +27,10 @@ export const SERVICE_PROJECT_CTA_CLASS_NAME =
 export const SERVICE_SOLUTION_SECTION_CLASS_NAME = "py-10 sm:py-12 lg:py-16";
 
 export const SERVICE_SOLUTION_HEADING_CLASS_NAME =
-  "mx-auto w-[min(75rem,calc(100%-2.25rem))] text-center mb-8 lg:mb-10";
+  "mx-auto mb-8 w-[min(29rem,calc(100%-2rem))] text-center md:w-[min(75rem,calc(100%-2.25rem))] lg:mb-10";
 
 export const SERVICE_SOLUTION_CARDS_CLASS_NAME =
-  "mx-auto w-[min(65rem,calc(100%-2.25rem))]";
+  "mx-auto w-[min(29rem,calc(100%-2rem))] md:w-[min(65rem,calc(100%-2.25rem))]";
 
 /**
  * Cỡ chữ cho nút pill "TƯ VẤN MIỄN PHÍ" — trước đây fix cứng 24px ở mọi khổ màn

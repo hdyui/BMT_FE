@@ -9,12 +9,12 @@ export function ProjectProcess({ project }: { project: ProjectDetail }) {
   return (
     <section className="bg-white pb-[clamp(68px,8vw,125px)]" aria-labelledby="process-title">
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
-        <ProjectSectionHeading className="mb-8" delay={80} duration={950}>
+        <ProjectSectionHeading className="mb-8" delay={180} duration={900}>
           <span id="process-title">Quá trình và năng lực thi công:</span>
         </ProjectSectionHeading>
         <div className="grid grid-cols-2 gap-x-3 gap-y-7 sm:gap-x-5 lg:grid-cols-4">
           {project.process.map((item, index) => (
-            <Reveal className={styles.imageReveal} delay={140 + index * 90} distance="long" duration={1050} from="fade" key={item.src}>
+            <Reveal className={styles.imageReveal} delay={420 + index * 140} duration={950} from="fade" key={item.src}>
               <article>
                 <div className={`aspect-[.75/1] rounded-[1.5rem] sm:rounded-[2rem] ${styles.media}`}>
                   <Image
@@ -32,7 +32,7 @@ export function ProjectProcess({ project }: { project: ProjectDetail }) {
             </Reveal>
           ))}
         </div>
-        <Reveal delay={320} distance="long" duration={950} from="left">
+        <Reveal delay={1050} duration={850} from="left">
           <p className="mt-7 text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em]">
             <ProjectRichText text={project.processDescription} />
           </p>

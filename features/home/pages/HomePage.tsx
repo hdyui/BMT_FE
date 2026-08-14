@@ -7,9 +7,9 @@ import { Reveal } from "@/lib/components/shared/Reveal";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { HomeHero } from "@/features/home/components/HomeHero";
 import { ProjectShowcase } from "@/features/home/components/ProjectShowcase";
-import { FeaturedServicesSection } from "@/features/home/components/FeaturedServicesSection";
+import { ServiceShowcase } from "@/features/home/components/ServiceShowcase";
 import { CountUpStats } from "@/features/home/components/CountUpStats";
-import { PartnerSection } from "@/features/home/components/PartnerSection";
+import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
 import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
@@ -93,9 +93,28 @@ function ProjectSectionHeading() {
   );
 }
 
+function ServiceSectionHeading() {
+  return (
+    <div className="text-center">
+      <Reveal>
+        <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[30px] max-sm:leading-tight">
+          Dịch vụ nổi bật
+        </h2>
+      </Reveal>
+      <Reveal delay={140}>
+        <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
+          BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa
+          dạng nhu cầu từ nhà ở đến không gian kinh doanh.
+        </p>
+      </Reveal>
+      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]" />
+    </div>
+  );
+}
+
 export function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-clip" data-scroll-snap-page>
+    <div className="min-h-screen overflow-x-clip">
       <SiteHeader />
       <HomeHero />
 
@@ -230,7 +249,7 @@ export function HomePage() {
           fill
           sizes="100vw"
         />
-        <div className="relative mx-auto w-[min(1320px,calc(100%-2.25rem))]">
+        <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
           <ProjectSectionHeading />
           <ProjectShowcase />
         </div>
@@ -257,15 +276,35 @@ export function HomePage() {
         />
 
         <div className="relative">
-          <FeaturedServicesSection />
+          <section className="relative overflow-hidden py-16 max-sm:bg-white">
+            <div
+              className="pointer-events-none absolute inset-0 bg-top bg-repeat-y opacity-35 mix-blend-multiply max-sm:hidden"
+              style={{
+                backgroundImage: "url('/images/home/blueprint-background.png')",
+                backgroundSize: "1922px 440px",
+              }}
+              aria-hidden="true"
+            />
+            <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+              <ServiceSectionHeading />
+              <ServiceShowcase />
+            </div>
+          </section>
 
-          <PartnerSection />
+          <section className="py-14 max-sm:pt-10 max-sm:pb-4">
+            <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
+              <SectionHeading title="Đối tác của BMT Decor" />
+              <Reveal delay={120}>
+                <PartnerMarquee />
+              </Reveal>
+            </div>
+          </section>
 
           <CapabilityProfileSection />
         </div>
       </div>
 
-      <section className="relative overflow-hidden bg-neutral-100 py-16 max-lg:-mb-[2.342945vw] max-lg:pb-[calc(4rem+2.342945vw)]">
+      <section className="relative overflow-hidden bg-neutral-100 py-16">
         <div
           className="pointer-events-none absolute inset-0 bg-top bg-repeat-y opacity-35 mix-blend-multiply"
           style={{
@@ -274,10 +313,10 @@ export function HomePage() {
           }}
           aria-hidden="true"
         />
-        <div className="relative mx-auto w-[min(1100px,calc(100%-2.25rem))]">
+        <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
           <SectionHeading title="Tin nổi bật" />
-          <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
-            <Reveal className="self-start">
+          <div className="mt-9 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
+            <Reveal>
               <Link className="group block" href="/tin-tuc">
                 <div
                   className="relative overflow-hidden rounded-3xl"
@@ -294,7 +333,7 @@ export function HomePage() {
                 <h3 className="mt-5 text-xl font-bold transition-colors group-hover:text-brand">
                   Bí quyết kiến tạo không gian sống hiện đại và bền vững
                 </h3>
-                <p className="mt-2 text-justify text-sm leading-relaxed text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:line-clamp-2 max-sm:text-left max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground max-sm:line-clamp-2 max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
                   Cập nhật xu hướng thiết kế, kinh nghiệm thi công và các giải
                   pháp hữu ích từ đội ngũ BMT Decor.
                 </p>
@@ -304,7 +343,7 @@ export function HomePage() {
               {news.map((item, index) => (
                 <Reveal delay={index * 100} key={item.title}>
                   <Link
-                    className="group grid grid-cols-[132px_1fr] items-center gap-5 max-sm:grid-cols-[46%_1fr] max-sm:gap-4"
+                    className="group grid grid-cols-[148px_1fr] items-center gap-5 max-sm:grid-cols-[46%_1fr] max-sm:gap-4"
                     href="/tin-tuc"
                   >
                     <div className="relative aspect-square overflow-hidden rounded-2xl max-sm:aspect-[1.75/1]">
@@ -313,14 +352,14 @@ export function HomePage() {
                         src={item.image}
                         alt=""
                         fill
-                        sizes="132px"
+                        sizes="148px"
                       />
                     </div>
                     <div className="min-w-0">
                       <h3 className="text-lg font-extrabold leading-snug text-charcoal transition-colors group-hover:text-brand max-sm:line-clamp-2 max-sm:text-[16px] max-sm:font-bold max-sm:leading-[1.12] max-sm:text-charcoal max-sm:group-hover:text-charcoal">
                         {item.title}
                       </h3>
-                      <p className="mt-2 line-clamp-3 text-justify text-sm leading-[1.45] text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:mt-1.5 max-sm:line-clamp-2 max-sm:text-left max-sm:text-[13px] max-sm:font-normal max-sm:leading-[1.3] max-sm:text-charcoal/80">
+                      <p className="mt-2 line-clamp-3 text-sm leading-[1.45] text-muted-foreground max-sm:mt-1.5 max-sm:line-clamp-2 max-sm:text-[13px] max-sm:font-normal max-sm:leading-[1.3] max-sm:text-charcoal/80">
                         {item.copy}
                       </p>
                     </div>
@@ -348,7 +387,7 @@ export function HomePage() {
       </section>
 
       <ContactForm />
-      <SiteFooter showTopBorder={false} />
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

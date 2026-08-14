@@ -64,7 +64,7 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8 max-sm:mt-4" delay={240} from="left">
-            <p className="max-w-2xl text-justify text-xl leading-[1.62] text-charcoal/85 [text-align-last:left] [text-justify:inter-character] sm:text-lg max-sm:text-left max-sm:text-[15px] max-sm:leading-[1.12]">
+            <p className="max-w-2xl text-xl leading-[1.62] text-charcoal/85 sm:text-lg max-sm:text-[15px] max-sm:leading-[1.12]">
               <Image
                 className="float-left mr-3 size-7 object-contain max-sm:mt-[2px] max-sm:mr-2 max-sm:size-[14px]"
                 src="/images/home/building-mark.png"

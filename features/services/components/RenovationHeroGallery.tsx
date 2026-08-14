@@ -23,7 +23,7 @@ function PhotoFrame({
       className={`group/frame relative size-full overflow-hidden rounded-[1.5rem] border-4 border-white sm:rounded-[3rem] sm:border-6 shadow-[0_18px_40px_rgb(36_33_34/.18)] ${className ?? ""}`}
     >
       <Image
-        className="object-cover transition-transform duration-500 ease-out group-hover/frame:scale-110"
+        className="object-cover transition-transform duration-500 ease-out group-hover/frame:scale-110 group-active/frame:scale-110"
         src={photo.image}
         alt={photo.alt}
         fill

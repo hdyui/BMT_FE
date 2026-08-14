@@ -54,12 +54,19 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
             delay={index * 150}
             from="bottom"
           >
-            {/* Background Frame: Tự động scale theo chiều ngang mới */}
+            {/* Background Frame: Tự động scale theo chiều ngang mới.
+                `width`/`height` PHẢI khớp tỉ lệ thật của file (1016x1214,
+                ~0.84) — trước đây để 260x600 (~0.43) làm trình duyệt tính
+                sai tỉ lệ khung theo `h-auto`, khiến `object-contain` co ảnh
+                nhỏ lại và chừa ~24% khoảng trống rỗng trên/dưới trong khung.
+                Số thứ tự (`top-[16.5%]`) và icon cam (`bottom-[-4%]`) đều
+                định vị theo % của khung đó nên bị lọt vào đúng vùng trống
+                này — số như bị lệch trái, icon như bị tụt xuống quá thấp. */}
             <Image
               src="/images/cai-tao-sua-chua/frame.png" // BẠN ĐỔI URL ẢNH KHUNG SỐ 49 VÀO ĐÂY
               alt="Khung background"
-              width={260}
-              height={600}
+              width={1016}
+              height={1214}
               className="h-auto w-full object-contain"
               sizes="(max-width: 1024px) 100vw, 20vw"
             />

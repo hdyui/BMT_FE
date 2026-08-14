@@ -33,8 +33,15 @@ export function ServicesOverviewPage() {
         />
         <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgb(255_255_255/.95)_0%,rgb(255_255_255/.78)_38%,rgb(255_255_255/.08)_68%)] max-md:bg-[linear-gradient(180deg,rgb(255_255_255/.96)_0%,rgb(255_255_255/.88)_55%,rgb(255_255_255/.18)_100%)]" />
 
-        <div className="relative h-full w-full max-md:mx-auto max-md:w-[calc(100%-2.25rem)]">
-          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-16">
+        {/* Màn nhỏ: bỏ kiểu "chữ + cụm ảnh chồng tuyệt đối trong khung cố định
+            chiều cao" (dễ đè lên nhau khi ước lượng chiều cao sai) — chuyển cụm
+            ảnh sang `relative` (vẫn là mốc % cho 4 thẻ con bên trong, nhưng bản
+            thân nó lại nằm trong luồng thường), nối ngay sau khối chữ bằng
+            margin-top thay vì `bottom-0` tuyệt đối, nên không bao giờ đè lên
+            nội dung bất kể chữ dài ngắn thế nào. pt-28 (112px) đẩy "GIẢI PHÁP"
+            xuống dưới SiteHeader cao 85px, tránh bị che. */}
+        <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
+          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-28">
             <Reveal>
               <p className="mb-4 inline-block border-b-2 border-charcoal pb-1 text-base sm:text-lg">
                 GIẢI PHÁP
@@ -51,13 +58,13 @@ export function ServicesOverviewPage() {
             </Reveal>
 
             <BuildingRule
-              className="mt-2 w-full max-w-85"
+              className="mt-2 w-full max-w-85 max-md:w-[45%]"
               src="/images/services/rule-dark.png"
               delay={200}
             />
 
             <Reveal delay={320} from="left">
-              <h2 className="font-heading mt-5 mb-4 max-w-160 text-sm sm:text-base">
+              <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] sm:text-base">
                 ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty sm:text-base">
@@ -77,25 +84,22 @@ export function ServicesOverviewPage() {
             </Reveal>
           </div>
 
-          {/* Màn nhỏ: cụm thẻ neo góc dưới phải và rộng theo vw (thay cho
-              680px + scale cứng cũ) nên không bao giờ tràn ngang.
+          {/* Từ lg: cụm thẻ vẫn neo tuyệt đối như cũ, chồng lên vùng ảnh nền
+              theo đúng bố cục desktop gốc.
 
-              Từ md: `w-[45%]` (cũ 49%) + `top-[16.4%]` (cũ 9%). Cụm này lấy kích
-              thước theo BỀ RỘNG rồi suy chiều cao qua `aspect-1387/1000`, nên
-              giảm bề rộng là co đều cả hai chiều, không méo. Trước đây trang có
-              `pt-16` đẩy banner xuống 64px; khi xoá khoảng trắng thì đỉnh cụm tụt
-              lên y=50px, nằm sau SiteHeader (85px). Bộ số mới cho đỉnh cụm ở
-              y≈92px (dưới header) mà đáy vẫn chạm đáy banner. */}
-          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] max-md:top-auto max-md:right-[-8%] max-md:bottom-0 max-md:w-[115%] max-md:origin-bottom-right">
+              Dưới lg: cụm thẻ chuyển sang `relative`, xuống dòng bình thường
+              ngay sau khối chữ (margin-top thay vì `bottom-0` tuyệt đối) nên
+              không bao giờ chồng lên đoạn mô tả cho dù chữ dài ngắn ra sao. */}
+          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full">
             {heroCards.map((card, index) => (
               <Reveal
-                className={`absolute w-[31.5%] hover:z-50 ${cardPositions[index]}`}
+                className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
                 delay={(heroCards.length - 1 - index) * 130}
                 from="right"
                 key={card.image}
               >
                 <Image
-                  className="h-auto w-full transition-transform duration-500 ease-out hover:scale-105"
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
                   src={card.image}
                   alt={card.alt}
                   width={800}
@@ -134,8 +138,11 @@ export function ServicesOverviewPage() {
               khách hàng trong từng giai đoạn.
             </p>
           </Reveal>
+          {/* Cùng lý do với đường kẻ ở phần FAQ: ảnh 1388×128 rất dẹt, khoá
+              chiều cao cố định khiến object-contain để trống mảng trên/dưới
+              trong khung. Đổi sang h-auto + đúng aspect ảnh gốc. */}
           <BuildingRule
-            className="mx-auto mt-4 w-full max-w-82.5"
+            className="mx-auto mt-4 w-full max-w-82.5 max-lg:mt-1.5 max-lg:h-auto max-lg:aspect-1388/128 max-lg:w-[50%]"
             src="/images/services/rule-orange.png"
             delay={320}
           />
@@ -152,11 +159,11 @@ export function ServicesOverviewPage() {
           Khe hở ở góc cong phía trên sẽ được lấp bằng một khối div phụ ẩn phía sau. */}
       <section className="grid lg:grid-cols-2">
         <Reveal
-          className="relative mr-3.5 lg:mr-0 z-20 min-h-[clamp(12.5rem,45vw,17.5rem)] overflow-hidden rounded-tr-[clamp(2rem,7vw,3.375rem)] lg:min-h-120 lg:rounded-tr-[4.5rem]"
+          className="group/photo relative z-20 min-h-[clamp(15rem,67vw,20rem)] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
           from="left"
         >
           <Image
-            className="object-cover transition-transform duration-700 ease-out hover:scale-105"
+            className="object-cover transition-transform duration-700 ease-out group-hover/photo:scale-105 group-active/photo:scale-105"
             src="/images/services/faq-photo.webp"
             alt="Góc thư giãn trong công trình do BMT Decor thực hiện"
             fill
@@ -173,19 +180,24 @@ export function ServicesOverviewPage() {
           />
 
           <Reveal>
-            <h2 className="font-heading text-2xl font-bold sm:text-3xl lg:text-4xl">
+            <h2 className="font-heading text-2xl font-bold max-lg:text-center sm:text-3xl lg:text-4xl">
               CÁC CÂU HỎI THƯỜNG GẶP
             </h2>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty">
+            <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-lg:mx-auto max-lg:text-center">
               Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ
               <br className="hidden md:inline" /> hơn về quy trình và dịch vụ
               của BMT Decor
             </p>
           </Reveal>
+          {/* Ảnh gốc rule-orange.png tỉ lệ 1388×128 (~10.8:1) rất dẹt: khoá
+              h-16 cố định trước đó khiến object-contain co theo bề rộng rồi
+              để trống mảng trên/dưới trong khung. Đổi sang h-auto + aspect
+              đúng tỉ lệ ảnh để khung ôm sát nội dung, không còn khoảng trắng
+              thừa. */}
           <BuildingRule
-            className="mt-3 mb-10 w-full max-w-82.5 lg:mb-18"
+            className="mt-3 mb-10 w-full max-w-82.5 max-lg:mx-auto max-lg:mt-1.5 max-lg:mb-4 max-lg:h-auto max-lg:aspect-1388/128 max-lg:w-[48%] lg:mb-18"
             src="/images/services/rule-orange.png"
             delay={320}
           />
@@ -193,7 +205,6 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
-      {/* Panel FAQ đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
       <ContactForm />
       <SiteFooter />
     </div>

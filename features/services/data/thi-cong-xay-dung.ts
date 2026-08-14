@@ -41,6 +41,9 @@ export const solutionCards = [
     ctaImage: "/images/thi-cong-xay-dung/btn-pill-nha-o.png",
     ctaImageWidth: 1408,
     ctaImageHeight: 253,
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-o.png",
+    ctaImageMobileWidth: 1668,
+    ctaImageMobileHeight: 253,
     image: "/images/thi-cong-xay-dung/solution-1.jpg",
   },
   {
@@ -60,6 +63,9 @@ export const solutionCards = [
     ctaImage: "/images/thi-cong-xay-dung/btn-pill-van-phong.png",
     ctaImageWidth: 1655,
     ctaImageHeight: 253,
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-van-phong.png",
+    ctaImageMobileWidth: 1972,
+    ctaImageMobileHeight: 253,
     image: "/images/thi-cong-xay-dung/solution-2.jpg",
   },
   {
@@ -80,6 +86,9 @@ export const solutionCards = [
     ctaImage: "/images/thi-cong-xay-dung/btn-pill-showroom.png",
     ctaImageWidth: 2397,
     ctaImageHeight: 253,
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-showroom.png",
+    ctaImageMobileWidth: 2939,
+    ctaImageMobileHeight: 253,
     image: "/images/thi-cong-xay-dung/solution-3.jpg",
   },
   {
@@ -99,6 +108,9 @@ export const solutionCards = [
     ctaImage: "/images/thi-cong-xay-dung/btn-pill-nha-hang.png",
     ctaImageWidth: 2180,
     ctaImageHeight: 253,
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-hang.png",
+    ctaImageMobileWidth: 2682,
+    ctaImageMobileHeight: 253,
     image: "/images/thi-cong-xay-dung/solution-4.jpg",
   },
 ];

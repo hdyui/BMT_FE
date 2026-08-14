@@ -11,6 +11,7 @@ import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 import { RenovationHeroGallery } from "@/features/services/components/RenovationHeroGallery";
 import { RenovationProcessSteps } from "@/features/services/components/RenovationProcessSteps";
+import { RenovationMobileContent } from "@/features/services/components/RenovationMobileContent";
 import {
   SERVICE_HERO_CLASS_NAME,
   SERVICE_PROJECT_CAROUSEL_CLASS_NAME,
@@ -54,10 +55,11 @@ const EDGE_SHADOWS = [
 
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal">
+    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip">
       <SiteHeader />
+      <RenovationMobileContent />
       {/* SECTION 1: BANNER */}
-      <section className={SERVICE_HERO_CLASS_NAME}>
+      <section className={`${SERVICE_HERO_CLASS_NAME} max-md:hidden`}>
         {/* Ảnh nền do thiết kế cung cấp, đã có sẵn các vệt xám loang — dùng thẳng
             thay vì tự vẽ bóng bằng CSS. File gốc 8000x3468 (tỉ lệ 2.31) nhưng chỉ
             120KB vì là gradient trơn; `object-cover` cắt nhẹ hai bên cho khớp tỉ
@@ -182,16 +184,11 @@ export function RenovationServicePage() {
 
                 {/* Đường line đen. mt-4 khớp với Construction/Design page (bản
                     cũ mt-5/xl:mt-6 khiến khoảng cách dòng to hơn 3 trang kia). */}
-                <Reveal delay={220} from="left">
-                  <Image
-                    className="mt-4 h-auto w-28 max-w-full object-contain object-left"
-                    src="/images/cai-tao-sua-chua/icon-building-divider.png"
-                    alt=""
-                    width={571}
-                    height={128}
-                    aria-hidden="true"
-                  />
-                </Reveal>
+                <BuildingRule
+                  className="mt-4 w-full max-w-85"
+                  src="/images/services/rule-dark.png"
+                  delay={220}
+                />
 
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
@@ -238,7 +235,7 @@ export function RenovationServicePage() {
       </section>
 
       {/* SECTION 2: GIẢI PHÁP CẢI TẠO PHÙ HỢP CHO MỌI CÔNG TRÌNH */}
-      <section className={SERVICE_PROJECT_SECTION_CLASS_NAME}>
+      <section className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} max-md:hidden`}>
         <div className={SERVICE_PROJECT_HEADING_CLASS_NAME}>
           <Reveal from="bottom">
             <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
@@ -290,9 +287,14 @@ export function RenovationServicePage() {
         </Reveal>
       </section>
 
-      {/* SECTION 3: THEO LOẠI HÌNH CÔNG TRÌNH */}
+      {/* SECTION 3: THEO LOẠI HÌNH CÔNG TRÌNH. `bg-white` (không phải
+          `bg-neutral-100`) để khớp đúng 2 trang Thi công/Xây dựng trọn gói —
+          nền xám nhạt #f5f5f5 cũ gần như không phân biệt được với nền trắng
+          #fff của SECTION 4 ngay bên dưới (section đó không set bg riêng nên
+          ăn theo nền trắng của trang), khiến 2 section trông dính liền/trùng
+          màu thay vì tách bạch. */}
       <section
-        className={`bg-neutral-100 ${SERVICE_SOLUTION_SECTION_CLASS_NAME}`}
+        className={`bg-white ${SERVICE_SOLUTION_SECTION_CLASS_NAME} max-md:hidden`}
       >
         <div className={SERVICE_SOLUTION_HEADING_CLASS_NAME}>
           <div className="mb-12 text-center">
@@ -329,7 +331,7 @@ export function RenovationServicePage() {
       </section>
 
       {/* SECTION 4: QUY TRÌNH CẢI TẠO & SỬA CHỮA */}
-      <section className="py-16">
+      <section className="hidden py-16 md:block">
         {/* <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
             <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">

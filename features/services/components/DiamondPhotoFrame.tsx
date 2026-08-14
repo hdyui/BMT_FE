@@ -24,7 +24,7 @@ export function DiamondPhotoFrame({
 }: DiamondPhotoFrameProps) {
   return (
     <div
-      className="absolute aspect-square -translate-x-1/2 -translate-y-1/2 hover:z-40"
+      className="absolute aspect-square -translate-x-1/2 -translate-y-1/2 hover:z-50"
       style={{ left, top, height: size, zIndex }}
     >
       <Reveal className="group/frame size-full" delay={delay} from="fade">

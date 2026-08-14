@@ -20,7 +20,6 @@ export function ProjectSectionHeading({
     <Reveal
       className={`${centered ? "text-center" : ""} ${className}`}
       delay={delay}
-      distance="long"
       duration={duration}
     >
       <h2 className="text-[clamp(29px,3vw,48px)] leading-[1.04] font-bold tracking-[-0.04em] text-brand uppercase text-balance">
