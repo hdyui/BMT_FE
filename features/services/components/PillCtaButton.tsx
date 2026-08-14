@@ -41,7 +41,7 @@ export function PillCtaButton({
   // càng dài, ảnh càng rộng, icon càng chiếm % nhỏ). Tính động thay vì dùng
   // con số cố định của bản desktop để chữ không bị đẩy tràn xuống dòng.
   const mobileIconPaddingPercent = mobileTextCentered
-    ? 12
+    ? 15
     : mobileImageWidth && mobileImageHeight
       ? (mobileImageHeight / mobileImageWidth) * 100 + 3
       : 0;

@@ -89,11 +89,26 @@ function RenovationMobileHero() {
           delay={120}
         />
         <Reveal delay={300} from="left">
-          <p className="mt-2 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed text-charcoal">
+          <p className="mt-2 flex items-center gap-1.5 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed text-charcoal">
+            <Image
+              className="size-3 shrink-0 object-contain"
+              src="/images/cai-tao-sua-chua/icon-house.png"
+              alt=""
+              width={90}
+              height={95}
+              aria-hidden="true"
+            />
             Cải Tạo Không Gian - Nâng Tầm Giá Trị Công Trình
           </p>
         </Reveal>
       </div>
+
+      {/* Bóng vuông bo góc, mờ mềm, nhô lên quá cạnh trên banner — nằm sau
+          hoa văn chấm cam theo đúng mockup. */}
+      <div
+        className="pointer-events-none absolute -top-[4%] right-[9%] -z-10 h-[19%] w-[16%] rounded-[1.75rem] bg-charcoal/[0.035] blur-[1.2vw]"
+        aria-hidden="true"
+      />
 
       <Reveal
         className="absolute top-[20%] right-[7.5%] w-[7.2%]"
@@ -145,7 +160,7 @@ function RenovationMobileHero() {
 
 function RenovationMobileProjects() {
   return (
-    <section className="relative isolate overflow-hidden px-4 pt-8 pb-7">
+    <section className="relative isolate overflow-hidden px-4 pt-8 pb-3">
       <Image
         className="-z-10 object-cover object-bottom opacity-55"
         src="/images/home/blueprint-background.png"
@@ -170,13 +185,18 @@ function RenovationMobileProjects() {
           </p>
         </Reveal>
         <BuildingRule
-          className="mx-auto mt-3 h-auto w-[43%]"
+          className="mx-auto mt-3 h-auto aspect-600/55 w-[43%]"
           src="/images/xay-dung-tron-goi/rule-orange.png"
           delay={180}
         />
       </div>
 
-      <Reveal className="mt-2" delay={120} duration={850} from="bottom">
+      {/* `-mx-4` bù trừ `px-4` của section: các trang Thi công/Xây dựng
+          trọn gói đặt ProjectCarousel trong section KHÔNG có padding ngang
+          nên nút mũi tên (left/right-[3.5%]) đo từ mép màn hình thật. Trang
+          này có `px-4` bọc ngoài nên nếu không bù, nút bị lệch vào trong
+          thêm 16px mỗi bên so với 3 trang kia. */}
+      <Reveal className="mt-2 -mx-4" delay={120} duration={850} from="bottom">
         <ProjectCarousel
           projects={mobileProjects}
           prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
@@ -186,15 +206,19 @@ function RenovationMobileProjects() {
         />
       </Reveal>
 
-      <Reveal className="mt-4 flex h-9 justify-center" delay={200} duration={800} from="bottom">
+      <Reveal className="mt-3 flex h-11 justify-center" delay={200} duration={800} from="bottom">
         <PillCtaButton
-          className="h-full"
+          className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
           href="#contact-form"
           label="TƯ VẤN MIỄN PHÍ"
           image="/images/thi-cong-xay-dung/btn-pill.png"
           imageWidth={1539}
           imageHeight={292}
-          textClassName="!text-[clamp(0.72rem,3.1vw,0.9rem)]"
+          mobileImage="/images/thi-cong-xay-dung/mobile/btn-consult.png"
+          mobileImageWidth={1539}
+          mobileImageHeight={292}
+          mobileTextCentered
+          textClassName="!text-[clamp(0.8rem,3.2vw,1.25rem)]"
         />
       </Reveal>
     </section>
@@ -234,7 +258,7 @@ function RenovationMobileSolutions() {
           </p>
         </Reveal>
         <BuildingRule
-          className="mx-auto mt-3 h-auto w-[43%]"
+          className="mx-auto mt-3 h-auto aspect-600/55 w-[43%]"
           src="/images/xay-dung-tron-goi/rule-orange.png"
           delay={120}
         />
@@ -340,14 +364,14 @@ function MobileProcessStep({
 
   return (
     <Reveal
-      className="absolute left-0 h-[17.738%] w-full"
+      className="group/step absolute left-0 h-[17.738%] w-full"
       delay={index * 90}
       duration={850}
-      from={index % 2 === 0 ? "right" : "left"}
+      from="bottom"
       style={{ top: `calc(11.43% + ${index} * 17.738%)` }}
     >
       <div
-        className={`absolute top-0 left-[12.2%] z-10 h-[77.18%] w-[67.1%] border-t border-l border-charcoal ${
+        className={`absolute top-0 left-[12.2%] z-10 h-[77.18%] w-[67.1%] border-t border-l border-charcoal transition-[filter] duration-300 group-active/step:drop-shadow-[0_10px_18px_rgb(36_33_34/.24)] ${
           isLast ? "border-b" : ""
         }`}
       >
@@ -357,8 +381,9 @@ function MobileProcessStep({
         )}
       </div>
 
-      <div className="absolute top-[-3.36%] left-[10.5%] h-[83.9%] w-[10.7%] overflow-visible rounded-l-[14px] bg-brand">
-        <span className="absolute top-1/2 right-[-20.5%] aspect-square w-[41%] -translate-y-1/2 rotate-45 bg-brand" />
+      {/* Mảng cam dưới số thứ tự: đổi sang cam nhạt khi rê/chạm. */}
+      <div className="absolute top-[-3.36%] left-[10.5%] h-[83.9%] w-[10.7%] overflow-visible rounded-l-[14px] bg-brand transition-colors duration-300 group-active/step:bg-[#f8a976]">
+        <span className="absolute top-1/2 right-[-20.5%] aspect-square w-[41%] -translate-y-1/2 rotate-45 bg-brand transition-colors duration-300 group-active/step:bg-[#f8a976]" />
         <span className="absolute inset-0 overflow-hidden rounded-l-[14px]">
           <span className="absolute inset-0 bg-[linear-gradient(58deg,rgb(255_255_255/.13)_0_49%,transparent_49.5%)]" />
         </span>
@@ -382,14 +407,21 @@ function MobileProcessStep({
         </p>
       </div>
 
-      <Image
-        className="absolute top-[24.16%] right-[10.1%] h-auto w-[10.8%] object-contain"
-        src={step.icon}
-        alt=""
-        width={199}
-        height={188}
-        aria-hidden="true"
-      />
+      {/* Icon: xuất hiện sau cùng của bước, chỉ fade in. */}
+      <Reveal
+        className="absolute top-[24.16%] right-[10.1%] w-[10.8%]"
+        delay={index * 90 + 320}
+        from="fade"
+      >
+        <Image
+          className="h-auto w-full object-contain"
+          src={step.icon}
+          alt=""
+          width={199}
+          height={188}
+          aria-hidden="true"
+        />
+      </Reveal>
 
       {!isLast && (
         <span className="absolute top-[77.18%] left-[65.4%] h-[14.1%] w-px bg-charcoal" aria-hidden="true">
@@ -404,8 +436,8 @@ function RenovationMobileProcess() {
   return (
     <section className="bg-[#f2f2f3]">
       <div className="relative mx-auto aspect-[410/840] w-full max-w-[410px] overflow-hidden bg-[#f2f2f3]">
-        <Reveal className="absolute inset-x-0 top-[1.07%]" from="bottom">
-          <h2 className="font-heading text-center text-[min(4.35vw,17.8px)] leading-[1.08] font-extrabold uppercase">
+        <Reveal className="absolute inset-x-0 top-[1.55%]" from="bottom">
+          <h2 className="font-heading text-center text-[min(4.74vw,19.4px)] leading-[1.08] font-extrabold uppercase">
             Quy trình cải tạo &amp; sửa chữa
             <span className="mt-[0.1%] flex items-center justify-center gap-[0.8%]">
               Tại
@@ -420,14 +452,20 @@ function RenovationMobileProcess() {
           </h2>
         </Reveal>
 
-        <Image
-          className="absolute top-[8.69%] left-[32.2%] h-auto w-[35.6%] object-contain"
-          src="/images/xay-dung-tron-goi/rule-orange.png"
-          alt=""
-          width={1388}
-          height={128}
-          aria-hidden="true"
-        />
+        <Reveal
+          className="absolute top-[8.19%] left-[32.2%] w-[35.6%]"
+          delay={140}
+          from="left"
+        >
+          <Image
+            className="h-auto w-full object-contain"
+            src="/images/xay-dung-tron-goi/rule-orange.png"
+            alt=""
+            width={1388}
+            height={128}
+            aria-hidden="true"
+          />
+        </Reveal>
 
         {processSteps.map((step, index) => (
           <MobileProcessStep step={step} index={index} key={step.number} />
