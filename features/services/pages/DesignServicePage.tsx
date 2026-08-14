@@ -234,12 +234,12 @@ export function DesignServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 px-4 text-center lg:!mb-10`}
         >
           <Reveal>
-            <h2 className="font-heading text-center text-3xl font-bold max-md:text-2xl sm:text-4xl">
+            <h2 className="font-heading text-center text-3xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl">
               GIẢI PHÁP THIẾT KẾ TỐI ƯU CHO MỌI KHÔNG GIAN
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p className="mx-auto mt-4 max-w-3xl text-pretty text-center text-sm leading-relaxed max-md:text-[0.82rem] max-md:leading-[1.3]">
+            <p className="mx-auto mt-4 max-w-3xl text-pretty text-justify [text-align-last:center] text-sm leading-relaxed max-md:text-[0.82rem] max-md:leading-[1.3]">
               BMT Decor cung cấp dịch vụ{" "}
               <strong className="font-bold">thiết kế kiến trúc</strong>,{" "}
               <strong className="font-bold">thiết kế nội thất</strong> và giải
@@ -252,7 +252,7 @@ export function DesignServicePage() {
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-5 h-8 max-w-[250px] max-md:h-6 max-md:max-w-42"
+            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             delay={300}
           />
@@ -299,10 +299,10 @@ export function DesignServicePage() {
             <Reveal from="bottom">
               {/* Mockup tách 2 dòng: dòng trên chữ thường, dòng dưới in đậm —
                   giống hệt 3 trang dịch vụ còn lại. */}
-              <h2 className="font-heading text-[clamp(0.75rem,3.8vw,1.25rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
                 <br />
-                <span className="font-bold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
+                <span className="font-extrabold md:font-bold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
@@ -360,7 +360,7 @@ export function DesignServicePage() {
             </h2>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-1 h-5 w-36 md:hidden"
+            className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:hidden"
             src="/images/thiet-ke-kien-truc-noi-that/rule-orange.png"
           />
         </div>

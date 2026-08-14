@@ -243,7 +243,7 @@ export function RenovationServicePage() {
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-6 max-w-[73.75rem] text-sm leading-relaxed text-pretty">
+            <p className="mx-auto mt-6 max-w-[73.75rem] text-sm leading-relaxed text-pretty text-justify [text-align-last:center]">
               BMT Decor cung cấp dịch vụ{" "}
               <strong className="font-bold">cải tạo nhà ở</strong>,{" "}
               <strong className="font-bold">cải tạo văn phòng</strong>,{" "}
@@ -260,7 +260,7 @@ export function RenovationServicePage() {
             </p>
           </Reveal>
           <BuildingRule
-            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
+            className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
             src="/images/xay-dung-tron-goi/rule-orange.png"
             delay={300}
           />
@@ -314,7 +314,7 @@ export function RenovationServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-5"
+                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
               />
             </Reveal>

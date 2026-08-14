@@ -55,7 +55,7 @@ export function SolutionCards({
                 className="relative aspect-[1.255] w-full overflow-hidden md:aspect-auto md:min-h-56 lg:min-h-full"
               >
                 <Image
-                  className="object-cover transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
+                  className="object-cover object-top md:object-center transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
                   src={card.image}
                   alt={card.titleCategory}
                   fill
@@ -80,7 +80,7 @@ export function SolutionCards({
                   <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(0.875rem,4.15vw,1.45rem)] leading-[1.3] font-extrabold uppercase md:mt-1 md:pt-0 md:text-2xl md:leading-tight md:whitespace-nowrap lg:text-[1.75rem]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
                     <br />
-                    <span className="text-brand md:whitespace-nowrap">
+                    <span className="text-brand whitespace-nowrap">
                       {card.titleCategory}
                     </span>
                   </h3>

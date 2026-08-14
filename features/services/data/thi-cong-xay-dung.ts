@@ -44,7 +44,7 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-o.png",
     ctaImageMobileWidth: 1668,
     ctaImageMobileHeight: 253,
-    image: "/images/thi-cong-xay-dung/solution-1.jpg",
+    image: "/images/thi-cong-xay-dung/solution-1-landscape.webp",
   },
   {
     number: "02",
@@ -66,12 +66,12 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-van-phong.png",
     ctaImageMobileWidth: 1972,
     ctaImageMobileHeight: 253,
-    image: "/images/thi-cong-xay-dung/solution-2.jpg",
+    image: "/images/thi-cong-xay-dung/solution-2-landscape.webp",
   },
   {
     number: "03",
-    titlePrefix: "THI CÔNG",
-    titleCategory: "SHOWROOM & THẨM MỸ VIỆN",
+    titlePrefix: "THI CÔNG SHOWROOM &",
+    titleCategory: "THẨM MỸ VIỆN",
     tagline:
       "Chính xác trong từng chi tiết hoàn thiện và nhận diện thương hiệu",
     description:
@@ -89,12 +89,12 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-showroom.png",
     ctaImageMobileWidth: 2939,
     ctaImageMobileHeight: 253,
-    image: "/images/thi-cong-xay-dung/solution-3.jpg",
+    image: "/images/thi-cong-xay-dung/solution-3-landscape.webp",
   },
   {
     number: "04",
-    titlePrefix: "THI CÔNG",
-    titleCategory: "NHÀ HÀNG & KHÁCH SẠN",
+    titlePrefix: "THI CÔNG NHÀ HÀNG &",
+    titleCategory: "KHÁCH SẠN",
     tagline: "Đảm bảo chất lượng thi công cho công trình khai thác liên tục",
     description:
       "Nhà hàng và khách sạn là những công trình có tần suất sử dụng cao, yêu cầu chất lượng thi công bền vững và khả năng vận hành ổn định. BMT Decor triển khai xây dựng phần thô, thi công hoàn thiện và lắp đặt các hạng mục theo đúng tiêu chuẩn kỹ thuật, giúp công trình đáp ứng yêu cầu khai thác lâu dài, dễ bảo trì và giữ được giá trị sử dụng theo thời gian.",
@@ -111,7 +111,7 @@ export const solutionCards = [
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-hang.png",
     ctaImageMobileWidth: 2682,
     ctaImageMobileHeight: 253,
-    image: "/images/thi-cong-xay-dung/solution-4.jpg",
+    image: "/images/thi-cong-xay-dung/solution-4-landscape.webp",
   },
 ];
 
