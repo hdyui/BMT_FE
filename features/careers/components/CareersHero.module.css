@@ -1,16 +1,6 @@
-@keyframes cta-fade-in {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
-}
-
 .mobilePresentation {
   display: none;
 }
-
 @media (max-width: 639px) {
   .careersHero {
     aspect-ratio: 3884 / 5972;
@@ -82,69 +72,5 @@
     height: 2.1cqw;
     margin-right: 0.38em;
     vertical-align: -0.16em;
-  }
-}
-
-.careersHeroCta {
-  display: inline-flex;
-  width: clamp(190px, 17.2vw, 330px);
-  aspect-ratio: 1366 / 291;
-  align-items: center;
-  margin-top: 1vw;
-  padding: 0;
-  border-radius: 999px;
-  background: url("/images/careers/careers-cta.jpg") center / 100% 100% no-repeat;
-  color: white;
-  font-size: clamp(18px, 1.65vw, 30px);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
-  text-align: center;
-  white-space: nowrap;
-  text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
-  box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
-  transition:
-    filter 0.3s,
-    box-shadow 0.3s,
-    transform 0.3s;
-  animation: cta-fade-in 0.85s 0.76s cubic-bezier(0.22, 1, 0.36, 1) both;
-}
-
-.careersHeroCtaLabel {
-  display: inline-flex;
-  width: 80%;
-  height: 100%;
-  align-items: center;
-  justify-content: center;
-}
-
-.careersHeroCta:hover {
-  transform: translateY(-5px) scale(1.02);
-  filter: brightness(1.04) saturate(1.03);
-  box-shadow: 0 1rem 2rem rgb(137 52 8 / 42%);
-}
-
-.careersHeroCta:active {
-  transform: translateY(2px) scale(0.99);
-}
-
-.careersHeroCta:focus-visible {
-  outline: 2px solid #f47a2a;
-  outline-offset: 4px;
-}
-
-@media (max-width: 1023px) {
-  .careersHeroCta {
-    width: min(17rem, 84vw);
-    height: auto;
-    margin-top: 28px;
-    padding: 0;
-    font-size: 24px;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .careersHeroCta {
-    animation: none;
   }
 }

@@ -1,44 +1,51 @@
 import Image from "next/image";
 import Link from "next/link";
+import portfolioBook from "@/features/home/assets/portfolio-book.png";
 import { Reveal } from "@/lib/components/shared/Reveal";
 
-const portfolioSlices = [
+const portfolioBooks = [
   {
-    clipPath: "inset(0 0 0 66.5%)",
+    position: "left-0",
+    layer: "z-30",
     delay: 100,
   },
   {
-    clipPath: "inset(0 33.25% 0 33.25%)",
-    delay: 230,
+    position: "left-[18%]",
+    layer: "z-20",
+    delay: 380,
   },
   {
-    clipPath: "inset(0 66.5% 0 0)",
-    delay: 360,
+    position: "left-[44.5%]",
+    layer: "z-10",
+    delay: 660,
   },
 ] as const;
 
 function PortfolioBooks() {
   return (
     <div
-      className="group relative mx-auto aspect-[1546/1221] w-full max-w-[560px] transition-transform duration-500 ease-out hover:scale-[1.035] max-sm:max-w-[300px]"
+      className="group relative mx-auto aspect-[1453/1256] w-full max-w-[560px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none max-sm:max-w-[300px]"
       role="img"
       aria-label="Bộ hồ sơ năng lực BMT Decor gồm ba quyển portfolio"
     >
-      {portfolioSlices.map((slice) => (
+      {portfolioBooks.map((book) => (
         <Reveal
-          className="absolute inset-0"
-          delay={slice.delay}
+          className={`pointer-events-none absolute top-0 h-full w-[55.54%] data-[visible=false]:translate-x-[45%] ${book.position} ${book.layer}`}
+          delay={book.delay}
+          duration={900}
+          distance="long"
           from="right"
-          key={slice.clipPath}
+          key={book.position}
         >
-          <Image
-            className="object-contain"
-            src="/images/home/portfolio-set.png"
-            alt=""
-            fill
-            sizes="(max-width: 1024px) 100vw, 46vw"
-            style={{ clipPath: slice.clipPath }}
-          />
+          <div className="relative h-full w-full">
+            <Image
+              className="object-contain"
+              src={portfolioBook}
+              alt=""
+              fill
+              sizes="(max-width: 639px) 48vw, (max-width: 1023px) 36vw, 26vw"
+            />
+          </div>
         </Reveal>
       ))}
     </div>
@@ -57,14 +64,14 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal delay={130}>
-            <p className="mt-3 text-base leading-relaxed text-charcoal/80 sm:text-lg lg:text-xl max-sm:text-[15px] max-sm:leading-[1.25]">
+            <p className="mt-3 text-justify text-base leading-relaxed text-charcoal/80 [text-align-last:left] [text-justify:inter-word] sm:text-lg lg:text-xl max-sm:text-[15px] max-sm:leading-[1.25]">
               Đơn vị thiết kế thi công kiến trúc và nội thất, ngoại thất chuyên
               nghiệp tại Việt Nam
             </p>
           </Reveal>
 
           <Reveal className="mt-8 max-sm:mt-4" delay={240} from="left">
-            <p className="max-w-2xl text-justify text-xl leading-[1.62] text-charcoal/85 [text-align-last:left] [text-justify:inter-character] sm:text-lg max-sm:text-left max-sm:text-[15px] max-sm:leading-[1.12]">
+            <p className="max-w-2xl text-justify text-xl leading-[1.62] text-charcoal/85 [text-align-last:left] [text-justify:inter-word] sm:text-lg max-sm:text-[15px] max-sm:leading-[1.12]">
               <Image
                 className="float-left mr-3 size-7 object-contain max-sm:mt-[2px] max-sm:mr-2 max-sm:size-[14px]"
                 src="/images/home/building-mark.png"

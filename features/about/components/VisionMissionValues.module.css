@@ -2,6 +2,10 @@
   animation: illustration-float 4.8s ease-in-out 1.5s infinite;
 }
 
+.dedicationIllustration {
+  clip-path: polygon(10% 0, 100% 0, 100% 100%, 0 100%, 0 10%);
+}
+
 @keyframes illustration-float {
   0%,
   100% {

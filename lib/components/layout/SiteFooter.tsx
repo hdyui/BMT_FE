@@ -129,7 +129,7 @@ export function SiteFooter({
         </Reveal>
 
         <Reveal className="md:col-span-2 lg:col-span-1" delay={120}>
-          <h3 className="mb-3 text-xl font-extrabold uppercase">Liên hệ:</h3>
+          <h3 className="mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:pl-[42px]">Liên hệ:</h3>
           <div className="grid gap-1.5 text-lg leading-relaxed 2xl:text-xl">
             <p className="flex items-start gap-2.5">
               <Image
@@ -165,7 +165,7 @@ export function SiteFooter({
             </p>
           </div>
 
-          <h3 className="mt-20 mb-3 text-xl font-extrabold uppercase 2xl:mt-24">
+          <h3 className="mt-20 mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:mt-24 2xl:pl-[42px]">
             Chi nhánh và nhà xưởng:
           </h3>
           <div className="grid gap-1.5 text-lg leading-relaxed 2xl:text-xl">

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import Link from "next/link";
+import { BmtCta } from "@/lib/components/shared/BmtCta";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import styles from "./CareersHero.module.css";
 
@@ -164,7 +164,7 @@ export function CareersHero() {
             </h1>
           </Reveal>
           <Reveal delay={420} from="left">
-            <p className="mt-7 max-w-[620px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] sm:text-lg sm:leading-8">
+            <p className="mt-7 max-w-[620px] text-justify text-xl leading-7 text-neutral-700 [text-align-last:left] [text-justify:inter-character] sm:text-lg sm:leading-8 lg:text-[var(--hero-description-desktop-font-size)] lg:leading-[var(--hero-description-desktop-line-height)]">
               <Image
                 className="mr-[0.38em] inline-block h-[1.05em] w-auto align-[-0.16em] [filter:brightness(0)_saturate(100%)_invert(56%)_sepia(88%)_saturate(2340%)_hue-rotate(343deg)_brightness(100%)_contrast(92%)]"
                 src="/images/home/building-mark.png"
@@ -181,9 +181,7 @@ export function CareersHero() {
             </p>
           </Reveal>
           <div>
-            <Link className={styles.careersHeroCta} href="/lien-he">
-              <span className={styles.careersHeroCtaLabel}>LIÊN HỆ NGAY</span>
-            </Link>
+            <BmtCta href="/lien-he">LIÊN HỆ NGAY</BmtCta>
           </div>
         </div>
       </div>

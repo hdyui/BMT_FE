@@ -14,7 +14,7 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
     <>
       <SiteHeader />
       <main
-        className="bg-white pt-[60px] text-charcoal xl:pt-[68px]"
+        className="bg-white pt-[60px] text-charcoal xl:pt-[var(--site-header-desktop-height)]"
         data-scroll-snap-page
       >
         <ProjectsHero />
@@ -24,7 +24,7 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
         <BeforeAfterGallery project={project} />
         <RelatedProjects />
       </main>
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </>
   );

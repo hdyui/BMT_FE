@@ -29,6 +29,12 @@
   background: #f6f6f6;
 }
 
+@media (min-width: 80rem) {
+  .hero {
+    margin-top: var(--site-header-desktop-height);
+  }
+}
+
 .heroDesktopArt,
 .heroMobileArt {
   position: absolute;

@@ -22,7 +22,7 @@ export function DocumentPageScaffold({
 }: DocumentPageScaffoldProps) {
   return (
     <div
-      className="min-h-screen overflow-x-clip pt-[60px] xl:pt-[68px]"
+      className="min-h-screen overflow-x-clip pt-[60px] xl:pt-[var(--site-header-desktop-height)]"
       data-scroll-snap-page
     >
       <SiteHeader />
@@ -67,7 +67,7 @@ export function DocumentPageScaffold({
           ))}
         </div>
       </section>
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

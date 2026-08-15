@@ -26,7 +26,7 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
@@ -216,7 +216,7 @@ export function DesignServicePage() {
 
       <section
         id="design-process"
-        className="relative z-10 scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] py-16"
+        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
       >
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
@@ -237,7 +237,7 @@ export function DesignServicePage() {
         <ProcessTimeline />
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

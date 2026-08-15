@@ -31,7 +31,7 @@ import {
 
 export function RenovationServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
       {/* SECTION 1: BANNER */}
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -250,7 +250,7 @@ export function RenovationServicePage() {
       </section>
 
       {/* SECTION 4: QUY TRÌNH CẢI TẠO & SỬA CHỮA */}
-      <section className="py-16">
+      <section className="relative -mb-[2.342945vw] bg-white pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
         {/* <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
             <h2 className="text-3xl font-bold uppercase sm:text-4xl">
@@ -262,7 +262,7 @@ export function RenovationServicePage() {
         <RenovationProcessSteps steps={processSteps} />
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

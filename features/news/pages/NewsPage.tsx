@@ -143,7 +143,7 @@ function ArticleCard({
         <>
           <Image
             className={`${styles.articleDivider} ${styles.articleDividerDesktop}`}
-            src="/images/news/article-divider.jpg"
+            src="/images/careers/job-divider.jpg"
             alt=""
             width={5010}
             height={123}
@@ -151,7 +151,7 @@ function ArticleCard({
           />
           <Image
             className={`${styles.articleDivider} ${styles.articleDividerMobile}`}
-            src="/images/news/mobile/article-divider.png"
+            src="/images/careers/mobile/job-divider-line.png"
             alt=""
             width={3612}
             height={12}
@@ -266,7 +266,7 @@ export function NewsPage() {
     <>
       <SiteHeader />
       <main
-        className="overflow-hidden bg-[#efedef] pt-[60px] xl:pt-[68px]"
+        className="overflow-hidden bg-[#efedef] pt-[60px] xl:pt-[var(--site-header-desktop-height)]"
         data-scroll-snap-page
       >
         <section className={styles.newsHero}>
@@ -429,7 +429,7 @@ export function NewsPage() {
               BMT Decor.
             </p>
             <div className={styles.newsHeroCtaSlot}>
-              <BmtCta className={styles.newsHeroCta} href="/lien-he">
+              <BmtCta href="/lien-he">
                 LIÊN HỆ NGAY
               </BmtCta>
             </div>
@@ -744,7 +744,7 @@ export function NewsPage() {
           </div>
         </section>
       </main>
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter showTopBorder={false} />
     </>
   );

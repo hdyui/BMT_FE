@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { BmtCta } from "@/lib/components/shared/BmtCta";
 import styles from "./ContactHero.module.css";
 
 const heroDecorations = [
@@ -80,9 +81,9 @@ export function ContactHero() {
               với không gian và ngân sách của bạn.
             </p>
 
-            <a className={styles.cta} href="#contact-form">
-              <span>LIÊN HỆ NGAY</span>
-            </a>
+            <div className={styles.ctaSlot}>
+              <BmtCta href="#contact-form">LIÊN HỆ NGAY</BmtCta>
+            </div>
           </div>
 
         </div>

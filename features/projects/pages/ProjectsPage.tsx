@@ -303,7 +303,7 @@ export function ProjectsPage() {
     <>
       <SiteHeader />
       <main
-        className="relative overflow-hidden bg-[#f2f2f4] pt-0 sm:pt-[60px] max-sm:overflow-visible xl:pt-[68px]"
+        className="relative overflow-hidden bg-[#f2f2f4] pt-0 sm:pt-[60px] max-sm:overflow-visible xl:pt-[var(--site-header-desktop-height)]"
         data-scroll-snap-page
       >
         <ProjectsHero />
@@ -347,20 +347,6 @@ export function ProjectsPage() {
                   thi công, khẳng định năng lực và chất lượng trong từng hạng
                   mục.
                 </p>
-              </Reveal>
-              <Reveal
-                className="mx-auto mt-[18px] w-fit max-sm:mt-[8px]"
-                delay={360}
-                from="left"
-              >
-                <Image
-                  src="/images/projects/section-rule.png"
-                  alt=""
-                  width={1388}
-                  height={128}
-                  className="h-auto w-[335px] max-w-[70vw] max-sm:w-[150px]"
-                  aria-hidden="true"
-                />
               </Reveal>
             </header>
 
@@ -526,7 +512,7 @@ export function ProjectsPage() {
           </div>
         </section>
       </main>
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter showTopBorder={false} />
     </>
   );

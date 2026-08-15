@@ -128,7 +128,7 @@ export function RelatedProjects() {
 
   return (
     <section
-      className="bg-[#f1f1f2] py-[clamp(62px,7vw,110px)]"
+      className="-mb-[2.342945vw] bg-[#f1f1f2] pt-[clamp(62px,7vw,110px)] pb-[calc(clamp(62px,7vw,110px)+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(clamp(62px,7vw,110px)+2.57vw)]"
       aria-labelledby="related-title"
     >
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">

@@ -16,7 +16,10 @@ function ServiceSectionHeading() {
           dạng nhu cầu từ nhà ở đến không gian kinh doanh.
         </p>
       </Reveal>
-      <BuildingRule className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]" />
+      <BuildingRule
+        className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]"
+        delay={300}
+      />
     </div>
   );
 }

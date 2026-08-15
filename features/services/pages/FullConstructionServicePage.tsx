@@ -26,7 +26,7 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       <section className={`${SERVICE_HERO_CLASS_NAME} md:h-[55vw] md:min-h-0`}>
@@ -195,7 +195,7 @@ export function FullConstructionServicePage() {
         </div>
       </section>
 
-      <section className="bg-[#f2f2f3] py-12 lg:py-14">
+      <section className="-mb-[2.342945vw] bg-[#f2f2f3] pt-12 pb-[calc(3rem+2.342945vw)] lg:-mb-[2.57vw] lg:pt-14 lg:pb-[calc(3.5rem+2.57vw)]">
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
             <h2 className="text-3xl font-extrabold sm:text-[32px]">
@@ -218,7 +218,7 @@ export function FullConstructionServicePage() {
         <ProcessStepsGrid />
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

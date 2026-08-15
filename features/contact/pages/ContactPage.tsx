@@ -9,11 +9,11 @@ export function ContactPage() {
     <>
       <SiteHeader />
       <main
-        className="relative overflow-hidden bg-[#f2f2f4] pt-[60px] max-[55rem]:pt-0 xl:pt-[68px]"
+        className="relative overflow-hidden bg-[#f2f2f4] pt-[60px] max-[55rem]:pt-0 xl:pt-[var(--site-header-desktop-height)]"
         data-scroll-snap-page
       >
         <div
-          className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-[68px] opacity-0 animate-[fade-in_700ms_80ms_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100 xl:block"
+          className="pointer-events-none absolute inset-x-0 top-0 z-10 hidden h-[var(--site-header-desktop-height)] opacity-0 animate-[fade-in_700ms_80ms_ease-out_forwards] motion-reduce:animate-none motion-reduce:opacity-100 xl:block"
           aria-hidden="true"
         >
           <span className="absolute inset-y-0 left-[43.4%] w-[calc(8.12%+1px)] bg-[#ef7b30]" />
@@ -22,8 +22,7 @@ export function ContactPage() {
         <div className="relative z-20 max-[55rem]:z-0">
           <ContactHero />
         </div>
-        {/* Hero Ä‘Ã£ phá»§ sáºµn mÃ©p trÃªn nÃªn khÃ´ng cáº§n dáº£i nhÃ´ cá»§a form. */}
-        <ContactForm />
+        <ContactForm showTopNotch />
         <ContactMap />
       </main>
       <SiteFooter showTopBorder={false} />

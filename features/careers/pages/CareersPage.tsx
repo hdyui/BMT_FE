@@ -11,7 +11,7 @@ export function CareersPage() {
       <main className="overflow-hidden" data-scroll-snap-page>
         <CareersHero />
         <CareerOpenings />
-        <ContactForm />
+        <ContactForm showTopNotch />
       </main>
       <SiteFooter showTopBorder={false} />
     </>

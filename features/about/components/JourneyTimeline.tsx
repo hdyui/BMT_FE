@@ -231,7 +231,7 @@ export function JourneyTimeline() {
 
                     <div className={isLeft ? "col-start-2" : "col-start-1 row-start-1"}>
                       <div
-                        className={`relative mb-2 size-12 overflow-hidden rounded-full bg-white ${
+                        className={`relative mb-2 size-14 overflow-hidden rounded-full bg-white ${
                           isLeft ? "mr-auto" : "ml-auto"
                         }`}
                       >
@@ -240,7 +240,7 @@ export function JourneyTimeline() {
                           src={milestone.image}
                           alt=""
                           fill
-                          sizes="48px"
+                          sizes="56px"
                         />
                       </div>
                       <h3 className="text-[14px] font-extrabold uppercase leading-[1.15] text-charcoal">
@@ -341,7 +341,7 @@ export function JourneyTimeline() {
                     <div className="grid grid-cols-[minmax(0,1fr)_54px] gap-3 pt-9">
                       <div className="min-w-0">
                         <div
-                          className={`relative ml-auto mr-1 size-[40px] transition-[opacity,translate] duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                          className={`relative ml-auto mr-1 size-16 transition-[opacity,translate] duration-800 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
                             isVisible
                               ? "translate-y-0 opacity-100"
                               : "translate-y-10 opacity-0"
@@ -354,7 +354,7 @@ export function JourneyTimeline() {
                               src={milestone.image}
                               alt=""
                               fill
-                              sizes="40px"
+                              sizes="64px"
                             />
                           </div>
                         </div>

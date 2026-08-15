@@ -69,7 +69,7 @@ const HERO_DIAMONDS = [
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen  bg-white pt-16 text-charcoal">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       {/* SECTION 1: BANNER */}
@@ -267,7 +267,7 @@ export function ConstructionServicePage() {
       </section>
 
       {/* SECTION 4: QUY TRÌNH THI CÔNG */}
-      <section className="relative isolate overflow-hidden bg-[#F2F2F3] py-16">
+      <section className="relative isolate -mb-[2.342945vw] overflow-hidden bg-[#F2F2F3] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
         <Image
           className="-z-10 object-cover"
           src="/images/thi-cong-xay-dung/process-background.png"
@@ -298,7 +298,7 @@ export function ConstructionServicePage() {
         <ConstructionProcessList />
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );
