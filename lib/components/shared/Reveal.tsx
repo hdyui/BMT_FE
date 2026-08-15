@@ -28,8 +28,8 @@ export function Reveal({
     if (!element) return;
 
     if (!("IntersectionObserver" in window)) {
-      const fallbackTimer = window.setTimeout(() => setVisible(true), 0);
-      return () => window.clearTimeout(fallbackTimer);
+      const fallbackTimer = globalThis.setTimeout(() => setVisible(true), 0);
+      return () => globalThis.clearTimeout(fallbackTimer);
     }
 
     const observer = new IntersectionObserver(

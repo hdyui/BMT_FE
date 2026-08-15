@@ -27,7 +27,7 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
+    <div className="min-h-screen bg-white text-charcoal md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
@@ -335,7 +335,7 @@ export function DesignServicePage() {
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
             {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
-            <h2 className="flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
+            <h2 className="hidden flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold md:flex">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"
@@ -366,8 +366,7 @@ export function DesignServicePage() {
         </div>
 
         <ProcessTimeline />
-        </section>
-      </div>
+      </section>
 
       <ContactForm showTopNotch />
       <SiteFooter />
