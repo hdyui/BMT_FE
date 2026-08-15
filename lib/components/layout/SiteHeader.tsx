@@ -38,14 +38,10 @@ export function SiteHeader({
         : pathname === href || pathname.startsWith(`${href}/`);
 
   return (
-    <header className="fixed inset-x-0 top-0 z-50 h-[60px] bg-[#2b2b2b] text-white max-xl:bg-charcoal/90 max-xl:shadow-md max-xl:backdrop-blur-[2px] xl:h-[var(--site-header-desktop-height)]">
-      <span
-        className="absolute inset-y-0 right-[clamp(16px,1.45vw,28px)] left-[clamp(16px,1.45vw,28px)] hidden bg-charcoal/95 shadow-md backdrop-blur-[2px] xl:block"
-        aria-hidden="true"
-      />
-      <div className="relative mx-auto flex h-full w-[min(1510px,calc(100%-3.5rem))] items-center max-xl:w-[calc(100%-1.5rem)] xl:grid xl:grid-cols-[186px_minmax(0,1fr)_186px] 2xl:grid-cols-[210px_minmax(0,1fr)_210px]">
+    <header className="fixed inset-x-0 top-0 z-50 h-[60px] bg-charcoal text-white max-xl:bg-charcoal/90 max-xl:shadow-md max-xl:backdrop-blur-[2px] xl:h-[var(--site-header-desktop-height)]">
+      <div className="relative mx-auto flex h-full w-[min(1510px,calc(100%-3.5rem))] items-center max-xl:w-[calc(100%-1.5rem)]">
         <BrandLogo
-          className="hidden w-[172px] shrink-0 justify-self-start xl:block 2xl:w-[186px]"
+          className="hidden w-[172px] shrink-0 xl:block 2xl:w-[186px]"
           inverted
         />
         <Link
@@ -67,10 +63,11 @@ export function SiteHeader({
           />
         </Link>
 
-        <nav
-          className="hidden h-full items-center justify-self-center gap-5 xl:flex 2xl:gap-7"
-          aria-label="Điều hướng chính"
-        >
+        <div className="ml-auto hidden h-full items-center gap-5 xl:flex 2xl:gap-6">
+          <nav
+            className="flex h-full items-center gap-5 2xl:gap-7"
+            aria-label="Điều hướng chính"
+          >
           {navigation.map((item) => {
             const isActive = isRouteActive(item.href, "children" in item);
             return (
@@ -122,17 +119,18 @@ export function SiteHeader({
               </div>
             );
           })}
-        </nav>
+          </nav>
 
-        <Link
-          className={cn(
-            buttonVariants({ size: "sm" }),
-            "hidden h-[42px] min-w-[164px] justify-self-end rounded-full bg-brand px-7 text-[14px] font-extrabold text-white shadow-none transition-[color,background-color,box-shadow,transform] duration-300 hover:scale-[1.04] hover:bg-brand hover:text-charcoal hover:shadow-[0_12px_28px_rgb(0_0_0/.28)] active:translate-y-px active:scale-[.97] active:shadow-md xl:inline-flex",
-          )}
-          href="/lien-he"
-        >
-          LIÊN HỆ
-        </Link>
+          <Link
+            className={cn(
+              buttonVariants({ size: "sm" }),
+              "inline-flex h-[42px] min-w-[164px] rounded-full bg-brand px-7 text-[14px] font-extrabold text-white shadow-none transition-[color,background-color,box-shadow,transform] duration-300 hover:scale-[1.02] hover:bg-brand hover:text-charcoal hover:shadow-[0_2px_6px_rgb(0_0_0/.2)] active:translate-y-0 active:scale-[1.02] active:bg-brand active:text-charcoal active:shadow-[0_1px_4px_rgb(0_0_0/.18)]",
+            )}
+            href="/lien-he"
+          >
+            LIÊN HỆ
+          </Link>
+        </div>
 
         <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
           <SheetTrigger

@@ -764,7 +764,6 @@
 }
 
 .mobileArticleList,
-.articleDividerMobile,
 .articleImageMobile,
 .articleMoreIconMobile,
 .articleLoadMore {
@@ -841,12 +840,6 @@
 
 .articleContentMore {
   margin-top: 16px;
-}
-
-.articleDivider {
-  display: block;
-  width: 100%;
-  height: auto;
 }
 
 .articleMoreLink {
@@ -1582,7 +1575,6 @@
 
   .desktopArticleList,
   .articlePagination,
-  .articleDividerDesktop,
   .articleImageDesktop,
   .articleMoreIconDesktop {
     display: none;
@@ -1655,14 +1647,6 @@
   .articleMoreLink:hover .articleMoreIconMobile,
   .articleMoreLink:focus-visible .articleMoreIconMobile {
     transform: translateX(3px);
-  }
-
-  .articleDividerMobile {
-    display: block;
-    width: 100%;
-    height: 1px;
-    margin: 22px 0;
-    object-fit: fill;
   }
 
   .articleLoadMore {
