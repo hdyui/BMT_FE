@@ -27,8 +27,42 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
-      <SiteHeader />
+    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
+      <SiteHeader mobileServiceMockup />
+
+      <section
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+138.95vw)] max-md:!min-h-0 md:h-[55vw] md:min-h-0`}
+      >
+        <MobileHeroArtwork variant="full-construction" />
+
+        <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
+          <div className="absolute top-[5.4%] left-[10.5%] w-[86%]">
+            <Reveal>
+              <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] font-extrabold leading-[1.12] text-brand">
+                DỊCH VỤ THIẾT KẾ THI CÔNG
+                <br />&amp; XÂY DỰNG TRỌN GÓI
+              </h1>
+            </Reveal>
+            <BuildingRule
+              className="mt-2 h-5 w-[42%] max-w-none [&_img]:object-contain [&_img]:object-right"
+              src="/images/services/rule-dark.png"
+              delay={160}
+            />
+            <Reveal delay={300} from="left">
+              <p className="mt-2 flex items-center gap-2 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed">
+                <Image
+                  className="size-3 shrink-0 object-contain"
+                  src="/images/services/icon-house.png"
+                  alt=""
+                  width={90}
+                  height={95}
+                  aria-hidden="true"
+                />
+                <span>Kiến tạo công trình bền vững từ thiết kế đến thi công</span>
+              </p>
+            </Reveal>
+          </div>
+        </div>
 
       <section
         className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+140.16vw)] max-md:!min-h-0`}
