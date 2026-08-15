@@ -366,8 +366,7 @@ export function DesignServicePage() {
         </div>
 
         <ProcessTimeline />
-        </section>
-      </div>
+      </section>
 
       <ContactForm showTopNotch />
       <SiteFooter />

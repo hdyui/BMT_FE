@@ -30,6 +30,11 @@ export function FullConstructionServicePage() {
     <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
+      <section
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+140.16vw)] max-md:!min-h-0`}
+      >
+        <MobileHeroArtwork variant="full-construction" />
+
         <Image
           className="absolute top-[9%] right-0 -z-10 hidden h-[91%] w-[18%] object-contain object-right-bottom opacity-90 md:block"
           src="/images/xay-dung-tron-goi/dong%20goi%20trang%20dich%20vu%20-%20xay%20dung%20tron%20goi%20web%20BMT%20decor-01.png"

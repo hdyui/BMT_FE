@@ -26,12 +26,10 @@ export function Reveal({
   useEffect(() => {
     const element = ref.current;
     if (!element) return;
-
-    if (!("IntersectionObserver" in window)) {
-      const fallbackTimer = window.setTimeout(() => setVisible(true), 0);
-      return () => window.clearTimeout(fallbackTimer);
+    if (typeof IntersectionObserver === "undefined") {
+      const fallbackTimer = setTimeout(() => setVisible(true), 0);
+      return () => clearTimeout(fallbackTimer);
     }
-
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (!entry.isIntersecting) return;

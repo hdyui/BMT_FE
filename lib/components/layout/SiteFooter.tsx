@@ -57,7 +57,7 @@ function ContactDetails({
   return (
     <>
       <h3
-        className={`mb-3 text-xl font-extrabold uppercase ${
+        className={`mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:pl-[42px] ${
           mobileMockup ? "max-md:text-base" : ""
         }`}
       >
@@ -103,7 +103,7 @@ function ContactDetails({
       </div>
 
       <h3
-        className={`mt-10 mb-3 text-xl font-extrabold uppercase lg:mt-20 2xl:mt-24 ${
+        className={`mt-10 mb-3 pl-[34px] text-xl font-extrabold uppercase lg:mt-20 2xl:mt-24 2xl:pl-[42px] ${
           mobileMockup ? "max-md:mt-8 max-md:text-base" : ""
         }`}
       >
@@ -300,7 +300,6 @@ export function SiteFooter({
               <span>Email: {contactInformation.email}</span>
             </p>
           </div>
-        </Reveal>
 
           <h3 className="mt-20 mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:mt-24 2xl:pl-[42px]">
             Chi nhánh và nhà xưởng:

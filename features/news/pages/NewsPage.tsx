@@ -19,6 +19,7 @@ import {
   CarouselItem,
 } from "@/lib/components/ui/carousel";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { ListDivider } from "@/lib/components/shared/ListDivider";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import styles from "./NewsPage.module.css";
@@ -140,24 +141,7 @@ function ArticleCard({
   return (
     <div className={styles.articleEntry}>
       {showDivider && (
-        <>
-          <Image
-            className={`${styles.articleDivider} ${styles.articleDividerDesktop}`}
-            src="/images/careers/job-divider.jpg"
-            alt=""
-            width={5010}
-            height={123}
-            aria-hidden="true"
-          />
-          <Image
-            className={`${styles.articleDivider} ${styles.articleDividerMobile}`}
-            src="/images/careers/mobile/job-divider-line.png"
-            alt=""
-            width={3612}
-            height={12}
-            aria-hidden="true"
-          />
-        </>
+        <ListDivider />
       )}
       <article className={`group ${styles.articleCard}`}>
         <div className={styles.articleImageWrap}>
