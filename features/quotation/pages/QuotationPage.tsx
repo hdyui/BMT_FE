@@ -7,7 +7,9 @@ import { ContactForm } from "@/lib/components/shared/ContactForm";
 
 export function QuotationPage() {
   return (
-    <div className={styles.page}>
+    <div
+      className={`min-h-dvh overflow-x-clip bg-white text-[#231f20] ${styles.page}`}
+    >
       <SiteHeader />
       <main>
         <QuotationHero />

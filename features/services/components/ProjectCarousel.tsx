@@ -23,6 +23,8 @@ type ProjectCarouselProps = {
   backgroundImage?: string;
   prevIcon?: string;
   nextIcon?: string;
+  mobileMockup?: boolean;
+  mobileInitialIndex?: number;
 };
 
 const DRAG_THRESHOLD = 50;
@@ -32,6 +34,8 @@ export function ProjectCarousel({
   backgroundImage,
   prevIcon,
   nextIcon,
+  mobileMockup = false,
+  mobileInitialIndex,
 }: ProjectCarouselProps) {
   const count = featuredProjects.length;
   /* Nhân bản danh sách 3 lần để lướt vòng: luôn còn thẻ ở cả hai phía nên
@@ -46,6 +50,23 @@ export function ProjectCarousel({
   const viewportRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const dragStartX = useRef<number | null>(null);
+  const logicalActive = ((active % count) + count) % count;
+
+  useEffect(() => {
+    if (
+      mobileInitialIndex === undefined ||
+      !window.matchMedia("(max-width: 767px)").matches
+    ) {
+      return;
+    }
+
+    const safeIndex = Math.min(Math.max(mobileInitialIndex, 0), count - 1);
+    const frame = requestAnimationFrame(() => {
+      setAnimate(false);
+      setActive(count + safeIndex);
+    });
+    return () => cancelAnimationFrame(frame);
+  }, [count, mobileInitialIndex]);
 
   const move = useCallback((direction: number) => {
     setAnimate(true);
@@ -122,7 +143,10 @@ export function ProjectCarousel({
 
       <div
         ref={viewportRef}
-        className="relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6"
+        className={cn(
+          "relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6",
+          mobileMockup && "max-md:py-0",
+        )}
         tabIndex={0}
         role="group"
         aria-label="Dự án tiêu biểu"
@@ -141,7 +165,8 @@ export function ProjectCarousel({
       >
         <div
           className={cn(
-            "flex w-max items-center gap-6 sm:gap-8 lg:gap-[50px]",
+            "flex w-max items-center gap-4 sm:gap-8 lg:gap-[3.125rem]",
+            mobileInitialIndex !== undefined && "max-md:gap-[20vw]",
             animate && "transition-transform duration-500 ease-out",
           )}
           style={{ transform: `translateX(${offset}px)` }}
@@ -156,11 +181,14 @@ export function ProjectCarousel({
                   cardRefs.current[index] = element;
                 }}
                 className={cn(
-                  "relative aspect-[3334/2653] w-[42vw] max-w-[600px] shrink-0 overflow-hidden rounded-[32px] transition-[transform,opacity] duration-500 ease-out",
+                  "relative aspect-3334/2653 w-[78vw] max-w-150 shrink-0 overflow-hidden rounded-[1.25rem] sm:w-[60vw] sm:rounded-[1.5rem] lg:w-[42vw] lg:rounded-[2rem] transition-[transform,opacity] duration-500 ease-out",
+                  mobileMockup &&
+                    "max-md:w-[86vw] max-md:rounded-[1.75rem]",
+                  mobileInitialIndex !== undefined && "max-md:!w-[86vw]",
                   isActive
                     ? "z-10 scale-100 opacity-100"
                     : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
-                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100",
+                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100 active:opacity-100",
                 )}
                 key={`${project.id}-${index}`}
                 // THÊM SỰ KIỆN onClick TẠI ĐÂY
@@ -176,7 +204,7 @@ export function ProjectCarousel({
                   src={project.image}
                   alt={project.title}
                   fill
-                  sizes="42vw"
+                  sizes="(max-width: 640px) 78vw, (max-width: 1024px) 60vw, 42vw"
                   priority={index === 0}
                 />
 
@@ -186,10 +214,22 @@ export function ProjectCarousel({
                 />
 
                 <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
-                  <p className="mb-1 text-[11px] font-semibold tracking-wider uppercase sm:text-xs">
+                  <p
+                    className={cn(
+                      "mb-1 text-[0.6875rem] font-normal tracking-wider uppercase sm:text-xs md:font-semibold",
+                      mobileInitialIndex !== undefined &&
+                        "max-md:text-[clamp(0.68rem,2.8vw,1.05rem)]",
+                    )}
+                  >
                     {project.tag}
                   </p>
-                  <h3 className="text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[26px]">
+                  <h3
+                    className={cn(
+                      "font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]",
+                      mobileInitialIndex !== undefined &&
+                        "max-md:text-[clamp(1.1rem,4vw,1.55rem)]",
+                    )}
+                  >
                     {project.title}
                   </h3>
                 </div>
@@ -199,7 +239,81 @@ export function ProjectCarousel({
         </div>
       </div>
 
-      <div className="relative z-10 mt-6 flex items-center justify-center gap-4">
+      {mobileMockup && (
+        <>
+          <button
+            className={cn(
+              "absolute top-1/2 left-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden",
+              mobileInitialIndex !== undefined &&
+                "max-md:!size-[clamp(1.75rem,6.4vw,2.5rem)]",
+            )}
+            onClick={() => move(-1)}
+            aria-label="Dự án trước"
+            type="button"
+          >
+            {prevIcon ? (
+              <Image
+                className="size-full object-cover"
+                src={prevIcon}
+                alt=""
+                width={48}
+                height={48}
+                aria-hidden="true"
+              />
+            ) : (
+              <span aria-hidden="true">‹</span>
+            )}
+          </button>
+          <button
+            className={cn(
+              "absolute top-1/2 right-[3.5%] z-20 grid size-7 -translate-y-1/2 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_12px_rgb(244_122_42/.3)] transition-transform active:scale-95 md:hidden",
+              mobileInitialIndex !== undefined &&
+                "max-md:!size-[clamp(1.75rem,6.4vw,2.5rem)]",
+            )}
+            onClick={() => move(1)}
+            aria-label="Dự án tiếp theo"
+            type="button"
+          >
+            {nextIcon ? (
+              <Image
+                className="size-full object-cover"
+                src={nextIcon}
+                alt=""
+                width={48}
+                height={48}
+                aria-hidden="true"
+              />
+            ) : (
+              <span aria-hidden="true">›</span>
+            )}
+          </button>
+          <div
+            className="mt-3 flex items-center justify-center gap-3 md:hidden"
+            aria-hidden="true"
+          >
+            {Array.from({ length: 4 }, (_, index) => (
+              <span
+                className={cn(
+                  "size-5 rounded-full border-2",
+                  mobileInitialIndex !== undefined &&
+                    "max-md:!size-[clamp(1.1rem,4.2vw,1.65rem)]",
+                  index === logicalActive
+                    ? "border-brand bg-brand shadow-[inset_0_0_0_3px_white]"
+                    : "border-charcoal bg-white",
+                )}
+                key={index}
+              />
+            ))}
+          </div>
+        </>
+      )}
+
+      <div
+        className={cn(
+          "relative z-10 mt-6 flex items-center justify-center gap-4",
+          mobileMockup && "max-md:hidden",
+        )}
+      >
         <button
           className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
           onClick={() => move(-1)}
@@ -217,7 +331,7 @@ export function ProjectCarousel({
             />
           ) : (
             <svg
-              className="ml-[-2px]"
+              className="ml-[-0.125rem]"
               width="14"
               height="16"
               viewBox="0 0 14 16"
@@ -245,7 +359,7 @@ export function ProjectCarousel({
             />
           ) : (
             <svg
-              className="mr-[-2px]"
+              className="mr-[-0.125rem]"
               width="14"
               height="16"
               viewBox="0 0 14 16"

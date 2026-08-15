@@ -28,6 +28,35 @@
   }
 }
 
+/* Banner trang Cải tạo & sửa chữa: ảnh nền tĩnh nên cho nó trôi rất chậm để
+   nền có hơi thở. Phóng sẵn 1.03 -> 1.06 để lúc dịch chuyển không lòi mép ảnh.
+   Ảnh dùng `origin-bottom` nên phóng theo hướng lên; translate dọc chỉ đi lên
+   (0 -> -0.5%) để mép đáy luôn dính đáy banner, giữ nguyên vệt bóng dưới cùng. */
+@keyframes hero-bg-drift {
+  from {
+    transform: scale(1.03) translate3d(0.6%, 0, 0);
+  }
+  to {
+    transform: scale(1.06) translate3d(-0.6%, -0.5%, 0);
+  }
+}
+
+/* Hai vệt bóng mép phải: trôi dọc nhẹ kèm đổi độ mờ, lệch pha nhau nhờ khác
+   thời lượng, để mắt không bắt được nhịp lặp. */
+@keyframes hero-shadow-drift {
+  /* % ở translate tính theo kích thước CHÍNH nó (dải rộng 4.7% banner), nên 8%
+     chỉ khoảng 5px — cố ý để chuyển động ngang gần như không thấy, phần nhận ra
+     được là trôi dọc 12px và đổi độ mờ. */
+  from {
+    transform: translate3d(8%, -0.75rem, 0);
+    opacity: 0.6;
+  }
+  to {
+    transform: translate3d(-8%, 0.75rem, 0);
+    opacity: 1;
+  }
+}
+
 @keyframes accordion-down {
   from {
     height: 0;

@@ -28,8 +28,7 @@ export const solutionCards = [
     description:
       "Một công trình chỉ đạt chất lượng khi thiết kế và thi công được triển khai đồng bộ. BMT Decor cung cấp dịch vụ thiết kế thi công nhà ở và xây nhà trọn gói, với quy trình xuyên suốt từ lập hồ sơ thiết kế, lựa chọn vật liệu đến thi công hoàn thiện giúp kiểm soát chất lượng, hạn chế phát sinh và đảm bảo tiến độ bàn giao.",
     checklist: [
-      "Thiết kế thi công nhà phố",
-      "Thiết kế thi công biệt thự",
+      "Thiết kế thi công nhà phố, biệt thự",
       "Thiết kế thi công căn hộ",
       "Xây nhà trọn gói",
     ],
@@ -37,7 +36,10 @@ export const solutionCards = [
     ctaImage: "/images/xay-dung-tron-goi/btn-pill-nha-o.png",
     ctaImageWidth: 1408,
     ctaImageHeight: 253,
-    image: "/images/xay-dung-tron-goi/photo-nha-pho.webp",
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-o.png",
+    ctaImageMobileWidth: 1668,
+    ctaImageMobileHeight: 253,
+    image: "/images/xay-dung-tron-goi/solution-nha-pho-v2.png",
   },
   {
     number: "02",
@@ -55,7 +57,10 @@ export const solutionCards = [
     ctaImage: "/images/xay-dung-tron-goi/btn-pill-van-phong.png",
     ctaImageWidth: 1655,
     ctaImageHeight: 253,
-    image: "/images/xay-dung-tron-goi/solution-van-phong.webp",
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-van-phong.png",
+    ctaImageMobileWidth: 1972,
+    ctaImageMobileHeight: 253,
+    image: "/images/xay-dung-tron-goi/solution-van-phong-v2.png",
   },
   {
     number: "03",
@@ -65,16 +70,17 @@ export const solutionCards = [
     description:
       "BMT Decor mang đến dịch vụ thiết kế thi công trọn gói showroom, cửa hàng và spa, giúp tối ưu công năng, nhận diện thương hiệu và trải nghiệm khách hàng. Mỗi công trình được triển khai đồng bộ từ thiết kế đến thi công hoàn thiện, đảm bảo tính thẩm mỹ và hiệu quả vận hành.",
     checklist: [
-      "Thiết kế thi công showroom",
-      "Thiết kế thi công cửa hàng",
-      "Thiết kế thi công spa",
-      "Thiết kế thi công thẩm mỹ viện",
+      "Thiết kế showroom, cửa hàng",
+      "Thiết kế spa, thẩm mỹ viện",
     ],
     cta: "Khám phá dự án showroom & thẩm mỹ viện",
     ctaImage: "/images/xay-dung-tron-goi/btn-pill-showroom.png",
     ctaImageWidth: 2397,
     ctaImageHeight: 253,
-    image: "/images/xay-dung-tron-goi/solution-showroom.webp",
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-showroom.png",
+    ctaImageMobileWidth: 2939,
+    ctaImageMobileHeight: 253,
+    image: "/images/xay-dung-tron-goi/solution-showroom-v4.webp",
   },
   {
     number: "04",
@@ -84,16 +90,17 @@ export const solutionCards = [
     description:
       "Với dịch vụ thiết kế thi công nhà hàng và khách sạn, BMT Decor triển khai đồng bộ từ thiết kế đến thi công, kiểm soát chặt chẽ từng hạng mục để đảm bảo công trình đạt yêu cầu về kỹ thuật, thẩm mỹ, tiến độ và sẵn sàng đưa vào vận hành theo đúng kế hoạch kinh doanh.",
     checklist: [
-      "Thiết kế thi công nhà hàng",
-      "Thiết kế thi công quán café",
-      "Thiết kế thi công khách sạn",
-      "Thiết kế thi công khu nghỉ dưỡng, resort",
+      "Thiết kế nhà hàng, khách sạn, quán café",
+      "Thiết kế sảnh, phòng lưu trú và không gian dịch vụ",
     ],
     cta: "Khám phá dự án nhà hàng & khách sạn",
     ctaImage: "/images/xay-dung-tron-goi/btn-pill-nha-hang.png",
     ctaImageWidth: 2206,
     ctaImageHeight: 253,
-    image: "/images/xay-dung-tron-goi/photo-nha-hang.webp",
+    ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-hang.png",
+    ctaImageMobileWidth: 2682,
+    ctaImageMobileHeight: 253,
+    image: "/images/xay-dung-tron-goi/solution-nha-hang-v3.webp",
   },
 ] as const;
 

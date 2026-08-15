@@ -46,13 +46,13 @@ export function HexagonShowcase() {
     <div className="relative aspect-[3467/4070] w-full">
       {/* 1. Hình lục giác xám góc trái trên cùng */}
       <Reveal
-        className="absolute top-[-4%] left-[2%] w-[25%] -z-20"
+        className="absolute top-[-1%] left-[-3%] w-[25%] -z-20"
         from="fade"
         delay={0}
       >
         <Image
           className="h-auto w-full opacity-80"
-          src="/images/xay-dung-tron-goi/hero-gray-hex-small.png"
+          src="/images/xay-dung-tron-goi/hero-gray-hex-top.png"
           alt=""
           width={355}
           height={392}
@@ -78,7 +78,7 @@ export function HexagonShowcase() {
 
       {/* 3. Hình lục giác xám LỚN nằm phụ phía sau lưng cụm hình */}
       <Reveal
-        className="absolute top-[30%] left-[6%] w-[38%] -z-20 opacity-70"
+        className="absolute top-[30%] left-[8%] w-[38%] -z-20 opacity-70"
         from="fade"
         delay={250}
       >
@@ -94,7 +94,7 @@ export function HexagonShowcase() {
 
       {/* 4. Hình lục giác viền cam góc trái dưới */}
       <Reveal
-        className="absolute bottom-[2%] left-[0%] w-[12%] z-10"
+        className="absolute bottom-[13%] left-[0%] w-[12%] z-10"
         from="fade"
         delay={300}
       >
@@ -110,13 +110,13 @@ export function HexagonShowcase() {
 
       {/* 5. Hình lục giác xám góc phải dưới */}
       <Reveal
-        className="absolute top-[75%] left-[85%] w-[14%] -z-10"
+        className="absolute top-[78%] left-[100%] w-[14%] -z-10"
         from="fade"
         delay={200}
       >
         <Image
           className="h-auto w-full"
-          src="/images/xay-dung-tron-goi/hero-gray-hex-top.png"
+          src="/images/xay-dung-tron-goi/hex-frame.png"
           alt=""
           width={782}
           height={1077}
@@ -127,7 +127,7 @@ export function HexagonShowcase() {
       {/* 4 Cụm hình ảnh trung tâm */}
       {clusterLayers.map((layer) => (
         <Reveal
-          className="group/hex absolute inset-0 z-0 hover:z-10"
+          className="group/hex absolute inset-0 z-0 hover:z-10 active:z-10"
           style={{ clipPath: layer.clipPath }}
           delay={380 + layer.order * 130}
           from="left"
@@ -149,7 +149,7 @@ export function HexagonShowcase() {
           >
             {/* ẢNH CHUYỂN ĐỘNG: Chỉ zoom hình bên trong, viền đứng im */}
             <Image
-              className="object-contain transition-transform duration-500 ease-out group-hover/hex:scale-105 will-change-transform"
+              className="object-contain transition-transform duration-500 ease-out group-hover/hex:scale-105 group-active/hex:scale-105 will-change-transform"
               style={{ transformOrigin: layer.transformOrigin }}
               src={CLUSTER}
               alt={layer.alt}
