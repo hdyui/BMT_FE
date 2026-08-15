@@ -27,51 +27,8 @@ import {
 
 export function FullConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip">
-      <SiteHeader mobileServiceMockup />
-
-      {/* `hero-artwork.png` là ảnh ghép sẵn cụm lục giác, chỉ chừa ~34,5%
-          chiều cao rỗng phía trên cho khối chữ. Section cao hơn ảnh đúng
-          2.5rem (`154vw` -> `calc(154vw+2.5rem)`), ảnh neo đáy (`bottom-0`
-          thay cho `inset-0`) giữ nguyên kích thước gốc — phần dư ra thành
-          khoảng trắng thật ở đỉnh cho khối chữ `pt-32`, không đè lên ảnh. */}
-      <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+138.95vw)] max-md:!min-h-0 md:h-[55vw] md:min-h-0`}
-      >
-        <MobileHeroArtwork variant="full-construction" />
-
-        {/* `pt-32` (128px) khớp khoảng cách header->tiêu đề chuẩn lấy từ
-            RenovationMobileHero (~85px header + ~41px khoảng trắng riêng),
-            thay cho `pt-[5.35rem]` cũ gần như sát luôn header không chừa
-            khoảng trắng. */}
-        <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
-          <div className="absolute top-[5.4%] left-[10.5%] w-[86%]">
-            <Reveal>
-              <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] font-extrabold leading-[1.12] text-brand">
-                DỊCH VỤ THIẾT KẾ THI CÔNG
-                <br />&amp; XÂY DỰNG TRỌN GÓI
-              </h1>
-            </Reveal>
-            <BuildingRule
-              className="mt-2 h-5 w-[42%] max-w-none [&_img]:object-contain [&_img]:object-right"
-              src="/images/services/rule-dark.png"
-              delay={160}
-            />
-            <Reveal delay={300} from="left">
-              <p className="mt-2 flex items-center gap-2 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed">
-                <Image
-                  className="size-3 shrink-0 object-contain"
-                  src="/images/services/icon-house.png"
-                  alt=""
-                  width={90}
-                  height={95}
-                  aria-hidden="true"
-                />
-                <span>Kiến tạo công trình bền vững từ thiết kế đến thi công</span>
-              </p>
-            </Reveal>
-          </div>
-        </div>
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
+      <SiteHeader />
 
         <Image
           className="absolute top-[9%] right-0 -z-10 hidden h-[91%] w-[18%] object-contain object-right-bottom opacity-90 md:block"
@@ -278,8 +235,8 @@ export function FullConstructionServicePage() {
         </div>
       </section>
 
-      <section className="bg-[#f2f2f3] pt-12 pb-0 md:pb-12 lg:py-14">
-        <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center">
+      <section className="-mb-[2.342945vw] bg-[#f2f2f3] pt-12 pb-[calc(3rem+2.342945vw)] lg:-mb-[2.57vw] lg:pt-14 lg:pb-[calc(3.5rem+2.57vw)]">
+        <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
             <h2 className="font-heading text-[clamp(0.95rem,4.2vw,1.35rem)] font-extrabold leading-[1.12] sm:text-[1.75rem] md:leading-normal">
               <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
@@ -301,7 +258,7 @@ export function FullConstructionServicePage() {
         <ProcessStepsGrid mobileMockup />
       </section>
 
-      <ContactForm mobileServiceMockup />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

@@ -380,23 +380,7 @@ export function AboutPage() {
 
         <section className="relative hidden py-24 sm:block sm:py-28 lg:py-32">
           <div
-            className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 z-0 overflow-hidden bg-[#f6f6f6] sm:-bottom-11 lg:-bottom-12"
-            aria-hidden="true"
-          >
-            <Image
-              className="object-cover object-bottom opacity-55"
-              src={`${imageRoot}/city-blueprint.png`}
-              alt=""
-              fill
-              sizes="100vw"
-            />
-          </div>
-          <div
-            className="pointer-events-none absolute inset-x-0 top-0 -bottom-10 z-20 overflow-hidden bg-[#f6f6f6] [--cutout-height:2.5rem] [--cutout-radius:2.25rem] sm:-bottom-11 sm:[--cutout-height:2.75rem] sm:[--cutout-radius:2.75rem] lg:-bottom-12 lg:[--cutout-height:3rem] lg:[--cutout-radius:3rem]"
-            style={{
-              clipPath:
-                "inset(calc(100% - var(--cutout-height)) 0 0 50% round 0 0 0 var(--cutout-radius))",
-            }}
+            className="pointer-events-none absolute inset-x-0 top-0 -bottom-[2.342945vw] z-0 overflow-hidden bg-[#f6f6f6] lg:-bottom-[2.57vw]"
             aria-hidden="true"
           >
             <Image
@@ -419,7 +403,7 @@ export function AboutPage() {
           </div>
         </section>
 
-        <ContactForm />
+        <ContactForm showTopNotch />
       </main>
       <SiteFooter showTopBorder={false} />
     </>

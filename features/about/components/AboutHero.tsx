@@ -66,7 +66,7 @@ export function AboutHero() {
             <BuildingRule className="mt-4 h-[30px] w-[325px] max-w-full brightness-0 max-sm:mt-3 max-sm:h-5 max-sm:w-[217px]" />
           </div>
           <p
-            className={`mt-5 max-w-[590px] text-justify text-base leading-7 text-neutral-800 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] delay-[780ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-4 max-sm:text-[14px] max-sm:leading-5 sm:text-[17px] sm:leading-7 ${
+            className={`mt-5 max-w-[590px] text-justify text-[clamp(10px,2.7vw,11px)] leading-[1.12] text-neutral-800 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] delay-[780ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-4 sm:text-base sm:leading-[1.4] lg:leading-[var(--hero-description-desktop-line-height)] ${
               isReady
                 ? "translate-x-0 opacity-100"
                 : "-translate-x-10 opacity-0"

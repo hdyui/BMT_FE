@@ -52,6 +52,7 @@ const categoryBlueprints = [
   {
     label: "NHÀ Ở",
     icon: "/images/home/category-house.png",
+    desktopIconClassName: "lg:h-auto lg:w-[44px]",
     slug: "nha-o",
     titles: [
       "Nhà phố hiện đại tại Phú Nhuận",
@@ -67,6 +68,7 @@ const categoryBlueprints = [
   {
     label: "VĂN PHÒNG",
     icon: "/images/home/category-office.png",
+    desktopIconClassName: "lg:h-auto lg:w-[39px]",
     slug: "van-phong",
     titles: [
       "Văn phòng công nghệ tại Quận 3",
@@ -82,6 +84,7 @@ const categoryBlueprints = [
   {
     label: "THẨM MỸ VIỆN, SHOWROOM",
     icon: "/images/home/category-showroom.png",
+    desktopIconClassName: "lg:h-auto lg:w-[48px]",
     slug: "showroom",
     titles: [
       "Showroom nội thất tại Quận 2",
@@ -97,6 +100,7 @@ const categoryBlueprints = [
   {
     label: "NHÀ HÀNG, KHÁCH SẠN",
     icon: "/images/home/category-hotel.png",
+    desktopIconClassName: "lg:h-auto lg:w-[43px]",
     slug: "hospitality",
     titles: [
       "Nhà hàng đương đại tại Quận 1",
@@ -131,7 +135,7 @@ export function ProjectShowcase() {
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(0);
   const [mobileProjectIndex, setMobileProjectIndex] = useState(0);
-  const [expandedCard, setExpandedCard] = useState<number | null>(null);
+  const [expandedCard, setExpandedCard] = useState(0);
   const [categoriesVisible, setCategoriesVisible] = useState(false);
   const [isFading, setIsFading] = useState(false);
   const [categoryIndicator, setCategoryIndicator] = useState({
@@ -188,14 +192,18 @@ export function ProjectShowcase() {
       if (!gridItem) return;
 
       const compactLayout = window.innerWidth < 640;
+      const desktopLayout = window.innerWidth >= 1024;
 
       setCategoryIndicator({
-        left:
-          gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
+        left: desktopLayout
+          ? gridItem.offsetLeft + button.offsetLeft
+          : gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
         top: compactLayout
           ? container.offsetHeight + 10
           : gridItem.offsetTop + button.offsetTop + button.offsetHeight,
-        width: Math.max(28, button.offsetWidth * 0.42),
+        width: desktopLayout
+          ? button.offsetWidth
+          : Math.max(28, button.offsetWidth * 0.42),
       });
     };
 
@@ -218,7 +226,7 @@ export function ProjectShowcase() {
     fadeTimer.current = setTimeout(() => {
       setActiveCategory(nextCategory);
       setPage(nextPage);
-      setExpandedCard(null);
+      setExpandedCard(0);
       enterTimer.current = setTimeout(() => setIsFading(false), 30);
     }, FADE_DURATION);
   };
@@ -253,7 +261,7 @@ export function ProjectShowcase() {
     <div className="mt-8">
       <div
         ref={categoriesRef}
-        className="relative mx-auto grid max-w-4xl grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-6"
+        className="relative mx-auto grid max-w-4xl grid-cols-4 gap-x-2 gap-y-4 sm:gap-x-4 sm:gap-y-6 lg:max-w-[1202px] lg:gap-x-[74px]"
       >
         {categories.map((item, index) => (
           <Reveal delay={index * 120} key={item.slug}>
@@ -276,14 +284,14 @@ export function ProjectShowcase() {
               type="button"
             >
               <span
-                className={`grid size-[58px] place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 max-sm:size-11 sm:size-16 ${
+                className={`grid size-[58px] place-items-center rounded-full border transition-[background-color,border-color,box-shadow,scale] duration-300 max-sm:size-11 sm:size-16 lg:size-[82px] ${
                   selectedCategory === index
-                    ? "scale-110 border-[#df641c] bg-[#e86f25] shadow-[0_8px_24px_rgb(223_100_28/.32)] group-hover:bg-[#df641c]"
+                    ? "scale-110 border-[#df641c] bg-[#e86f25] shadow-[0_8px_24px_rgb(223_100_28/.32)] group-hover:bg-[#df641c] lg:scale-100"
                     : "border-brand group-hover:border-[#df641c] group-hover:bg-[#df641c]"
                 }`}
               >
                 <Image
-                  className={`size-8 object-contain transition-[filter] duration-300 max-sm:size-7 sm:size-9 ${
+                  className={`size-8 object-contain transition-[filter] duration-300 max-sm:size-7 sm:size-9 ${item.desktopIconClassName} ${
                     selectedCategory === index
                       ? "brightness-0 invert"
                       : "group-hover:brightness-0 group-hover:invert"
@@ -294,7 +302,7 @@ export function ProjectShowcase() {
                   height={44}
                 />
               </span>
-              <span className="max-w-40 leading-snug max-sm:flex max-sm:h-9 max-sm:w-full max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:text-center max-sm:text-[10px] max-sm:font-extrabold max-sm:leading-[1.05] max-sm:tracking-[-0.025em] sm:whitespace-nowrap sm:text-[13px] sm:font-extrabold sm:leading-none lg:whitespace-normal lg:text-[12px] lg:font-extrabold lg:leading-snug">
+              <span className="max-w-40 leading-snug max-sm:flex max-sm:h-9 max-sm:w-full max-sm:items-center max-sm:justify-center max-sm:px-0.5 max-sm:text-center max-sm:text-[10px] max-sm:font-extrabold max-sm:leading-[1.05] max-sm:tracking-[-0.025em] sm:whitespace-nowrap sm:text-[13px] sm:font-extrabold sm:leading-none lg:max-w-none lg:text-[15px] lg:font-semibold">
                 {item.label}
               </span>
             </button>
@@ -398,15 +406,9 @@ export function ProjectShowcase() {
                   }`}
                   key={project.id}
                   variants={cardItemVariants}
-                  onBlur={(event) => {
-                    if (!event.currentTarget.contains(event.relatedTarget)) {
-                      setExpandedCard(null);
-                    }
-                  }}
                   onClick={() => setExpandedCard(index)}
                   onFocusCapture={() => setExpandedCard(index)}
                   onMouseEnter={() => setExpandedCard(index)}
-                  onMouseLeave={() => setExpandedCard(null)}
                   tabIndex={0}
                 >
                   <div className="pointer-events-none absolute inset-y-0 left-1/2 w-[600px] -translate-x-1/2">
@@ -423,10 +425,20 @@ export function ProjectShowcase() {
                   </div>
 
                   <div
-                    className={`absolute inset-0 bg-[#c85a24]/90 transition-opacity duration-500 ${
+                    className={`pointer-events-none absolute inset-0 transition-opacity duration-500 ${
                       isExpanded ? "opacity-100" : "opacity-0"
                     }`}
-                  />
+                  >
+                    <Image
+                      className="scale-[1.03] object-cover object-top opacity-[0.82]"
+                      src="/images/home/featured-projects-background.png"
+                      alt=""
+                      fill
+                      loading="eager"
+                      sizes="600px"
+                      aria-hidden="true"
+                    />
+                  </div>
 
                   <div
                     className={`absolute inset-0 flex flex-col justify-end p-7 text-left text-white transition-opacity duration-300 ${

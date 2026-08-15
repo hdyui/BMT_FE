@@ -12,18 +12,11 @@ type Errors = Partial<Record<FieldName, string>>;
 
 const requiredMessage = "Vui lòng nhập thông tin.";
 
-type ContactFormProps = {
-  /** Bo góc phải phía trên: nửa trái nhô lên, nửa phải để lộ nền section trên.
-   *  Tắt khi section phía trên đã tự thò xuống che phần này. */
-  topNotch?: boolean;
-  /** Giữ tương thích với các trang dịch vụ dùng biến thể mobile của PR #15. */
-  mobileServiceMockup?: boolean;
-};
-
 export function ContactForm({
-  topNotch = true,
-  mobileServiceMockup = false,
-}: ContactFormProps = {}) {
+  showTopNotch = false,
+}: {
+  showTopNotch?: boolean;
+}) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
@@ -90,31 +83,31 @@ export function ContactForm({
 
   return (
     <section
-      className="relative bg-brand py-14 text-white max-lg:z-10 max-lg:overflow-hidden max-lg:bg-transparent max-lg:pt-8 max-lg:pb-[31px]"
-      data-mobile-service-mockup={mobileServiceMockup || undefined}
+      className="relative z-10 overflow-hidden bg-transparent py-14 text-white max-lg:pt-8 max-lg:pb-[31px]"
       id="contact-form"
       ref={sectionRef}
     >
-      {topNotch && (
+      {!showTopNotch && (
         <span
-          className="pointer-events-none absolute bottom-full left-0 z-20 hidden h-11 w-[calc(50%+2.75rem)] bg-[radial-gradient(circle_at_top_right,transparent_2.75rem,var(--brand)_calc(2.75rem+0.5px))] lg:block"
+          className="pointer-events-none absolute inset-0 z-[1] hidden bg-brand lg:block"
           aria-hidden="true"
         />
       )}
       <span
-        className="pointer-events-none absolute inset-x-0 bottom-0 top-[2.342945vw] hidden bg-[#ee7b30] max-lg:block"
+        className={`pointer-events-none absolute inset-x-0 bottom-0 top-[2.342945vw] z-[1] bg-[#ee7b30] lg:top-[2.57vw] ${showTopNotch ? "block" : "hidden max-lg:block"}`}
         aria-hidden="true"
       />
       <Image
-        className="absolute left-0 top-0 hidden h-auto w-full max-lg:block"
+        className={`absolute left-0 top-0 z-[1] h-auto w-full ${showTopNotch ? "block lg:left-[calc(49.96%-54.308901vw)] lg:w-[109.690989vw] lg:max-w-none" : "hidden max-lg:block"}`}
         src="/images/contact/mobile/form-background.png"
         alt=""
         width={3884}
         height={2109}
         decoding="sync"
         loading="eager"
-        sizes="(max-width: 1023px) 100vw, 1px"
+        sizes={showTopNotch ? "(max-width: 1023px) 100vw, 110vw" : "(max-width: 1023px) 100vw, 1px"}
         unoptimized
+        data-contact-form-notch={showTopNotch ? "asset" : undefined}
         aria-hidden="true"
       />
 

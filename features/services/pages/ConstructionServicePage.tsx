@@ -305,7 +305,7 @@ const DIAMOND_BY_KEY = Object.fromEntries(
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-hidden">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       <ConstructionMobileHero />
@@ -667,10 +667,7 @@ export function ConstructionServicePage() {
       </section>
 
       {/* SECTION 4: QUY TRÌNH THI CÔNG */}
-      <section
-        className="relative isolate scroll-mt-[85px] overflow-hidden bg-[#F2F2F3] py-16 max-md:pt-8 max-md:pb-8"
-        id="construction-process"
-      >
+      <section className="relative isolate -mb-[2.342945vw] overflow-hidden bg-[#F2F2F3] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
         <Image
           className="-z-10 object-cover"
           src="/images/thi-cong-xay-dung/process-background.png"
@@ -724,7 +721,7 @@ export function ConstructionServicePage() {
         </div>
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

@@ -56,13 +56,13 @@ function AnimatedHeading({
   fullWidthRule?: boolean;
 }) {
   const ruleWidthClass = fullWidthRule
-    ? "max-w-[340px] max-sm:max-w-[155px]"
-    : "max-w-[285px] max-sm:max-w-[128px]";
+    ? "max-w-[380px]"
+    : "max-w-[330px]";
 
   return (
     <div>
       <h3
-        className={`text-2xl sm:text-3xl font-bold uppercase leading-none text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 max-sm:text-[21px] ${
+        className={`text-[26px] font-extrabold uppercase leading-none tracking-[-0.025em] text-brand transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 sm:text-[34px] lg:text-[38px] ${
           isVisible ? "translate-y-0 opacity-100" : "translate-y-16 opacity-0"
         }`}
         style={{ transitionDelay: `${delay}ms` }}
@@ -78,28 +78,11 @@ function AnimatedHeading({
         }}
         aria-hidden="true"
       >
-        {fullWidthRule ? (
-          <BuildingRule
-            className="h-full max-w-none text-brand sm:[&>span:last-child]:h-6 sm:[&>span:last-child]:w-9 sm:[&>span:last-child>img]:h-6"
-            compact
-            fullWidth
-          />
-        ) : (
-          <>
-            <BuildingRule
-              className="h-full max-w-none text-brand sm:hidden"
-              compact
-              fullWidth
-            />
-            <Image
-              className="hidden object-contain object-left sm:block"
-              src="/images/home/section-rule.png"
-              alt=""
-              fill
-              sizes="285px"
-            />
-          </>
-        )}
+        <BuildingRule
+          className="h-full max-w-none text-brand sm:[&>span:last-child]:h-6 sm:[&>span:last-child]:w-9 sm:[&>span:last-child>img]:h-6"
+          compact
+          fullWidth
+        />
       </div>
     </div>
   );
@@ -182,7 +165,7 @@ function CoreValuesList({
               }`}
             >
               <div className="overflow-hidden">
-                <p className="pb-3 text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] max-sm:pb-2 max-sm:text-[13px] max-sm:leading-[1.45]">
+                <p className="max-w-[290px] pb-3 text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] max-sm:max-w-[236px] max-sm:pb-2 max-sm:text-[13px]">
                   {description}
                 </p>
               </div>
@@ -215,7 +198,7 @@ function CoreValueIllustration({
     >
       {coreValues.map((value, index) => (
         <Image
-          className={`object-contain transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${
+          className={`object-contain transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${index === 4 ? styles.dedicationIllustration : ""} ${
             activeValue === index
               ? "scale-100 opacity-100 blur-0"
               : "pointer-events-none scale-[.965] opacity-0 blur-[2px]"
@@ -271,12 +254,12 @@ export function VisionMissionValues() {
 
       <div className="mx-auto grid w-[min(1240px,calc(100%-3rem))] items-start gap-14 max-sm:w-[calc(100%-2.25rem)] max-sm:gap-8 lg:grid-cols-[.92fr_1.05fr_1.08fr] lg:gap-8">
         <div className="space-y-14 max-sm:order-3 max-sm:space-y-8 lg:space-y-16">
-          <div>
+          <div className="max-w-[330px]">
             <AnimatedHeading isVisible={isVisible} delay={100}>
               Tầm nhìn
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[14px] max-sm:leading-5 ${
+              className={`mt-5 max-w-full text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[13px] ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"
@@ -290,12 +273,12 @@ export function VisionMissionValues() {
             </p>
           </div>
 
-          <div>
+          <div className="max-w-[330px]">
             <AnimatedHeading isVisible={isVisible} delay={650}>
               Sứ mệnh
             </AnimatedHeading>
             <p
-              className={`mt-5 max-w-[410px] text-justify text-[16px] leading-6 text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[14px] max-sm:leading-5 ${
+              className={`mt-5 max-w-full text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[13px] ${
                 isVisible
                   ? "translate-x-0 opacity-100"
                   : "-translate-x-20 opacity-0"

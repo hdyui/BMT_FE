@@ -16,55 +16,46 @@ export function TrustCardReveal({
   ...props
 }: TrustCardRevealProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const motionRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const element = ref.current;
-    const motionElement = motionRef.current;
-    if (!element || !motionElement) return;
+    if (!element) return;
 
     const prefersReducedMotion = window.matchMedia(
       "(prefers-reduced-motion: reduce)",
     ).matches;
-    let fadeAnimation: Animation | undefined;
-    let movementAnimation: Animation | undefined;
+    let revealAnimation: Animation | undefined;
+
+    if (!prefersReducedMotion) {
+      element.style.opacity = "0";
+      element.style.transform = "translate3d(0, 24px, 0)";
+    }
 
     const reveal = () => {
       if (prefersReducedMotion || typeof element.animate !== "function") {
         element.style.opacity = "1";
-        motionElement.style.removeProperty("transform");
+        element.style.transform = "none";
         return;
       }
 
-      fadeAnimation = element.animate([{ opacity: 0 }, { opacity: 1 }], {
-        duration: 420,
-        easing: "cubic-bezier(0.16, 1, 0.3, 1)",
-        fill: "forwards",
-      });
-
-      movementAnimation = motionElement.animate(
+      revealAnimation = element.animate(
         [
-          { transform: "translate3d(0, 64px, 0)" },
-          { transform: "translate3d(0, 0, 0)" },
+          { opacity: 0, transform: "translate3d(0, 24px, 0)" },
+          { opacity: 1, transform: "translate3d(0, 0, 0)" },
         ],
         {
-          duration: 1050,
-          delay: 500 + Math.min(delay, 720),
+          duration: 620,
+          delay: Math.min(delay, 420),
           easing: "cubic-bezier(0.16, 1, 0.3, 1)",
           fill: "forwards",
         },
       );
 
-      fadeAnimation.onfinish = () => {
+      revealAnimation.onfinish = () => {
         element.style.opacity = "1";
+        element.style.transform = "none";
         element.style.willChange = "auto";
-        fadeAnimation?.cancel();
-      };
-
-      movementAnimation.onfinish = () => {
-        motionElement.style.removeProperty("transform");
-        motionElement.style.willChange = "auto";
-        movementAnimation?.cancel();
+        revealAnimation?.cancel();
       };
     };
 
@@ -84,8 +75,7 @@ export function TrustCardReveal({
 
     return () => {
       observer.disconnect();
-      fadeAnimation?.cancel();
-      movementAnimation?.cancel();
+      revealAnimation?.cancel();
     };
   }, [delay]);
 
@@ -93,18 +83,16 @@ export function TrustCardReveal({
     <div
       ref={ref}
       className={cn(
-        "opacity-0 will-change-[opacity] motion-reduce:opacity-100",
+        "will-change-[opacity,transform] motion-reduce:translate-y-0 motion-reduce:opacity-100",
         className,
       )}
       {...props}
     >
       <div
-        ref={motionRef}
         className={cn(
-          "will-change-transform motion-reduce:transform-none motion-reduce:transition-none",
+          "motion-reduce:transform-none motion-reduce:transition-none",
           motionClassName,
         )}
-        style={{ transform: "translate3d(0, 64px, 0)" }}
       >
         {children}
       </div>

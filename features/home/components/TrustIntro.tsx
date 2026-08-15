@@ -53,14 +53,14 @@ export function TrustIntro() {
       variants={introContainerVariants}
     >
       <motion.h2
-        className="text-3xl font-bold uppercase motion-reduce:transform-none sm:text-4xl"
+        className="text-3xl font-bold uppercase motion-reduce:transform-none sm:text-4xl lg:text-charcoal"
         variants={introItemVariants}
       >
         <span className="sm:hidden">Vì sao khách hàng tin chọn</span>
         <span className="hidden sm:inline">Vì sao khách hàng tin chọn BMT Decor?</span>
       </motion.h2>
       <motion.p
-        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-white/80 motion-reduce:transform-none max-sm:text-base"
+        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-white/80 motion-reduce:transform-none max-sm:text-base lg:text-muted-foreground"
         variants={introItemVariants}
       >
         <span className="sm:hidden">

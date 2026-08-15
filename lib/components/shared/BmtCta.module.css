@@ -1,11 +1,9 @@
-@keyframes cta-rise-in {
+@keyframes cta-fade-in {
   from {
     opacity: 0;
-    transform: translateY(36px);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
   }
 }
 
@@ -14,7 +12,6 @@
   display: inline-flex;
   aspect-ratio: 1366 / 291;
   align-items: center;
-  justify-content: center;
   border: 0;
   border-radius: 999px;
   background: url("/images/careers/careers-cta.jpg") center / 100% 100%
@@ -27,9 +24,9 @@
   box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
   text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
   transition:
-    transform 260ms ease,
-    filter 260ms ease,
-    box-shadow 260ms ease;
+    filter 0.3s,
+    box-shadow 0.3s,
+    transform 0.3s;
 }
 
 .cta:hover {
@@ -39,7 +36,6 @@
 }
 
 .cta:active {
-  box-shadow: 0 0.45rem 0.9rem rgb(137 52 8 / 24%);
   transform: translateY(2px) scale(0.99);
 }
 
@@ -50,11 +46,21 @@
 
 .hero {
   width: clamp(190px, 17.2vw, 330px);
-  min-height: 40px;
-  margin-top: 1.25vw;
-  padding: 0 17% 0 3%;
-  font-size: clamp(14px, 1.4vw, 20px);
-  animation: cta-rise-in 0.7s 1.4s cubic-bezier(0.16, 1, 0.3, 1) backwards;
+  margin-top: 1vw;
+  padding: 0;
+  font-size: clamp(18px, 1.65vw, 30px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+  animation: cta-fade-in 0.85s 0.76s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.hero .label {
+  display: inline-flex;
+  width: 80%;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
 }
 
 .compact {
@@ -66,6 +72,14 @@
   font-size: clamp(11px, 3.05vw, 13px);
   font-weight: 800;
   box-shadow: 0 0.55rem 1rem rgb(137 52 8 / 28%);
+  transition:
+    transform 260ms ease,
+    filter 260ms ease,
+    box-shadow 260ms ease;
+}
+
+.compact:active {
+  box-shadow: 0 0.45rem 0.9rem rgb(137 52 8 / 24%);
 }
 
 .compact .label {
@@ -84,11 +98,10 @@
 
 @media (max-width: 1023px) {
   .hero {
-    width: min(240px, 78vw);
-    min-height: 0;
+    width: min(17rem, 84vw);
     margin-top: 28px;
-    padding: 0 17% 0 3%;
-    font-size: 18px;
+    padding: 0;
+    font-size: 24px;
   }
 }
 

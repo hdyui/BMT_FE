@@ -17,24 +17,32 @@ import { TrustIntro } from "@/features/home/components/TrustIntro";
 const trustReasons = [
   {
     image: "/images/home/trust-card-interior.png",
+    desktopImage: "/images/home/trust-card-team-normal.png",
+    desktopHoverImage: "/images/home/trust-card-team-hover.png",
     icon: "/images/home/trust-icon-team.png",
     title: "Đội ngũ giàu kinh nghiệm",
     copy: "Kiến trúc sư và kỹ sư giàu chuyên môn, luôn đồng hành và tư vấn giải pháp phù hợp với nhu cầu của khách hàng.",
   },
   {
     image: "/images/home/trust-card-design.png",
+    desktopImage: "/images/home/trust-card-process-normal.png",
+    desktopHoverImage: "/images/home/trust-card-process-hover.png",
     icon: "/images/home/trust-icon-plan.png",
     title: "Quy trình chuyên nghiệp",
     copy: "Quy trình làm việc rõ ràng, minh bạch, kiểm soát tiến độ và chất lượng trong từng giai đoạn.",
   },
   {
     image: "/images/home/trust-card-build.png",
+    desktopImage: "/images/home/trust-card-turnkey-normal.png",
+    desktopHoverImage: "/images/home/trust-card-turnkey-hover.png",
     icon: "/images/home/trust-icon-process.png",
     title: "Thi công trọn gói, đồng bộ",
     copy: "Triển khai xuyên suốt từ thiết kế đến hoàn thiện, đảm bảo tính thống nhất và tối ưu thời gian, chi phí.",
   },
   {
     image: "/images/home/trust-card-site.png",
+    desktopImage: "/images/home/trust-card-quality-normal.png",
+    desktopHoverImage: "/images/home/trust-card-quality-hover.png",
     icon: "/images/home/trust-icon-quality.png",
     title: "Chất lượng thi công",
     copy: "Thi công đúng kỹ thuật, sử dụng vật liệu phù hợp và kiểm tra kỹ lưỡng trước khi bàn giao.",
@@ -100,15 +108,15 @@ export function HomePage() {
       <HomeHero />
 
       <section className="bg-white">
-        <div className="relative overflow-hidden bg-charcoal pt-16 text-white">
+        <div className="relative overflow-hidden bg-charcoal pt-16 text-white lg:bg-white lg:text-charcoal">
           <Image
-            className="object-cover"
+            className="object-cover lg:hidden"
             src="/images/home/trust-background.png"
             alt=""
             fill
             sizes="100vw"
           />
-          <div className="absolute inset-0 bg-charcoal/15" />
+          <div className="absolute inset-0 bg-charcoal/15 lg:hidden" />
 
           <div className="relative mx-auto w-[min(1360px,calc(100%-2rem))]">
             <TrustIntro />
@@ -170,46 +178,54 @@ export function HomePage() {
         <div className="mx-auto -mt-44 hidden w-[min(1360px,calc(100%-2rem))] grid-cols-4 gap-5 lg:grid">
           {trustReasons.map((reason, index) => (
             <TrustCardReveal
-              className="group/card-lift relative z-0 hover:z-10"
-              delay={index * 180}
+              className="relative"
+              delay={index * 110}
               key={reason.title}
-              motionClassName="origin-[center_176px] [transform:scale(1)] transition-transform duration-300 ease-in-out group-hover/card-lift:[transform:scale(1.02)]"
             >
-              <article className="h-100 group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)]">
-                <div className="relative h-44 overflow-hidden">
-                  <Image
-                    className="object-cover"
-                    src={reason.image}
-                    alt={reason.title}
-                    fill
-                    sizes="25vw"
-                  />
-                </div>
-                <div className="relative min-h-44 px-6 pt-11 pb-7">
-                  <span className="absolute -top-8 left-6 grid size-16 place-items-center rounded-lg bg-white shadow-lg transition-colors duration-300 group-hover/card:bg-brand">
-                    <Image
-                      className="size-9 object-contain transition-opacity duration-300 group-hover/card:opacity-0"
-                      src={reason.icon}
-                      alt=""
-                      width={44}
-                      height={44}
-                    />
-                    <Image
-                      className="absolute size-9 object-contain opacity-0 brightness-0 invert transition-opacity duration-300 group-hover/card:opacity-100"
-                      src={reason.icon}
-                      alt=""
-                      width={44}
-                      height={44}
-                    />
-                  </span>
-                  <h3 className="text-xl font-bold leading-snug">
-                    {reason.title}
-                  </h3>
-                  <p className="mt-3 text-[17px] leading-relaxed text-muted-foreground">
-                    {reason.copy}
-                  </p>
-                </div>
-                <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-500 ease-out group-hover/card:scale-x-100" />
+              <article
+                className="group/card relative isolate aspect-[1189/1656] overflow-hidden rounded-2xl bg-white text-white outline-none focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-offset-4 focus-visible:ring-offset-white"
+                tabIndex={0}
+                aria-labelledby={`trust-title-${index}`}
+                aria-describedby={`trust-copy-${index}`}
+              >
+                <Image
+                  className="object-cover transition-opacity duration-500 ease-out group-hover/card:opacity-0 group-focus/card:opacity-0 motion-reduce:transition-none"
+                  src={reason.desktopImage}
+                  alt=""
+                  fill
+                  sizes="(max-width:1279px) 25vw, 325px"
+                />
+
+                <Image
+                  className="pointer-events-none object-cover opacity-0 transition-opacity duration-500 ease-out group-hover/card:opacity-100 group-focus/card:opacity-100 motion-reduce:transition-none"
+                  src={reason.desktopHoverImage}
+                  alt=""
+                  fill
+                  sizes="(max-width:1279px) 25vw, 325px"
+                  aria-hidden="true"
+                />
+
+                <Image
+                  className="pointer-events-none scale-[1.01] object-cover opacity-0 transition-opacity duration-500 ease-out group-hover/card:opacity-100 group-focus/card:opacity-100 motion-reduce:transition-none"
+                  src="/images/home/trust-card-hover-overlay.png"
+                  alt=""
+                  fill
+                  sizes="(max-width:1279px) 25vw, 325px"
+                  aria-hidden="true"
+                />
+
+                <h3
+                  id={`trust-title-${index}`}
+                  className="absolute inset-x-6 bottom-7 z-10 text-xl font-bold leading-snug transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover/card:-translate-y-32 group-focus/card:-translate-y-32 xl:group-hover/card:-translate-y-20 xl:group-focus/card:-translate-y-20 motion-reduce:transition-none"
+                >
+                  {reason.title}
+                </h3>
+                <p
+                  id={`trust-copy-${index}`}
+                  className="absolute inset-x-6 bottom-7 z-10 translate-y-3 text-justify text-sm leading-[1.55] text-white opacity-0 transition-[opacity,transform] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] [text-align-last:left] [text-justify:inter-word] group-hover/card:translate-y-0 group-hover/card:opacity-100 group-focus/card:translate-y-0 group-focus/card:opacity-100 motion-reduce:transition-none"
+                >
+                  {reason.copy}
+                </p>
               </article>
             </TrustCardReveal>
           ))}
@@ -265,7 +281,7 @@ export function HomePage() {
         </div>
       </div>
 
-      <section className="relative overflow-hidden bg-neutral-100 py-16 max-lg:-mb-[2.342945vw] max-lg:pb-[calc(4rem+2.342945vw)]">
+      <section className="relative -mb-[2.342945vw] overflow-hidden bg-neutral-100 pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
         <div
           className="pointer-events-none absolute inset-0 bg-top bg-repeat-y opacity-35 mix-blend-multiply"
           style={{
@@ -347,7 +363,7 @@ export function HomePage() {
         </div>
       </section>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter showTopBorder={false} />
     </div>
   );

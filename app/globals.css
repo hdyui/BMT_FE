@@ -102,6 +102,9 @@
   --brand: #f47a2a;
   --brand-dark: #d95f15;
   --charcoal: #242122;
+  --site-header-desktop-height: 60px;
+  --hero-description-desktop-font-size: 1.125rem;
+  --hero-description-desktop-line-height: 1.5;
   --radius: 0.625rem;
   --sidebar: oklch(0.985 0 0);
   --sidebar-foreground: oklch(0.19 0 0);
@@ -356,13 +359,13 @@
 
 @media (min-width: 1024px) and (prefers-reduced-motion: no-preference) {
   html:has([data-scroll-snap-page]) {
-    scroll-padding-top: 68px;
+    scroll-padding-top: var(--site-header-desktop-height);
     scroll-snap-type: y proximity;
   }
 
   body:has([data-scroll-snap-page]) section,
   body:has([data-scroll-snap-page]) footer {
-    scroll-margin-top: 68px;
+    scroll-margin-top: var(--site-header-desktop-height);
     scroll-snap-align: start;
   }
 }

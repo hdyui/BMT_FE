@@ -19,7 +19,7 @@ const cardPositions = [
 
 export function ServicesOverviewPage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal">
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       <section className={SERVICE_HERO_CLASS_NAME}>
@@ -172,7 +172,7 @@ export function ServicesOverviewPage() {
         </Reveal>
 
         {/* Đã xóa lg:-ml-[14px] ở div chứa panel */}
-        <div className="relative z-10 bg-neutral-100 px-5 py-10 sm:py-14 lg:mt-7.5 lg:-mb-7.5 lg:rounded-tr-[5.1875rem] lg:rounded-bl-[1.875rem] lg:pt-8 lg:pr-[8%] lg:pb-12 lg:pl-[5.5%]">
+        <div className="relative z-10 bg-neutral-100 px-5 py-14 lg:mt-[30px] lg:-mb-[max(30px,2.57vw)] lg:rounded-tr-[83px] lg:rounded-bl-[30px] lg:pt-8 lg:pr-[8%] lg:pb-[calc(3rem+max(0px,calc(2.57vw-30px)))] lg:pl-[5.5%]">
           {/* MỚI: Khối màu xám nhỏ ẩn phía sau, dùng để lấp vào khoảng hở 14px ở góc trên cùng */}
           <div
             className="hidden lg:block absolute top-0 -left-3.5 w-3.5 h-25 bg-neutral-100"
@@ -205,8 +205,8 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
-      {/* Panel FAQ đã thò xuống che sẵn nửa phải nên không cần dải nhô của form. */}
-      <ContactForm />
+      {/* Panel FAQ thò xuống làm lớp nền được nhìn xuyên qua phần khuyết của form. */}
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

@@ -14,7 +14,7 @@ export function QuotationPage() {
       <main>
         <QuotationHero />
         <QuotationEstimator />
-        <ContactForm />
+        <ContactForm showTopNotch />
       </main>
       <SiteFooter />
     </div>

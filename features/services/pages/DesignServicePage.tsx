@@ -27,8 +27,8 @@ import {
 
 export function DesignServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal">
-      <SiteHeader mobileServiceMockup />
+    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
+      <SiteHeader />
 
       {/* Dùng đúng token chung với các trang dịch vụ khác: chiều cao banner ăn
           theo 38.9vw nên tỉ lệ giữ nguyên ở mọi bề rộng màn hình và mọi mức
@@ -328,14 +328,14 @@ export function DesignServicePage() {
         </div>
       </section>
 
-      <div className="relative max-md:bg-brand">
-        <section
-          id="design-process"
-          className="relative z-10 scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] py-16 max-md:rounded-br-[2rem] max-md:pt-3 max-md:pb-0"
-        >
-        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] max-md:mb-1 max-md:w-[calc(100%-1.25rem)]">
-          <Reveal>
-            <h2 className="font-heading hidden flex-wrap items-center justify-center gap-x-3 gap-y-2 text-4xl font-extrabold md:flex">
+      <section
+        id="design-process"
+        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
+      >
+        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
+          <Reveal className="">
+            {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
+            <h2 className="flex flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"
@@ -369,7 +369,7 @@ export function DesignServicePage() {
         </section>
       </div>
 
-      <ContactForm />
+      <ContactForm showTopNotch />
       <SiteFooter />
     </div>
   );

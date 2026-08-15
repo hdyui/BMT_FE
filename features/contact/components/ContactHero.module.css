@@ -87,7 +87,7 @@
 
   .descriptionIcon { display: none; }
   .mobileDescriptionIcon { display: inline-block; width: auto; height: 0.9em; margin-right: 0.28em; vertical-align: -0.08em; }
-  .cta { display: none; }
+  .ctaSlot { display: none; }
 }
 
 @media (max-width: 34rem) {
@@ -219,6 +219,13 @@
   animation: copySlide 720ms 420ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
+@media (min-width: 64rem) {
+  .description {
+    font-size: var(--hero-description-desktop-font-size);
+    line-height: var(--hero-description-desktop-line-height);
+  }
+}
+
 .descriptionIcon {
   display: inline-block;
   width: auto;
@@ -227,51 +234,6 @@
   vertical-align: -0.16em;
   filter: brightness(0) saturate(100%) invert(56%) sepia(88%) saturate(2340%)
     hue-rotate(343deg) brightness(100%) contrast(92%);
-}
-
-.cta {
-  position: relative;
-  display: inline-flex;
-  width: clamp(190px, 17.2cqw, 330px);
-  height: auto;
-  min-height: 2.5rem;
-  aspect-ratio: 1366 / 291;
-  margin-top: 1.55cqw;
-  align-items: center;
-  border: 0;
-  border-radius: 999px;
-  background: url("/images/careers/careers-cta.jpg") center / 100% 100%
-    no-repeat;
-  padding: 0;
-  opacity: 0;
-  color: white;
-  font-size: clamp(18px, 1.65cqw, 30px);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
-  text-align: center;
-  white-space: nowrap;
-  box-shadow: 0 0.75rem 1.45rem rgb(137 52 8 / 30%);
-  text-shadow: 0 1px 1px rgb(126 42 3 / 25%);
-  animation: fadeDecoration 680ms 720ms ease-out forwards;
-  transition:
-    transform 260ms ease,
-    filter 260ms ease,
-    box-shadow 260ms ease;
-}
-
-.cta:hover {
-  filter: brightness(1.04) saturate(1.03);
-  box-shadow: 0 1rem 2rem rgb(137 52 8 / 42%);
-  transform: translateY(-5px) scale(1.02);
-}
-.cta:active {
-  box-shadow: 0 0.45rem 0.9rem rgb(137 52 8 / 24%);
-  transform: translateY(2px) scale(0.99);
-}
-.cta:focus-visible {
-  outline: 3px solid #242122;
-  outline-offset: 4px;
 }
 
 .photoEntrance {
@@ -432,13 +394,6 @@
     text-align: left;
   }
 
-  .cta {
-    width: min(17rem, 84vw);
-    height: auto;
-    margin-top: 1.5rem;
-    padding: 0;
-    font-size: 24px;
-  }
   .photoEntrance {
     position: relative;
     top: auto;
@@ -522,7 +477,6 @@
   .title > span:first-child,
   .brandLogo,
   .description,
-  .cta,
   .photoEntrance,
   .photo {
     opacity: 1;
@@ -530,7 +484,6 @@
     transform: none;
   }
 
-  .cta,
   .photo,
   .photoFrame {
     transition-duration: 0.01ms;
@@ -553,7 +506,7 @@
   .description { max-width: none; margin-top: 0.34rem; font-size: clamp(0.63rem, 2.55vw, 0.92rem); line-height: 1.2; text-align: justify; text-align-last: left; text-justify: inter-character; }
   .descriptionIcon { display: none; }
   .mobileDescriptionIcon { display: inline-block; width: auto; height: 0.9em; margin-right: 0.28em; vertical-align: -0.08em; }
-  .cta { display: none; }
+  .ctaSlot { display: none; }
 }
 
 @media (max-width: 34rem) {
