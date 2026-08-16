@@ -56,8 +56,8 @@ function AnimatedHeading({
   fullWidthRule?: boolean;
 }) {
   const ruleWidthClass = fullWidthRule
-    ? "max-w-[380px]"
-    : "max-w-[330px]";
+    ? "max-w-[230px] sm:max-w-[380px]"
+    : "max-w-[175px] sm:max-w-[330px]";
 
   return (
     <div>
@@ -165,7 +165,7 @@ function CoreValuesList({
               }`}
             >
               <div className="overflow-hidden">
-                <p className="max-w-[290px] pb-3 text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] max-sm:max-w-[236px] max-sm:pb-2 max-sm:text-[13px]">
+                <p className="max-w-[290px] pb-3 text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] max-sm:w-full max-sm:max-w-none max-sm:pb-2 max-sm:text-[13px]">
                   {description}
                 </p>
               </div>
@@ -254,7 +254,7 @@ export function VisionMissionValues() {
 
       <div className="mx-auto grid w-[min(1240px,calc(100%-3rem))] items-start gap-14 max-sm:w-[calc(100%-2.25rem)] max-sm:gap-8 lg:grid-cols-[.92fr_1.05fr_1.08fr] lg:gap-8">
         <div className="space-y-14 max-sm:order-3 max-sm:space-y-8 lg:space-y-16">
-          <div className="max-w-[330px]">
+          <div className="max-w-[330px] max-sm:max-w-none">
             <AnimatedHeading isVisible={isVisible} delay={100}>
               Tầm nhìn
             </AnimatedHeading>
@@ -273,7 +273,7 @@ export function VisionMissionValues() {
             </p>
           </div>
 
-          <div className="max-w-[330px]">
+          <div className="max-w-[330px] max-sm:max-w-none">
             <AnimatedHeading isVisible={isVisible} delay={650}>
               Sứ mệnh
             </AnimatedHeading>
@@ -300,10 +300,7 @@ export function VisionMissionValues() {
           style={{ transitionDelay: "430ms" }}
         >
           <div className={styles.illustrationFloat}>
-            <CoreValueIllustration
-              activeValue={activeMobileValue}
-              mobile
-            />
+            <CoreValueIllustration activeValue={activeMobileValue} mobile />
             <CoreValueIllustration
               activeValue={activeDesktopValue}
               mobile={false}
@@ -312,11 +309,7 @@ export function VisionMissionValues() {
         </div>
 
         <div className="max-sm:order-2 lg:pt-0">
-          <AnimatedHeading
-            isVisible={isVisible}
-            delay={260}
-            fullWidthRule
-          >
+          <AnimatedHeading isVisible={isVisible} delay={260} fullWidthRule>
             Giá trị cốt lõi
           </AnimatedHeading>
 
