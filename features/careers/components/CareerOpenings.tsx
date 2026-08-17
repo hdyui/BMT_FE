@@ -1,7 +1,7 @@
 "use client";
 
-import Image, { getImageProps } from "next/image";
-import { useEffect, useMemo, useRef, useState } from "react";
+import Image from "next/image";
+import { useEffect, useMemo, useState } from "react";
 import {
   BriefcaseBusiness,
   ChevronDown,
@@ -11,30 +11,11 @@ import {
 } from "lucide-react";
 import { careerJobs, type CareerJob } from "@/features/careers/data/jobs";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
+import { ListDivider } from "@/lib/components/shared/ListDivider";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import styles from "./CareerOpenings.module.css";
 
 const pageSize = 3;
-
-const {
-  props: { srcSet: mobileDividerSrcSet },
-} = getImageProps({
-  src: "/images/careers/mobile/job-divider-line.png",
-  alt: "",
-  width: 3612,
-  height: 12,
-  sizes: "(max-width: 639px) calc(100vw - 36px), 1px",
-});
-
-const {
-  props: { srcSet: desktopDividerSrcSet, ...desktopDividerProps },
-} = getImageProps({
-  src: "/images/careers/job-divider.jpg",
-  alt: "",
-  width: 5010,
-  height: 123,
-  sizes: "(min-width: 1200px) 1180px, calc(100vw - 36px)",
-});
 
 function Metadata({ job }: { job: CareerJob }) {
   const items = [
@@ -58,42 +39,6 @@ function Metadata({ job }: { job: CareerJob }) {
         </li>
       ))}
     </ul>
-  );
-}
-
-function JobDivider({ delay }: { delay: number }) {
-  const dividerRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const node = dividerRef.current;
-    if (!node) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (!entry.isIntersecting) return;
-        setVisible(true);
-        observer.disconnect();
-      },
-      { threshold: 0.2 },
-    );
-
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, []);
-
-  return (
-    <div
-      ref={dividerRef}
-      className="relative mt-5 aspect-[5010/123] w-full overflow-hidden max-sm:mt-3 max-sm:h-[1px] max-sm:aspect-auto"
-      aria-hidden="true"
-    >
-      <picture>
-        <source media="(max-width: 639px)" srcSet={mobileDividerSrcSet} />
-        <source media="(min-width: 640px)" srcSet={desktopDividerSrcSet} />
-        <img {...desktopDividerProps} alt="" className={`absolute inset-0 size-full object-contain transition-[opacity,transform] duration-700 ease-out motion-reduce:transition-none max-sm:object-fill ${visible ? "scale-x-100 opacity-100" : "scale-x-0 opacity-0"}`} style={{ transformOrigin: "left center", transitionDelay: `${delay}ms` }} />
-      </picture>
-    </div>
   );
 }
 
@@ -181,7 +126,7 @@ function JobRow({
             </div>
           </div>
         </div>
-        {showDivider ? <JobDivider delay={delay + 120} /> : null}
+        {showDivider ? <ListDivider delay={delay + 120} /> : null}
       </article>
     </Reveal>
   );
