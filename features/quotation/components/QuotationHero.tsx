@@ -63,7 +63,7 @@ const DECORATION_CLASS =
 export function QuotationHero() {
   return (
     <section
-      className="relative h-[calc(154vw+1rem)] max-h-[50.375rem] min-h-[35.625rem] overflow-hidden bg-[#f5f5f5] md:mt-[5.3125rem] md:h-auto md:max-h-none md:min-h-[35.125rem] md:bg-[#f6f6f6]"
+      className="relative h-[calc(154vw+1rem)] max-h-[50.375rem] min-h-[35.625rem] overflow-hidden bg-[#f5f5f5] md:mt-[var(--site-header-desktop-height)] md:h-auto md:max-h-none md:min-h-[35.125rem] md:bg-[#f6f6f6]"
       aria-labelledby="quotation-title"
     >
       <div className="absolute inset-0 max-md:hidden" aria-hidden="true">

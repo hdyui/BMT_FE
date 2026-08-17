@@ -172,7 +172,7 @@ export function ServicesOverviewPage() {
         </Reveal>
 
         {/* Đã xóa lg:-ml-[14px] ở div chứa panel */}
-        <div className="relative z-10 bg-neutral-100 px-5 py-14 lg:mt-[30px] lg:-mb-[max(30px,2.57vw)] lg:rounded-tr-[83px] lg:rounded-bl-[30px] lg:pt-8 lg:pr-[8%] lg:pb-[calc(3rem+max(0px,calc(2.57vw-30px)))] lg:pl-[5.5%]">
+        <div className="relative z-10 bg-neutral-100 px-5 py-14 lg:mt-[30px] lg:-mb-[calc(max(30px,2.57vw)+10px)] lg:rounded-tr-[83px] lg:rounded-bl-[30px] lg:pt-8 lg:pr-[8%] lg:pb-[calc(3rem+max(0px,calc(2.57vw-30px))+10px)] lg:pl-[5.5%]">
           {/* MỚI: Khối màu xám nhỏ ẩn phía sau, dùng để lấp vào khoảng hở 14px ở góc trên cùng */}
           <div
             className="hidden lg:block absolute top-0 -left-3.5 w-3.5 h-25 bg-neutral-100"
@@ -205,8 +205,13 @@ export function ServicesOverviewPage() {
         </div>
       </section>
 
-      {/* Panel FAQ thò xuống làm lớp nền được nhìn xuyên qua phần khuyết của form. */}
-      <ContactForm showTopNotch />
+      {/* Bọc nền xám neutral-100 sau lưng ContactForm: phần khuyết (notch) phía
+          trên form vốn trong suốt trong ảnh nền, chỉ chồng margin âm của panel
+          FAQ không đảm bảo khớp pixel ở mọi khổ màn hình, nên thêm nền chắc
+          chắn ở đây để phần khuyết luôn lộ đúng màu xám thay vì trắng. */}
+      <div className="bg-neutral-100">
+        <ContactForm showTopNotch />
+      </div>
       <SiteFooter />
     </div>
   );

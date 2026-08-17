@@ -2,7 +2,6 @@
 
 import Image from "next/image";
 import {
-  FormEvent,
   useEffect,
   useLayoutEffect,
   useMemo,
@@ -10,7 +9,6 @@ import {
   useState,
 } from "react";
 import styles from "@/features/quotation/quotation.module.css";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
 
 /**
  * Khung ước tính báo giá + dải liên hệ.
@@ -79,7 +77,6 @@ export function QuotationEstimator() {
   const [budgetError, setBudgetError] = useState("");
   const [areaTouched, setAreaTouched] = useState(false);
   const [budgetTouched, setBudgetTouched] = useState(false);
-  const [submitted, setSubmitted] = useState(false);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -194,11 +191,6 @@ export function QuotationEstimator() {
     if (!plain.trim()) setBudgetError("Vui lòng nhập ngân sách.");
     else if (!digitsOnly(plain)) setBudgetError("Vui lòng chỉ nhập số");
     else setBudgetError("");
-  }
-
-  function submitContact(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    setSubmitted(true);
   }
 
   return (
@@ -378,64 +370,6 @@ export function QuotationEstimator() {
           </div>
         </div>
       </section>
-
-      <div className="md:hidden">
-        <ContactForm />
-      </div>
-
-      <section className="relative hidden min-h-[24.375rem] overflow-hidden text-white md:block md:min-h-[20.125rem]">
-        <Image
-          className="z-0 object-cover object-top"
-          src="/images/bao-gia/decor-28.jpg"
-          alt=""
-          fill
-          sizes="100vw"
-        />
-        <form
-          className="relative z-[1] mx-auto w-[min(56.25rem,calc(100%-2rem))] pt-22 pb-[2.8125rem] md:pt-25"
-          onSubmit={submitContact}
-        >
-          <h2 className="m-0 text-[1.5625rem] leading-[1.1] font-extrabold md:text-[1.8125rem]">
-            {step === 4 ? "NHẬN BÁO GIÁ CHI TIẾT" : "LIÊN HỆ TƯ VẤN"}
-          </h2>
-          {step === 4 && (
-            <p className="mt-1.5 mb-0 text-sm">
-              Để lại thông tin, chúng tôi sẽ gửi báo giá chi tiết theo từng hạng
-              mục miễn phí, không ràng buộc.
-            </p>
-          )}
-          <Image
-            className="my-3.5 h-0.5 w-full object-fill"
-            src="/images/bao-gia/decor-34.jpg"
-            alt=""
-            width={5014}
-            height={127}
-          />
-          <div className="grid grid-cols-1 gap-3 md:grid-cols-2 md:gap-[3.125rem]">
-            <ContactField name="name" label="Tên khách hàng" />
-            <ContactField
-              name="phone"
-              label="Số điện thoại"
-              inputMode="tel"
-            />
-          </div>
-          <button
-            className="relative mt-3 grid h-[2.375rem] w-full place-items-center overflow-hidden rounded-full border-0 bg-[#231f20] text-white transition-[transform,filter] duration-[240ms] hover:-translate-y-0.5 hover:brightness-[1.18]"
-            type="submit"
-          >
-            <Image
-              className="z-0 object-fill"
-              src="/images/bao-gia/decor-36.jpg"
-              alt=""
-              fill
-              sizes="900px"
-            />
-            <span className="relative z-[1] font-bold">
-              {submitted ? "Đã nhận thông tin" : "Gửi ngay"}
-            </span>
-          </button>
-        </form>
-      </section>
     </>
   );
 }
@@ -451,36 +385,6 @@ function HeadingRule() {
         height={127}
       />
     </span>
-  );
-}
-
-function ContactField({
-  name,
-  label,
-  inputMode,
-}: {
-  name: string;
-  label: string;
-  inputMode?: "tel";
-}) {
-  return (
-    <label className="relative h-[2.375rem] overflow-hidden rounded-full focus-within:outline-2 focus-within:outline-offset-[3px] focus-within:outline-white">
-      <span className="sr-only">{label}</span>
-      <Image
-        className="z-0 object-fill"
-        src="/images/bao-gia/decor-35.jpg"
-        alt=""
-        fill
-        sizes="420px"
-      />
-      <input
-        className="relative z-[1] h-full w-full border-0 bg-transparent px-[1.125rem] font-[inherit] text-[#231f20] outline-0"
-        name={name}
-        inputMode={inputMode}
-        placeholder={`${label}...`}
-        required
-      />
-    </label>
   );
 }
 
