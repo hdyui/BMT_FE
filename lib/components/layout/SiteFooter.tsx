@@ -266,8 +266,10 @@ export function SiteFooter({
           </div>
         </Reveal>
 
-        <Reveal className="mt-6 md:col-span-2 lg:col-span-1" delay={120}>
-          <h3 className="mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:pl-[42px]">Liên hệ:</h3>
+        <Reveal className="mt-8" delay={240}>
+          <h3 className="mb-3 pl-6 text-lg font-extrabold uppercase">
+            Liên hệ:
+          </h3>
           <div className={mobileContactListClass}>
             <p className={mobileContactRowClass}>
               <Image
@@ -300,8 +302,10 @@ export function SiteFooter({
               <span>Email: {contactInformation.email}</span>
             </p>
           </div>
+        </Reveal>
 
-          <h3 className="mt-6 mb-3 pl-[34px] text-xl font-extrabold uppercase 2xl:pl-[42px]">
+        <Reveal className="mt-8" delay={360}>
+          <h3 className="mb-3 pl-6 text-lg font-extrabold uppercase">
             Chi nhánh và nhà xưởng:
           </h3>
           <div className={mobileContactListClass}>
@@ -338,7 +342,7 @@ export function SiteFooter({
           </div>
         </Reveal>
 
-        <Reveal delay={120}>
+        <Reveal className="md:col-span-2 lg:col-span-1" delay={120}>
           <ContactDetails />
         </Reveal>
 
