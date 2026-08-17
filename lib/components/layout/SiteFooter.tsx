@@ -302,6 +302,7 @@ export function SiteFooter({
               <span>Email: {contactInformation.email}</span>
             </p>
           </div>
+        </Reveal>
 
         <Reveal className="mt-8" delay={360}>
           <h3 className="mb-3 pl-6 text-lg font-extrabold uppercase">

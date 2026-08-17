@@ -65,13 +65,17 @@ export function ContactForm({
     const form = new FormData(formElement);
     const nextErrors: Errors = {};
 
-    if (!String(form.get("name") ?? "").trim()) nextErrors.name = requiredMessage;
-    if (!String(form.get("phone") ?? "").trim()) nextErrors.phone = requiredMessage;
+    if (!String(form.get("name") ?? "").trim())
+      nextErrors.name = requiredMessage;
+    if (!String(form.get("phone") ?? "").trim())
+      nextErrors.phone = requiredMessage;
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    toast.success("Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.");
+    toast.success(
+      "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+    );
     formElement.reset();
     setErrors({});
   }
@@ -105,7 +109,11 @@ export function ContactForm({
         height={2109}
         decoding="sync"
         loading="eager"
-        sizes={showTopNotch ? "(max-width: 1023px) 100vw, 110vw" : "(max-width: 1023px) 100vw, 1px"}
+        sizes={
+          showTopNotch
+            ? "(max-width: 1023px) 100vw, 110vw"
+            : "(max-width: 1023px) 100vw, 1px"
+        }
         unoptimized
         data-contact-form-notch={showTopNotch ? "asset" : undefined}
         aria-hidden="true"
@@ -113,7 +121,9 @@ export function ContactForm({
 
       <div className="relative z-10 mx-auto w-[min(1200px,calc(100%-2.25rem))] max-lg:w-[calc(100%-2rem)]">
         <div className="block w-full">
-          <div className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}>
+          <div
+            className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
+          >
             <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
               Liên hệ tư vấn
             </h2>
@@ -142,7 +152,11 @@ export function ContactForm({
           </div>
         </div>
 
-        <form className="mt-7 max-lg:mt-[clamp(0.75rem,3.1116vw,2rem)]" onSubmit={handleSubmit} noValidate>
+        <form
+          className="mt-7 max-lg:mt-[clamp(0.75rem,3.1116vw,2rem)]"
+          onSubmit={handleSubmit}
+          noValidate
+        >
           <div
             className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
             style={{ transitionDelay: "220ms" }}
@@ -152,27 +166,39 @@ export function ContactForm({
                 <span className="sr-only">Tên khách hàng</span>
                 <Input
                   className={inputClassName}
-                  aria-describedby={errors.name ? "contact-name-error" : undefined}
+                  aria-describedby={
+                    errors.name ? "contact-name-error" : undefined
+                  }
                   aria-invalid={Boolean(errors.name)}
                   name="name"
                   onChange={() => clearFieldError("name")}
                   placeholder="Tên khách hàng..."
                 />
-                {errors.name && <span className={errorClassName} id="contact-name-error">{errors.name}</span>}
+                {errors.name && (
+                  <span className={errorClassName} id="contact-name-error">
+                    {errors.name}
+                  </span>
+                )}
               </label>
 
               <label>
                 <span className="sr-only">Số điện thoại</span>
                 <Input
                   className={inputClassName}
-                  aria-describedby={errors.phone ? "contact-phone-error" : undefined}
+                  aria-describedby={
+                    errors.phone ? "contact-phone-error" : undefined
+                  }
                   aria-invalid={Boolean(errors.phone)}
                   name="phone"
                   onChange={() => clearFieldError("phone")}
                   placeholder="Số điện thoại..."
                   type="tel"
                 />
-                {errors.phone && <span className={errorClassName} id="contact-phone-error">{errors.phone}</span>}
+                {errors.phone && (
+                  <span className={errorClassName} id="contact-phone-error">
+                    {errors.phone}
+                  </span>
+                )}
               </label>
             </div>
           </div>
