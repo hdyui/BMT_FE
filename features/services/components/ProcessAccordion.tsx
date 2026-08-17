@@ -36,7 +36,7 @@ export function ProcessAccordion() {
                   aria-hidden="true"
                 />
               </div>
-              <span className="mt-4 block text-sm font-bold text-charcoal">
+              <span className="mt-4 block text-sm text-charcoal">
                 {String(index + 1).padStart(2, "0")}.
               </span>
               <h3 className="font-heading mt-1 text-lg font-bold text-pretty">
