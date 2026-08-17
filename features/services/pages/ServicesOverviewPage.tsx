@@ -38,15 +38,16 @@ export function ServicesOverviewPage() {
             ảnh sang `relative` (vẫn là mốc % cho 4 thẻ con bên trong, nhưng bản
             thân nó lại nằm trong luồng thường), nối ngay sau khối chữ bằng
             margin-top thay vì `bottom-0` tuyệt đối, nên không bao giờ đè lên
-            nội dung bất kể chữ dài ngắn thế nào. pt-28 (112px) đẩy "GIẢI PHÁP"
-            xuống dưới SiteHeader cao 85px, tránh bị che. */}
+            nội dung bất kể chữ dài ngắn thế nào. Wrapper ngoài cùng đã có pt-16
+            (64px) để né SiteHeader cao 60px trên mobile, nên chỉ cần thêm chút
+            khoảng thở, không lặp lại toàn bộ chiều cao header lần nữa. */}
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
-          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-28">
+          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
-              <p className="mb-4 inline-block border-b-2 border-charcoal pb-1 text-base sm:text-lg">
+              <p className="mb-4 inline-block border-b-2 border-charcoal pb-1 text-base max-md:pb-0 sm:text-lg">
                 GIẢI PHÁP
               </p>
-              <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-bold text-brand lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
+              <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
                 <span className="block lg:whitespace-nowrap">
                   THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ
                 </span>
@@ -122,7 +123,7 @@ export function ServicesOverviewPage() {
       <section className="py-12 sm:py-16 lg:py-20" id="quy-trinh">
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center lg:mb-10">
           <Reveal>
-            <h2 className="font-heading text-2xl font-bold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
+            <h2 className="font-heading text-2xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
               QUY TRÌNH LÀM VIỆC
             </h2>
           </Reveal>
@@ -159,7 +160,7 @@ export function ServicesOverviewPage() {
           Khe hở ở góc cong phía trên sẽ được lấp bằng một khối div phụ ẩn phía sau. */}
       <section className="grid lg:grid-cols-2">
         <Reveal
-          className="group/photo relative z-20 min-h-[clamp(15rem,67vw,20rem)] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
+          className="group/photo relative z-20 max-lg:aspect-[1400/1207] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
           from="left"
         >
           <Image
@@ -180,7 +181,7 @@ export function ServicesOverviewPage() {
           />
 
           <Reveal>
-            <h2 className="font-heading text-2xl font-bold max-lg:text-center sm:text-3xl lg:text-4xl">
+            <h2 className="font-heading text-2xl font-bold max-lg:text-center max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-3xl lg:text-4xl">
               CÁC CÂU HỎI THƯỜNG GẶP
             </h2>
           </Reveal>
