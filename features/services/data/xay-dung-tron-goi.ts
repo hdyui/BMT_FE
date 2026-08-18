@@ -4,18 +4,24 @@ export const featuredProjects = [
     image: "/images/xay-dung-tron-goi/project-van-phong-thu-duc.png",
     tag: "THIẾT KẾ THI CÔNG NỘI THẤT",
     title: "VĂN PHÒNG THỦ ĐỨC",
+    fit: "cover",
+    zoom: true,
   },
   {
     id: "nha-pho-binh-chanh",
     image: "/images/xay-dung-tron-goi/photo-nha-pho-clean.webp",
     tag: "THIẾT KẾ THI CÔNG NỘI THẤT",
     title: "NHÀ PHỐ BÌNH CHÁNH",
+    fit: "cover",
+    zoom: true,
   },
   {
     id: "yen-sao-khang-yen",
     image: "/images/xay-dung-tron-goi/photo-showroom.webp",
     tag: "THIẾT KẾ THI CÔNG NỘI THẤT",
     title: "YẾN SÀO KHANG YẾN",
+    fit: "cover",
+    zoom: true,
   },
 ] as const;
 
@@ -123,7 +129,7 @@ export const processSteps = [
     number: "3",
     numeralImage: "/images/xay-dung-tron-goi/numeral-3.png",
     icon: "/images/xay-dung-tron-goi/step-icon-3.png",
-    title: "Thiết kế &\nLập phương án thi công",
+    title: "Thiết kế &\nLập phương án thi công",
     copy: "Triển khai thiết kế kiến trúc, nội thất và lập phương án thi công xây dựng, dự toán chi phí cùng tiến độ thực hiện.",
   },
   {

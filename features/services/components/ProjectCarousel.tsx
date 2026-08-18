@@ -16,6 +16,8 @@ export type FeaturedProject = {
   image: string;
   tag: string;
   title: string;
+  fit?: "contain" | "cover";
+  zoom?: boolean;
 };
 
 type ProjectCarouselProps = {
@@ -28,6 +30,26 @@ type ProjectCarouselProps = {
 };
 
 const DRAG_THRESHOLD = 50;
+
+const getCardDepthClass = (distance: number, isMobileMockup: boolean) => {
+  if (distance === 0) {
+    return "[--card-scale-x:1] [--card-scale-y:1]";
+  }
+
+  if (distance === 1) {
+    return cn(
+      "[--card-scale-x:0.78] [--card-scale-y:0.94]",
+      isMobileMockup &&
+        "max-md:[--card-scale-x:0.84] max-md:[--card-scale-y:0.92]",
+    );
+  }
+
+  return cn(
+    "[--card-scale-x:0.64] [--card-scale-y:0.82]",
+    isMobileMockup &&
+      "max-md:[--card-scale-x:0.7] max-md:[--card-scale-y:0.8]",
+  );
+};
 
 export function ProjectCarousel({
   projects: featuredProjects,
@@ -45,11 +67,13 @@ export function ProjectCarousel({
     [featuredProjects],
   );
   const [active, setActive] = useState(count + Math.min(1, count - 1));
-  const [offset, setOffset] = useState(0);
   const [animate, setAnimate] = useState(true);
   const viewportRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<Array<HTMLDivElement | null>>([]);
   const dragStartX = useRef<number | null>(null);
+  const wrapSettleFrameRef = useRef<number | null>(null);
+  const wrapResetFrameRef = useRef<number | null>(null);
   const logicalActive = ((active % count) + count) % count;
 
   useEffect(() => {
@@ -69,20 +93,29 @@ export function ProjectCarousel({
   }, [count, mobileInitialIndex]);
 
   const move = useCallback((direction: number) => {
+    if (wrapSettleFrameRef.current !== null) {
+      cancelAnimationFrame(wrapSettleFrameRef.current);
+      wrapSettleFrameRef.current = null;
+    }
+    if (wrapResetFrameRef.current !== null) {
+      cancelAnimationFrame(wrapResetFrameRef.current);
+      wrapResetFrameRef.current = null;
+    }
     setAnimate(true);
     setActive((current) => current + direction);
   }, []);
 
-  /* Toàn bộ hàng thẻ trượt ngang sao cho thẻ đang chọn nằm giữa khung nhìn.
-     Đo bằng offsetLeft nên không phụ thuộc bề rộng thẻ hay khoảng cách. */
+  /* Căn track trực tiếp trong layout phase để cú đổi từ bản sao ngoài về bộ giữa
+     không tạo thêm một render lệch vị trí, vốn nhìn giống như carousel reload. */
   useLayoutEffect(() => {
     const align = () => {
       const viewport = viewportRef.current;
+      const track = trackRef.current;
       const card = cardRefs.current[active];
-      if (!viewport || !card) return;
-      setOffset(
-        viewport.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2),
-      );
+      if (!viewport || !track || !card) return;
+      const nextOffset =
+        viewport.clientWidth / 2 - (card.offsetLeft + card.offsetWidth / 2);
+      track.style.transform = `translate3d(${nextOffset}px, 0, 0)`;
     };
 
     align();
@@ -91,18 +124,58 @@ export function ProjectCarousel({
     return () => observer.disconnect();
   }, [active]);
 
-  /* Sau khi nhảy về bản sao giữa (không có transition), bật lại hiệu ứng. */
+  /* Giữ transition tắt trọn một frame sau khi đổi bản sao, rồi mới bật lại.
+     Hai requestAnimationFrame đảm bảo trình duyệt đã vẽ vị trí reset ổn định. */
   useEffect(() => {
     if (animate) return;
-    const frame = requestAnimationFrame(() => setAnimate(true));
-    return () => cancelAnimationFrame(frame);
+    let enableFrame = 0;
+    const resetFrame = requestAnimationFrame(() => {
+      enableFrame = requestAnimationFrame(() => setAnimate(true));
+    });
+    return () => {
+      cancelAnimationFrame(resetFrame);
+      cancelAnimationFrame(enableFrame);
+    };
   }, [animate]);
 
-  /* Trượt xong mà đã lấn sang bản sao ngoài thì dời ngầm về bản sao giữa. */
-  const handleTransitionEnd = () => {
+  useEffect(
+    () => () => {
+      if (wrapSettleFrameRef.current !== null) {
+        cancelAnimationFrame(wrapSettleFrameRef.current);
+      }
+      if (wrapResetFrameRef.current !== null) {
+        cancelAnimationFrame(wrapResetFrameRef.current);
+      }
+    },
+    [],
+  );
+
+  /* Chỉ nhận transition của track. Transition từ card con cũng bubble lên và
+     có thể khiến vòng lặp reset trước khi track trượt xong. */
+  const handleTransitionEnd = (
+    event: React.TransitionEvent<HTMLDivElement>,
+  ) => {
+    if (
+      event.target !== event.currentTarget ||
+      event.propertyName !== "transform"
+    ) {
+      return;
+    }
     if (active >= count && active < count * 2) return;
-    setAnimate(false);
-    setActive(count + (((active % count) + count) % count));
+
+    /* Đợi trạng thái cuối của card được vẽ trọn một frame rồi mới teleport.
+       Nhờ vậy thẻ phụ không bị chốt scale sớm hơn một nhịp ở điểm nối vòng. */
+    wrapSettleFrameRef.current = requestAnimationFrame(() => {
+      wrapResetFrameRef.current = requestAnimationFrame(() => {
+        setAnimate(false);
+        setActive((current) => {
+          if (current >= count && current < count * 2) return current;
+          return count + (((current % count) + count) % count);
+        });
+        wrapSettleFrameRef.current = null;
+        wrapResetFrameRef.current = null;
+      });
+    });
   };
 
   useEffect(() => {
@@ -125,28 +198,26 @@ export function ProjectCarousel({
 
   return (
     <div className="relative w-full">
-      {/*
-        ===================================================================
-        NOTE: ĐỔI LINK ẢNH BACKGROUND Ở ĐÂY NHA!
-        ===================================================================
-      */}
       <Image
-        // Đã thêm object-bottom để hình neo sát dưới đáy và loang mờ lên trên
         className="-z-10 object-cover object-bottom"
         src={backgroundImage || "/images/home/blueprint-background.png"}
-        alt="Background"
+        alt=""
         fill
         sizes="100vw"
-        quality={100} // Đã thêm quality={100} để giữ hình sắc nét, không bị mờ
         aria-hidden="true"
       />
 
       <div
         ref={viewportRef}
         className={cn(
-          "relative left-1/2 w-screen -translate-x-1/2 overflow-hidden py-6",
+          "relative left-1/2 w-screen -translate-x-1/2 touch-pan-y overflow-hidden py-4 select-none sm:py-5 lg:py-6",
           mobileMockup && "max-md:py-0",
         )}
+        style={{
+          perspective: "1600px",
+          perspectiveOrigin: "50% 50%",
+          transformStyle: "preserve-3d",
+        }}
         tabIndex={0}
         role="group"
         aria-label="Dự án tiêu biểu"
@@ -156,24 +227,44 @@ export function ProjectCarousel({
         onTouchEnd={(event) => endDrag(event.changedTouches[0].clientX)}
         onPointerDown={(event) => {
           if (event.pointerType === "touch") return;
+          event.currentTarget.setPointerCapture(event.pointerId);
           dragStartX.current = event.clientX;
         }}
         onPointerUp={(event) => {
           if (event.pointerType === "touch") return;
           endDrag(event.clientX);
         }}
+        onPointerCancel={() => {
+          dragStartX.current = null;
+        }}
       >
         <div
+          ref={trackRef}
           className={cn(
-            "flex w-max items-center gap-4 sm:gap-8 lg:gap-[3.125rem]",
-            mobileInitialIndex !== undefined && "max-md:gap-[20vw]",
-            animate && "transition-transform duration-500 ease-out",
+            "flex w-max items-end [transform-style:preserve-3d]",
+            animate &&
+              "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
           )}
-          style={{ transform: `translateX(${offset}px)` }}
+          style={{
+            transform: "translate3d(0, 0, 0)",
+            transformStyle: "preserve-3d",
+          }}
           onTransitionEnd={handleTransitionEnd}
         >
           {slides.map((project, index) => {
             const isActive = index === active;
+            const distance = Math.abs(index - active);
+            const relativePosition = index - active;
+            const rotateY =
+              relativePosition < 0 ? 17 : relativePosition > 0 ? -17 : 0;
+            const translateZ =
+              distance === 0 ? 0 : distance === 1 ? -50 : -110;
+            const transformOrigin =
+              relativePosition < 0
+                ? "right center"
+                : relativePosition > 0
+                  ? "left center"
+                  : "center center";
 
             return (
               <div
@@ -181,57 +272,89 @@ export function ProjectCarousel({
                   cardRefs.current[index] = element;
                 }}
                 className={cn(
-                  "relative aspect-3334/2653 w-[78vw] max-w-150 shrink-0 overflow-hidden rounded-[1.25rem] sm:w-[60vw] sm:rounded-[1.5rem] lg:w-[42vw] lg:rounded-[2rem] transition-[transform,opacity] duration-500 ease-out",
+                  "relative -mr-8 aspect-[1.257] w-[74vw] shrink-0 origin-bottom overflow-hidden rounded-[1.25rem] sm:-mr-[6vw] sm:w-[48vw] sm:rounded-[1.5rem] lg:w-[38vw] lg:max-w-[34rem] lg:rounded-[2rem]",
+                  "[backface-visibility:hidden] [transform-style:preserve-3d]",
+                  animate &&
+                    "transition-[transform,opacity,filter] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
+                  getCardDepthClass(distance, mobileMockup),
                   mobileMockup &&
-                    "max-md:w-[86vw] max-md:rounded-[1.75rem]",
-                  mobileInitialIndex !== undefined && "max-md:!w-[86vw]",
-                  isActive
-                    ? "z-10 scale-100 opacity-100"
-                    : // Thêm cursor-pointer để hiện hình bàn tay khi hover vào các ảnh phụ
-                      "scale-[0.82] opacity-90 cursor-pointer hover:opacity-100 active:opacity-100",
+                    "max-md:-mr-[14vw] max-md:w-[82vw] max-md:rounded-[1.75rem]",
+                  mobileInitialIndex !== undefined && "max-md:!w-[82vw]",
+                  distance === 0 && "opacity-100 saturate-100",
+                  distance === 1 &&
+                    "cursor-pointer opacity-94 saturate-[0.94] hover:opacity-100 active:opacity-100",
+                  distance >= 2 &&
+                    "pointer-events-none opacity-0 saturate-[0.88]",
                 )}
                 key={`${project.id}-${index}`}
-                // THÊM SỰ KIỆN onClick TẠI ĐÂY
+                style={{
+                  transform: `perspective(1600px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale3d(var(--card-scale-x), var(--card-scale-y), 1)`,
+                  transformOrigin,
+                  transformStyle: "preserve-3d",
+                  zIndex: Math.max(1, slides.length - distance),
+                }}
                 onClick={() => {
-                  // Chỉ trượt khi ảnh được click không phải là ảnh đang active
                   if (!isActive) {
                     move(index - active);
                   }
                 }}
               >
-                <Image
-                  className="object-cover"
-                  src={project.image}
-                  alt={project.title}
-                  fill
-                  sizes="(max-width: 640px) 78vw, (max-width: 1024px) 60vw, 42vw"
-                  priority={index === 0}
-                />
-
-                <div
-                  className="pointer-events-none absolute inset-x-0 bottom-0 h-[50%] bg-gradient-to-t from-[#F47A2A] via-[#F47A2A]/90 to-transparent"
-                  aria-hidden="true"
-                />
-
-                <div className="absolute inset-x-0 bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white">
-                  <p
+                <div className="absolute inset-0">
+                  <Image
+                    className="scale-105 object-cover opacity-45 blur-xl"
+                    src={project.image}
+                    alt=""
+                    fill
+                    sizes="(max-width: 767px) 82vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
+                    draggable={false}
+                    aria-hidden="true"
+                  />
+                  <Image
                     className={cn(
-                      "mb-1 text-[0.6875rem] font-normal tracking-wider uppercase sm:text-xs md:font-semibold",
-                      mobileInitialIndex !== undefined &&
-                        "max-md:text-[clamp(0.68rem,2.8vw,1.05rem)]",
+                      project.fit === "cover"
+                        ? "object-cover"
+                        : "object-contain",
+                      project.zoom && "scale-[1.025]",
+                    )}
+                    src={project.image}
+                    alt={project.title}
+                    fill
+                    sizes="(max-width: 767px) 82vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
+                    draggable={false}
+                  />
+
+                  <div
+                    className="pointer-events-none absolute inset-x-0 bottom-0 h-[48%] bg-gradient-to-t from-[#F47A2A] via-[#F47A2A]/88 to-transparent"
+                    aria-hidden="true"
+                  />
+
+                  <div
+                    className={cn(
+                      "absolute bottom-0 flex flex-col items-center justify-end p-5 pb-6 text-center text-white",
+                      relativePosition < 0 && "right-[18%] left-0",
+                      relativePosition === 0 && "inset-x-0",
+                      relativePosition > 0 && "right-0 left-[18%]",
                     )}
                   >
-                    {project.tag}
-                  </p>
-                  <h3
-                    className={cn(
-                      "font-heading text-xl leading-tight font-bold uppercase sm:text-2xl lg:text-[1.625rem]",
-                      mobileInitialIndex !== undefined &&
-                        "max-md:text-[clamp(1.1rem,4vw,1.55rem)]",
-                    )}
-                  >
-                    {project.title}
-                  </h3>
+                    <p
+                      className={cn(
+                        "mb-1 text-xs font-light tracking-[0.035em] uppercase sm:text-sm",
+                        mobileInitialIndex !== undefined &&
+                          "max-md:text-[clamp(0.75rem,3vw,1.05rem)]",
+                      )}
+                    >
+                      {project.tag}
+                    </p>
+                    <h3
+                      className={cn(
+                        "font-heading text-lg leading-tight font-bold uppercase sm:text-xl lg:text-[1.375rem]",
+                        mobileInitialIndex !== undefined &&
+                          "max-md:text-[clamp(1rem,3.7vw,1.4rem)]",
+                      )}
+                    >
+                      {project.title}
+                    </h3>
+                  </div>
                 </div>
               </div>
             );
@@ -310,12 +433,12 @@ export function ProjectCarousel({
 
       <div
         className={cn(
-          "relative z-10 mt-6 flex items-center justify-center gap-4",
+          "relative z-10 mt-3 flex items-center justify-center gap-5 sm:mt-4 sm:gap-6",
           mobileMockup && "max-md:hidden",
         )}
       >
         <button
-          className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
+          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95"
           onClick={() => move(-1)}
           aria-label="Dự án trước"
           type="button"
@@ -343,7 +466,7 @@ export function ProjectCarousel({
           )}
         </button>
         <button
-          className="grid size-12 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_6px_20px_rgb(244_122_42/.4)] transition-all duration-300 hover:scale-110 hover:bg-brand-dark active:scale-95"
+          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95"
           onClick={() => move(1)}
           aria-label="Dự án tiếp theo"
           type="button"

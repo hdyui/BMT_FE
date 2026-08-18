@@ -26,7 +26,7 @@ export const solutionCards = [
     number: "01",
     titlePrefix: "CẢI TẠO & SỬA CHỮA",
     titleCategory: "NHÀ Ở",
-    tagline: "Nâng Cấp Không Gian Sống Mà Không Cần Xây Mới",
+    tagline: "Nâng cấp không gian sống mà không cần xây mới",
     description:
       "Khi nhu cầu sử dụng thay đổi hoặc công trình xuống cấp, cải tạo nhà ở là giải pháp giúp tối ưu công năng và nâng cao chất lượng không gian với chi phí hợp lý. BMT Decor triển khai từ sửa chữa đến cải tạo tổng thể, đảm bảo thi công an toàn, đúng tiến độ và hạn chế ảnh hưởng đến sinh hoạt của gia đình.",
     checklist: [
@@ -44,7 +44,7 @@ export const solutionCards = [
     number: "02",
     titlePrefix: "CẢI TẠO",
     titleCategory: "VĂN PHÒNG",
-    tagline: "Làm Mới Không Gian, Tăng Hiệu Quả Làm Việc",
+    tagline: "Làm mới không gian, tăng hiệu quả làm việc",
     description:
       "Không gian làm việc cần được nâng cấp để đáp ứng quy mô phát triển và hình ảnh doanh nghiệp. BMT Decor cung cấp giải pháp cải tạo văn phòng với phương án thi công linh hoạt, tối ưu mặt bằng và hệ thống kỹ thuật, giúp doanh nghiệp nhanh chóng đưa văn phòng vào vận hành mà vẫn đảm bảo chất lượng công trình.",
     checklist: [
@@ -62,7 +62,7 @@ export const solutionCards = [
     number: "03",
     titlePrefix: "CẢI TẠO",
     titleCategory: "SHOWROOM & THẨM MỸ VIỆN",
-    tagline: "Làm Mới Không Gian, Gia Tăng Trải Nghiệm Khách Hàng",
+    tagline: "Cải tạo không gian, gia tăng trải nghiệm khách hàng",
     description:
       "Xu hướng kinh doanh luôn thay đổi, kéo theo nhu cầu nâng cấp không gian để phù hợp với nhận diện thương hiệu và trải nghiệm khách hàng. BMT Decor thực hiện cải tạo showroom, cải tạo spa, cải tạo thẩm mỹ viện với giải pháp thi công nhanh, đảm bảo tính thẩm mỹ và hạn chế gián đoạn hoạt động kinh doanh.",
     checklist: ["Cải tạo showroom, cửa hàng", "Cải tạo spa, thẩm mỹ viện"],
@@ -76,7 +76,7 @@ export const solutionCards = [
     number: "04",
     titlePrefix: "CẢI TẠO",
     titleCategory: "NHÀ HÀNG & KHÁCH SẠN",
-    tagline: "Nâng Cấp Không Gian, Duy Trì Chất Lượng Dịch Vụ",
+    tagline: "Nâng cấp không gian, duy trì chất lượng dịch vụ",
     description:
       "Sau thời gian khai thác, nhà hàng và khách sạn cần được cải tạo để đáp ứng nhu cầu vận hành và nâng cao trải nghiệm khách hàng. BMT Decor triển khai cải tạo nhà hàng, cải tạo khách sạn và sửa chữa các hạng mục xuống cấp với kế hoạch thi công hợp lý, giúp rút ngắn thời gian gián đoạn kinh doanh.",
     checklist: [

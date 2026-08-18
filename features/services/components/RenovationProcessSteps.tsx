@@ -50,89 +50,109 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
         {steps.map((step, index) => (
           <Reveal
             key={step.number}
-            className="group/step @container relative w-full transition-all duration-300 hover:-translate-y-1 hover:drop-shadow-[0_10px_20px_rgba(0,0,0,0.15)]"
+            className="group/step @container relative w-full transition-all duration-300 hover:-translate-y-1"
             delay={index * 150}
             from="bottom"
           >
-            {/* Background Frame: Tự động scale theo chiều ngang mới.
-                `width`/`height` PHẢI khớp tỉ lệ thật của file (1016x1214,
-                ~0.84) — trước đây để 260x600 (~0.43) làm trình duyệt tính
-                sai tỉ lệ khung theo `h-auto`, khiến `object-contain` co ảnh
-                nhỏ lại và chừa ~24% khoảng trống rỗng trên/dưới trong khung.
-                Số thứ tự (`top-[16.5%]`) và icon cam (`bottom-[-4%]`) đều
-                định vị theo % của khung đó nên bị lọt vào đúng vùng trống
-                này — số như bị lệch trái, icon như bị tụt xuống quá thấp. */}
-            <Image
-              src="/images/cai-tao-sua-chua/frame.png" // BẠN ĐỔI URL ẢNH KHUNG SỐ 49 VÀO ĐÂY
-              alt="Khung background"
-              width={1016}
-              height={1214}
-              className="h-auto w-full object-contain"
-              sizes="(max-width: 1024px) 100vw, 20vw"
-            />
+            {/* Bọc riêng phần "thẻ thật" (ảnh khung + số + chữ + icon) trong
+                1 lớp có drop-shadow khi hover, KHÔNG bọc 2 <span> che mũi tên
+                bên dưới — trước đây drop-shadow nằm ở Reveal ngoài cùng nên
+                đổ bóng lên luôn cả mảng che, khiến mảng che (dù đã đúng màu
+                nền) nổi bật lên như 1 mảng trắng khi hover vì xung quanh nó
+                bị bóng làm tối đi còn bản thân nó thì không. */}
+            <div className="relative transition-all duration-300 group-hover/step:drop-shadow-[0_10px_20px_rgba(0,0,0,0.15)]">
+              {/* Background Frame: Tự động scale theo chiều ngang mới.
+                  `width`/`height` PHẢI khớp tỉ lệ thật của file (1016x1214,
+                  ~0.84) — trước đây để 260x600 (~0.43) làm trình duyệt tính
+                  sai tỉ lệ khung theo `h-auto`, khiến `object-contain` co ảnh
+                  nhỏ lại và chừa ~24% khoảng trống rỗng trên/dưới trong khung.
+                  Số thứ tự (`top-[16.5%]`) và icon cam (`bottom-[-4%]`) đều
+                  định vị theo % của khung đó nên bị lọt vào đúng vùng trống
+                  này — số như bị lệch trái, icon như bị tụt xuống quá thấp. */}
+              <Image
+                src="/images/cai-tao-sua-chua/frame.png" // BẠN ĐỔI URL ẢNH KHUNG SỐ 49 VÀO ĐÂY
+                alt="Khung background"
+                width={1016}
+                height={1214}
+                className="h-auto w-full object-contain"
+                sizes="(max-width: 1024px) 100vw, 20vw"
+              />
+
+              {/* Lớp overlay sáng màu cam khi hover */}
+              <div className="pointer-events-none absolute left-0 top-0 h-[28%] w-full rounded-t-[1.5rem] bg-white/0 transition-colors duration-300 group-hover/step:bg-white/20" />
+
+              {/* Số thứ tự và khối chữ đều tính theo BỀ RỘNG CARD (cqw) nên khi
+                  card to ra ở tablet/mobile chữ phóng theo đúng tỉ lệ, không còn
+                  bé tí trong khung. Từ lg trở lên chốt lại đúng px của bản cũ. */}
+              {/* `leading-none` bỏ khoảng đệm line-height phía trên/dưới chữ số
+                  — không có nó thì -translate-y-1/2 canh giữa theo cả phần
+                  leading rỗng chứ không phải theo bản thân glyph, làm số nhìn
+                  lệch xuống dưới tâm khung. */}
+              <div className="absolute left-[46%] top-[16.5%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center text-[17.9cqw] font-black leading-none text-white lg:text-[2.25rem] xl:text-[2.75rem]">
+                {step.number}
+              </div>
+              {/* Vùng chứa Text: Vẫn giữ nguyên tỉ lệ bóp lề để lọt lòng khung đen */}
+              <div className="absolute inset-0 bottom-[12%] left-[12%] right-[18%] top-[29%] flex flex-col pt-2">
+                {/* Tiêu đề: đậm hơn (extrabold) và to hơn một chút so với bản cũ.
+                    `shrink-0` để flexbox không bóp chiều cao khi nội dung tràn. */}
+                <h3 className="font-heading flex shrink-0 flex-col text-left text-[6.3cqw] font-extrabold leading-snug text-charcoal lg:text-[0.8125rem] xl:text-sm">
+                  <span>{step.title}</span>
+                  <span>{step.subtitle}</span>
+                </h3>
+
+                {/* Đường line cam: `shrink-0` giữ line luôn hiển thị đủ độ dày,
+                    không bị flexbox bóp mất khi mô tả dài tràn khung (bug khiến
+                    1 số thẻ mất hẳn đường line). */}
+                <div className="my-1.5 h-0.5 w-[55%] shrink-0 bg-[#f26f21]" />
+
+                {/* Mô tả: căn đều 2 lề, chừa lề trong đều 2 bên (px) và
+                    siết bớt tracking để chữ khít lại, không bị giãn quá khi justify */}
+                <p className="text-justify tracking-tighter px-[3%] text-[5.46cqw] leading-tight text-charcoal/80 lg:text-[0.6875rem] xl:text-xs xl:leading-relaxed">
+                  {step.description}
+                </p>
+              </div>
+
+              {/* Icon (Logo dưới): Tràn 50% ra ngoài khung. Đã thu nhỏ thêm một
+                  nấc (24->20/lg 10->9/xl 12->10) so với bản cũ. */}
+              <Reveal
+                className="absolute bottom-[-4%] left-[46%] z-10 -translate-x-1/2 translate-y-1/2"
+                delay={index * 150 + 350}
+                from="fade"
+              >
+                <Image
+                  className="size-[17cqw] max-w-10 object-contain transition-transform duration-300 group-hover/step:scale-110 lg:size-9 xl:size-10"
+                  src={step.icon}
+                  alt={step.title}
+                  width={48}
+                  height={48}
+                />
+              </Reveal>
+            </div>
 
             {index === steps.length - 1 && (
               <>
+                {/* Che mũi tên nối sang thẻ kế của ảnh frame.png. Đặt cao
+                    hơn (71%) vì đỉnh tam giác mũi tên trong ảnh thật đã lộ
+                    ra từ y≈72.3% (đo trực tiếp trên frame.png), sớm hơn chỗ
+                    thân line bắt đầu bẻ cua (~75.5%) — để ở 75% bị hở phần
+                    đỉnh mũi tên. Nền thật của thẻ là màu xám của section
+                    (#F2F2F3, xem RenovationServicePage) chứ không phải
+                    trắng, và giờ đã đứng ngoài vùng group-hover:drop-shadow
+                    ở trên nên không còn bị đổ bóng làm nổi bật khi hover. */}
                 <span
-                  className="pointer-events-none absolute bottom-0 right-0 top-[68%] w-[17%] bg-white"
+                  className="pointer-events-none absolute bottom-0 right-0 top-[71%] w-[17%] bg-[#F2F2F3]"
                   aria-hidden="true"
                 />
+                {/* Line đen nối dài: canh đúng vị trí + độ dày của line thật
+                    trong ảnh (đo được dày 7px trên nền rộng 1016px, tâm ở
+                    x≈84.65%), lùi thêm về bên phải một chút cho khớp mắt
+                    nhìn với viền khung gốc, và dày hơn một chút cho rõ nét. */}
                 <span
-                  className="pointer-events-none absolute bottom-0 right-[14.6%] top-[68%] w-[0.8%] bg-[#231f20]"
+                  className="pointer-events-none absolute bottom-0 right-[14.4%] top-[71%] w-[1.1%] bg-[#231f20]/60"
                   aria-hidden="true"
                 />
               </>
             )}
-
-            {/* Lớp overlay sáng màu cam khi hover */}
-            <div className="pointer-events-none absolute left-0 top-0 h-[28%] w-full rounded-t-[1.5rem] bg-white/0 transition-colors duration-300 group-hover/step:bg-white/20" />
-
-            {/* Số thứ tự và khối chữ đều tính theo BỀ RỘNG CARD (cqw) nên khi
-                card to ra ở tablet/mobile chữ phóng theo đúng tỉ lệ, không còn
-                bé tí trong khung. Từ lg trở lên chốt lại đúng px của bản cũ. */}
-            {/* `leading-none` bỏ khoảng đệm line-height phía trên/dưới chữ số
-                — không có nó thì -translate-y-1/2 canh giữa theo cả phần
-                leading rỗng chứ không phải theo bản thân glyph, làm số nhìn
-                lệch xuống dưới tâm khung. */}
-            <div className="absolute left-[46%] top-[16.5%] flex -translate-x-1/2 -translate-y-1/2 items-center justify-center text-[17.9cqw] font-black leading-none text-white lg:text-[2.25rem] xl:text-[2.75rem]">
-              {step.number}
-            </div>
-            {/* Vùng chứa Text: Vẫn giữ nguyên tỉ lệ bóp lề để lọt lòng khung đen */}
-            <div className="absolute inset-0 bottom-[12%] left-[12%] right-[18%] top-[29%] flex flex-col pt-2">
-              {/* Tiêu đề: đậm hơn (extrabold) và to hơn một chút so với bản cũ.
-                  `shrink-0` để flexbox không bóp chiều cao khi nội dung tràn. */}
-              <h3 className="font-heading flex shrink-0 flex-col text-left text-[6.3cqw] font-extrabold leading-snug text-charcoal lg:text-[0.8125rem] xl:text-sm">
-                <span>{step.title}</span>
-                <span>{step.subtitle}</span>
-              </h3>
-
-              {/* Đường line cam: `shrink-0` giữ line luôn hiển thị đủ độ dày,
-                  không bị flexbox bóp mất khi mô tả dài tràn khung (bug khiến
-                  1 số thẻ mất hẳn đường line). */}
-              <div className="my-1.5 h-0.5 w-[55%] shrink-0 bg-[#f26f21]" />
-
-              {/* Mô tả: căn đều 2 lề, chừa lề trong đều 2 bên (px) và
-                  siết bớt tracking để chữ khít lại, không bị giãn quá khi justify */}
-              <p className="text-justify tracking-tighter px-[3%] text-[5.46cqw] leading-tight text-charcoal/80 lg:text-[0.6875rem] xl:text-xs xl:leading-relaxed">
-                {step.description}
-              </p>
-            </div>
-
-            {/* Icon (Logo dưới): Tràn 50% ra ngoài khung. Đã thu nhỏ thêm một
-                nấc (24->20/lg 10->9/xl 12->10) so với bản cũ. */}
-            <Reveal
-              className="absolute bottom-[-4%] left-[46%] z-10 -translate-x-1/2 translate-y-1/2"
-              delay={index * 150 + 350}
-              from="fade"
-            >
-              <Image
-                className="size-[17cqw] max-w-10 object-contain transition-transform duration-300 group-hover/step:scale-110 lg:size-9 xl:size-10"
-                src={step.icon}
-                alt={step.title}
-                width={48}
-                height={48}
-              />
-            </Reveal>
           </Reveal>
         ))}
       </div>

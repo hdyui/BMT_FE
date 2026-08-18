@@ -198,7 +198,7 @@ export function SiteFooter({
 }) {
   return (
     <footer
-      className={`${showTopBorder ? "border-t-[10px] border-brand" : "border-t-0"} ${hideTopBorderOnMobile ? "max-sm:border-t-0" : ""} bg-[#f1f1f3]`}
+      className={`${showTopBorder ? "border-t-[10px] border-brand" : "border-t-0"} ${hideTopBorderOnMobile ? "max-md:border-t-0" : ""} bg-[#f1f1f3]`}
       id="footer"
     >
       <div className="px-[clamp(16px,4.2vw,24px)] py-8 sm:hidden">

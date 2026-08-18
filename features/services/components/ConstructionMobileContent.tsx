@@ -150,7 +150,11 @@ const processTitles = [
 // số độc lập với tiêu đề để cả hai có thể được căn quang học chính xác.
 const processNumberTops = [6.55, 25.6, 44.64, 63.67, 84.11] as const;
 const processTitleTops = [5.9, 25.55, 45.25, 64.6, 84.65] as const;
-const processDescriptionTops = [14.55, 34.25, 53.95, 73.65, 93.35] as const;
+/* Tâm dọc của năm khối cam, đo trực tiếp trên `process-timeline.webp`
+   (3056x6831): mỗi khối cao 673px (9.85% chiều cao ảnh), lần lượt ở
+   709-1381, 2010-2682, 3310-3982, 4611-5283, 6007-6679 px. Khối mô tả dùng
+   `-translate-y-1/2` nên đặt đúng các tâm này là chữ cách đều trên/dưới nền cam. */
+const processDescriptionTops = [15.3, 34.34, 53.37, 72.42, 92.86] as const;
 
 export function ConstructionMobileProcess() {
   return (
@@ -202,7 +206,7 @@ export function ConstructionMobileProcess() {
               style={{ top: `${processDescriptionTops[index]}%` }}
             >
               <Reveal delay={base + 180} from="left">
-                <p className="text-[clamp(0.67rem,2.72vw,1.28rem)] leading-[1.08] text-white">
+                <p className="text-justify text-[clamp(0.67rem,2.72vw,1.28rem)] leading-[1.08] text-white">
                   {step.description}
                 </p>
               </Reveal>

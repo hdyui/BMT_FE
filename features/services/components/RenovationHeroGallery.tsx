@@ -43,10 +43,11 @@ export function RenovationHeroGallery({
     //
     // Từ lg chiều cao ăn theo CHIỀU CAO BANNER thay vì cố định 30rem, nếu không
     // thì từ 1536px trở lên banner cao ra mà cụm ảnh đứng yên, thừa cả trăm px
-    // trắng phía dưới. Trừ 8.8125rem = 113px (đỉnh cụm, tức đáy header 85px +
-    // 28px) + 28px (lề dưới) — hai lề bằng nhau nên cụm nằm cân giữa header và
-    // đáy banner. Muốn cụm dài thêm thì giảm ĐỒNG THỜI số này và `lg:mt-` bên
-    // RenovationServicePage, nếu không hai lề sẽ lệch.
+    // trắng phía dưới. Trừ 4.25rem = 68px = đỉnh cụm (40px `lg:py-10` của lưới,
+    // mức sát header tối thiểu không sửa `lg:py-10` — xem RenovationServicePage)
+    // + lề dưới 28px (GIỮ NGUYÊN, không đụng). Hai lề LỆCH nhau có chủ đích.
+    // Muốn cụm sát header hơn nữa thì phải giảm `lg:py-10` của lưới (ảnh hưởng
+    // cả cột chữ bên trái), không sửa được riêng ở component này nữa.
     // CHÚ Ý: `clamp(...)` phải trùng với `lg:h-` trong SERVICE_HERO_CLASS_NAME.
     //
     // `grid-rows-[6.5fr_3.5fr]`: ô trên-trái 6,5 phần, ô dưới-trái 3,5 phần.
@@ -54,7 +55,7 @@ export function RenovationHeroGallery({
     // `lg:max-w-[36.5rem]`: không có nó thì cụm ăn trọn 660px của cột phải (55%
     // của container 1200px) và ba khung ảnh bè ngang. Chặn ở 584px cho khung
     // đứng hơn; `ml-auto` giữ cụm dán mép phải như cũ.
-    <div className="ml-auto grid h-[min(26.25rem,100vw)] w-full max-w-180 grid-cols-2 grid-rows-[6.5fr_3.5fr] gap-2.5 sm:h-[28.75rem] sm:gap-4 lg:h-[calc(clamp(35rem,38.9vw,47.5rem)-8.8125rem)] lg:max-w-[36.5rem] lg:gap-2.5">
+    <div className="ml-auto grid h-[min(26.25rem,100vw)] w-full max-w-180 grid-cols-2 grid-rows-[6.5fr_3.5fr] gap-2.5 sm:h-[28.75rem] sm:gap-4 lg:h-[calc(clamp(35rem,38.9vw,47.5rem)-4.25rem)] lg:max-w-[36.5rem] lg:gap-2.5">
       <Reveal className="col-start-1 row-start-1" delay={160} from="right">
         <PhotoFrame photo={top} />
       </Reveal>

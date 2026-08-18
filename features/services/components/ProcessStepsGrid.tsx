@@ -166,7 +166,7 @@ export function ProcessStepsGrid({
                       delay={index * 110 + 180}
                       from="bottom"
                     >
-                      <span className="absolute top-0 right-[2%] grid aspect-square w-[29%] place-items-center">
+                      <span className="absolute top-[-4%] right-[-3%] grid aspect-square w-[29%] place-items-center">
                         <Image
                           className="absolute inset-0 size-full object-contain"
                           src="/images/xay-dung-tron-goi/icon-circle-bg.png"
@@ -185,13 +185,13 @@ export function ProcessStepsGrid({
                         />
                       </span>
 
-                      <div className="absolute top-[28%] right-[17%] bottom-[8%] left-[27%]">
+                      <div className="absolute top-[28%] right-[17%] bottom-[8%] left-[17%]">
                         {/* Cỡ chữ theo bề rộng card (cqw) để chữ luôn cân với
                             khung nền; từ lg chốt lại đúng 13px/11px như cũ. */}
-                        <h3 className="font-heading pr-[20%] text-[4.93cqw] leading-tight font-bold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[0.8125rem]">
+                        <h3 className="font-heading pr-[20%] text-[4.93cqw] leading-[1.08] font-extrabold whitespace-pre-line transition-colors duration-300 group-hover/step:text-brand lg:text-[0.9rem]">
                           {step.title}
                         </h3>
-                        <p className="mt-2 text-[4.17cqw] leading-snug text-muted-foreground text-pretty lg:text-[0.6875rem]">
+                        <p className="mt-2 text-[4.17cqw] leading-[1.18] text-charcoal text-justify text-pretty lg:text-[0.8125rem]">
                           {step.copy}
                         </p>
                       </div>

@@ -68,7 +68,7 @@ function RenovationMobileHero() {
 
       {/* Cỡ chữ/leading/hiệu ứng Reveal đồng bộ với banner thiết kế kiến trúc
           nội thất (DesignServicePage). Khoảng cách từ header xuống tiêu đề
-          (top-[7.5%] cộng `pt-[85px]` của RenovationMobileContent) đã đủ rộng
+          (top-[7.5%] cộng `pt-[60px]` của RenovationMobileContent) đã đủ rộng
           nên giữ nguyên. */}
       <div className="absolute top-[7.5%] left-[7.3%] w-[83%] border-l-[3px] border-brand pl-[3.2%]">
         <Reveal>
@@ -160,15 +160,11 @@ function RenovationMobileHero() {
 
 function RenovationMobileProjects() {
   return (
-    <section className="relative isolate overflow-hidden px-4 pt-8 pb-3">
-      <Image
-        className="-z-10 object-cover object-bottom opacity-55"
-        src="/images/home/blueprint-background.png"
-        alt=""
-        fill
-        sizes="100vw"
-        aria-hidden="true"
-      />
+    <section className="relative px-4 pt-8 pb-3">
+      {/* Tiêu đề KHÔNG có lớp nền nào — ăn thẳng theo nền trắng của trang nên
+          luôn trắng tinh 100%, không phụ thuộc vào chiều cao tổng của section
+          (khác với dùng 1 gradient trải hết section, tỉ lệ trắng/xám sẽ đổi
+          theo chiều cao carousel mỗi màn hình). */}
       <div className="mx-auto max-w-[29rem] text-center">
         <Reveal from="bottom">
           <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase">
@@ -191,36 +187,44 @@ function RenovationMobileProjects() {
         />
       </div>
 
-      {/* `-mx-4` bù trừ `px-4` của section: các trang Thi công/Xây dựng
-          trọn gói đặt ProjectCarousel trong section KHÔNG có padding ngang
-          nên nút mũi tên (left/right-[3.5%]) đo từ mép màn hình thật. Trang
-          này có `px-4` bọc ngoài nên nếu không bù, nút bị lệch vào trong
-          thêm 16px mỗi bên so với 3 trang kia. */}
-      <Reveal className="mt-2 -mx-4" delay={120} duration={850} from="bottom">
-        <ProjectCarousel
-          projects={mobileProjects}
-          prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
-          nextIcon="/images/cai-tao-sua-chua/nav-next.png"
-          mobileMockup
-          mobileInitialIndex={0}
+      {/* Nền xám chỉ bọc riêng khối carousel + nút CTA. `-mx-4` bù trừ `px-4`
+          của section để khối này (và ProjectCarousel bên trong) tràn
+          full-bleed sát hai mép màn hình — nút mũi tên (left/right-[3.5%])
+          của ProjectCarousel nhờ đó vẫn đo đúng từ mép thật thay vì lệch vào
+          trong 16px mỗi bên. Dải gradient trắng→trong suốt cao 4rem ở đỉnh
+          khối làm mềm ranh giới với phần tiêu đề phía trên thay vì cắt cứng. */}
+      <div className="relative isolate -mx-4 mt-2 overflow-hidden bg-[#f2f2f3] pb-3">
+        <div
+          className="absolute inset-x-0 top-0 z-10 h-16 bg-gradient-to-b from-white to-transparent"
+          aria-hidden="true"
         />
-      </Reveal>
 
-      <Reveal className="mt-3 flex h-11 justify-center" delay={200} duration={800} from="bottom">
-        <PillCtaButton
-          className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
-          href="#contact-form"
-          label="TƯ VẤN MIỄN PHÍ"
-          image="/images/thi-cong-xay-dung/btn-pill.png"
-          imageWidth={1539}
-          imageHeight={292}
-          mobileImage="/images/thi-cong-xay-dung/mobile/btn-consult.png"
-          mobileImageWidth={1539}
-          mobileImageHeight={292}
-          mobileTextCentered
-          textClassName="!text-[clamp(0.8rem,3.2vw,1.25rem)]"
-        />
-      </Reveal>
+        <Reveal delay={120} duration={850} from="bottom">
+          <ProjectCarousel
+            projects={mobileProjects}
+            prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
+            nextIcon="/images/cai-tao-sua-chua/nav-next.png"
+            mobileMockup
+            mobileInitialIndex={0}
+          />
+        </Reveal>
+
+        <Reveal className="mt-3 flex h-11 justify-center" delay={200} duration={800} from="bottom">
+          <PillCtaButton
+            className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
+            href="#contact-form"
+            label="TƯ VẤN MIỄN PHÍ"
+            image="/images/thi-cong-xay-dung/btn-pill.png"
+            imageWidth={1539}
+            imageHeight={292}
+            mobileImage="/images/thi-cong-xay-dung/mobile/btn-consult.png"
+            mobileImageWidth={1539}
+            mobileImageHeight={292}
+            mobileTextCentered
+            textClassName="!text-[clamp(0.8rem,3.2vw,1.25rem)]"
+          />
+        </Reveal>
+      </div>
     </section>
   );
 }
@@ -476,8 +480,10 @@ function RenovationMobileProcess() {
 }
 
 export function RenovationMobileContent() {
+  /* pt đúng bằng chiều cao header cố định (60px) để banner nằm sát ngay dưới
+     header, không còn dải trắng thừa như mốc 85px cũ. */
   return (
-    <main className="overflow-x-hidden pt-[85px] md:hidden">
+    <main className="-mb-[2.342945vw] overflow-x-hidden pt-[60px] md:hidden">
       <RenovationMobileHero />
       <RenovationMobileProjects />
       <RenovationMobileSolutions />
