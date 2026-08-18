@@ -19,7 +19,7 @@ export const featuredProjects = [
     title: "PHÒNG YẾN SÀO KHANG YẾN",
     tag: "THI CÔNG NỘI THẤT",
     image: "/images/xay-dung-tron-goi/photo-showroom.webp",
-    fit: "cover",
+    fit: "cover" as const,
   },
 ];
 
