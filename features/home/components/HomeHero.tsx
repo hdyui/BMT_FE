@@ -35,7 +35,7 @@ const bodyItemVariants: Variants = {
 
 const slides = [
   {
-    image: "/images/home/hero-background-client-01-web.webp",
+    image: "/images/home/hero-background-01.png",
     alt: "Mẫu nhà phố do BMT Decor thiết kế",
     title: "BMT Decor - Đơn vị thiết kế và thi công trọn gói",
     copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng cho nhà ở, văn phòng và công trình thương mại.",
@@ -56,7 +56,7 @@ const slides = [
     href: "/du-an",
   },
   {
-    image: "/images/home/hero-background-client-04.png",
+    image: "/images/home/hero-background-04.png",
     alt: "Hồ sơ năng lực BMT Decor",
     title: "Hồ sơ năng lực BMT Decor",
     copy: "Khám phá năng lực của BMT Decor thông qua đội ngũ chuyên môn, quy trình triển khai, lĩnh vực hoạt động và các dự án tiêu biểu.",
@@ -156,7 +156,7 @@ export function HomeHero() {
           >
             <div
               className={`absolute inset-0 transform-gpu transition-transform duration-[6000ms] ease-out motion-reduce:transform-none ${
-                isActive ? "scale-[1.01]" : "scale-100"
+                isActive ? "scale-[1.05]" : "scale-100"
               }`}
             >
               <Image
@@ -167,7 +167,8 @@ export function HomeHero() {
                 fill
                 priority={index === 0}
                 sizes="100vw"
-                unoptimized
+                quality={60}
+                // unoptimized
               />
             </div>
             <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />

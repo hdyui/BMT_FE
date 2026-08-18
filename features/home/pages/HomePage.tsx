@@ -103,7 +103,10 @@ function ProjectSectionHeading() {
 
 export function HomePage() {
   return (
-    <div className="min-h-screen overflow-x-clip" data-scroll-snap-page>
+    <div
+      className="min-h-screen overflow-x-clip pt-[60px] xl:pt-[var(--site-header-desktop-height)]"
+      data-scroll-snap-page
+    >
       <SiteHeader />
       <HomeHero />
 
