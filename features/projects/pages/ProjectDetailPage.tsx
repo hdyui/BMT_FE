@@ -24,7 +24,17 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
         <BeforeAfterGallery project={project} />
         <RelatedProjects />
       </main>
-      <ContactForm showTopNotch />
+      <ContactForm
+        showTopNotch
+        title="BẠN YÊU THÍCH KHÔNG GIAN NÀY?"
+        description={
+          <>
+            Liên hệ ngay <strong>BMT Decor</strong> hoặc để lại thông tin để được
+            đội ngũ tư vấn giải pháp <strong>thiết kế - thi công</strong> phù hợp
+            nhất cho ngôi nhà của bạn.
+          </>
+        }
+      />
       <SiteFooter />
     </>
   );
