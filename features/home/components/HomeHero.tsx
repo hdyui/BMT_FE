@@ -167,7 +167,7 @@ export function HomeHero() {
                 fill
                 priority={index === 0}
                 sizes="100vw"
-                quality={40}
+                quality={20}
                 // unoptimized
               />
             </div>
