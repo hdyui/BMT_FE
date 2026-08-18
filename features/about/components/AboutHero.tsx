@@ -35,7 +35,7 @@ export function AboutHero() {
         onLoad={handleImageLoad}
       />
       <div
-        className="absolute inset-y-0 left-0 -z-10 w-[62vw]"
+        className="absolute inset-y-0 left-0 -z-10 w-[62vw] max-sm:hidden"
         aria-hidden="true"
       >
         <Image
@@ -47,6 +47,10 @@ export function AboutHero() {
           sizes="62vw"
         />
       </div>
+      <div
+        className="absolute inset-0 -z-10 hidden max-sm:block max-sm:bg-[linear-gradient(180deg,rgba(255,255,255,.08)_0%,rgba(255,255,255,.18)_34%,rgba(255,255,255,.82)_68%,#fff_100%)]"
+        aria-hidden="true"
+      />
 
       <div className="mx-auto flex min-h-[100svh] w-[min(1380px,calc(100%-2.25rem))] items-center py-16 max-sm:items-end max-sm:pb-[clamp(2.25rem,6svh,4rem)] max-sm:pt-24 lg:min-h-[784px]">
         <div className="w-full max-w-[610px]">
@@ -75,7 +79,7 @@ export function AboutHero() {
             <BuildingRule className="mt-4 h-[30px] w-[325px] max-w-full brightness-0 max-sm:mt-3 max-sm:h-5 max-sm:w-[217px]" />
           </div>
           <p
-            className={`mt-5 max-w-[590px] text-justify text-[clamp(10px,2.7vw,11px)] leading-[1.12] text-neutral-800 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] delay-[780ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-4 sm:text-base sm:leading-[1.4] lg:leading-[var(--hero-description-desktop-line-height)] ${
+            className={`mt-5 max-w-[590px] text-justify text-[clamp(10px,2.7vw,11px)] leading-[1.12] text-neutral-800 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] delay-[780ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-4 max-sm:text-[14px] max-sm:leading-5 sm:text-base sm:leading-[1.4] lg:leading-[var(--hero-description-desktop-line-height)] ${
               isReady
                 ? "translate-x-0 opacity-100"
                 : "-translate-x-10 opacity-0"
