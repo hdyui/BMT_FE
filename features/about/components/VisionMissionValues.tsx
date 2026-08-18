@@ -103,8 +103,8 @@ function CoreValuesList({
     <div
       className={
         mobile
-          ? "mt-4 flex flex-col sm:hidden"
-          : "mt-7 hidden space-y-2 sm:block"
+          ? "mt-4 flex h-[320px] flex-col sm:hidden"
+          : "mt-7 hidden h-[400px] space-y-2 sm:block"
       }
     >
       {coreValues.map(({ title, description }, index) => {
@@ -198,7 +198,7 @@ function CoreValueIllustration({
     >
       {coreValues.map((value, index) => (
         <Image
-          className={`object-contain transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${index === 4 ? styles.dedicationIllustration : ""} ${
+          className={`${index === 3 ? "object-fill" : "object-contain"} transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${index === 4 ? styles.dedicationIllustration : ""} ${
             activeValue === index
               ? "scale-100 opacity-100 blur-0"
               : "pointer-events-none scale-[.965] opacity-0 blur-[2px]"

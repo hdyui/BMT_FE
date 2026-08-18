@@ -82,9 +82,8 @@
 
 .comparisonGrid {
   position: relative;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2px;
+  width: min(100%, 68.75rem);
+  margin-inline: auto;
 }
 
 .comparisonGrid > * {
@@ -99,26 +98,133 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  user-select: none;
 }
 
-.comparisonRowFacade .comparisonMedia {
-  aspect-ratio: 1.42 / 1;
+.beforeAfterFigure {
+  margin: 0;
 }
 
-.comparisonRowStair .comparisonMedia {
-  aspect-ratio: 1.08 / 1;
+.beforeAfterMedia {
+  aspect-ratio: 3 / 2;
+  overflow: hidden;
+  border-radius: clamp(1.35rem, 3vw, 2.8rem);
+  isolation: isolate;
+  background: #d9d6d0;
+  box-shadow: 0 1.5rem 4rem rgb(64 47 33 / 14%);
 }
 
-.comparisonRowLiving .comparisonMedia {
-  aspect-ratio: 1.15 / 1;
+.beforeAfterBefore {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  will-change: clip-path;
 }
 
-.comparisonGrid > :first-child .media {
-  border-radius: 2.8rem 0 0 2.8rem;
+.beforeAfterBadge {
+  position: absolute;
+  top: clamp(0.75rem, 1.6vw, 1.25rem);
+  z-index: 4;
+  display: grid;
+  place-items: center;
+  width: clamp(4.025rem, 7vw, 6.125rem);
+  aspect-ratio: 361 / 175;
+  color: white;
+  font-size: clamp(0.595rem, 1.05vw, 1.015rem);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.02em;
+  text-transform: none;
 }
 
-.comparisonGrid > :nth-child(2) .media {
-  border-radius: 0 2.8rem 2.8rem 0;
+.beforeAfterBadgeBefore {
+  left: clamp(0.75rem, 1.6vw, 1.25rem);
+}
+
+.beforeAfterBadgeAfter {
+  right: clamp(0.75rem, 1.6vw, 1.25rem);
+}
+
+.beforeAfterBadgeImage {
+  object-fit: contain;
+}
+
+.beforeAfterBadgeText {
+  position: relative;
+  z-index: 1;
+  transform: translateY(-1px);
+}
+
+.beforeAfterDivider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 3;
+  width: 2px;
+  transform: translateX(-50%);
+  background: rgb(255 255 255 / 88%);
+  box-shadow: 0 0 1rem rgb(0 0 0 / 18%);
+  pointer-events: none;
+  will-change: left;
+}
+
+.beforeAfterHandle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  place-items: center;
+  width: clamp(2.75rem, 5vw, 3.5rem);
+  height: clamp(2.75rem, 5vw, 3.5rem);
+  transform: translate(-50%, -50%);
+  border: 1px solid rgb(255 255 255 / 72%);
+  border-radius: 50%;
+  color: #2d2a26;
+  background: rgb(255 255 255 / 94%);
+  box-shadow: 0 0.7rem 2rem rgb(31 27 23 / 22%);
+  font-size: clamp(0.72rem, 1.4vw, 0.9rem);
+  font-weight: 700;
+}
+
+.beforeAfterHandle span:first-child {
+  justify-self: end;
+  transform: translateX(1px);
+}
+
+.beforeAfterHandle span:last-child {
+  justify-self: start;
+  transform: translateX(-1px);
+}
+
+.beforeAfterRange {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  appearance: none;
+  cursor: ew-resize;
+  opacity: 0;
+}
+
+.beforeAfterRange::-webkit-slider-thumb {
+  width: 3.5rem;
+  height: 100%;
+  appearance: none;
+}
+
+.beforeAfterRange::-moz-range-thumb {
+  width: 3.5rem;
+  height: 100%;
+  border: 0;
+  border-radius: 0;
+}
+
+.beforeAfterMedia:has(.beforeAfterRange:focus-visible) {
+  outline: 3px solid var(--color-brand);
+  outline-offset: 4px;
 }
 
 @media (max-width: 1023px) {
@@ -145,22 +251,11 @@
   }
 
   .comparisonGrid {
-    grid-template-columns: 1fr;
-    gap: 0.75rem;
+    width: 100%;
   }
 
-  .comparisonRowFacade .comparisonMedia,
-  .comparisonRowStair .comparisonMedia,
-  .comparisonRowLiving .comparisonMedia {
-    aspect-ratio: auto;
-  }
-
-  .comparisonImage {
-    height: auto;
-  }
-
-  .comparisonGrid > :first-child .media,
-  .comparisonGrid > :nth-child(2) .media {
+  .beforeAfterMedia {
+    aspect-ratio: 4 / 3;
     border-radius: 1.5rem;
   }
 }

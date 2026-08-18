@@ -35,9 +35,18 @@ export function AboutHero() {
         onLoad={handleImageLoad}
       />
       <div
-        className="absolute inset-0 -z-10 bg-[linear-gradient(90deg,rgba(255,255,255,.82)_0%,rgba(255,255,255,.72)_28%,rgba(255,255,255,.52)_45%,rgba(255,255,255,.24)_56%,rgba(255,255,255,.06)_65%,rgba(255,255,255,0)_72%)] max-lg:bg-[linear-gradient(90deg,rgba(255,255,255,.88)_0%,rgba(255,255,255,.76)_42%,rgba(255,255,255,.48)_68%,rgba(255,255,255,.18)_88%,rgba(255,255,255,.08)_100%)] max-sm:bg-[linear-gradient(180deg,rgba(255,255,255,.08)_0%,rgba(255,255,255,.18)_34%,rgba(255,255,255,.82)_68%,#fff_100%)]"
+        className="absolute inset-y-0 left-0 -z-10 w-[62vw]"
         aria-hidden="true"
-      />
+      >
+        <Image
+          className="object-fill"
+          src={`${imageRoot}/hero-overlay.svg`}
+          alt=""
+          fill
+          priority
+          sizes="62vw"
+        />
+      </div>
 
       <div className="mx-auto flex min-h-[100svh] w-[min(1380px,calc(100%-2.25rem))] items-center py-16 max-sm:items-end max-sm:pb-[clamp(2.25rem,6svh,4rem)] max-sm:pt-24 lg:min-h-[784px]">
         <div className="w-full max-w-[610px]">
