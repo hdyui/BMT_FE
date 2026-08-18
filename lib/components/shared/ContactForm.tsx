@@ -1,6 +1,6 @@
 "use client";
 
-import type { FormEvent } from "react";
+import type { FormEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
@@ -14,8 +14,12 @@ const requiredMessage = "Vui lòng nhập thông tin.";
 
 export function ContactForm({
   showTopNotch = false,
+  title = "Liên hệ tư vấn",
+  description,
 }: {
   showTopNotch?: boolean;
+  title?: ReactNode;
+  description?: ReactNode;
 }) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
@@ -125,8 +129,13 @@ export function ContactForm({
             className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
           >
             <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
-              Liên hệ tư vấn
+              {title}
             </h2>
+            {description && (
+              <p className="max-w-[1120px] text-base leading-[1.45] text-white/95 max-lg:max-w-[94%] max-lg:text-[11px] max-lg:leading-[1.35]">
+                {description}
+              </p>
+            )}
           </div>
           <div className="relative h-4 w-full lg:h-10" aria-hidden="true">
             <span
