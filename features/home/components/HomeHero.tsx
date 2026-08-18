@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { PointerEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
@@ -35,28 +35,28 @@ const bodyItemVariants: Variants = {
 
 const slides = [
   {
-    image: "/images/home/hero-background-01.png",
+    image: "/images/home/hero-background-01.webp",
     alt: "Mẫu nhà phố do BMT Decor thiết kế",
     title: "BMT Decor - Đơn vị thiết kế và thi công trọn gói",
     copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng cho nhà ở, văn phòng và công trình thương mại.",
     href: "/gioi-thieu",
   },
   {
-    image: "/images/home/hero-background-02.png",
+    image: "/images/home/hero-background-02.webp",
     alt: "Không gian nội thất do BMT Decor thực hiện",
     title: "Đáp ứng đa dạng nhu cầu xây dựng & cải tạo",
     copy: "Dù là xây mới, cải tạo hay hoàn thiện nội thất, BMT Decor đều xây dựng giải pháp phù hợp với từng loại hình công trình, quy mô đầu tư và mục tiêu sử dụng.",
     href: "/dich-vu/xay-dung-tron-goi",
   },
   {
-    image: "/images/home/hero-background-03.png",
+    image: "/images/home/hero-background-03.webp",
     alt: "Công trình thương mại đã hoàn thiện",
     title: "Những công trình đã hoàn thiện",
     copy: "Từ nhà ở, văn phòng, showroom đến các công trình thương mại, mỗi dự án đều là minh chứng cho năng lực thiết kế, thi công và cam kết chất lượng.",
     href: "/du-an",
   },
   {
-    image: "/images/home/hero-background-04.png",
+    image: "/images/home/hero-background-04.webp",
     alt: "Hồ sơ năng lực BMT Decor",
     title: "Hồ sơ năng lực BMT Decor",
     copy: "Khám phá năng lực của BMT Decor thông qua đội ngũ chuyên môn, quy trình triển khai, lĩnh vực hoạt động và các dự án tiêu biểu.",
@@ -166,8 +166,9 @@ export function HomeHero() {
                 draggable={false}
                 fill
                 priority={index === 0}
+                fetchPriority={index === 0 ? "high" : "low"}
                 sizes="100vw"
-                quality={20}
+                quality={70}
                 // unoptimized
               />
             </div>
