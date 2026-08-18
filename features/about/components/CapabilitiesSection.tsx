@@ -41,7 +41,7 @@ const capabilities: {
   },
   {
     number: "03",
-    title: "Triển Khai Đa Loại Hình Công Trình",
+    title: "Triển Khai Đa Loại Hình",
     mobileTitle: "Triển Khai Đa Loại Hình",
     description:
       "Kinh nghiệm thực hiện nhà ở, văn phòng, showroom, nhà hàng, khách sạn và các công trình thương mại với giải pháp phù hợp cho từng quy mô dự án.",
