@@ -1,8 +1,8 @@
-import Image from "next/image";
 import type { ProjectDetail } from "../data/project-details";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { ProjectRichText } from "./ProjectRichText";
+import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import styles from "./ProjectDetail.module.css";
 
 export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
@@ -28,43 +28,15 @@ export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
               }`}
               key={comparison.before.src}
             >
-                {[comparison.before, comparison.after].map((image, imageIndex) => (
-                  <Reveal
-                    className={`min-w-0 ${styles.imageReveal}`}
-                    delay={160 + imageIndex * 90}
-                    distance="long"
-                    duration={1050}
-                    from="fade"
-                    key={image.src}
-                  >
-                  <figure>
-                    <div className={`${styles.comparisonMedia} ${styles.media}`}>
-                      <Image
-                        src={image.src}
-                        alt={image.alt}
-                        width={image.width}
-                        height={image.height}
-                        sizes="(min-width: 640px) 50vw, 100vw"
-                        className={styles.comparisonImage}
-                      />
-                      {image.badge && (
-                        <span className={`absolute top-3 z-10 rounded-full bg-brand px-4 py-2 text-sm font-bold text-white sm:top-4 sm:px-5 sm:text-base ${imageIndex === 0 ? "left-3 sm:left-4" : "right-3 sm:right-4"}`}>
-                          {image.badge}
-                        </span>
-                      )}
-                    </div>
-                    <figcaption className="mt-2 text-center text-[clamp(15px,1.25vw,18px)] font-bold">
-                      {image.label}
-                    </figcaption>
-                  </figure>
-                  </Reveal>
-                ))}
-                <span
-                  className="pointer-events-none absolute top-1/2 left-1/2 z-20 hidden size-12 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-white text-2xl shadow-md sm:grid"
-                  aria-hidden="true"
-                >
-                  ↔
-                </span>
+              <Reveal
+                className={`min-w-0 ${styles.imageReveal}`}
+                delay={160 + rowIndex * 60}
+                distance="long"
+                duration={1050}
+                from="fade"
+              >
+                <BeforeAfterSlider comparison={comparison} />
+              </Reveal>
             </div>
           ))}
         </div>

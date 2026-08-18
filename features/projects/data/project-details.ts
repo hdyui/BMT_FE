@@ -167,9 +167,9 @@ export const projects: Record<string, ProjectDetail> = {
     comparisons: [
       {
         before: {
-          src: `${detailRoot}/before-facade.png`,
+          src: `${detailRoot}/before-facade-cropped-v2.png`,
           alt: "Mặt tiền nhà phố trước cải tạo",
-          width: 3068,
+          width: 3046,
           height: 2281,
           label: "Hiện trạng",
           badge: "Trước",
