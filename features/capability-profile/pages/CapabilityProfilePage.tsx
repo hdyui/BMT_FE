@@ -1,18 +1,25 @@
-import { DocumentPageScaffold } from "@/lib/components/layout/DocumentPageScaffold";
+import { SiteFooter } from "@/lib/components/layout/SiteFooter";
+import { SiteHeader } from "@/lib/components/layout/SiteHeader";
+import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { CapabilityHero } from "../components/CapabilityHero";
+import { ProfileDocumentSection } from "../components/ProfileDocumentSection";
 
 export function CapabilityProfilePage() {
   return (
-    <DocumentPageScaffold
-      eyebrow="BMT DECOR"
-      title="HỒ SƠ NĂNG LỰC"
-      description="Tổng quan về đội ngũ, kinh nghiệm, quy trình và năng lực triển khai của BMT Decor."
-      sections={[
-        "Thông tin doanh nghiệp",
-        "Năng lực thiết kế",
-        "Năng lực thi công",
-        "Đội ngũ chuyên môn",
-        "Dự án tiêu biểu",
-      ]}
-    />
+    <div className="min-h-[100dvh] overflow-x-clip bg-[#f7f7f7] pt-[60px]">
+      <SiteHeader />
+      <main>
+        <CapabilityHero />
+        <ProfileDocumentSection />
+        {/* Phần khuyết phía trên ContactForm trong suốt, nên bọc nền trùng màu
+            section ngay trên (#fdfdfd) để không lộ vệt xám của nền trang. */}
+        <div className="bg-[#fdfdfd]">
+          <ContactForm showTopNotch />
+        </div>
+      </main>
+      {/* Nền form đã là cam nên bỏ vạch cam 10px mặc định ở đầu footer,
+          giống trang chủ và các trang dịch vụ. */}
+      <SiteFooter showTopBorder={false} />
+    </div>
   );
 }

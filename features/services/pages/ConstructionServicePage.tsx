@@ -71,13 +71,14 @@ const HERO_DIAMONDS = [
     key: "top",
     src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
     alt: "Thi công nhà hàng",
-    // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` đã hạ 9,2% -> 15,8%
-    // (xuống 40px) để hình hiện ra nhiều hơn: phần thấy được dưới header đi từ
-    // 44,6% lên 52,1% chiều cao hình. Ba hình kia đã được giải lại theo, vì hạ
-    // hình này xuống là bóp hai khe hở kề nó.
+    // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` nhích lên 15,8% ->
+    // 12,8% để phần đỉnh hình bị che dưới header nhiều hơn (~45% chiều cao hình).
+    // Lưu ý: nhích `top` của hình này lên/xuống làm hở/khít khe hở với hai hình
+    // "right" và "left" kề nó (xem comment cũ) — nếu thấy có khe hở lộ ra thì báo
+    // để giãn lại vị trí 2 hình đó theo.
     left: "23.4%",
-    top: "15.8%",
-    size: "62.5%",
+    top: "-2.7%",
+    size: "67.5%",
     zIndex: 10,
   },
   {
@@ -86,9 +87,9 @@ const HERO_DIAMONDS = [
     alt: "Thi công thẩm mỹ viện",
     // Mép phải hình này là mép phải của cả cụm: 48,9% + 0.7071 x 37,9% x 0.423
     // = 60,2% bề rộng banner, dừng đúng ở thanh cam của khối chữ bên phải.
-    left: "48.9%",
-    top: "36.3%",
-    size: "37.9%",
+    left: "45.4%",
+    top: "31.3%",
+    size: "40.9%",
     zIndex: 20,
   },
   {
@@ -97,9 +98,9 @@ const HERO_DIAMONDS = [
     alt: "Thi công nhà ở",
     // To hơn mockup (38,4% -> 44,6%) để chìm 6,5% dưới cạnh đáy banner:
     // đỉnh dưới ở 72,6% + 0.7071 x 44,6% = 104,1% chiều cao banner.
-    left: "35.4%",
-    top: "72.6%",
-    size: "44.6%",
+    left: "31.9%",
+    top: "73.5%",
+    size: "48.2%",
     zIndex: 40,
   },
   {
@@ -109,8 +110,8 @@ const HERO_DIAMONDS = [
     // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
     // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
     left: "9.4%",
-    top: "64.7%",
-    size: "39.5%",
+    top: "52.2%",
+    size: "42.7%",
     zIndex: 30,
   },
 ] as const;
@@ -508,11 +509,20 @@ export function ConstructionServicePage() {
                 </h1>
               </Reveal>
 
-              <BuildingRule
-                className="mt-4 w-full max-w-85"
-                src="/images/services/rule-dark.png"
+              <Reveal
+                className="relative mt-4 h-[1.3rem] w-28 overflow-hidden"
                 delay={220}
-              />
+                from="fade"
+              >
+                <Image
+                  className="absolute top-0 right-0 w-56 max-w-none"
+                  src="/images/services/rule-dark.png"
+                  alt=""
+                  width={1388}
+                  height={128}
+                  aria-hidden="true"
+                />
+              </Reveal>
 
               <Reveal delay={380} from="left">
                 <p className="mt-1 max-w-[19.375rem] text-pretty text-sm font-normal leading-snug text-charcoal sm:text-base">
@@ -558,7 +568,7 @@ export function ConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-0 !pb-0 text-center px-4`}
         >
           <Reveal from="bottom">
-            <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase md:text-3xl md:font-bold lg:text-4xl text-center">
+            <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase md:text-3xl lg:text-4xl text-center">
               THI CÔNG XÂY DỰNG TỪ PHẦN THÔ ĐẾN HOÀN THIỆN
             </h2>
           </Reveal>
@@ -634,10 +644,10 @@ export function ConstructionServicePage() {
         <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
                 <span className="font-normal">THI CÔNG XÂY DỰNG</span>
                 <br />
-                <span className="font-extrabold md:font-bold">
+                <span className="font-extrabold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -649,7 +659,7 @@ export function ConstructionServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:mt-5 md:w-full md:max-w-62.5"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
                 align="center"
               />
@@ -700,7 +710,7 @@ export function ConstructionServicePage() {
         <div className="hidden md:block">
           <div className="mx-auto mb-12 w-[min(790px,calc(100%-2.25rem))] text-center">
             <Reveal from="bottom">
-              <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
+              <h2 className="font-heading text-3xl font-extrabold uppercase sm:text-4xl">
                 QUY TRÌNH THI CÔNG XÂY DỰNG
               </h2>
             </Reveal>
@@ -722,7 +732,8 @@ export function ConstructionServicePage() {
       </section>
 
       <ContactForm showTopNotch />
-      <SiteFooter />
+      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

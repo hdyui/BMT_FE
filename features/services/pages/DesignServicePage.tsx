@@ -187,11 +187,20 @@ export function DesignServicePage() {
                 </span>
               </h1>
             </Reveal>
-            <BuildingRule
-              className="mt-4 w-full max-w-85 max-md:mt-2 max-md:w-[45%]"
-              src="/images/services/rule-dark.png"
+            <Reveal
+              className="relative mt-4 h-[1.3rem] w-28 overflow-hidden"
               delay={180}
-            />
+              from="fade"
+            >
+              <Image
+                className="absolute top-0 right-0 w-56 max-w-none"
+                src="/images/services/rule-dark.png"
+                alt=""
+                width={1388}
+                height={128}
+                aria-hidden="true"
+              />
+            </Reveal>
             <Reveal
               className="flex items-start gap-2 max-md:items-center"
               delay={300}
@@ -234,7 +243,7 @@ export function DesignServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 px-4 text-center lg:!mb-10`}
         >
           <Reveal>
-            <h2 className="font-heading text-center text-3xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl">
+            <h2 className="font-heading text-center text-3xl font-extrabold leading-[1.08] max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] sm:text-4xl">
               GIẢI PHÁP THIẾT KẾ TỐI ƯU CHO MỌI KHÔNG GIAN
             </h2>
           </Reveal>
@@ -299,10 +308,10 @@ export function DesignServicePage() {
             <Reveal from="bottom">
               {/* Mockup tách 2 dòng: dòng trên chữ thường, dòng dưới in đậm —
                   giống hệt 3 trang dịch vụ còn lại. */}
-              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
                 <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
                 <br />
-                <span className="font-extrabold md:font-bold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
+                <span className="font-extrabold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
@@ -312,7 +321,7 @@ export function DesignServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:mt-5 md:w-full md:max-w-62.5"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
               />
             </Reveal>
@@ -334,8 +343,7 @@ export function DesignServicePage() {
       >
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
           <Reveal className="">
-            {/* ĐÃ SỬA: Thay justify-center thành justify-between */}
-            <h2 className="hidden flex-wrap items-center justify-between gap-y-2 text-4xl font-extrabold md:flex">
+            <h2 className="hidden flex-wrap items-center justify-center gap-x-3 gap-y-2 text-4xl font-extrabold md:flex">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
               <Image
                 className="inline-block h-9 w-auto sm:h-10"
@@ -369,7 +377,8 @@ export function DesignServicePage() {
       </section>
 
       <ContactForm showTopNotch />
-      <SiteFooter />
+      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

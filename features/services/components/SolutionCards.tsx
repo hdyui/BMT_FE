@@ -41,7 +41,7 @@ export function SolutionCards({
 
         return (
           <Reveal
-            className="group/card overflow-hidden rounded-[clamp(1.4rem,6vw,2rem)] bg-white shadow-[0_4px_12px_rgb(36_33_34/.25)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_24px_48px_rgb(36_33_34/.16)] active:-translate-y-1 active:shadow-[0_18px_36px_rgb(36_33_34/.18)] md:rounded-[1.5rem] md:shadow-[0_4px_20px_rgb(36_33_34/.08)] lg:min-h-140 lg:rounded-[2rem]"
+            className="group/card overflow-hidden rounded-[clamp(1.4rem,6vw,2rem)] bg-white shadow-[0_2px_6px_rgb(36_33_34/.55)] transition-[transform,box-shadow] duration-300 ease-out hover:-translate-y-1.5 hover:shadow-[0_8px_16px_rgb(36_33_34/.5)] active:-translate-y-1 active:shadow-[0_6px_12px_rgb(36_33_34/.52)] md:rounded-[1.5rem] md:shadow-[0_3px_8px_rgb(36_33_34/.5)] lg:min-h-140 lg:rounded-[2rem]"
             delay={index * 160}
             from="fade"
             key={card.number}
@@ -85,7 +85,7 @@ export function SolutionCards({
                     </span>
                   </h3>
                 </div>
-                <p className="mt-2 text-[clamp(0.72rem,3vw,0.88rem)] leading-tight font-extrabold md:text-sm md:font-bold">
+                <p className="mt-2 text-[clamp(0.72rem,3vw,0.88rem)] leading-tight font-extrabold md:text-sm">
                   {card.tagline}
                 </p>
 
@@ -106,13 +106,13 @@ export function SolutionCards({
                   {card.description}
                 </p>
 
-                <p className="mt-2 text-[clamp(0.7rem,2.85vw,0.84rem)] font-extrabold md:mt-5 md:text-sm md:font-bold">
+                <p className="mt-2 text-[clamp(0.7rem,2.85vw,0.84rem)] font-extrabold md:mt-5 md:text-sm">
                   BMT Decor cung cấp:
                 </p>
                 <ul className="mt-1 grid gap-0.5 md:mt-2 md:gap-1.5">
                   {card.checklist.map((item) => (
                     <li
-                      className="flex items-start gap-2 text-[clamp(0.69rem,2.72vw,0.82rem)] leading-[1.2] md:text-sm md:leading-normal"
+                      className="flex items-start gap-2 text-[clamp(0.69rem,2.72vw,0.82rem)] leading-[1.2] md:text-sm"
                       key={item}
                     >
                       <Image

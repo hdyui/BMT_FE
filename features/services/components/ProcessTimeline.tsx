@@ -223,16 +223,17 @@ export function ProcessTimeline() {
         style={TIMELINE_STYLE}
       >
       <span
-        className="pointer-events-none absolute left-1/2 z-10 hidden w-px -translate-x-1/2 bg-charcoal lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.3845)] lg:block lg:h-[calc(var(--step-h)*2.6)]"
+        className="pointer-events-none absolute left-1/2 z-10 hidden -translate-x-1/2 lg:top-[calc(var(--frame-h)/2_-_var(--step-h)*0.3845)] lg:block lg:h-[calc(var(--step-h)*2.8)]"
         aria-hidden="true"
       >
-        {[14.79, 50.1, 85.09].map((position) => (
-          <span
-            className="absolute left-1/2 size-2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-black"
-            style={{ top: `${position}%` }}
-            key={position}
-          />
-        ))}
+        <Image
+          className="h-full w-auto"
+          src="/images/thiet-ke-kien-truc-noi-that/process-axis.png"
+          alt=""
+          width={358}
+          height={2955}
+          aria-hidden="true"
+        />
       </span>
       <div className="grid w-full gap-4 max-md:grid-cols-2 max-md:gap-14 lg:grid-cols-2 lg:gap-40">
         <div className="grid gap-4 max-md:gap-0 lg:gap-0">

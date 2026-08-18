@@ -184,11 +184,20 @@ export function RenovationServicePage() {
 
                 {/* Đường line đen. mt-4 khớp với Construction/Design page (bản
                     cũ mt-5/xl:mt-6 khiến khoảng cách dòng to hơn 3 trang kia). */}
-                <BuildingRule
-                  className="mt-4 w-full max-w-85"
-                  src="/images/services/rule-dark.png"
+                <Reveal
+                  className="relative mt-4 h-[1.3rem] w-28 overflow-hidden"
                   delay={220}
-                />
+                  from="fade"
+                >
+                  <Image
+                    className="absolute top-0 right-0 w-56 max-w-none"
+                    src="/images/services/rule-dark.png"
+                    alt=""
+                    width={1388}
+                    height={128}
+                    aria-hidden="true"
+                  />
+                </Reveal>
 
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
@@ -204,16 +213,20 @@ export function RenovationServicePage() {
 
           {/* CỤM 3 ẢNH BÊN PHẢI
 
-              Từ lg: neo từ trên xuống (`self-start` + `mt-[4.5625rem]`) thay vì
-              canh giữa. Canh giữa làm đỉnh cụm rơi vào y=40px, tức nằm sau
-              SiteHeader (85px) nên mép trên hai ảnh trái bị che.
+              Từ lg: neo từ trên xuống (`self-start`, KHÔNG còn `mt-` riêng) thay
+              vì canh giữa. Canh giữa làm đỉnh cụm rơi vào y=40px, tức nằm sau
+              SiteHeader nên mép trên hai ảnh trái bị che.
 
-              73px = 40px (`lg:py-10` của lưới) trừ đi rồi cộng: đỉnh cụm nằm ở
-              y=113px, tức cách đáy header (85px) đúng 28px — bằng khoảng cách từ
-              đáy cụm xuống đáy banner. Hai lề này cùng là px cố định nên bằng
-              nhau ở mọi bề rộng. Chiều cao cụm đã trừ sẵn cả hai, xem
+              SiteHeader là `fixed`, banner section đã có padding-top của
+              wrapper bù đúng bằng chiều cao header (`xl:pt-[var(--site-header-desktop-height)]`
+              ở RenovationServicePage gốc), nên đỉnh section NGANG đáy header —
+              không cần cộng thêm 85px vào đây nữa (bản cũ tính dư). Đỉnh cụm
+              giờ chỉ còn cách đáy header đúng 40px (`lg:py-10` của lưới, mức
+              tối thiểu không đụng tới vì áp dụng chung cho cả lưới) — đây là
+              mép trên gần nhất có thể mà không sửa `lg:py-10`. Lề DƯỚI (đáy
+              cụm tới đáy banner) vẫn GIỮ NGUYÊN 28px như cũ — không đụng, xem
               RenovationHeroGallery. */}
-          <div className="relative lg:mt-[4.5625rem] lg:self-start">
+          <div className="relative lg:self-start">
             <Reveal from="right">
               <RenovationHeroGallery
                 large={{
@@ -234,11 +247,26 @@ export function RenovationServicePage() {
         </div>
       </section>
 
-      {/* SECTION 2: GIẢI PHÁP CẢI TẠO PHÙ HỢP CHO MỌI CÔNG TRÌNH */}
-      <section className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} max-md:hidden`}>
+      {/* SECTION 2: GIẢI PHÁP CẢI TẠO PHÙ HỢP CHO MỌI CÔNG TRÌNH. Dùng ảnh
+          gradient trắng→xám `carousel-background.png` giống hệt 3 trang dịch
+          vụ con còn lại (Thi công/Xây dựng trọn gói/Thiết kế) thay vì tô phẳng
+          `bg-[#F2F2F3]` — tô phẳng khiến tiêu đề nằm trên nền xám đậm hơn hẳn
+          so với 3 trang kia (đo được #F2F2F3 so với ~#F8F8F8 ở đỉnh gradient). */}
+      <section
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} max-md:hidden`}
+      >
+        <Image
+          className="-z-10 object-cover"
+          src="/images/cai-tao-sua-chua/carousel-background.png"
+          alt=""
+          fill
+          sizes="100vw"
+          aria-hidden="true"
+        />
+
         <div className={SERVICE_PROJECT_HEADING_CLASS_NAME}>
           <Reveal from="bottom">
-            <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
+            <h2 className="font-heading text-3xl font-extrabold leading-[1.08] uppercase sm:text-4xl">
               Giải Pháp Cải Tạo Phù Hợp Cho Mọi Công Trình
             </h2>
           </Reveal>
@@ -283,6 +311,7 @@ export function RenovationServicePage() {
             imageWidth={1539}
             imageHeight={292}
             textClassName={SERVICE_PILL_CTA_TEXT_CLASS_NAME}
+            textPaddingRightPercent={14}
           />
         </Reveal>
       </section>
@@ -302,7 +331,7 @@ export function RenovationServicePage() {
               <h2 className="font-heading text-3xl uppercase sm:text-4xl">
                 <span className="font-normal">CẢI TẠO & SỬA CHỮA</span>
                 <br />
-                <span className="font-bold">
+                <span className="font-extrabold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -314,7 +343,7 @@ export function RenovationServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:mt-5 md:w-full md:max-w-62.5"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
               />
             </Reveal>
@@ -330,8 +359,10 @@ export function RenovationServicePage() {
         </div>
       </section>
 
-      {/* SECTION 4: QUY TRÌNH CẢI TẠO & SỬA CHỮA */}
-      <section className="relative -mb-[2.342945vw] bg-white pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
+      {/* SECTION 4: QUY TRÌNH CẢI TẠO & SỬA CHỮA. `max-md:hidden` như ba section
+          trên: bản mobile đã có khối quy trình riêng trong RenovationMobileContent,
+          thiếu class này thì mobile hiện 5 bước hai lần. */}
+      <section className="relative -mb-[2.342945vw] bg-[#F2F2F3] pt-16 pb-[calc(4rem+2.342945vw)] max-md:hidden lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
         {/* <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal from="bottom">
             <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
@@ -344,7 +375,8 @@ export function RenovationServicePage() {
       </section>
 
       <ContactForm showTopNotch />
-      <SiteFooter />
+      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

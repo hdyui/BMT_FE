@@ -18,7 +18,8 @@ export const featuredProjects = [
     id: "2",
     title: "PHÒNG YẾN SÀO KHANG YẾN",
     tag: "THI CÔNG NỘI THẤT",
-    image: "/images/thi-cong-xay-dung/project-2.jpg",
+    image: "/images/xay-dung-tron-goi/photo-showroom.webp",
+    fit: "cover",
   },
 ];
 
@@ -106,7 +107,7 @@ export const solutionCards = [
     ],
     cta: "KHÁM PHÁ DỰ ÁN NHÀ HÀNG & KHÁCH SẠN",
     ctaImage: "/images/thi-cong-xay-dung/btn-pill-nha-hang.png",
-    ctaImageWidth: 2180,
+    ctaImageWidth: 2206,
     ctaImageHeight: 253,
     ctaImageMobile: "/images/xay-dung-tron-goi/mobile/btn-pill-nha-hang.png",
     ctaImageMobileWidth: 2682,

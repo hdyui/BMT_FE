@@ -125,11 +125,20 @@ export function FullConstructionServicePage() {
                   <br />& XÂY DỰNG TRỌN GÓI
                 </h1>
               </Reveal>
-              <BuildingRule
-                className="mt-3 block mr-auto ml-0 w-full max-w-85"
-                src="/images/services/rule-dark.png"
+              <Reveal
+                className="relative mt-3 h-[1.3rem] w-28 overflow-hidden"
                 delay={200}
-              />
+                from="fade"
+              >
+                <Image
+                  className="absolute top-0 right-0 w-56 max-w-none"
+                  src="/images/services/rule-dark.png"
+                  alt=""
+                  width={1388}
+                  height={128}
+                  aria-hidden="true"
+                />
+              </Reveal>
               <Reveal delay={320} from="left">
                 <p className="mt-2 max-w-[19.375rem] text-pretty text-sm font-normal leading-relaxed sm:text-base">
                   Kiến tạo công trình bền vững từ
@@ -173,10 +182,8 @@ export function FullConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
         >
           <Reveal>
-            <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] font-extrabold leading-[1.08] sm:text-3xl md:font-bold md:leading-normal lg:text-[2rem] text-center">
-              TỐI ƯU MÔ HÌNH THIẾT KẾ
-              <br />
-              THI CÔNG TRỌN GÓI
+            <h2 className="whitespace-nowrap font-heading text-[clamp(0.72rem,3.4vw,1.55rem)] font-extrabold leading-[1.08] sm:text-3xl lg:text-[2rem] text-center">
+              TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>
@@ -238,10 +245,10 @@ export function FullConstructionServicePage() {
         <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
                 <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
                 <br />
-                <span className="font-extrabold md:font-bold">
+                <span className="font-extrabold">
                   THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
                 </span>
               </h2>
@@ -253,7 +260,7 @@ export function FullConstructionServicePage() {
             </Reveal>
             <Reveal delay={250} from="left">
               <BuildingRule
-                className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
+                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:mt-5 md:w-full md:max-w-62.5"
                 src="/images/cai-tao-sua-chua/rule-orange-center.png"
               />
             </Reveal>
@@ -272,7 +279,7 @@ export function FullConstructionServicePage() {
       <section className="-mb-[2.342945vw] bg-[#f2f2f3] pt-12 pb-[calc(3rem+2.342945vw)] lg:-mb-[2.57vw] lg:pt-14 lg:pb-[calc(3.5rem+2.57vw)]">
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="font-heading text-[clamp(0.95rem,4.2vw,1.35rem)] font-extrabold leading-[1.12] sm:text-[1.75rem] md:leading-normal">
+            <h2 className="font-heading text-[clamp(0.95rem,4.2vw,1.35rem)] font-extrabold leading-[1.12] sm:text-[1.75rem]">
               <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
               <span className="block whitespace-nowrap">XÂY NHÀ TRỌN GÓI</span>
             </h2>
@@ -293,7 +300,8 @@ export function FullConstructionServicePage() {
       </section>
 
       <ContactForm showTopNotch />
-      <SiteFooter />
+      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

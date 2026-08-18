@@ -149,7 +149,7 @@ export function QuotationHero() {
           TỐI ƯU CHI PHÍ
         </h1>
         <p
-          className={`m-0 mt-2 max-w-[36.875rem] text-[clamp(0.6875rem,2.7vw,0.875rem)] leading-[1.25] mix-blend-multiply md:mt-5 md:text-xs md:leading-[1.55] md:text-justify min-[75rem]:text-sm ${styles.animFromRight}`}
+          className={`m-0 mt-2 max-w-[36.875rem] text-justify text-[clamp(0.6875rem,2.7vw,0.875rem)] leading-[1.25] mix-blend-multiply md:mt-5 md:text-xs md:leading-[1.55] min-[75rem]:text-sm ${styles.animFromRight}`}
         >
           <Image
             className="mr-1 inline-block h-3 w-3 object-contain align-[-0.08em] md:mr-1.5 md:h-[1.0625rem] md:w-4 md:-translate-y-1 md:align-middle"

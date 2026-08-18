@@ -40,10 +40,10 @@ function ProcessBlockShape() {
 
 export function ConstructionProcessList() {
   return (
-    <div className="relative mx-auto w-[min(65rem,calc(100%-2.25rem))]">
+    <div className="relative mx-auto w-[min(58rem,calc(100%-2.25rem))]">
       {/* Thanh dọc màu xám chạy suốt danh sách, canh theo cột thứ hai */}
       <span
-        className="absolute top-0 bottom-10 left-[16.3%] hidden w-2 -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
+        className="absolute top-0 bottom-10 left-[22.5%] hidden w-2 -translate-x-1/2 rounded-full bg-[#C9C9C9] md:block"
         aria-hidden="true"
       >
         <span className="absolute -top-2 left-1/2 size-4 -translate-x-1/2 rounded-full bg-[#C9C9C9]" />
@@ -60,11 +60,11 @@ export function ConstructionProcessList() {
             >
               {/* 1. Số thứ tự: zoom nhẹ kết hợp fade */}
               <Reveal
-                className="mx-auto md:mx-0"
+                className="mx-auto md:mx-0 md:translate-x-22 md:translate-y-4"
                 delay={base}
                 from="zoom"
               >
-                <div className="relative grid aspect-square w-20 place-items-center sm:w-27.5 md:w-full">
+                <div className="relative grid aspect-square w-20 place-items-center sm:w-27.5 md:w-[76%]">
                   <Image
                     className="absolute inset-0 size-full object-contain"
                     src="/images/thi-cong-xay-dung/circle-ring.png"
@@ -73,34 +73,34 @@ export function ConstructionProcessList() {
                     height={300}
                     aria-hidden="true"
                   />
-                  <span className="relative text-5xl leading-none font-normal text-charcoal sm:text-7xl md:text-6xl">
+                  <span className="relative text-5xl leading-none font-normal text-charcoal sm:text-7xl md:text-5xl">
                     {step.number}
                   </span>
                 </div>
               </Reveal>
 
               {/* 2. Chấm tròn cam trên thanh timeline */}
-              <div className="hidden justify-center md:flex ml-4">
+              <div className="hidden justify-center md:flex ml-22 mt-9">
                 <Reveal delay={base} from="zoom">
-                  <span className="grid size-9 place-items-center rounded-full border-1 border-brand bg-[#F2F2F3]">
-                    <span className="block size-5.5 rounded-full bg-brand" />
+                  <span className="grid size-7 place-items-center rounded-full border-1 border-brand bg-[#F2F2F3]">
+                    <span className="block size-4.5 rounded-full bg-brand" />
                   </span>
                 </Reveal>
               </div>
 
               {/* 3. Tiêu đề: trượt từ trái sang phải, đổi màu cam khi rê chuột */}
               <Reveal
-                className="text-center md:pl-5 md:text-left"
+                className="text-center md:pl-16 md:text-left"
                 delay={base + 120}
                 from="left"
               >
-                <h3 className="font-heading text-lg leading-snug font-bold text-charcoal transition-colors duration-300 group-hover/step:text-brand group-active/step:text-brand md:text-lg">
+                <h3 className="font-heading text-lg leading-snug font-extrabold text-charcoal transition-colors duration-300 group-hover/step:text-brand group-active/step:text-brand md:text-lg">
                   {step.title}
                   <br className="hidden md:block" />{" "}
                   {step.subtitle}
                 </h3>
                 <span
-                  className="mt-2 hidden w-[85%] border-b-2 border-dotted border-charcoal/70 md:block"
+                  className="mt-3 hidden w-[78%] border-b-2 border-dotted border-charcoal/70 md:-ml-4 md:block"
                   aria-hidden="true"
                 />
               </Reveal>
@@ -124,7 +124,7 @@ export function ConstructionProcessList() {
 
               {/* 5. Khối nội dung cam: trượt từ trái sang phải, đổ bóng khi hover */}
               <Reveal delay={base + 360} from="left">
-                <div className="relative isolate transition-[filter] duration-300 group-hover/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)] group-active/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)]">
+                <div className="relative isolate transition-[filter] duration-300 group-hover/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)] group-active/step:drop-shadow-[0_14px_26px_rgb(238_123_48/.45)] md:w-[78%]">
                   <ProcessBlockShape />
                   <p className="px-6 py-5 text-sm leading-relaxed text-justify text-white md:px-6 md:py-5">
                     {step.description}

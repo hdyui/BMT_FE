@@ -44,7 +44,7 @@ export function ServicesOverviewPage() {
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
           <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
-              <p className="mb-4 inline-block border-b-2 border-charcoal pb-1 text-base max-md:pb-0 sm:text-lg">
+              <p className="mb-4 inline-block text-base max-md:border-b-2 max-md:border-charcoal max-md:pb-0 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
                 GIẢI PHÁP
               </p>
               <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
@@ -59,14 +59,15 @@ export function ServicesOverviewPage() {
             </Reveal>
 
             <BuildingRule
-              className="mt-2 w-full max-w-85 max-md:w-[45%]"
+              className="mt-2 w-full max-w-72 max-md:w-[45%]"
               src="/images/services/rule-dark.png"
               delay={200}
             />
 
             <Reveal delay={320} from="left">
-              <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] sm:text-base">
-                ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG MẠI
+              <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] sm:text-base lg:whitespace-nowrap">
+                ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG{" "}
+                MẠI
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty sm:text-base">
                 <p className="leading-normal lg:w-full lg:text-justify">
@@ -213,7 +214,8 @@ export function ServicesOverviewPage() {
       <div className="bg-neutral-100">
         <ContactForm showTopNotch />
       </div>
-      <SiteFooter />
+      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
+      <SiteFooter hideTopBorderOnMobile />
     </div>
   );
 }

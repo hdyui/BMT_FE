@@ -54,7 +54,7 @@ export function PillCtaButton({
         style={{ aspectRatio: `${imageWidth} / ${imageHeight}` }}
       >
         <Image
-          className="h-full w-full transition-[filter] duration-300 group-hover/pill:brightness-[.88] group-hover/pill:drop-shadow-[0_10px_18px_rgb(244_122_42/.28)]"
+          className="h-full w-full drop-shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-[filter] duration-300 group-hover/pill:brightness-110 group-hover/pill:saturate-105 group-hover/pill:drop-shadow-[0_6px_14px_rgba(244,122,42,0.35)]"
           src={image}
           alt=""
           width={imageWidth}
@@ -82,7 +82,7 @@ export function PillCtaButton({
         style={{ aspectRatio: `${mobileImageWidth} / ${mobileImageHeight}` }}
       >
         <Image
-          className="h-full w-full transition-[filter] duration-300 group-hover/pill:brightness-[.88] group-hover/pill:drop-shadow-[0_10px_18px_rgb(244_122_42/.28)]"
+          className="h-full w-full drop-shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-[filter] duration-300 group-hover/pill:brightness-110 group-hover/pill:saturate-105 group-hover/pill:drop-shadow-[0_6px_14px_rgba(244,122,42,0.35)]"
           src={mobileImage}
           alt=""
           width={mobileImageWidth}
@@ -102,7 +102,7 @@ export function PillCtaButton({
         style={{ aspectRatio: `${imageWidth} / ${imageHeight}` }}
       >
         <Image
-          className="h-full w-full transition-[filter] duration-300 group-hover/pill:brightness-[.88] group-hover/pill:drop-shadow-[0_10px_18px_rgb(244_122_42/.28)]"
+          className="h-full w-full drop-shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-[filter] duration-300 group-hover/pill:brightness-110 group-hover/pill:saturate-105 group-hover/pill:drop-shadow-[0_6px_14px_rgba(244,122,42,0.35)]"
           src={image}
           alt=""
           width={imageWidth}
@@ -110,7 +110,7 @@ export function PillCtaButton({
           aria-hidden="true"
         />
         <span
-          className={`absolute inset-0 flex items-center justify-center pr-[18%] pl-[8%] text-sm font-semibold whitespace-nowrap text-white uppercase ${textClassName ?? ""}`}
+          className={`absolute inset-0 flex items-center justify-center pr-[22%] pl-[8%] text-sm font-semibold whitespace-nowrap text-white uppercase ${textClassName ?? ""}`}
         >
           {label}
         </span>
