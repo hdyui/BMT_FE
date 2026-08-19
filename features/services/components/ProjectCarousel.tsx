@@ -36,18 +36,20 @@ const getCardDepthClass = (distance: number, isMobileMockup: boolean) => {
     return "[--card-scale-x:1] [--card-scale-y:1]";
   }
 
+  /* Mobile bám mockup: thẻ phụ chỉ thu nhỏ đều 0.82 như bản cũ, không bóp riêng
+     trục ngang — nhờ vậy chúng nằm trọn ngoài khung nhìn thay vì ló mép vào. */
   if (distance === 1) {
     return cn(
       "[--card-scale-x:0.78] [--card-scale-y:0.94]",
       isMobileMockup &&
-        "max-md:[--card-scale-x:0.84] max-md:[--card-scale-y:0.92]",
+        "max-md:[--card-scale-x:0.82] max-md:[--card-scale-y:0.82]",
     );
   }
 
   return cn(
     "[--card-scale-x:0.64] [--card-scale-y:0.82]",
     isMobileMockup &&
-      "max-md:[--card-scale-x:0.7] max-md:[--card-scale-y:0.8]",
+      "max-md:[--card-scale-x:0.82] max-md:[--card-scale-y:0.82]",
   );
 };
 
@@ -259,12 +261,12 @@ export function ProjectCarousel({
               relativePosition < 0 ? 17 : relativePosition > 0 ? -17 : 0;
             const translateZ =
               distance === 0 ? 0 : distance === 1 ? -50 : -110;
-            const transformOrigin =
+            const transformOriginClass =
               relativePosition < 0
-                ? "right center"
+                ? "[transform-origin:right_center]"
                 : relativePosition > 0
-                  ? "left center"
-                  : "center center";
+                  ? "[transform-origin:left_center]"
+                  : "[transform-origin:center_center]";
 
             return (
               <div
@@ -272,14 +274,19 @@ export function ProjectCarousel({
                   cardRefs.current[index] = element;
                 }}
                 className={cn(
-                  "relative -mr-8 aspect-[1.257] w-[74vw] shrink-0 origin-bottom overflow-hidden rounded-[1.25rem] sm:-mr-[6vw] sm:w-[48vw] sm:rounded-[1.5rem] lg:w-[38vw] lg:max-w-[34rem] lg:rounded-[2rem]",
-                  "[backface-visibility:hidden] [transform-style:preserve-3d]",
+                  "relative -mr-8 aspect-[1.257] w-[74vw] shrink-0 overflow-hidden rounded-[1.25rem] sm:-mr-[6vw] sm:w-[48vw] sm:rounded-[1.5rem] lg:w-[38vw] lg:max-w-[34rem] lg:rounded-[2rem]",
+                  "[--card-3d:1] [backface-visibility:hidden] [transform-style:preserve-3d]",
+                  transformOriginClass,
                   animate &&
                     "transition-[transform,opacity,filter] duration-[650ms] ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none",
                   getCardDepthClass(distance, mobileMockup),
+                  /* Mockup mobile chỉ có đúng một thẻ: rộng 86vw, chừa khoảng
+                     dương với thẻ kế, không nghiêng và không lùi chiều sâu — nhờ
+                     vậy hai thẻ bên cạnh nằm hẳn ngoài mép màn hình thay vì ló
+                     vào một dải. Desktop giữ nguyên lớp 3D. */
                   mobileMockup &&
-                    "max-md:-mr-[14vw] max-md:w-[82vw] max-md:rounded-[1.75rem]",
-                  mobileInitialIndex !== undefined && "max-md:!w-[82vw]",
+                    "max-md:mr-4 max-md:w-[86vw] max-md:rounded-[1.75rem] max-md:[--card-3d:0] max-md:[transform-origin:center_center]",
+                  mobileInitialIndex !== undefined && "max-md:!w-[86vw]",
                   distance === 0 && "opacity-100 saturate-100",
                   distance === 1 &&
                     "cursor-pointer opacity-94 saturate-[0.94] hover:opacity-100 active:opacity-100",
@@ -287,12 +294,19 @@ export function ProjectCarousel({
                     "pointer-events-none opacity-0 saturate-[0.88]",
                 )}
                 key={`${project.id}-${index}`}
-                style={{
-                  transform: `perspective(1600px) translateZ(${translateZ}px) rotateY(${rotateY}deg) scale3d(var(--card-scale-x), var(--card-scale-y), 1)`,
-                  transformOrigin,
-                  transformStyle: "preserve-3d",
-                  zIndex: Math.max(1, slides.length - distance),
-                }}
+                /* Độ sâu và độ nghiêng nhân với hệ số `--card-3d`, đặt bằng
+                   class nên nấc max-md hạ được về 0 — inline style thì media
+                   query không với tới. */
+                style={
+                  {
+                    transform:
+                      "perspective(1600px) translateZ(calc(var(--card-depth) * var(--card-3d))) rotateY(calc(var(--card-tilt) * var(--card-3d))) scale3d(var(--card-scale-x), var(--card-scale-y), 1)",
+                    transformStyle: "preserve-3d",
+                    zIndex: Math.max(1, slides.length - distance),
+                    "--card-depth": `${translateZ}px`,
+                    "--card-tilt": `${rotateY}deg`,
+                  } as React.CSSProperties
+                }
                 onClick={() => {
                   if (!isActive) {
                     move(index - active);
@@ -305,7 +319,7 @@ export function ProjectCarousel({
                     src={project.image}
                     alt=""
                     fill
-                    sizes="(max-width: 767px) 82vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
+                    sizes="(max-width: 767px) 86vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
                     draggable={false}
                     aria-hidden="true"
                   />
@@ -319,7 +333,7 @@ export function ProjectCarousel({
                     src={project.image}
                     alt={project.title}
                     fill
-                    sizes="(max-width: 767px) 82vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
+                    sizes="(max-width: 767px) 86vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
                     draggable={false}
                   />
 

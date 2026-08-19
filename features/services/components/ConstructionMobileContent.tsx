@@ -95,9 +95,11 @@ export function ConstructionMobileHero() {
         ))}
       </div>
 
-      {/* `top-32` (128px) khớp khoảng cách header->tiêu đề chuẩn lấy từ
-          RenovationMobileHero (~85px header + ~41px khoảng trắng riêng). */}
-      <div className="absolute top-32 right-[3.5%] left-[7.3%] flex items-start gap-[3vw]">
+      {/* Section này bắt đầu ngay đỉnh trang (header 60px là `fixed`), nên mốc
+          `85px + 5vw` cho ra khoảng cách header -> tiêu đề bằng đúng trang xây
+          dựng trọn gói. Thay cho `top-32` (128px) cũ, tức bớt ~23px khoảng
+          trắng; con số này cũng khớp mockup (58/512 = 11,3vw dưới header). */}
+      <div className="absolute top-[calc(85px+5vw)] right-[3.5%] left-[7.3%] flex items-start gap-[3vw]">
         <Reveal className="h-[20vw] shrink-0" from="fade">
           <span
             className="block h-full w-[0.55vw] rounded-full bg-brand"
@@ -106,7 +108,12 @@ export function ConstructionMobileHero() {
         </Reveal>
         <div className="min-w-0 pt-[0.4vw]">
           <Reveal>
-            <h1 className="font-heading text-[4vw] leading-[1.12] font-extrabold whitespace-nowrap text-brand uppercase">
+            {/* Tiêu đề này là MỘT dòng `whitespace-nowrap` (theo mockup), chỗ
+                trống chỉ có 85,65vw (7,3% -> 96,5%, trừ vạch 0,55vw và gap 3vw)
+                nên không nhét được 5,9vw như các trang kia — 5,9vw cần 90vw,
+                tràn khỏi màn hình. 5,55vw là cỡ lớn nhất còn đủ một dòng và
+                cũng chính là cỡ trong mockup (436/512 ink = 5,68vw). */}
+            <h1 className="font-heading text-[clamp(1.1rem,5.55vw,1.65rem)] leading-[1.12] font-extrabold whitespace-nowrap text-brand uppercase">
               Dịch vụ thi công xây dựng
             </h1>
           </Reveal>
@@ -116,12 +123,12 @@ export function ConstructionMobileHero() {
             delay={160}
           />
           <Reveal
-            className="mt-2 flex items-center gap-2 whitespace-nowrap"
+            className="mt-2 flex items-center gap-[0.2em] whitespace-nowrap text-[clamp(0.55rem,2.85vw,0.7rem)]"
             delay={300}
             from="left"
           >
             <Image
-              className="size-3 shrink-0 object-contain"
+              className="relative -top-[0.12em] size-[1.1em] shrink-0 object-contain"
               src="/images/thi-cong-xay-dung/icon-house.png"
               alt=""
               width={90}

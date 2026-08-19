@@ -32,16 +32,16 @@ export function FaqAccordion() {
             className="border-b border-neutral-300"
             value={`faq-${index + 1}`}
           >
-            <AccordionTrigger className="w-full rounded-none py-2.5 text-left text-[0.9375rem] font-normal text-pretty hover:text-brand active:text-brand hover:no-underline aria-expanded:text-brand **:data-[slot=accordion-trigger-icon]:hidden">
+            <AccordionTrigger className="w-full rounded-none py-2.5 text-left text-[0.9375rem] font-normal text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] hover:text-brand active:text-brand hover:no-underline aria-expanded:text-brand **:data-[slot=accordion-trigger-icon]:hidden">
               <span className="flex items-start gap-3 font-bold ">
                 <span
-                  className="mt-1.5 size-2.5 shrink-0 rounded-full border border-charcoal transition-colors duration-300 group-aria-expanded/accordion-trigger:border-charcoal group-aria-expanded/accordion-trigger:bg-charcoal"
+                  className="mt-1.5 size-2.5 max-md:mt-[0.4em] max-md:size-[0.67em] shrink-0 rounded-full border border-charcoal transition-colors duration-300 group-aria-expanded/accordion-trigger:border-charcoal group-aria-expanded/accordion-trigger:bg-charcoal"
                   aria-hidden="true"
                 />
                 {faq.question}
               </span>
             </AccordionTrigger>
-            <AccordionContent className="pl-6.5 text-sm leading-relaxed text-pretty">
+            <AccordionContent className="pl-6.5 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))]">
               {/* 378px (khoảng hợp lệ 370-384) để câu trả lời ngắt đúng 3 hàng,
                   xuống dòng ngay sau "nhà ở,"; text-wrap ghi đè text-pretty
                   thừa hưởng từ khối cha để trình duyệt không tự cân lại dòng. */}

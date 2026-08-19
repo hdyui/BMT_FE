@@ -36,9 +36,16 @@ export function FullConstructionServicePage() {
         <MobileHeroArtwork variant="full-construction" />
 
         <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
-          <div className="absolute top-[5.4%] left-[10.5%] w-[86%]">
+          {/* `top` hạ 5,4% -> 3,6%: cộng phần chữ hoa nằm thấp hơn mép hộp
+              ~5px, mốc này đưa đỉnh chữ về 4,6% chiều cao banner, đúng bằng
+              mockup, bớt được ~10px khoảng trắng dưới header. */}
+          <div className="absolute top-[3.6%] left-[10.5%] w-[86%]">
             <Reveal>
-              <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] font-extrabold leading-[1.12] text-brand">
+              {/* Chặn dưới 1,35rem cũ không co theo bề ngang: ở 320px dòng 1
+                  rộng 112% khung nên rớt dòng, còn ở 390-430px chỉ lấp 85-92%
+                  nên thừa chỗ bên phải. Thang thuần vw giữ đều ~95-97% khung ở
+                  mọi bề ngang — chữ to hơn và ăn sang phải hơn mà vẫn 2 dòng. */}
+              <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
                 DỊCH VỤ THIẾT KẾ THI CÔNG
                 <br />&amp; XÂY DỰNG TRỌN GÓI
               </h1>
@@ -49,9 +56,9 @@ export function FullConstructionServicePage() {
               delay={160}
             />
             <Reveal delay={300} from="left">
-              <p className="mt-2 flex items-center gap-2 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed">
+              <p className="mt-2 flex items-center gap-[0.2em] text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed">
                 <Image
-                  className="size-3 shrink-0 object-contain"
+                  className="relative -top-[0.12em] size-[1.1em] shrink-0 object-contain"
                   src="/images/services/icon-house.png"
                   alt=""
                   width={90}
@@ -168,7 +175,7 @@ export function FullConstructionServicePage() {
 
       {/* SECTION 2 */}
       <section
-        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate max-md:!pt-12 max-md:!pb-3 md:!py-12 lg:!py-16`}
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate max-md:!pt-8 max-md:!pb-3 md:!py-12 lg:!py-16`}
       >
         <Image
           className="-z-10 object-cover"
@@ -182,12 +189,26 @@ export function FullConstructionServicePage() {
           className={`${SERVICE_PROJECT_HEADING_CLASS_NAME} !mb-8 lg:!mb-10 text-center px-4`}
         >
           <Reveal>
-            <h2 className="whitespace-nowrap font-heading text-[clamp(0.72rem,3.4vw,1.55rem)] font-extrabold leading-[1.08] sm:text-3xl lg:text-[2rem] text-center">
-              TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI
+            {/* Mockup text-chuan.png: tiêu đề 2 dòng, ngắt sau "THIẾT KẾ".
+                Bản cũ ép 1 dòng bằng whitespace-nowrap nên cỡ chữ phải tụt
+                xuống 3,4vw; tách 2 dòng mới lên cỡ này được.
+
+                Cỡ chữ dùng đúng token của tiêu đề carousel trang thiết kế kiến
+                trúc nội thất. Mockup đo được 4,42vw nên bản này nhỉnh hơn ~8%.
+                Vẫn giữ nowrap để chốt đúng 2 dòng — thẻ <br> ngắt được kể cả
+                khi nowrap. */}
+            <h2 className="whitespace-nowrap font-heading text-[clamp(0.72rem,3.4vw,1.55rem)] font-extrabold leading-[1.08] max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] sm:text-3xl lg:text-[2rem] text-center">
+              TỐI ƯU MÔ HÌNH THIẾT KẾ{" "}
+              <br className="md:hidden" />
+              THI CÔNG TRỌN GÓI
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-center">
+            {/* Mockup: đoạn này 5 dòng, giãn dòng chặt. 2,7vw cho ra đúng 5
+                dòng ở mọi bề ngang (text-sm 14px cũ ra 7 dòng) và trùng cỡ suy
+                từ bề rộng chữ trong mockup (2,69-2,70vw). Giãn dòng đo được
+                ~1,1-1,15; lấy 1,2 để dấu tiếng Việt không chạm nhau. */}
+            <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-center max-md:text-[clamp(0.5rem,2.7vw,0.875rem)] max-md:leading-[1.2]">
               Dịch vụ <span className="font-normal md:font-bold">thiết kế thi công</span> và{" "}
               <span className="font-normal md:font-bold">xây dựng trọn gói</span> giúp chủ đầu
               tư triển khai công trình một cách đồng bộ, từ ý tưởng,
@@ -279,7 +300,7 @@ export function FullConstructionServicePage() {
       <section className="-mb-[2.342945vw] bg-[#f2f2f3] pt-12 pb-[calc(3rem+2.342945vw)] lg:-mb-[2.57vw] lg:pt-14 lg:pb-[calc(3.5rem+2.57vw)]">
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
-            <h2 className="font-heading text-[clamp(0.95rem,4.2vw,1.35rem)] font-extrabold leading-[1.12] sm:text-[1.75rem]">
+            <h2 className="font-heading text-[clamp(0.95rem,4.75vw,1.55rem)] font-extrabold leading-[1.12] sm:text-[1.75rem]">
               <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
               <span className="block whitespace-nowrap">XÂY NHÀ TRỌN GÓI</span>
             </h2>
