@@ -42,7 +42,8 @@ export function ProcessAccordion() {
               <h3 className="font-heading mt-1 text-lg font-bold text-pretty">
                 {step.title}
               </h3>
-              <p className="mt-2 text-sm leading-relaxed text-pretty">
+              {/* Cỡ chữ thân bài đồng bộ với đoạn mô tả ở khối QUY TRÌNH LÀM VIỆC. */}
+              <p className="mt-2 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))]">
                 {step.copy}
               </p>
               <span

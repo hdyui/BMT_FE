@@ -32,8 +32,12 @@ const MOBILE_ROWS = [
 ] as const;
 
 function MobileProcessTimeline() {
+  /* `scale` không đổi ô layout: khối vẫn chiếm đủ chiều cao chưa thu nhỏ
+     nhưng chỉ vẽ 95% từ mép trên, chừa ra 5% chiều cao khoảng chết ở đáy
+     (~24px ở màn 390px). Margin âm bù đúng lượng đó: chiều cao = bề rộng x
+     4648/3593, nên 5% chiều cao = 6,47% bề rộng. */
   return (
-    <div className="relative mx-auto aspect-[3593/4648] w-[calc(100%-1.25rem)] origin-top scale-[0.95] overflow-hidden md:hidden">
+    <div className="relative mx-auto mb-[calc((100vw-1.25rem)*-0.0647)] aspect-[3593/4648] w-[calc(100%-1.25rem)] origin-top scale-[0.95] overflow-hidden md:hidden">
       <Image
         className="absolute inset-0 size-full object-fill"
         src="/images/thiet-ke-kien-truc-noi-that/mobile/process-framework.png"

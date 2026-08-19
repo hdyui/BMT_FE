@@ -134,7 +134,10 @@ export function QuotationContactForm({
             <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
               Nhận báo giá chi tiết
             </h2>
-            <p className="whitespace-nowrap text-sm leading-relaxed text-white/90 lg:text-base max-lg:text-[11px] max-lg:leading-[1.4]">
+            {/* Dưới lg câu này dài hơn bề ngang khung nên `whitespace-nowrap`
+                làm phần đuôi tràn ra và bị `overflow-hidden` của section cắt
+                mất — cho xuống hàng ở mobile/tablet, desktop vẫn một dòng. */}
+            <p className="whitespace-nowrap text-sm leading-relaxed text-white/90 lg:text-base max-lg:whitespace-normal max-lg:text-[11px] max-lg:leading-[1.4]">
               Để lại thông tin, chúng tôi sẽ gửi báo giá chi tiết theo từng hạng mục miễn phí, không ràng buộc.
             </p>
           </div>
