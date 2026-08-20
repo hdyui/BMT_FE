@@ -3,46 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
+import { aboutCoreValues as coreValues } from "@/features/about/data/about-content";
 import styles from "./VisionMissionValues.module.css";
 
 const imageRoot = "/images/about/source";
-
-const coreValues: {
-  title: string;
-  description: string;
-  image: string;
-}[] = [
-  {
-    title: "Chất lượng là cam kết",
-    description:
-      "Chúng tôi đặt chất lượng thiết kế, vật liệu và thi công làm tiêu chuẩn trong mọi công trình. Mỗi hạng mục đều được kiểm soát chặt chẽ để đảm bảo tính thẩm mỹ, độ bền và giá trị sử dụng lâu dài.",
-    image: `${imageRoot}/core-value-quality.png`,
-  },
-  {
-    title: "Khách hàng là trọng tâm",
-    description:
-      "Lắng nghe nhu cầu, thấu hiểu mong muốn và đưa ra giải pháp phù hợp là cách BMT Decor tạo nên những không gian đáp ứng cả công năng lẫn thẩm mỹ của từng khách hàng.",
-    image: `${imageRoot}/core-value-customer.png`,
-  },
-  {
-    title: "Sáng tạo là giá trị",
-    description:
-      "Không ngừng cập nhật xu hướng thiết kế và đổi mới tư duy, chúng tôi mang đến những giải pháp phù hợp với từng không gian, tạo nên dấu ấn riêng cho mỗi công trình.",
-    image: `${imageRoot}/core-value-creativity.png`,
-  },
-  {
-    title: "Chuyên nghiệp là nền tảng",
-    description:
-      "Quy trình làm việc rõ ràng, minh bạch và kiểm soát chặt chẽ từ thiết kế đến thi công giúp đảm bảo tiến độ, chất lượng và sự đồng bộ trong từng dự án.",
-    image: `${imageRoot}/core-value-professionalism.png`,
-  },
-  {
-    title: "Tận tâm là trách nhiệm",
-    description:
-      "Chúng tôi đồng hành cùng khách hàng trong suốt quá trình thực hiện, luôn sẵn sàng tư vấn, hỗ trợ và xử lý nhanh chóng mọi vấn đề để mang đến trải nghiệm tốt nhất.",
-    image: `${imageRoot}/core-value-dedication.png`,
-  },
-];
 
 function AnimatedHeading({
   children,

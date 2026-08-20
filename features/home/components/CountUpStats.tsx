@@ -1,12 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-
-const stats = [
-  { value: 15, label: "Năm kinh nghiệm" },
-  { value: 500, label: "Dự án đã triển khai" },
-  { value: 60, label: "Nhân sự" },
-] as const;
+import { homeStats as stats } from "@/features/home/data/home-content";
 
 function CountUpNumber({
   value,

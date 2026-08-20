@@ -7,6 +7,10 @@ import { BmtCta } from "@/lib/components/shared/BmtCta";
 import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
+import {
+  homeProjectCategories as categories,
+  type HomeProject as Project,
+} from "@/features/home/data/home-content";
 
 const cardContainerVariants: Variants = {
   hidden: {},
@@ -27,105 +31,6 @@ const cardItemVariants: Variants = {
     transition: { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
   },
 };
-
-type Project = {
-  id: string;
-  image: string;
-  title: string;
-  area: string;
-  style: string;
-  year: number;
-};
-
-const projectImages = [
-  "/images/home/project-wide-01.png",
-  "/images/home/project-wide-02.png",
-  "/images/home/project-wide-03.png",
-  "/images/home/project-wide-04.png",
-  "/images/home/project-wide-01.png",
-  "/images/home/project-wide-02.png",
-  "/images/home/project-wide-03.png",
-  "/images/home/project-wide-04.png",
-] as const;
-
-const categoryBlueprints = [
-  {
-    label: "NHÀ Ở",
-    icon: "/images/home/category-house.png",
-    desktopIconClassName: "lg:h-auto lg:w-[44px]",
-    slug: "nha-o",
-    titles: [
-      "Nhà phố hiện đại tại Phú Nhuận",
-      "Biệt thự sân vườn tại Thủ Đức",
-      "Căn hộ tối giản tại The Metropole",
-      "Nhà phố kết hợp kinh doanh tại Quận 7",
-      "Biệt thự nghỉ dưỡng tại Bảo Lộc",
-      "Căn hộ phong cách Japandi tại Bình Thạnh",
-      "Nhà phố lệch tầng tại Gò Vấp",
-      "Penthouse hiện đại tại Quận 2",
-    ],
-  },
-  {
-    label: "VĂN PHÒNG",
-    icon: "/images/home/category-office.png",
-    desktopIconClassName: "lg:h-auto lg:w-[39px]",
-    slug: "van-phong",
-    titles: [
-      "Văn phòng công nghệ tại Quận 3",
-      "Trụ sở doanh nghiệp tại Bình Thạnh",
-      "Văn phòng sáng tạo tại Quận 1",
-      "Không gian làm việc mở tại Thủ Đức",
-      "Văn phòng điều hành tại Tân Bình",
-      "Trung tâm đào tạo tại Quận 10",
-      "Văn phòng tài chính tại Quận 7",
-      "Co-working space tại Phú Nhuận",
-    ],
-  },
-  {
-    label: "THẨM MỸ VIỆN, SHOWROOM",
-    icon: "/images/home/category-showroom.png",
-    desktopIconClassName: "lg:h-auto lg:w-[48px]",
-    slug: "showroom",
-    titles: [
-      "Showroom nội thất tại Quận 2",
-      "Thẩm mỹ viện cao cấp tại Quận 1",
-      "Cửa hàng thời trang tại Quận 3",
-      "Spa chăm sóc da tại Phú Nhuận",
-      "Showroom ô tô tại Thủ Đức",
-      "Beauty clinic tại Bình Thạnh",
-      "Cửa hàng flagship tại Quận 7",
-      "Studio trưng bày tại Tân Bình",
-    ],
-  },
-  {
-    label: "NHÀ HÀNG, KHÁCH SẠN",
-    icon: "/images/home/category-hotel.png",
-    desktopIconClassName: "lg:h-auto lg:w-[43px]",
-    slug: "hospitality",
-    titles: [
-      "Nhà hàng đương đại tại Quận 1",
-      "Boutique hotel tại Đà Lạt",
-      "Nhà hàng sân vườn tại Thủ Đức",
-      "Khách sạn nghỉ dưỡng tại Vũng Tàu",
-      "Quán café concept tại Quận 3",
-      "Nhà hàng Nhật tại Bình Thạnh",
-      "Resort ven biển tại Phan Thiết",
-      "Khách sạn business tại Tân Bình",
-    ],
-  },
-] as const;
-
-const categories = categoryBlueprints.map((category) => ({
-  ...category,
-  projects: category.titles.map<Project>((title, index) => ({
-    id: `${category.slug}-${index + 1}`,
-    image: projectImages[index],
-    title,
-    area: `${120 + index * 15}m²`,
-    style: index % 2 === 0 ? "Hiện đại" : "Tối giản",
-    year: 2024 + (index % 3),
-  })),
-}));
 
 const PROJECTS_PER_PAGE = 4;
 const FADE_DURATION = 220;
@@ -339,7 +244,7 @@ export function ProjectShowcase() {
                     decoding="sync"
                     loading="eager"
                     sizes="(max-width: 639px) 46vw, 50vw"
-                    unoptimized={mobileProject.image === projectImages[3]}
+                    unoptimized={mobileProject.image === "/images/home/project-wide-04.png"}
                   />
                 </div>
                 <div className="flex flex-col justify-center bg-brand p-4 text-white sm:p-7">
@@ -420,7 +325,7 @@ export function ProjectShowcase() {
                       decoding="sync"
                       loading="eager"
                       sizes="600px"
-                      unoptimized={project.image === projectImages[3]}
+                      unoptimized={project.image === "/images/home/project-wide-04.png"}
                     />
                   </div>
 
