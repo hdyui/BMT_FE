@@ -1,14 +1,16 @@
 "use client";
 
 import Image from "next/image";
-import {
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import styles from "@/features/quotation/quotation.module.css";
+import { ContactForm } from "@/lib/components/shared/ContactForm";
+import {
+  quotationBuildingTypes as buildingTypes,
+  quotationRates,
+  quotationServiceTypes as serviceTypes,
+  quotationStepCopy as stepCopy,
+  quotationSteps as steps,
+} from "@/features/quotation/data/quotation-estimator";
 
 /**
  * Khung ước tính báo giá + dải liên hệ.
@@ -17,39 +19,6 @@ import styles from "@/features/quotation/quotation.module.css";
  * chuyển sang Tailwind. Mốc `md:` (>=768px) tương ứng đúng media query cũ, nên
  * bản desktop giữ nguyên; phần dưới 768px là các giá trị nhỏ hơn của bản cũ.
  */
-
-const steps = [
-  "Loại hình",
-  "Diện tích",
-  "Ngân sách",
-  "Gói",
-  "Ước tính",
-] as const;
-const buildingTypes = [
-  "Nhà ở",
-  "Văn phòng",
-  "Thẩm mỹ viện, showroom",
-  "Nhà hàng, khách sạn",
-];
-const serviceTypes = [
-  "Xây dựng trọn gói",
-  "Thiết kế kiến trúc & nội thất",
-  "Thi công xây dựng",
-  "Cải tạo & sửa chữa",
-];
-
-const stepCopy = [
-  [
-    "BẠN CẦN THIẾT KẾ GÌ?",
-    "Chọn loại không gian phù hợp với căn nhà của anh/chị",
-  ],
-  ["DIỆN TÍCH BAO NHIÊU?", "Điền diện tích sàn ước tính"],
-  [
-    "NGÂN SÁCH CỦA ANH CHỊ?",
-    "Một khoảng ngân sách thực tế giúp chúng tôi gợi ý gói phù hợp",
-  ],
-  ["CHỌN MỨC DỊCH VỤ", "Có thể đổi bất cứ lúc nào, chỉ ảnh hưởng đến ước tính"],
-] as const;
 
 /** Ô chọn / ô nhập dùng chung một chiều cao: 58px ở mobile, 68px từ md. */
 const PILL_HEIGHT = "h-12 md:h-[4.25rem]";
@@ -121,13 +90,7 @@ export function QuotationEstimator() {
 
   const estimate = useMemo(() => {
     const squareMeters = digitsOnly(area) ? Number(area) : 80;
-    const rates: Record<string, [number, number]> = {
-      "Xây dựng trọn gói": [315000, 402500],
-      "Thiết kế kiến trúc & nội thất": [220000, 285000],
-      "Thi công xây dựng": [4800000, 6200000],
-      "Cải tạo & sửa chữa": [2100000, 3800000],
-    };
-    const [lowRate, highRate] = rates[service];
+    const [lowRate, highRate] = quotationRates[service];
     return {
       low: squareMeters * lowRate,
       high: squareMeters * highRate,
@@ -418,7 +381,9 @@ function StepButton({
       onClick={onClick}
     >
       {icon === "left" && arrow}
-      <span className="relative z-[2] text-sm md:text-[0.9375rem]">{label}</span>
+      <span className="relative z-[2] text-sm md:text-[0.9375rem]">
+        {label}
+      </span>
       {icon === "right" && arrow}
       <Image
         className={`z-[1] object-fill opacity-0 transition-opacity duration-[250ms] ${styles.buttonHoverFill}`}

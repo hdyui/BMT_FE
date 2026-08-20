@@ -1,7 +1,6 @@
 import type { ProjectDetail } from "../data/project-details";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
-import { ProjectRichText } from "./ProjectRichText";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import styles from "./ProjectDetail.module.css";
 
@@ -41,21 +40,6 @@ export function BeforeAfterGallery({ project }: { project: ProjectDetail }) {
           ))}
         </div>
 
-        <div className="mt-[clamp(54px,6vw,90px)]">
-          <Reveal delay={80} distance="long" duration={950}>
-            <h2 className="text-[clamp(28px,3vw,46px)] leading-[1.05] font-bold tracking-[-0.04em] text-brand uppercase text-balance">
-              Bạn yêu thích không gian này?
-            </h2>
-          </Reveal>
-          <Reveal delay={160} distance="long" duration={950} from="left">
-            <p className="mt-3 max-w-[1180px] text-[clamp(15px,1.2vw,19px)] leading-[1.5]">
-              <ProjectRichText
-                text={project.ctaDescription}
-                emphasis={["BMT Decor", "thiết kế – thi công"]}
-              />
-            </p>
-          </Reveal>
-        </div>
       </div>
     </section>
   );
