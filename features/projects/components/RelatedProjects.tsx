@@ -11,14 +11,12 @@ import {
 } from "@/lib/components/ui/carousel";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
+import {
+  relatedProjects,
+  relatedProjectsDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
+  type RelatedProjectData as RelatedProject,
+} from "@/features/projects/data/related-projects";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
-
-type RelatedProject = {
-  title: string;
-  image: string;
-};
-
-const TEMP_PROJECT_DETAIL_SLUG = "nha-pho-2-tang-quan-9";
 
 function subscribeToProjectColumns(onStoreChange: () => void) {
   const tabletQuery = window.matchMedia("(min-width: 640px)");
@@ -38,33 +36,6 @@ function getVisibleProjectCount() {
   if (window.matchMedia("(min-width: 640px)").matches) return 2;
   return 1;
 }
-
-const relatedProjects: RelatedProject[] = [
-  {
-    title: "Chung cư La Astoria Q.2",
-    image: "/images/projects/project-03.png",
-  },
-  {
-    title: "Căn hộ The Opera Residence",
-    image: "/images/projects/project-05.png",
-  },
-  {
-    title: "Nhà phố 2 tầng Quận 9",
-    image: "/images/projects/project-06.png",
-  },
-  {
-    title: "Nhà phố Bình Chánh",
-    image: "/images/projects/project-07.png",
-  },
-  {
-    title: "Căn hộ chung cư Q9",
-    image: "/images/projects/project-08.png",
-  },
-  {
-    title: "Căn hộ chung cư Q7",
-    image: "/images/projects/project-09.png",
-  },
-];
 
 function RelatedProjectCard({ project }: { project: RelatedProject }) {
   return (

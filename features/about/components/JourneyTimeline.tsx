@@ -4,53 +4,7 @@ import type { PointerEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-
-const imageRoot = "/images/about/source";
-
-const milestones = [
-  {
-    year: "2011",
-    title: "Thành lập công ty",
-    description:
-      "Chính thức hoạt động trong lĩnh vực thiết kế kiến trúc, thiết kế nội thất và thi công công trình.",
-    image: `${imageRoot}/journey-2011.png`,
-  },
-  {
-    year: "2014",
-    title: "Mở rộng hoạt động",
-    description:
-      "Triển khai dịch vụ thiết kế thi công trọn gói cho nhà ở và công trình thương mại.",
-    image: `${imageRoot}/journey-2014.png`,
-  },
-  {
-    year: "2017",
-    title: "Phát triển đội ngũ",
-    description:
-      "Hoàn thiện quy trình thiết kế, thi công và quản lý dự án theo tiêu chuẩn chuyên nghiệp.",
-    image: `${imageRoot}/journey-2017.png`,
-  },
-  {
-    year: "2020",
-    title: "Đẩy mạnh dự án",
-    description:
-      "Mở rộng triển khai nhiều công trình nhà ở, văn phòng, showroom và không gian kinh doanh.",
-    image: `${imageRoot}/journey-2020.png`,
-  },
-  {
-    year: "2022",
-    title: "Cột mốc 500+ dự án",
-    description:
-      "Hoàn thành hơn 500 dự án nhà ở, văn phòng, showroom và công trình thương mại trên nhiều quy mô.",
-    image: `${imageRoot}/journey-2022.png`,
-  },
-  {
-    year: "2026",
-    title: "Kiến tạo giá trị",
-    description:
-      "Không ngừng nâng cao chất lượng dịch vụ, đồng hành cùng khách hàng từ ý tưởng đến công trình hoàn thiện.",
-    image: `${imageRoot}/journey-2026.png`,
-  },
-] as const;
+import { aboutJourneyMilestones as milestones } from "@/features/about/data/about-content";
 
 export function JourneyTimeline() {
   const sectionRef = useRef<HTMLElement>(null);

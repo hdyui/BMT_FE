@@ -4,46 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { services } from "@/config/site";
 import { Reveal } from "@/lib/components/shared/Reveal";
-
-const serviceDetails = [
-  {
-    image: "/images/home/service-mobile-turnkey.webp",
-    desktopImage: "/images/home/service-turnkey-optimized.webp",
-    copy: "Cung cấp giải pháp xây dựng trọn gói từ tư vấn, thiết kế, thi công đến hoàn thiện, đảm bảo chất lượng, tiến độ và tối ưu chi phí.",
-  },
-  {
-    image: "/images/home/service-mobile-design.webp",
-    desktopImage: "/images/home/service-design-optimized.webp",
-    copy: "Thiết kế không gian hài hòa giữa công năng và thẩm mỹ, mang đến giải pháp phù hợp với nhu cầu sử dụng và phong cách của từng khách hàng.",
-  },
-  {
-    image: "/images/home/service-mobile-construction.webp",
-    desktopImage: "/images/home/service-construction-optimized.webp",
-    copy: "Thi công công trình theo đúng bản vẽ và tiêu chuẩn kỹ thuật, đảm bảo chất lượng, an toàn và tiến độ trong suốt quá trình thực hiện.",
-  },
-  {
-    image: "/images/home/service-mobile-renovation.webp",
-    desktopImage: "/images/home/service-renovation-optimized.webp",
-    copy: "Nâng cấp, cải tạo và sửa chữa công trình hiện hữu, tối ưu công năng, làm mới không gian và gia tăng giá trị sử dụng.",
-  },
-] as const;
-
-const mobileServiceLabels = [
-  ["XÂY DỰNG", "TRỌN GÓI"],
-  ["THIẾT KẾ KIẾN TRÚC &", "NỘI THẤT"],
-  ["THI CÔNG", "XÂY DỰNG"],
-  ["CẢI TẠO &", "SỬA CHỮA"],
-] as const;
+import {
+  homeMobileServiceLabels as mobileServiceLabels,
+  homeServiceDetails as serviceDetails,
+} from "@/features/home/data/home-content";
 
 const SERVICE_CLOSE_DURATION = 320;
 const SERVICE_OPEN_DURATION = 460;
 const SERVICE_IMAGE_OPEN_DURATION = 460;
 const SERVICE_COPY_DELAY = 90;
-type TransitionPhase =
-  | "idle"
-  | "closing"
-  | "swapping"
-  | "opening";
+type TransitionPhase = "idle" | "closing" | "swapping" | "opening";
 
 function AccordionControl({ active }: { active: boolean }) {
   return (
@@ -107,7 +77,8 @@ export function ServiceShowcase() {
     () => () => {
       if (transitionTimer.current) clearTimeout(transitionTimer.current);
       if (firstSwapFrame.current) cancelAnimationFrame(firstSwapFrame.current);
-      if (secondSwapFrame.current) cancelAnimationFrame(secondSwapFrame.current);
+      if (secondSwapFrame.current)
+        cancelAnimationFrame(secondSwapFrame.current);
     },
     [],
   );
@@ -478,7 +449,7 @@ export function ServiceShowcase() {
                 >
                   <div className="overflow-hidden">
                     <p
-                      className={`w-full px-7 pt-5 pb-3 text-[17px] leading-relaxed text-charcoal transition-[opacity,translate] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none xl:px-8 ${
+                      className={`mx-auto w-[86%] pt-5 pb-3 text-justify text-[17px] leading-relaxed text-charcoal transition-[opacity,translate] ease-[cubic-bezier(0.16,1,0.3,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${
                         isExpanded
                           ? "translate-y-0 opacity-100"
                           : "translate-y-2 opacity-0"
