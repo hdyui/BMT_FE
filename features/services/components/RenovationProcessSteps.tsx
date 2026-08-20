@@ -143,12 +143,20 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
                   className="pointer-events-none absolute bottom-0 right-0 top-[71%] w-[17%] bg-[#F2F2F3]"
                   aria-hidden="true"
                 />
-                {/* Line đen nối dài: canh đúng vị trí + độ dày của line thật
-                    trong ảnh (đo được dày 7px trên nền rộng 1016px, tâm ở
-                    x≈84.65%), lùi thêm về bên phải một chút cho khớp mắt
-                    nhìn với viền khung gốc, và dày hơn một chút cho rõ nét. */}
+                {/* Line đen nối dài: lấy ĐÚNG toạ độ của line thật trong
+                    frame.png. Đo trên file gốc rộng 1016px: line chiếm x =
+                    856→864 (lõi đặc 857→863, hai mép là pixel khử răng cưa),
+                    tức mép trái 84,25% - mép phải 85,14% - dày 0,886%.
+
+                    Trước đây để `w-[1.1%]` vì muốn line đậm hơn cho rõ nét,
+                    nhưng `right` bị khoá nên toàn bộ phần dày thêm phình sang
+                    TRÁI: mép trái rơi xuống 84,10%, thừa 0,15% (~0,3px ở thẻ
+                    rộng ~201px) so với line trong ảnh — đủ để thấy lệch ở chỗ
+                    nối tại mốc 71%. Nay khớp cả vị trí lẫn bề dày.
+
+                    Muốn dời sang trái thì TĂNG `right`; mỗi 0,1% ≈ 0,2px. */}
                 <span
-                  className="pointer-events-none absolute bottom-0 right-[14.4%] top-[71%] w-[1.1%] bg-[#231f20]/60"
+                  className="pointer-events-none absolute bottom-0 right-[14.86%] top-[71%] w-[0.89%] bg-[#231f20]/60"
                   aria-hidden="true"
                 />
               </>

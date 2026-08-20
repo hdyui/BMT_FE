@@ -376,7 +376,7 @@ function StepButton({
 
   return (
     <button
-      className={`relative flex h-12 items-center gap-2 overflow-hidden rounded-full border-0 text-[#231f20] transition-[color,transform] duration-[250ms] hover:-translate-y-0.5 focus-visible:-translate-y-0.5 md:h-[3.625rem] md:min-w-[10.3125rem] md:justify-center md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "min-w-[8.5rem] justify-center bg-[#231f20] px-3 text-white" : "min-w-0 justify-start bg-white px-0"} ${styles.stepButton}`}
+      className={`relative flex h-12 items-center gap-2 overflow-hidden rounded-full border-0 text-[#231f20] transition-[color,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] focus-visible:-translate-y-[5px] focus-visible:scale-[1.02] active:translate-y-[2px] active:scale-[0.99] md:h-[3.625rem] md:min-w-[10.3125rem] md:justify-center md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "min-w-[8.5rem] justify-center bg-[#231f20] px-3 text-white" : "min-w-0 justify-start bg-white px-0"} ${styles.stepButton}`}
       type="button"
       onClick={onClick}
     >
@@ -412,7 +412,7 @@ function OptionGrid({ options, selected, onSelect }: OptionGridProps) {
         const checked = selected === option;
         return (
           <button
-            className={`relative flex ${PILL_HEIGHT} min-w-0 items-center overflow-hidden rounded-full border bg-white px-3 text-left transition-[border-color,background-color] duration-[240ms] hover:border-[#ef7b30] hover:bg-[#f2f2f4] md:border-2 md:px-[1.8125rem] ${
+            className={`relative flex ${PILL_HEIGHT} min-w-0 items-center overflow-hidden rounded-full border bg-white px-3 text-left transition-[border-color,background-color,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:border-[#ef7b30] hover:bg-[#f2f2f4] active:translate-y-[2px] active:scale-[0.99] md:border-2 md:px-[1.8125rem] ${
               checked
                 ? `border-[#ef7b30] bg-[#f2f2f4] ${styles.optionSelected}`
                 : "border-[#ededee]"

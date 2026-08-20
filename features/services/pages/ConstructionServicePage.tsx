@@ -508,11 +508,26 @@ export function ConstructionServicePage() {
                 </h1>
               </Reveal>
 
-              <BuildingRule
-                className="mt-4 w-full max-w-85"
-                src="/images/services/rule-dark.png"
+              {/* Đường line đen: dùng chung pattern với 3 trang dịch vụ còn lại
+                  (Full / Renovation / Design) — hộp w-28 + overflow-hidden cắt
+                  lấy phần ĐUÔI của ảnh 1388x128 (ảnh neo `right-0` và rộng gấp
+                  đôi hộp), nên chỉ hiện đoạn vạch ngắn kèm icon nhà.
+                  BuildingRule trước đây kéo ảnh full 340px làm vạch dài hơn hẳn
+                  3 trang kia. mt-4 + delay 220 khớp RenovationServicePage. */}
+              <Reveal
+                className="relative mt-4 h-[1.3rem] w-28 overflow-hidden"
                 delay={220}
-              />
+                from="fade"
+              >
+                <Image
+                  className="absolute top-0 right-0 w-56 max-w-none"
+                  src="/images/services/rule-dark.png"
+                  alt=""
+                  width={1388}
+                  height={128}
+                  aria-hidden="true"
+                />
+              </Reveal>
 
               <Reveal delay={380} from="left">
                 <p className="mt-1 max-w-[19.375rem] text-pretty text-sm font-normal leading-snug text-charcoal sm:text-base">
@@ -644,7 +659,7 @@ export function ConstructionServicePage() {
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Giải pháp thiết kế tối ưu cho từng không gian
+                Thi công đồng bộ, đảm bảo chất lượng và tiến độ
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -714,7 +729,11 @@ export function ConstructionServicePage() {
         <div className="hidden md:block">
           <div className="mx-auto mb-12 w-[min(790px,calc(100%-2.25rem))] text-center">
             <Reveal from="bottom">
-              <h2 className="font-heading text-3xl font-bold uppercase sm:text-4xl">
+              {/* font-extrabold cho khớp tiêu đề section cuối của DesignServicePage
+                  (text-4xl font-extrabold) và FullConstructionServicePage — hai
+                  trang đó đều extrabold, riêng trang này còn ở bold nên nét chữ
+                  mảnh hơn hẳn. */}
+              <h2 className="font-heading text-3xl font-extrabold uppercase sm:text-4xl">
                 QUY TRÌNH THI CÔNG XÂY DỰNG
               </h2>
             </Reveal>
@@ -724,9 +743,16 @@ export function ConstructionServicePage() {
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
+              {/* Không có h-/w- thì BuildingRule rơi về mặc định h-10 w-full
+                  max-w-[430px] = 430x40px, to hơn hẳn hai vạch cam ở section 2
+                  và 3 (250x32px). Khối này nằm trong `hidden md:block` nên chỉ
+                  cần nhánh md+ của hai vạch kia: w-full max-w-62.5 + cùng thang
+                  h-clamp. `align="center"` để ảnh "-center" neo giữa khung như
+                  section 3, thay vì object-right mặc định. */}
               <BuildingRule
-                className="mx-auto mt-5"
+                className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
                 src="/images/thi-cong-xay-dung/rule-orange-center.png"
+                align="center"
               />
             </Reveal>
           </div>

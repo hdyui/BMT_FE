@@ -22,7 +22,12 @@ export function ServicesOverviewPage() {
     <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
-      <section className={SERVICE_HERO_CLASS_NAME}>
+      {/* --hero-lift: kéo TOÀN BỘ nội dung banner (cột chữ trái + cụm 4 thẻ
+          ảnh phải) lên gần header thêm bấy nhiêu. Một núm duy nhất cho cả hai
+          bên nên tương quan trái/phải không bao giờ lệch. Đơn vị vw để nó co
+          theo chiều cao banner (lg: 38,9vw). Chỉ áp dụng từ md trở lên — bản
+          mobile xếp dọc theo luồng thường, không đụng tới. */}
+      <section className={`${SERVICE_HERO_CLASS_NAME} [--hero-lift:3.5vw]`}>
         <Image
           className="-z-30 object-cover"
           src="/images/services/hero-background.webp"
@@ -42,7 +47,7 @@ export function ServicesOverviewPage() {
             (64px) để né SiteHeader cao 60px trên mobile, nên chỉ cần thêm chút
             khoảng thở, không lặp lại toàn bộ chiều cao header lần nữa. */}
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
-          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
+          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center md:translate-y-[calc(var(--hero-lift)*-1)] lg:ml-[7.3%] lg:translate-y-[calc(3.5vw-var(--hero-lift))] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
               {/* Dưới md trước đây là `border-b-2`: dày 2px và nằm ở đáy hộp
                   inline-block (~6,5px dưới baseline) nên nhìn đậm và rời chữ.
@@ -114,7 +119,7 @@ export function ServicesOverviewPage() {
               Dưới lg: cụm thẻ chuyển sang `relative`, xuống dòng bình thường
               ngay sau khối chữ (margin-top thay vì `bottom-0` tuyệt đối) nên
               không bao giờ chồng lên đoạn mô tả cho dù chữ dài ngắn ra sao. */}
-          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full">
+          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] md:translate-y-[calc(var(--hero-lift)*-1)] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full max-md:translate-y-0">
             {heroCards.map((card, index) => (
               <Reveal
                 className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}

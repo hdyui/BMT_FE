@@ -10,8 +10,15 @@ export function CapabilityHero() {
   const initialUp = reduceMotion ? false : { opacity: 0, y: 28 };
   const initialLeft = reduceMotion ? false : { opacity: 0, x: -34 };
 
+  /* Mọi ảnh và hoa văn trong banner đều đặt theo % của khung, nên bố cục chỉ
+     khớp khi khung giữ đúng tỉ lệ. Trước đây chiều cao desktop khoá cứng
+     35.125rem (562px) trong khi bề ngang co giãn theo cửa sổ, nên đổi bề ngang
+     là mọi thứ xô lệch: ở khổ 1696px ảnh mockup cao 473px chỉ còn chừa 11px
+     đáy, thay vì 59px như ở khổ 1525px mà bố cục này vốn được canh.
+     562 / 1525 = 36.85vw — buộc chiều cao chạy theo bề ngang thì tỉ lệ khung
+     không đổi, bố cục giữ nguyên ở mọi khổ màn hình. */
   return (
-    <section className="relative isolate min-h-[690px] overflow-hidden bg-[#f3f3f3] pb-16 lg:h-[35.125rem] lg:min-h-[35.125rem] lg:pb-0">
+    <section className="relative isolate min-h-[690px] overflow-hidden bg-[#f3f3f3] pb-16 lg:h-[36.85vw] lg:min-h-[36.85vw] lg:pb-0">
       <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
         <motion.div
           className="absolute inset-y-0 right-0 z-0 w-[20%] rounded-l-[4rem] bg-[#eeeeee]"

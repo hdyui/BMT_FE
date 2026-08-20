@@ -227,7 +227,7 @@ export function QuotationContactForm({
             style={{ transitionDelay: "360ms" }}
           >
             <Button
-              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
+              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:translate-y-[2px] active:scale-[0.99] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
             >
               Gửi ngay
