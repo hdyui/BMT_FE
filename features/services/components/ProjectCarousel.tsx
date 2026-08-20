@@ -452,7 +452,7 @@ export function ProjectCarousel({
         )}
       >
         <button
-          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95"
+          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 ease-out hover:-translate-y-[5px] hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:translate-y-[2px] active:scale-95"
           onClick={() => move(-1)}
           aria-label="Dự án trước"
           type="button"
@@ -480,7 +480,7 @@ export function ProjectCarousel({
           )}
         </button>
         <button
-          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95"
+          className="grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 ease-out hover:-translate-y-[5px] hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:translate-y-[2px] active:scale-95"
           onClick={() => move(1)}
           aria-label="Dự án tiếp theo"
           type="button"

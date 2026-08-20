@@ -457,8 +457,11 @@ function RenovationMobileProcess() {
           </h2>
         </Reveal>
 
+        {/* `top` 8,19% -> 7,4%: xích vạch lên sát tiêu đề thêm ~6,6px (khung
+            cao 840 đơn vị nên 1% = 8,4px ở bề ngang tối đa 410px). Giảm tiếp
+            nếu muốn sát hơn — vạch chỉ neo theo khung, không đẩy gì bên dưới. */}
         <Reveal
-          className="absolute top-[8.19%] left-[27.5%] w-[45%]"
+          className="absolute top-[7.4%] left-[27.5%] w-[45%]"
           delay={140}
           from="left"
         >

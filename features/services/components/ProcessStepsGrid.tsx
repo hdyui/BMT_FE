@@ -122,7 +122,13 @@ export function ProcessStepsGrid({
               return (
                 <Reveal delay={index * 110} from="fade" key={step.number}>
                   <div
-                    className="group/step @container relative w-full transition-[transform,filter] duration-300 ease-out hover:-translate-y-1.5 hover:drop-shadow-[0_18px_28px_rgb(36_33_34/.16)]"
+                    /* Phải liệt kê cả `translate` và `scale`: Tailwind v4 nhấc
+                       và phóng bằng 2 thuộc tính CSS riêng chứ không gói trong
+                       `transform` nữa, nên danh sách cũ `[transform,filter]`
+                       không bắt được cú nhấc — thẻ giật một phát thay vì trôi
+                       lên. Dùng đúng bộ số của các nút CTA: nhấc 5px, phóng
+                       102%, 300ms ease-out, nhấn xuống thì lún 2px. */
+                    className="group/step @container relative w-full transition-[filter,transform,translate,scale,rotate] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:drop-shadow-[0_18px_28px_rgb(36_33_34/.16)] active:translate-y-[2px] active:scale-[0.99]"
                     style={{ aspectRatio: CARD_ASPECT }}
                   >
                     {/* Nền card là layer gốc khách hàng cung cấp. */}

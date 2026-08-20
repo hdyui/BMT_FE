@@ -174,7 +174,10 @@ function TimelineStep({
           }`}
         >
           <Image
-            className="absolute inset-0 size-full object-contain transition-[filter,transform] duration-300 ease-out group-hover/step:scale-105 group-hover/step:brightness-110 group-hover/step:saturate-125"
+            /* Vòng tròn cam đứng yên, chỉ sáng lên — cú zoom dành riêng cho
+               icon bên trong (xem <Image> ngay dưới). Vì vậy ở đây chỉ
+               transition `filter`, không đụng tới scale. */
+            className="absolute inset-0 size-full object-contain transition-[filter] duration-300 ease-out group-hover/step:brightness-110 group-hover/step:saturate-125"
             src={step.circle}
             alt=""
             fill

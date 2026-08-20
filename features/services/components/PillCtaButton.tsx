@@ -49,7 +49,7 @@ export function PillCtaButton({
   if (!mobileImage || !mobileImageWidth || !mobileImageHeight) {
     return (
       <Link
-        className={`group/pill relative inline-flex shrink-0 items-center self-start transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] ${className ?? ""}`}
+        className={`group/pill relative inline-flex shrink-0 items-center self-start transition-transform duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] active:translate-y-[2px] active:scale-[0.99] ${className ?? ""}`}
         href={href}
         style={{ aspectRatio: `${imageWidth} / ${imageHeight}` }}
       >
@@ -74,7 +74,7 @@ export function PillCtaButton({
 
   return (
     <Link
-      className={`group/pill inline-flex shrink-0 items-center self-start transition-transform duration-300 ease-out hover:scale-[1.03] active:scale-[0.98] ${className ?? ""}`}
+      className={`group/pill inline-flex shrink-0 items-center self-start transition-transform duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] active:translate-y-[2px] active:scale-[0.99] ${className ?? ""}`}
       href={href}
     >
       <span

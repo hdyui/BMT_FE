@@ -276,7 +276,7 @@ export function FullConstructionServicePage() {
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Giải pháp thiết kế tối ưu cho từng không gian
+                Giải pháp toàn diện, tối ưu công năng
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
