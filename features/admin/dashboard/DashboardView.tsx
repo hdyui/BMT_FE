@@ -18,9 +18,9 @@ import { buttonVariants } from "@/lib/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const completion = [
-  { label: "Trang chủ", value: 82, href: "/admin/home" },
-  { label: "Giới thiệu", value: 68, href: "/admin/about" },
-  { label: "Dịch vụ", value: 74, href: "/admin/services" },
+  { label: "Trang chủ", value: 82, href: "/admin/content/home" },
+  { label: "Giới thiệu", value: 68, href: "/admin/content/about" },
+  { label: "Dịch vụ", value: 74, href: "/admin/content/services" },
   { label: "Dự án", value: 76, href: "/admin/projects" },
   { label: "Thông tin chung", value: 54, href: "/admin/settings" },
 ];
@@ -67,14 +67,14 @@ export function DashboardView({
       value: "04",
       detail: "4/4 slide đang hiển thị",
       icon: House,
-      href: "/admin/home",
+      href: "/admin/content/home",
     },
     {
       label: "Dự án trang Home",
       value: "32",
       detail: "Data riêng của Homepage",
       icon: Layers3,
-      href: "/admin/home",
+      href: "/admin/content/home",
     },
     {
       label: "Projects Page",
@@ -96,13 +96,13 @@ export function DashboardView({
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader
         title="Dashboard"
-        description="Tổng quan độ hoàn thiện nội dung website BMT Decor. Các số liệu bên dưới là dữ liệu mẫu FE-only."
+        description="Tổng quan workspace nội dung website BMT Decor và các điểm quản trị đang được định nghĩa."
         actions={
           <Link
-            href="/admin/home"
+            href="/admin/content/home"
             className={cn(buttonVariants({ size: "lg" }), "h-10 px-4")}
           >
-            <FileImage /> Quản lý Trang chủ
+            <FileImage /> Nội dung Trang chủ
           </Link>
         }
       />

@@ -106,15 +106,15 @@ export function ResourceEditorPage({
       if (mode === "create") {
         const saved = await createRecord(config.key, draft);
         setSavedSnapshot(structuredClone(saved));
-        toast.success("Đã tạo bản nháp cục bộ", {
-          description: "Dữ liệu sẽ reset khi reload trang.",
+        toast.success("Đã tạo bản nháp", {
+          description: "Save adapter đã nhận nội dung mới.",
         });
         router.replace(`${baseHref}/${saved.id}`);
       } else {
         const saved = await updateRecord(config.key, draft.id, draft);
         setSavedSnapshot(structuredClone(saved));
-        toast.success("Đã cập nhật bản nháp", {
-          description: "Thay đổi chưa được lưu vào hệ thống thực tế.",
+        toast.success("Đã cập nhật nội dung", {
+          description: "Save adapter đã nhận thay đổi.",
         });
       }
     } finally {
@@ -151,7 +151,7 @@ export function ResourceEditorPage({
         )}
         <AdminPageHeader
           title={pageTitle}
-          description={`${config.description} Dữ liệu mẫu FE-only, không có persistence thật.`}
+          description={config.description}
           actions={
             <div className="flex items-center gap-2">
               {dirty && <Badge variant="warning">Có thay đổi chưa lưu</Badge>}

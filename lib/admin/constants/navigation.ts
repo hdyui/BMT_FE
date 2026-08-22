@@ -1,19 +1,14 @@
 import type { LucideIcon } from "lucide-react";
 import {
   BriefcaseBusiness,
-  Building2,
-  CircleHelp,
-  ContactRound,
-  FileText,
   FolderKanban,
   GalleryVerticalEnd,
-  House,
   ImageIcon,
   LayoutDashboard,
+  LayoutTemplate,
   Newspaper,
   SearchCheck,
   Settings2,
-  Sparkles,
 } from "lucide-react";
 
 export interface AdminNavigationItem {
@@ -35,11 +30,8 @@ export const adminNavigation: AdminNavigationSection[] = [
     ],
   },
   {
-    label: "Nội dung website",
+    label: "Danh mục",
     items: [
-      { label: "Trang chủ", href: "/admin/home", icon: House },
-      { label: "Giới thiệu", href: "/admin/about", icon: Building2 },
-      { label: "Dịch vụ", href: "/admin/services", icon: Sparkles },
       { label: "Dự án", href: "/admin/projects", icon: FolderKanban },
       { label: "Tin tức", href: "/admin/news", icon: Newspaper },
       {
@@ -47,20 +39,19 @@ export const adminNavigation: AdminNavigationSection[] = [
         href: "/admin/recruitment",
         icon: BriefcaseBusiness,
       },
-      { label: "Báo giá", href: "/admin/quotation", icon: FileText },
-      { label: "Liên hệ", href: "/admin/contacts", icon: ContactRound },
     ],
   },
   {
-    label: "Media & SEO",
+    label: "Nội dung trang",
+    items: [
+      { label: "Nội dung trang", href: "/admin/content", icon: LayoutTemplate },
+    ],
+  },
+  {
+    label: "Hệ thống",
     items: [
       { label: "Media", href: "/admin/media", icon: ImageIcon },
       { label: "SEO", href: "/admin/seo", icon: SearchCheck },
-    ],
-  },
-  {
-    label: "Cài đặt",
-    items: [
       { label: "Cấu hình", href: "/admin/settings", icon: Settings2 },
     ],
   },
@@ -77,6 +68,10 @@ export const adminPageMeta: Record<
   "/admin/home": {
     title: "Trang chủ",
     description: "Quản lý nội dung riêng của Homepage",
+  },
+  "/admin/content": {
+    title: "Nội dung trang",
+    description: "Quản lý content theo đúng public page và section nguồn",
   },
   "/admin/about": {
     title: "Giới thiệu",
@@ -118,12 +113,6 @@ export const adminPageMeta: Record<
     title: "Cấu hình",
     description: "Thông tin doanh nghiệp, header và footer",
   },
-};
-
-export const supportNavigationItem: AdminNavigationItem = {
-  label: "Phạm vi Admin",
-  href: "/admin/settings",
-  icon: CircleHelp,
 };
 
 export const adminBrandIcon = GalleryVerticalEnd;

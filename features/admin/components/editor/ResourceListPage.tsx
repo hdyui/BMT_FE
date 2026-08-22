@@ -64,8 +64,8 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
     setDeleting(true);
     try {
       await removeRecord(config.key, deleteTarget.id);
-      toast.success("Đã xóa khỏi dữ liệu mẫu", {
-        description: "Thay đổi chỉ tồn tại trong phiên hiện tại.",
+      toast.success("Đã xóa nội dung", {
+        description: "Repository adapter đã nhận thay đổi.",
       });
       setDeleteTarget(null);
     } finally {
@@ -94,7 +94,7 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
     setReordering(true);
     try {
       await reorderRecords(config.key, normalized);
-      toast.success("Đã cập nhật thứ tự cục bộ");
+      toast.success("Đã cập nhật thứ tự");
     } finally {
       setReordering(false);
     }
@@ -113,9 +113,16 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
           title={config.title}
           description={config.description}
           actions={
-            <Button nativeButton={false} render={<Link href={`${baseHref}/new`} />}>
-              <Plus /> Thêm {config.singular.toLocaleLowerCase("vi")}
-            </Button>
+            <div className="flex flex-wrap items-center gap-2">
+              {config.key === "projects/list" && (
+                <Button variant="outline" nativeButton={false} render={<Link href="/admin/projects/details" />}>
+                  Chi tiết dự án
+                </Button>
+              )}
+              <Button nativeButton={false} render={<Link href={`${baseHref}/new`} />}>
+                <Plus /> Thêm {config.singular.toLocaleLowerCase("vi")}
+              </Button>
+            </div>
           }
         />
       </div>
@@ -123,7 +130,7 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
 
       <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-[0_12px_36px_rgb(36_33_34/.035)]">
         <div className="border-b p-4 sm:p-5">
-          <div className="grid gap-3 md:grid-cols-[minmax(240px,1fr)_220px]">
+          <div>
             <label className="relative block">
               <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
               <Input
@@ -133,21 +140,10 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
                 className="h-10 pl-9"
               />
             </label>
-            <select
-              value={viewState}
-              onChange={(event) => setViewState(event.target.value as ViewState)}
-              className="h-10 rounded-lg border border-input bg-muted/40 px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/30"
-              aria-label="Kiểm tra trạng thái danh sách"
-            >
-              <option value="normal">Trạng thái: Normal</option>
-              <option value="loading">Trạng thái: Loading</option>
-              <option value="empty">Trạng thái: Empty</option>
-              <option value="error">Trạng thái: Error</option>
-            </select>
           </div>
           <div className="mt-3 flex flex-wrap justify-between gap-2 text-xs text-muted-foreground">
-            <span>{filtered.length} nội dung mẫu FE-only</span>
-            <span>Thay đổi chưa được lưu vào hệ thống thực tế.</span>
+            <span>{filtered.length} bản ghi</span>
+            <span>Persistence được giao tiếp qua repository adapter.</span>
           </div>
         </div>
 

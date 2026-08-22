@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
-import { ImageIcon, Upload } from "lucide-react";
+import { ImageIcon, Trash2, Upload } from "lucide-react";
 
 import { Button } from "@/lib/components/ui/button";
 import { Input } from "@/lib/components/ui/input";
@@ -60,14 +60,16 @@ export function ImageField({
             </p>
           )}
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          onClick={() => inputRef.current?.click()}
-        >
-          <Upload /> Thay ảnh
-        </Button>
+        <div className="flex items-center gap-2">
+          {value && (
+            <Button type="button" variant="ghost" size="sm" onClick={() => { setLocalPreview(null); onChange(""); }}>
+              <Trash2 /> Xóa lựa chọn
+            </Button>
+          )}
+          <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()}>
+            <Upload /> {value ? "Thay ảnh" : "Chọn ảnh"}
+          </Button>
+        </div>
       </div>
 
       <div className="relative mt-3 aspect-[16/9] overflow-hidden rounded-xl border bg-muted">
@@ -118,8 +120,7 @@ export function ImageField({
         className="sr-only"
       />
       <p className="mt-3 text-[11px] leading-relaxed text-muted-foreground">
-        File được chọn chỉ dùng để xem trước trong phiên này. Trình duyệt không
-        ghi ảnh vào source hoặc môi trường production.
+        UI chỉ chuẩn bị selection và preview. Upload provider sẽ được nối tại media adapter khi persistence được chốt.
       </p>
     </section>
   );
