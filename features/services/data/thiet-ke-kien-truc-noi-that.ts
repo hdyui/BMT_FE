@@ -52,10 +52,12 @@ export const solutionCards = [
     ctaImage: "/images/thiet-ke-kien-truc-noi-that/btn-pill-nha-o.png",
     ctaImageWidth: 1408,
     ctaImageHeight: 253,
-    ctaImageMobile: "/images/thiet-ke-kien-truc-noi-that/mobile/btn-pill-nha-o.png",
+    ctaImageMobile:
+      "/images/thiet-ke-kien-truc-noi-that/mobile/btn-pill-nha-o.png",
     ctaImageMobileWidth: 1668,
     ctaImageMobileHeight: 253,
-    image: "/images/thiet-ke-kien-truc-noi-that/solution-nha-o-landscape-v2.png",
+    image:
+      "/images/thiet-ke-kien-truc-noi-that/solution-nha-o-landscape-v2.png",
   },
   {
     number: "02",
@@ -78,12 +80,13 @@ export const solutionCards = [
       "/images/thiet-ke-kien-truc-noi-that/mobile/btn-pill-van-phong.png",
     ctaImageMobileWidth: 1972,
     ctaImageMobileHeight: 253,
-    image: "/images/thiet-ke-kien-truc-noi-that/solution-van-phong-landscape-v2.png",
+    image:
+      "/images/thiet-ke-kien-truc-noi-that/solution-van-phong-landscape-v2.png",
   },
   {
     number: "03",
-    titlePrefix: "THIẾT KẾ THI CÔNG",
-    titleCategory: "SHOWROOM & THẨM MỸ VIỆN",
+    titlePrefix: "THIẾT KẾ SHOWROOM & ",
+    titleCategory: "THẨM MỸ VIỆN",
     tagline: "Tăng trải nghiệm khách hàng, nâng tầm giá trị thương hiệu",
     description:
       "Không gian kinh doanh là yếu tố quan trọng trong việc thu hút khách hàng và gia tăng giá trị thương hiệu. Với dịch vụ thiết kế showroom và thẩm mỹ viện, BMT Decor chú trọng xây dựng không gian có tính nhận diện thương hiệu cao, tối ưu trải nghiệm khách hàng và bố trí công năng khoa học, góp phần nâng cao hiệu quả kinh doanh của doanh nghiệp.",
@@ -100,8 +103,8 @@ export const solutionCards = [
   },
   {
     number: "04",
-    titlePrefix: "THIẾT KẾ THI CÔNG",
-    titleCategory: "NHÀ HÀNG & KHÁCH SẠN",
+    titlePrefix: "THIẾT KẾ NHÀ HÀNG & ",
+    titleCategory: "KHÁCH SẠN",
     tagline: "Không gian ấn tượng, tối ưu vận hành và trải nghiệm dịch vụ",
     description:
       "Dịch vụ thiết kế nhà hàng, quán café và khách sạn tập trung vào việc cân bằng giữa công năng vận hành, thẩm mỹ không gian và trải nghiệm của khách hàng. Mỗi giải pháp thiết kế nội thất nhà hàng, khách sạn được nghiên cứu theo mô hình kinh doanh, quy mô đầu tư và phong cách thương hiệu, góp phần nâng cao hiệu quả và tạo dấu ấn thương hiệu.",
@@ -117,7 +120,8 @@ export const solutionCards = [
       "/images/thiet-ke-kien-truc-noi-that/mobile/btn-pill-nha-hang.png",
     ctaImageMobileWidth: 2682,
     ctaImageMobileHeight: 253,
-    image: "/images/thiet-ke-kien-truc-noi-that/solution-nha-hang-landscape.png",
+    image:
+      "/images/thiet-ke-kien-truc-noi-that/solution-nha-hang-landscape.png",
   },
 ] as const;
 

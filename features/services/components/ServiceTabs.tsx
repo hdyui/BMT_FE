@@ -198,7 +198,15 @@ export function ServiceTabs() {
           from="left"
         >
           <Image
-            className="object-cover transition-[transform,filter] duration-500 ease-out group-hover:scale-[1.03] group-active:scale-[1.03] lg:drop-shadow-md lg:group-hover:drop-shadow-2xl lg:group-active:drop-shadow-2xl"
+            /* Cùng bộ số với các nút CTA: phóng 102%, 300ms ease-out. Danh
+               sách transition phải có `translate` và `scale` — Tailwind v4
+               nhấc/phóng bằng 2 thuộc tính CSS riêng chứ không gói trong
+               `transform` nữa, danh sách cũ `[transform,filter]` không bắt
+               được nên ảnh giật một phát.
+               Cú nhấc 5px chỉ bật từ lg: dưới lg ảnh nằm trong khung bo góc
+               `overflow-hidden`, đẩy ảnh lên sẽ hở một dải trống ở đáy khung;
+               từ lg khung để `overflow-visible` nên ảnh nổi lên tự nhiên. */
+            className="object-cover transition-[transform,translate,scale,filter] duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:drop-shadow-md lg:group-hover:-translate-y-[5px] lg:group-hover:drop-shadow-2xl lg:group-active:-translate-y-[5px] lg:group-active:drop-shadow-2xl"
             src={detail.image}
             alt={detail.label}
             fill
@@ -229,7 +237,11 @@ export function ServiceTabs() {
           <Reveal delay={240}>
             <p className="mt-2 text-[clamp(0.75rem,2.6vw,0.9375rem)] font-medium max-w-fit lg:mt-3 lg:font-extrabold lg:text-md">{detail.tagline}</p>
             <span className="mt-3 mb-1.5 block h-0.5 w-16 bg-brand lg:mt-5 lg:mb-2 lg:w-36" />
-            <p className="text-[clamp(0.75rem,2.4vw,0.9375rem)] leading-relaxed text-pretty lg:text-base">{detail.copy}</p>
+            {/* Căn đều hai lề. Bỏ `text-pretty` vì `text-wrap: pretty` tự cân
+                lại số chữ giữa các dòng (nhất là dòng áp chót), làm dòng đó
+                ngắn đi trong khi justify vẫn kéo nó ra đủ bề rộng — khoảng
+                trắng giữa các từ giãn bất thường. */}
+            <p className="text-justify text-[clamp(0.75rem,2.4vw,0.9375rem)] leading-relaxed lg:text-base">{detail.copy}</p>
           </Reveal>
         </div>
       </div>

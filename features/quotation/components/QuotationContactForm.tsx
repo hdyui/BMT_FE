@@ -134,7 +134,10 @@ export function QuotationContactForm({
             <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
               Nhận báo giá chi tiết
             </h2>
-            <p className="whitespace-nowrap text-sm leading-relaxed text-white/90 lg:text-base max-lg:text-[11px] max-lg:leading-[1.4]">
+            {/* Dưới lg câu này dài hơn bề ngang khung nên `whitespace-nowrap`
+                làm phần đuôi tràn ra và bị `overflow-hidden` của section cắt
+                mất — cho xuống hàng ở mobile/tablet, desktop vẫn một dòng. */}
+            <p className="whitespace-nowrap text-sm leading-relaxed text-white/90 lg:text-base max-lg:whitespace-normal max-lg:text-[11px] max-lg:leading-[1.4]">
               Để lại thông tin, chúng tôi sẽ gửi báo giá chi tiết theo từng hạng mục miễn phí, không ràng buộc.
             </p>
           </div>
@@ -224,7 +227,7 @@ export function QuotationContactForm({
             style={{ transitionDelay: "360ms" }}
           >
             <Button
-              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
+              className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:translate-y-[2px] active:scale-[0.99] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
             >
               Gửi ngay

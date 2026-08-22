@@ -100,7 +100,7 @@ export function DesignServicePage() {
             ~128px), thay cho `pt-24` cũ (96px, chỉ chừa ~11px dưới header). */}
         <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
           <Reveal
-            className="absolute top-[4.7%] bottom-[75.5%] left-[6.55%] w-0.5"
+            className="absolute top-[4.72vw] bottom-[75.5%] left-[6.55%] w-0.5"
             delay={90}
             from="fade"
           >
@@ -114,9 +114,14 @@ export function DesignServicePage() {
             />
           </Reveal>
 
-          <div className="absolute top-[4.9%] left-[10.2%] w-[86%]">
+          {/* `top-[5vw]` = đúng mốc của trang xây dựng trọn gói (khối overlay ở
+              cả hai trang đều bắt đầu tại 85px, bên đó là 3,6% x 138,95vw =
+              5,0vw). `w-` chỉ là mốc ngắt dòng chứ không dời chữ (tiêu đề canh
+              trái, vạch và dòng mô tả nằm ở element riêng), nên nới 86% -> 89,5%
+              để dòng "DỊCH VỤ THIẾT KẾ KIẾN TRÚC" ở cỡ mới không bị rớt dòng. */}
+          <div className="absolute top-[5vw] left-[10.2%] w-[89.5%]">
             <Reveal>
-              <h1 className="font-heading text-[clamp(1.2rem,5.2vw,1.35rem)] font-extrabold leading-[1.12] text-brand">
+              <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
                 DỊCH VỤ THIẾT KẾ KIẾN TRÚC
                 <br />&amp; NỘI THẤT CHUYÊN NGHIỆP
               </h1>
@@ -124,18 +129,18 @@ export function DesignServicePage() {
           </div>
 
           <BuildingRule
-            className="absolute top-[16.2%] left-[10.2%] h-[4.2%] w-[40%] max-w-none [&_img]:object-contain [&_img]:object-right"
+            className="absolute top-[14.5%] left-[10.2%] h-[4.2%] w-[40%] max-w-none [&_img]:object-contain [&_img]:object-right"
             src="/images/services/rule-dark.png"
             delay={160}
           />
 
           <Reveal
-            className="absolute top-[20.35%] left-[10.2%] flex items-center gap-1.5"
+            className="absolute top-[22%] left-[10.2%] flex items-center gap-[0.2em] text-[clamp(0.55rem,2.75vw,0.68rem)]"
             delay={280}
             from="left"
           >
             <Image
-              className="size-3 shrink-0 object-contain"
+              className="relative -top-[0.12em] size-[1.1em] shrink-0 object-contain"
               src="/images/thiet-ke-kien-truc-noi-that/icon-building.png"
               alt=""
               width={160}
@@ -339,9 +344,13 @@ export function DesignServicePage() {
 
       <section
         id="design-process"
-        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
+        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] max-md:pt-8 max-md:pb-[calc(2.5rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
       >
-        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))]">
+        {/* Dưới md: đỉnh section 64px -> 32px và khoảng cách vạch cam -> khối 6
+            bước 56px -> 24px, cho khớp mức 48px/28-32px của section cuối ở các
+            trang dịch vụ khác. Ảnh khung `process-framework.png` không có lề
+            rỗng nên toàn bộ khoảng trắng là do hai mốc này. */}
+        <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] max-md:mb-6">
           <Reveal className="">
             <h2 className="hidden flex-wrap items-center justify-center gap-x-3 gap-y-2 text-4xl font-extrabold md:flex">
               <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
@@ -353,7 +362,7 @@ export function DesignServicePage() {
                 height={207}
               />
             </h2>
-            <h2 className="font-heading text-center text-[clamp(1.1rem,5vw,1.25rem)] leading-[1.08] font-extrabold md:hidden">
+            <h2 className="font-heading text-center text-[clamp(0.95rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold md:hidden">
               <span className="block">QUY TRÌNH THIẾT KẾ</span>
               <span className="flex items-center justify-center gap-1">
                 TẠI

@@ -338,7 +338,7 @@ export function RenovationServicePage() {
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
-                Giải Pháp Cải Tạo Theo Từng Loại Hình Công Trình
+                Giải pháp cải tạo tối ưu cho từng không gian
               </p>
             </Reveal>
             <Reveal delay={250} from="left">

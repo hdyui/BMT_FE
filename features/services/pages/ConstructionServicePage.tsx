@@ -71,14 +71,13 @@ const HERO_DIAMONDS = [
     key: "top",
     src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
     alt: "Thi công nhà hàng",
-    // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` nhích lên 15,8% ->
-    // 12,8% để phần đỉnh hình bị che dưới header nhiều hơn (~45% chiều cao hình).
-    // Lưu ý: nhích `top` của hình này lên/xuống làm hở/khít khe hở với hai hình
-    // "right" và "left" kề nó (xem comment cũ) — nếu thấy có khe hở lộ ra thì báo
-    // để giãn lại vị trí 2 hình đó theo.
+    // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` đã hạ 9,2% -> 15,8%
+    // (xuống 40px) để hình hiện ra nhiều hơn: phần thấy được dưới header đi từ
+    // 44,6% lên 52,1% chiều cao hình. Ba hình kia đã được giải lại theo, vì hạ
+    // hình này xuống là bóp hai khe hở kề nó.
     left: "23.4%",
-    top: "-2.7%",
-    size: "67.5%",
+    top: "15.8%",
+    size: "62.5%",
     zIndex: 10,
   },
   {
@@ -87,9 +86,9 @@ const HERO_DIAMONDS = [
     alt: "Thi công thẩm mỹ viện",
     // Mép phải hình này là mép phải của cả cụm: 48,9% + 0.7071 x 37,9% x 0.423
     // = 60,2% bề rộng banner, dừng đúng ở thanh cam của khối chữ bên phải.
-    left: "45.4%",
-    top: "31.3%",
-    size: "40.9%",
+    left: "48.9%",
+    top: "36.3%",
+    size: "37.9%",
     zIndex: 20,
   },
   {
@@ -98,9 +97,9 @@ const HERO_DIAMONDS = [
     alt: "Thi công nhà ở",
     // To hơn mockup (38,4% -> 44,6%) để chìm 6,5% dưới cạnh đáy banner:
     // đỉnh dưới ở 72,6% + 0.7071 x 44,6% = 104,1% chiều cao banner.
-    left: "31.9%",
-    top: "73.5%",
-    size: "48.2%",
+    left: "35.4%",
+    top: "72.6%",
+    size: "44.6%",
     zIndex: 40,
   },
   {
@@ -110,8 +109,8 @@ const HERO_DIAMONDS = [
     // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
     // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
     left: "9.4%",
-    top: "52.2%",
-    size: "42.7%",
+    top: "64.7%",
+    size: "39.5%",
     zIndex: 30,
   },
 ] as const;
@@ -306,7 +305,7 @@ const DIAMOND_BY_KEY = Object.fromEntries(
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
+    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-hidden">
       <SiteHeader />
 
       <ConstructionMobileHero />
@@ -509,6 +508,12 @@ export function ConstructionServicePage() {
                 </h1>
               </Reveal>
 
+              {/* Đường line đen: dùng chung pattern với 3 trang dịch vụ còn lại
+                  (Full / Renovation / Design) — hộp w-28 + overflow-hidden cắt
+                  lấy phần ĐUÔI của ảnh 1388x128 (ảnh neo `right-0` và rộng gấp
+                  đôi hộp), nên chỉ hiện đoạn vạch ngắn kèm icon nhà.
+                  BuildingRule trước đây kéo ảnh full 340px làm vạch dài hơn hẳn
+                  3 trang kia. mt-4 + delay 220 khớp RenovationServicePage. */}
               <Reveal
                 className="relative mt-4 h-[1.3rem] w-28 overflow-hidden"
                 delay={220}
@@ -553,7 +558,7 @@ export function ConstructionServicePage() {
 
       {/* SECTION 2: TỪ PHẦN THÔ ĐẾN HOÀN THIỆN */}
       <section
-        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!pb-3 lg:!py-16`}
+        className={`${SERVICE_PROJECT_SECTION_CLASS_NAME} relative isolate !py-12 max-md:!pt-8 max-md:!pb-3 lg:!py-16`}
       >
         <Image
           className="-z-10 object-cover"
@@ -573,7 +578,7 @@ export function ConstructionServicePage() {
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-4 max-w-[73.75rem] text-[clamp(0.78rem,2.75vw,1rem)] leading-[1.25] text-pretty text-justify [text-align-last:center] md:text-sm md:leading-relaxed">
+            <p className="mx-auto mt-4 max-w-[73.75rem] text-[clamp(0.78rem,2.75vw,1rem)] leading-[1.25] text-pretty text-center md:text-sm md:leading-relaxed">
               Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ
               của công trình. BMT Decor triển khai{" "}
               <strong className="font-normal lg:font-bold">
@@ -644,7 +649,7 @@ export function ConstructionServicePage() {
         <div className={`${SERVICE_SOLUTION_HEADING_CLASS_NAME} max-md:!mb-4`}>
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
-              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
+              <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
                 <span className="font-normal">THI CÔNG XÂY DỰNG</span>
                 <br />
                 <span className="font-extrabold">
@@ -654,7 +659,7 @@ export function ConstructionServicePage() {
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Giải pháp thiết kế tối ưu cho từng không gian
+                Thi công đồng bộ, đảm bảo chất lượng và tiến độ
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -677,7 +682,18 @@ export function ConstructionServicePage() {
       </section>
 
       {/* SECTION 4: QUY TRÌNH THI CÔNG */}
-      <section className="relative isolate -mb-[2.342945vw] overflow-hidden bg-[#F2F2F3] pt-16 pb-[calc(4rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]">
+      {/* Dưới lg, ContactForm luôn vẽ ảnh khấc `form-background.png` mà 2,3429%
+          bề rộng trên cùng của ảnh là TRONG SUỐT (hàng đục hoàn toàn đầu tiên ở
+          y=91/3884). Không kéo form lên thì dải trong suốt đó lộ nền trắng của
+          trang chứ không phải nền xám của section này -> thấy vệt lệch màu.
+          `-mb` kéo form đè lên đúng chiều cao khấc, `pb` cộng bù lại để khoảng
+          trắng nhìn thấy không đổi. Đây là cách 3 trang dịch vụ kia đang làm.
+          Chỉ áp dưới lg: từ lg trở lên trang này dùng ContactForm không notch
+          (nền cam đặc, không trong suốt) nên không có vệt lệch. */}
+      <section
+        className="relative isolate scroll-mt-[85px] overflow-hidden bg-[#F2F2F3] py-16 max-lg:-mb-[2.342945vw] max-lg:pb-[calc(4rem+2.342945vw)] max-md:pt-12 max-md:pb-[calc(2rem+2.342945vw)]"
+        id="construction-process"
+      >
         <Image
           className="-z-10 object-cover"
           src="/images/thi-cong-xay-dung/process-background.png"
@@ -686,20 +702,23 @@ export function ConstructionServicePage() {
           sizes="100vw"
           aria-hidden="true"
         />
-        <div className="mx-auto mb-3 w-[calc(100%-2rem)] text-center md:hidden">
+        <div className="mx-auto mb-4 w-[calc(100%-2rem)] text-center md:hidden">
           <Reveal from="bottom">
-            <h2 className="font-heading text-[4.7vw] leading-none font-extrabold uppercase">
+            <h2 className="font-heading text-[clamp(0.95rem,4.75vw,1.55rem)] leading-none font-extrabold uppercase">
               QUY TRÌNH THI CÔNG XÂY DỰNG
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-1.5 text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed">
+            <p className="mx-auto mt-3 text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed">
               Triển khai bài bản, giám sát chặt chẽ trong từng giai đoạn
             </p>
           </Reveal>
           <Reveal delay={250} from="left">
             <BuildingRule
-              className="mx-auto mt-2 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
+              // Không có h- thì BuildingRule giữ mặc định h-10 (40px) trong khi
+              // ảnh 1388x128 co theo w-[36vw] chỉ cao ~13px -> thừa ~13px trống
+              // ở CẢ trên lẫn dưới vạch. h-auto + đúng aspect ảnh cho hộp ôm sát.
+              className="mx-auto mt-2 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none"
               src="/images/thi-cong-xay-dung/rule-orange-center.png"
             />
           </Reveal>
@@ -710,6 +729,10 @@ export function ConstructionServicePage() {
         <div className="hidden md:block">
           <div className="mx-auto mb-12 w-[min(790px,calc(100%-2.25rem))] text-center">
             <Reveal from="bottom">
+              {/* font-extrabold cho khớp tiêu đề section cuối của DesignServicePage
+                  (text-4xl font-extrabold) và FullConstructionServicePage — hai
+                  trang đó đều extrabold, riêng trang này còn ở bold nên nét chữ
+                  mảnh hơn hẳn. */}
               <h2 className="font-heading text-3xl font-extrabold uppercase sm:text-4xl">
                 QUY TRÌNH THI CÔNG XÂY DỰNG
               </h2>
@@ -720,9 +743,16 @@ export function ConstructionServicePage() {
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
+              {/* Không có h-/w- thì BuildingRule rơi về mặc định h-10 w-full
+                  max-w-[430px] = 430x40px, to hơn hẳn hai vạch cam ở section 2
+                  và 3 (250x32px). Khối này nằm trong `hidden md:block` nên chỉ
+                  cần nhánh md+ của hai vạch kia: w-full max-w-62.5 + cùng thang
+                  h-clamp. `align="center"` để ảnh "-center" neo giữa khung như
+                  section 3, thay vì object-right mặc định. */}
               <BuildingRule
-                className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none md:w-full md:max-w-62.5"
+                className="mx-auto mt-5 h-[clamp(1.25rem,4vw,2rem)] w-full max-w-62.5"
                 src="/images/thi-cong-xay-dung/rule-orange-center.png"
+                align="center"
               />
             </Reveal>
           </div>
@@ -731,9 +761,8 @@ export function ConstructionServicePage() {
         </div>
       </section>
 
-      <ContactForm showTopNotch />
-      {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
-      <SiteFooter hideTopBorderOnMobile />
+      <ContactForm />
+      <SiteFooter />
     </div>
   );
 }

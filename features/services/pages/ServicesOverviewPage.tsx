@@ -22,7 +22,12 @@ export function ServicesOverviewPage() {
     <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
-      <section className={SERVICE_HERO_CLASS_NAME}>
+      {/* --hero-lift: kéo TOÀN BỘ nội dung banner (cột chữ trái + cụm 4 thẻ
+          ảnh phải) lên gần header thêm bấy nhiêu. Một núm duy nhất cho cả hai
+          bên nên tương quan trái/phải không bao giờ lệch. Đơn vị vw để nó co
+          theo chiều cao banner (lg: 38,9vw). Chỉ áp dụng từ md trở lên — bản
+          mobile xếp dọc theo luồng thường, không đụng tới. */}
+      <section className={`${SERVICE_HERO_CLASS_NAME} [--hero-lift:3.5vw]`}>
         <Image
           className="-z-30 object-cover"
           src="/images/services/hero-background.webp"
@@ -42,37 +47,59 @@ export function ServicesOverviewPage() {
             (64px) để né SiteHeader cao 60px trên mobile, nên chỉ cần thêm chút
             khoảng thở, không lặp lại toàn bộ chiều cao header lần nữa. */}
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
-          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
+          <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center md:translate-y-[calc(var(--hero-lift)*-1)] lg:ml-[7.3%] lg:translate-y-[calc(3.5vw-var(--hero-lift))] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
-              <p className="mb-4 inline-block text-base max-md:border-b-2 max-md:border-charcoal max-md:pb-0 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
+              {/* Dưới md trước đây là `border-b-2`: dày 2px và nằm ở đáy hộp
+                  inline-block (~6,5px dưới baseline) nên nhìn đậm và rời chữ.
+                  Đổi sang cùng kiểu gạch chân như bản PC — 1px, nhưng offset 4px
+                  thay vì 8px để sát chữ hơn. Giá trị md/lg giữ nguyên. */}
+              <p className="mb-4 inline-block text-base max-md:underline max-md:decoration-1 max-md:underline-offset-4 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
                 GIẢI PHÁP
               </p>
-              <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
+              {/* Dưới md: cỡ chữ 5,6vw cho ngang các trang dịch vụ con (5,9vw),
+                  kèm ngắt dòng theo mockup — "VÀ" xuống dòng 2. Ngắt cũ để "VÀ"
+                  ở cuối dòng 1 làm dòng đó dài hơn 11% (hệ số bề rộng 17,4 so
+                  với 15,7), ở 5,9vw sẽ tràn 113% khung nên buộc phải nhỏ đi.
+                  Hai span "VÀ" ẩn/hiện theo breakpoint để md trở lên giữ nguyên
+                  ngắt dòng cũ của bản desktop. */}
+              <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand max-md:text-[clamp(1.1rem,5.6vw,1.75rem)] lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
                 <span className="block lg:whitespace-nowrap">
-                  THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ
+                  THIẾT KẾ THI CÔNG, XÂY DỰNG
+                  <span className="max-md:hidden">{" "}VÀ</span>
                 </span>
 
                 <span className="block lg:whitespace-nowrap">
-                  CẢI TẠO TRỌN GÓI
+                  <span className="md:hidden">VÀ </span>CẢI TẠO TRỌN GÓI
                 </span>
               </h1>
             </Reveal>
 
+            {/* 45% -> 40% của cột chữ (cột = 100vw - 36px) cho ra vạch rộng
+                36,3vw, bằng 4 trang dịch vụ con (~36,2vw) và bằng mockup
+                (256/720 = 35,6vw). `object-contain` nên icon nhà ở đuôi vạch
+                cũng thu theo đúng tỉ lệ. */}
             <BuildingRule
-              className="mt-2 w-full max-w-72 max-md:w-[45%]"
+              className="mt-2 w-full max-w-72 max-md:w-[40%]"
               src="/images/services/rule-dark.png"
               delay={200}
             />
 
             <Reveal delay={320} from="left">
-              <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] sm:text-base lg:whitespace-nowrap">
+              {/* Dưới md: 2,6vw + nowrap để câu này nằm gọn MỘT dòng và lấp ~98%
+                  cột chữ, đúng như mockup (659/720 = 91,5vw trên cột 92,4vw).
+                  Chặn dưới hạ 0,5625rem -> 0,5rem vì 9px cố định sẽ tràn 108%
+                  khung ở màn 320px. */}
+              <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] max-md:whitespace-nowrap max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base lg:whitespace-nowrap">
                 ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG{" "}
                 MẠI
               </h2>
-              <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty sm:text-base">
-                <p className="leading-normal lg:w-full lg:text-justify">
+              <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base">
+                {/* Căn đều 2 lề cả ở mobile/tablet chứ không chỉ từ lg. Cần
+                    `w-full` đi kèm, nếu không flex item co theo nội dung thì
+                    justify không có lề phải để dàn chữ. */}
+                <p className="w-full text-justify leading-normal lg:w-full lg:text-justify">
                   <Image
-                    className="inline-block size-4 mr-0.5 my-1 align-sub object-contain"
+                    className="inline-block size-4 mr-0.5 my-1 align-sub object-contain max-md:my-0 max-md:size-[0.88em] max-md:align-[-0.08em]"
                     src="/images/services/icon-house.png"
                     alt=""
                     width={86}
@@ -92,7 +119,7 @@ export function ServicesOverviewPage() {
               Dưới lg: cụm thẻ chuyển sang `relative`, xuống dòng bình thường
               ngay sau khối chữ (margin-top thay vì `bottom-0` tuyệt đối) nên
               không bao giờ chồng lên đoạn mô tả cho dù chữ dài ngắn ra sao. */}
-          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full">
+          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] md:translate-y-[calc(var(--hero-lift)*-1)] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full max-md:translate-y-0">
             {heroCards.map((card, index) => (
               <Reveal
                 className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
@@ -122,7 +149,10 @@ export function ServicesOverviewPage() {
       </section>
 
       <section className="py-12 sm:py-16 lg:py-20" id="quy-trinh">
-        <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center lg:mb-10">
+        {/* Dưới md nới lề trang 18px -> 12px riêng cho khối này: đoạn mô tả đã
+            chạm trần cỡ chữ của bố cục 2 dòng, chỉ còn cách nới khung mới to
+            thêm được. Lề 12px vẫn cách mép màn hình an toàn. */}
+        <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center max-md:w-[calc(100%-1.5rem)] lg:mb-10">
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
               QUY TRÌNH LÀM VIỆC
@@ -131,10 +161,18 @@ export function ServicesOverviewPage() {
           <Reveal delay={160}>
             {/* Mockup ngắt 2 dòng sau "đảm bảo tiến độ," và in đậm "BMT Decor",
                 "quy trình 6 bước". Ngắt dòng chỉ bật từ md trở lên để màn nhỏ
-                vẫn tự xuống hàng theo bề rộng. */}
-            <p className="mx-auto mt-3 max-w-180 text-sm leading-relaxed sm:text-base">
-              <strong className="font-bold">BMT Decor</strong> triển khai dự án
-              theo <strong className="font-bold">quy trình 6 bước</strong> rõ
+                vẫn tự xuống hàng theo bề rộng.
+
+                Dưới md: bỏ in đậm, và cỡ chữ bám bề rộng khung thay vì
+                text-sm cố định (14px cứng cho ra 3 dòng, màn 320px là 4 dòng).
+
+                0,0295 là mức kịch trần của bố cục 2 dòng: câu này dài 65,13
+                lần cỡ chữ, chia đôi thì dòng dài nhất tối thiểu 33,44 lần —
+                và chỗ ngắt greedy hiện tại đã đúng là chỗ cân nhất, nên không
+                thể moi thêm bằng cách ngắt lại. Dòng 1 lấp 98,6% khung. */}
+            <p className="mx-auto mt-3 max-w-180 text-sm leading-relaxed max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] sm:text-base">
+              <strong className="font-bold max-md:font-normal">BMT Decor</strong> triển khai dự án
+              theo <strong className="font-bold max-md:font-normal">quy trình 6 bước</strong> rõ
               ràng, đảm bảo tiến độ,
               <br className="hidden md:inline" /> chất lượng và đồng hành cùng
               khách hàng trong từng giai đoạn.
@@ -187,7 +225,7 @@ export function ServicesOverviewPage() {
             </h2>
           </Reveal>
           <Reveal delay={160}>
-            <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-lg:mx-auto max-lg:text-center">
+            <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] max-lg:mx-auto max-lg:text-center">
               Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ
               <br className="hidden md:inline" /> hơn về quy trình và dịch vụ
               của BMT Decor

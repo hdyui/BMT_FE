@@ -67,12 +67,13 @@ function RenovationMobileHero() {
       </Reveal>
 
       {/* Cỡ chữ/leading/hiệu ứng Reveal đồng bộ với banner thiết kế kiến trúc
-          nội thất (DesignServicePage). Khoảng cách từ header xuống tiêu đề
-          (top-[7.5%] cộng `pt-[60px]` của RenovationMobileContent) đã đủ rộng
-          nên giữ nguyên. */}
-      <div className="absolute top-[7.5%] left-[7.3%] w-[83%] border-l-[3px] border-brand pl-[3.2%]">
+          nội thất (DesignServicePage). Section này nằm ngay dưới header nhờ
+          `pt-[60px]` của RenovationMobileContent, nên khoảng cách header ->
+          tiêu đề chính là `top`: đặt `calc(25px + 5vw)` cho bằng trang xây dựng
+          trọn gói (bên đó = 85px + 5vw tính từ đỉnh banner, trừ header 60px). */}
+      <div className="absolute top-[calc(25px+5vw)] left-[7.3%] w-[83%] border-l-[3px] border-brand pl-[3.2%]">
         <Reveal>
-          <h1 className="font-heading text-[clamp(1.35rem,5.25vw,1.55rem)] leading-[1.12] font-extrabold text-brand uppercase">
+          <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] leading-[1.12] font-extrabold text-brand uppercase">
             Dịch vụ cải tạo &amp;
             <br />
             sửa chữa trọn gói
@@ -89,9 +90,9 @@ function RenovationMobileHero() {
           delay={120}
         />
         <Reveal delay={300} from="left">
-          <p className="mt-2 flex items-center gap-1.5 text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed text-charcoal">
+          <p className="mt-2 flex items-center gap-[0.2em] text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed text-charcoal">
             <Image
-              className="size-3 shrink-0 object-contain"
+              className="relative -top-[0.12em] size-[1.1em] shrink-0 object-contain"
               src="/images/cai-tao-sua-chua/icon-house.png"
               alt=""
               width={90}
@@ -262,7 +263,7 @@ function RenovationMobileSolutions() {
           </p>
         </Reveal>
         <BuildingRule
-          className="mx-auto mt-3 h-auto w-[43%] max-md:aspect-1388/128 md:mt-5 md:w-auto"
+          className="mx-auto mt-3 h-[clamp(1.25rem,4vw,2rem)] w-[45vw] max-w-none"
           src="/images/xay-dung-tron-goi/rule-orange.png"
           delay={120}
         />
@@ -456,8 +457,11 @@ function RenovationMobileProcess() {
           </h2>
         </Reveal>
 
+        {/* `top` 8,19% -> 7,4%: xích vạch lên sát tiêu đề thêm ~6,6px (khung
+            cao 840 đơn vị nên 1% = 8,4px ở bề ngang tối đa 410px). Giảm tiếp
+            nếu muốn sát hơn — vạch chỉ neo theo khung, không đẩy gì bên dưới. */}
         <Reveal
-          className="absolute top-[8.19%] left-[32.2%] w-[35.6%]"
+          className="absolute top-[7.4%] left-[27.5%] w-[45%]"
           delay={140}
           from="left"
         >
