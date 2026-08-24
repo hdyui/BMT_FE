@@ -8,17 +8,16 @@ import { toast } from "sonner";
 import { ImageField } from "@/features/admin/components/ImageField";
 import { projectContentService } from "@/lib/admin/services/project-content.service";
 import type { AdminProjectDetailContent } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
-import { Input } from "@/lib/components/ui/input";
-import { Textarea } from "@/lib/components/ui/textarea";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 function ContentField({
   label,
@@ -74,9 +73,7 @@ export function ProjectDetailEditor({
       onChange(
         details.map((detail) => (detail.id === saved.id ? saved : detail)),
       );
-      toast.success("Đã lưu Project Detail trong local state", {
-        description: "Detail vẫn độc lập với Projects Page Cards.",
-      });
+      toast.success("Đã lưu nội dung chi tiết dự án");
     } finally {
       setSaving(false);
     }
@@ -87,9 +84,9 @@ export function ProjectDetailEditor({
       <div className="grid min-h-72 place-items-center rounded-2xl border bg-card p-6 text-center">
         <div>
           <FileText className="mx-auto size-6 text-brand" />
-          <h2 className="mt-3 font-semibold">Chưa có Project Detail</h2>
+          <h2 className="mt-3 font-semibold">Chưa có nội dung chi tiết dự án</h2>
           <p className="mt-2 text-sm text-muted-foreground">
-            Trạng thái sẵn sàng cho dữ liệu detail từ API trong tương lai.
+            Hãy thêm nội dung chi tiết cho dự án đầu tiên.
           </p>
         </div>
       </div>
@@ -101,19 +98,18 @@ export function ProjectDetailEditor({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold">Project Detail</h2>
-            <Badge>P1</Badge>
+            <h2 className="font-semibold">Chi tiết dự án</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Metadata, nội dung chi tiết và bộ ảnh là data riêng
+            Thông tin, nội dung chi tiết và bộ ảnh của từng dự án
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={() => setPreviewOpen(true)}>
-            <Eye /> Preview
+            <Eye /> Xem trước
           </Button>
           <Button onClick={saveDraft} disabled={saving}>
-            <Save /> {saving ? "Đang lưu..." : "Save Draft"}
+            <Save /> {saving ? "Đang lưu..." : "Lưu bản nháp"}
           </Button>
         </div>
       </div>
@@ -125,21 +121,19 @@ export function ProjectDetailEditor({
           </p>
           <div className="space-y-1.5">
             {details.map((detail) => (
-              <button
+              <Button
                 key={detail.id}
                 type="button"
+                variant="ghost"
                 onClick={() => selectDetail(detail)}
-                className={`w-full rounded-xl border p-3 text-left outline-none transition-colors ${
+                className={`h-auto w-full justify-start whitespace-normal rounded-xl border p-3 text-left ${
                   detail.id === selectedId
                     ? "border-brand/25 bg-card"
                     : "border-transparent hover:bg-card/70"
                 }`}
               >
                 <p className="text-xs font-semibold">{detail.title}</p>
-                <p className="mt-1 truncate text-[11px] text-muted-foreground">
-                  /{detail.slug}
-                </p>
-              </button>
+              </Button>
             ))}
           </div>
         </aside>
@@ -148,12 +142,12 @@ export function ProjectDetailEditor({
           <section className="rounded-2xl border p-4 sm:p-5">
             <h3 className="font-semibold">Thông tin dự án</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Các giá trị hiển thị, không chứa control layout hoặc style
+              Các thông tin giới thiệu chính của dự án
             </p>
             <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
               {[
                 ["Tiêu đề", "title"],
-                ["Slug", "slug"],
+                ["Đường dẫn", "slug"],
                 ["Danh mục", "category"],
                 ["Địa điểm", "location"],
                 ["Khách hàng", "client"],
@@ -191,7 +185,7 @@ export function ProjectDetailEditor({
           <section className="rounded-2xl border p-4 sm:p-5">
             <h3 className="font-semibold">Nội dung chi tiết</h3>
             <p className="mt-1 text-xs text-muted-foreground">
-              Copy cho từng block đã được developer định nghĩa
+              Nội dung giới thiệu cho từng phần của dự án
             </p>
             <div className="mt-5 grid gap-4 lg:grid-cols-2">
               <ContentField
@@ -228,20 +222,14 @@ export function ProjectDetailEditor({
           </section>
 
           <ImageField
-            label="Ảnh Hero Project Detail"
+            label="Ảnh mở đầu trang chi tiết dự án"
             value={draft.heroImage}
             alt={draft.heroAlt}
             ratio="1.02:1"
             recommendedSize="2560 × 2500px"
             onChange={(value) => update("heroImage", value)}
-            onAltChange={(value) => update("heroAlt", value)}
           />
 
-          <div className="rounded-xl border bg-muted/35 px-4 py-3 text-xs leading-relaxed text-muted-foreground">
-            Survey, drawing, gallery, rendering và before/after sẽ tiếp tục dùng
-            cùng cách quản lý ảnh hiện tại. Tải ảnh lên kho dùng chung là phạm
-            vi tương lai.
-          </div>
         </div>
       </div>
 
@@ -249,11 +237,10 @@ export function ProjectDetailEditor({
         <DialogContent className="admin-theme-surface w-[min(68rem,calc(100%-2rem))] max-w-none">
           <DialogHeader>
             <div className="flex items-center gap-2">
-              <DialogTitle>Preview Project Detail</DialogTitle>
-              <Badge variant="secondary">Layout khóa</Badge>
+              <DialogTitle>Xem trước chi tiết dự án</DialogTitle>
             </div>
             <DialogDescription>
-              Bản xem trước dùng content hiện tại và không cho phép chỉnh style.
+              Bản xem trước sử dụng nội dung bạn đang chỉnh sửa.
             </DialogDescription>
           </DialogHeader>
           <div className="mt-5 overflow-hidden rounded-2xl border bg-background">

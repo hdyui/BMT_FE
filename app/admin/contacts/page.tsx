@@ -8,19 +8,19 @@ export default function AdminContactsPage() {
   return (
     <AdminModuleShell
       title="Nội dung Liên hệ"
-      description="Quản lý nội dung form và hình ảnh đã được cấu hình trong public component."
+      description="Quản lý biểu mẫu và hình ảnh trên trang Liên hệ."
       items={[
         {
-          title: "Contact Form",
+          title: "Biểu mẫu liên hệ",
           description:
-            "Tiêu đề, mô tả, field label, placeholder, nút gửi và success message.",
+            "Tiêu đề, mô tả, tên các ô nhập, chữ gợi ý, nút gửi và thông báo thành công.",
           priority: "P1",
           href: "/admin/contacts/form",
         },
         {
-          title: "Form Image / Background",
+          title: "Hình ảnh biểu mẫu và ảnh nền",
           description:
-            "Thay ảnh nền hoặc decorative asset khi component hiện tại hỗ trợ.",
+            "Thay hình ảnh biểu mẫu hoặc ảnh nền của trang Liên hệ.",
           priority: "P2",
           href: "/admin/contacts/form",
         },

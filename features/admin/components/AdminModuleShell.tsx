@@ -2,9 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Layers3 } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
 import type { AdminModuleScopeItem } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
 
 export function AdminModuleShell({
   title,
@@ -20,17 +18,15 @@ export function AdminModuleShell({
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader title={title} description={description} />
-      <LockedDesignNotice className="mt-6" />
-
-      <section className="mt-7 overflow-hidden rounded-2xl border bg-card">
+      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
         <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
           <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
             <Layers3 className="size-4" />
           </span>
           <div>
-            <h2 className="text-sm font-semibold">Phạm vi nội dung</h2>
+            <h2 className="text-sm font-semibold">Các nhóm nội dung</h2>
             <p className="text-xs text-muted-foreground">
-              Dữ liệu được giữ riêng theo thiết kế của trang
+              Chọn nhóm cần xem hoặc cập nhật
             </p>
           </div>
         </div>
@@ -47,11 +43,6 @@ export function AdminModuleShell({
               <div className="min-w-0 flex-1">
                 <div className="flex flex-wrap items-center gap-2">
                   <h3 className="font-semibold">{item.title}</h3>
-                  <Badge
-                    variant={item.priority === "P1" ? "default" : "secondary"}
-                  >
-                    {item.priority}
-                  </Badge>
                   {item.count && (
                     <span className="text-xs text-muted-foreground">
                       {item.count}

@@ -1,44 +1,51 @@
 "use client";
 
-import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
+import { useLayoutEffect, useRef } from "react";
+import { Plus, Trash2 } from "lucide-react";
 
 import { ImageField } from "@/features/admin/components/ImageField";
 import type {
   AdminFieldConfig,
   AdminFieldValue,
 } from "@/lib/admin/types/crud";
-import { Button } from "@/lib/components/ui/button";
-import { Input } from "@/lib/components/ui/input";
-import { Textarea } from "@/lib/components/ui/textarea";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export function EditorField({
   field,
   value,
-  altValue,
+  labelOverride,
   error,
+  dirty = false,
   onChange,
-  onAltChange,
 }: {
   field: AdminFieldConfig;
   value: AdminFieldValue | undefined;
-  altValue?: string;
+  labelOverride?: string;
   error?: string;
+  dirty?: boolean;
   onChange: (value: AdminFieldValue) => void;
-  onAltChange?: (value: string) => void;
 }) {
   if (field.type === "image") {
     return (
       <div>
         <ImageField
-          label={field.label}
+          label={labelOverride ?? getConciseImageLabel(field.label)}
           value={String(value ?? "")}
-          alt={altValue ?? ""}
+          alt={labelOverride ?? field.label}
           ratio={field.ratio}
           recommendedSize={field.recommendedSize}
-          showAlt={Boolean(field.altKey)}
+          dirty={dirty}
           onChange={onChange}
-          onAltChange={onAltChange}
         />
         {error && <FieldError>{error}</FieldError>}
       </div>
@@ -50,31 +57,21 @@ export function EditorField({
     return (
       <div className="flex items-center justify-between gap-4 rounded-xl border bg-muted/25 px-4 py-3">
         <div>
-          <p className="text-sm font-medium">{field.label}</p>
+          <p className="flex items-center gap-2 text-sm font-medium">
+            {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+            {field.label}
+          </p>
           {field.description && (
             <p className="mt-0.5 text-xs text-muted-foreground">
               {field.description}
             </p>
           )}
         </div>
-        <button
-          type="button"
-          role="switch"
-          aria-checked={enabled}
-          onClick={() => onChange(!enabled)}
-          className={cn(
-            "relative h-6 w-11 shrink-0 rounded-full border outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30",
-            enabled ? "border-brand bg-brand" : "bg-muted",
-          )}
-        >
-          <span
-            className={cn(
-              "absolute top-0.5 size-4.5 rounded-full bg-white shadow-sm transition-transform",
-              enabled ? "translate-x-5" : "translate-x-0.5",
-            )}
-          />
-          <span className="sr-only">{enabled ? "Đang hiển thị" : "Đang ẩn"}</span>
-        </button>
+        <Switch
+          checked={enabled}
+          onCheckedChange={(checked) => onChange(checked)}
+          aria-label={enabled ? "Đang hiển thị" : "Đang ẩn"}
+        />
       </div>
     );
   }
@@ -84,6 +81,7 @@ export function EditorField({
       <ArrayField
         label={field.label}
         description={field.description}
+        dirty={dirty}
         values={Array.isArray(value) ? value : []}
         onChange={onChange}
       />
@@ -98,9 +96,9 @@ export function EditorField({
   return (
     <label className="grid gap-2 text-sm font-medium">
       <span className="flex flex-wrap items-center justify-between gap-2">
-        <span>
+        <span className="flex items-center gap-2">
+          {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
           {field.label}
-          {field.required && <span className="ml-1 text-brand">*</span>}
         </span>
         {counter && (
           <span className="text-[11px] font-normal text-muted-foreground">
@@ -109,28 +107,24 @@ export function EditorField({
         )}
       </span>
       {field.type === "textarea" ? (
-        <Textarea
+        <AutoGrowTextarea
           value={currentValue}
           placeholder={field.placeholder}
           maxLength={field.maxLength}
           aria-invalid={Boolean(error)}
-          className="min-h-28 resize-y bg-background"
           onChange={(event) => onChange(event.target.value)}
         />
       ) : field.type === "select" ? (
-        <select
-          value={currentValue}
-          aria-invalid={Boolean(error)}
-          className="h-10 rounded-lg border border-input bg-background px-3 text-sm outline-none focus:border-ring focus:ring-3 focus:ring-ring/30"
-          onChange={(event) => onChange(event.target.value)}
-        >
-          <option value="">Chọn giá trị</option>
-          {field.options?.map((option) => (
-            <option value={option} key={option}>
-              {option}
-            </option>
-          ))}
-        </select>
+        <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
+          <SelectTrigger className="w-full" aria-invalid={Boolean(error)}>
+            <SelectValue placeholder="Chọn giá trị" />
+          </SelectTrigger>
+          <SelectContent>
+            {field.options?.map((option) => (
+              <SelectItem value={option} key={option}>{option}</SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
       ) : (
         <Input
           type={field.type === "number" ? "number" : "text"}
@@ -160,30 +154,59 @@ export function EditorField({
   );
 }
 
+function getConciseImageLabel(label: string) {
+  const concise = label.split("·").at(-1)?.trim() ?? label;
+  return concise
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function AutoGrowTextarea({
+  value,
+  ...props
+}: React.ComponentProps<typeof Textarea>) {
+  const ref = useRef<HTMLTextAreaElement>(null);
+
+  useLayoutEffect(() => {
+    const textarea = ref.current;
+    if (!textarea) return;
+    textarea.style.height = "auto";
+    textarea.style.height = `${textarea.scrollHeight}px`;
+  }, [value]);
+
+  return (
+    <Textarea
+      {...props}
+      ref={ref}
+      value={value}
+      rows={1}
+      className="min-h-10 resize-none overflow-hidden bg-background"
+    />
+  );
+}
+
 function ArrayField({
   label,
   description,
+  dirty,
   values,
   onChange,
 }: {
   label: string;
   description?: string;
+  dirty: boolean;
   values: string[];
   onChange: (values: string[]) => void;
 }) {
-  function move(index: number, direction: -1 | 1) {
-    const target = index + direction;
-    if (target < 0 || target >= values.length) return;
-    const next = [...values];
-    [next[index], next[target]] = [next[target], next[index]];
-    onChange(next);
-  }
-
   return (
     <div className="grid gap-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="text-sm font-medium">{label}</p>
+          <p className="flex items-center gap-2 text-sm font-medium">
+            {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+            {label}
+          </p>
           {description && (
             <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           )}
@@ -221,26 +244,7 @@ function ArrayField({
                 type="button"
                 variant="ghost"
                 size="icon"
-                disabled={index === 0}
-                aria-label="Di chuyển lên"
-                onClick={() => move(index, -1)}
-              >
-                <ArrowUp />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                disabled={index === values.length - 1}
-                aria-label="Di chuyển xuống"
-                onClick={() => move(index, 1)}
-              >
-                <ArrowDown />
-              </Button>
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
+                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 aria-label="Xóa dòng"
                 onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))}
               >

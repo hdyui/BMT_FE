@@ -10,14 +10,13 @@ import {
 } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
 import { ProjectDetailEditor } from "@/features/admin/projects/ProjectDetailEditor";
 import { ProjectListPanel } from "@/features/admin/projects/ProjectListPanel";
 import { ProjectTaxonomyPanel } from "@/features/admin/projects/ProjectTaxonomyPanel";
 import { RelatedProjectsPanel } from "@/features/admin/projects/RelatedProjectsPanel";
 import type { ProjectContentBundle } from "@/lib/admin/types/content";
-import { Button } from "@/lib/components/ui/button";
-import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 type ProjectTab = "list" | "categories" | "details" | "related";
 
@@ -41,7 +40,7 @@ export function ProjectsContentManager({
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader
         title="Nội dung Dự án"
-        description="Projects Page Cards, Project Detail và Related Projects là ba nhóm dữ liệu độc lập trong prototype này."
+        description="Quản lý danh sách, danh mục, nội dung chi tiết và các dự án liên quan."
         actions={
           activeTab === "list" ? (
             <Button
@@ -53,38 +52,25 @@ export function ProjectsContentManager({
           ) : undefined
         }
       />
-      <LockedDesignNotice className="mt-6" />
-
-      <div className="admin-scrollbar mt-6 overflow-x-auto">
-        <div className="inline-flex min-w-max rounded-xl border bg-card p-1">
+      <Tabs value={activeTab} onValueChange={(value) => setActiveTab(value as ProjectTab)} className="mt-6">
+        <div className="admin-scrollbar overflow-x-auto">
+          <TabsList className="h-auto min-w-max">
           {tabs.map((tab) => {
             const Icon = tab.icon;
-            const active = activeTab === tab.value;
             return (
-              <button
+              <TabsTrigger
                 key={tab.value}
-                type="button"
-                onClick={() => setActiveTab(tab.value)}
-                className={cn(
-                  "inline-flex h-9 items-center gap-2 rounded-lg px-3.5 text-sm font-medium outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30",
-                  active
-                    ? "bg-brand/10 text-foreground shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground",
-                )}
+                value={tab.value}
               >
-                <Icon
-                  className={cn("size-4", active && "text-brand")}
-                  strokeWidth={1.8}
-                />
+                <Icon className="size-4" strokeWidth={1.8} />
                 {tab.label}
-              </button>
+              </TabsTrigger>
             );
           })}
+          </TabsList>
         </div>
-      </div>
 
-      <div className="mt-5">
-        {activeTab === "list" && (
+        <TabsContent value="list" className="mt-5">
           <ProjectListPanel
             cards={content.cards}
             categories={content.categories.map((category) => category.label)}
@@ -94,32 +80,32 @@ export function ProjectsContentManager({
               setContent((current) => ({ ...current, cards }))
             }
           />
-        )}
-        {activeTab === "categories" && (
+        </TabsContent>
+        <TabsContent value="categories" className="mt-5">
           <ProjectTaxonomyPanel
             categories={content.categories}
             onChange={(categories) =>
               setContent((current) => ({ ...current, categories }))
             }
           />
-        )}
-        {activeTab === "details" && (
+        </TabsContent>
+        <TabsContent value="details" className="mt-5">
           <ProjectDetailEditor
             details={content.details}
             onChange={(details) =>
               setContent((current) => ({ ...current, details }))
             }
           />
-        )}
-        {activeTab === "related" && (
+        </TabsContent>
+        <TabsContent value="related" className="mt-5">
           <RelatedProjectsPanel
             projects={content.related}
             onChange={(related) =>
               setContent((current) => ({ ...current, related }))
             }
           />
-        )}
-      </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 }

@@ -4,12 +4,13 @@ import { CircleAlert } from "lucide-react";
 import { AdminModuleShell } from "@/features/admin/components/AdminModuleShell";
 import { ResourceEditorPage } from "@/features/admin/components/editor/ResourceEditorPage";
 import { ResourceListPage } from "@/features/admin/components/editor/ResourceListPage";
+import { UnifiedResourceEditorPage } from "@/features/admin/components/editor/UnifiedResourceEditorPage";
 import {
   getAdminResource,
   getAdminResourceGroup,
 } from "@/lib/admin/mock-data/resource-registry";
 import type { AdminModuleKey } from "@/lib/admin/types/crud";
-import { Button } from "@/lib/components/ui/button";
+import { Button } from "@/components/ui/button";
 
 export function AdminCrudRoute({
   module,
@@ -33,8 +34,32 @@ export function AdminCrudRoute({
 
   const exactResource = getAdminResource(fullKey);
   if (exactResource) {
+    const directCollectionEditor =
+      exactResource.kind === "collection" &&
+      ["services", "quotation"].includes(exactResource.module);
+
+    if (directCollectionEditor) {
+      return (
+        <UnifiedResourceEditorPage
+          config={exactResource}
+          companionConfig={
+            exactResource.companionResourceKey
+              ? getAdminResource(exactResource.companionResourceKey)
+              : undefined
+          }
+        />
+      );
+    }
+
     return exactResource.kind === "collection" ? (
-      <ResourceListPage config={exactResource} />
+      <ResourceListPage
+        config={exactResource}
+        companionConfig={
+          exactResource.companionResourceKey
+            ? getAdminResource(exactResource.companionResourceKey)
+            : undefined
+        }
+      />
     ) : (
       <ResourceEditorPage config={exactResource} mode="singleton" />
     );
@@ -64,16 +89,16 @@ export function AdminCrudRoute({
         <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-muted text-brand">
           <CircleAlert className="size-5" />
         </span>
-        <h1 className="mt-4 text-xl font-bold">Route quản trị chưa tồn tại</h1>
+        <h1 className="mt-4 text-xl font-bold">Không tìm thấy trang quản trị</h1>
         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-          Resource này chưa được khai báo trong Admin Content Registry.
+          Trang bạn đang tìm chưa sẵn sàng hoặc đường dẫn không đúng.
         </p>
         <Button
           className="mt-5"
           nativeButton={false}
           render={<Link href={`/admin/${module}`} />}
         >
-          Quay lại module
+          Quay lại trang trước
         </Button>
       </div>
     </div>

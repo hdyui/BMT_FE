@@ -1,4 +1,5 @@
 import { adminResourceRegistry } from "@/lib/admin/mock-data/resource-registry";
+import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
 
 export interface AdminContentPageDefinition {
   id: string;
@@ -12,7 +13,7 @@ export interface AdminContentPageDefinition {
 export const adminContentPages: AdminContentPageDefinition[] = [
   {
     id: "header",
-    label: "Header",
+    label: "Đầu trang",
     publicRoute: "Toàn website",
     resourceKeys: ["settings/branding", "settings/navigation", "settings/company"],
     sourceFiles: ["config/site.ts", "lib/components/layout/SiteHeader.tsx"],
@@ -40,7 +41,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     children: [
       servicePage("services-overview", "Trang tổng quan", "/dich-vu", "overview"),
       servicePage("turnkey", "Xây dựng trọn gói", "/dich-vu/xay-dung-tron-goi", "xay-dung-tron-goi"),
-      servicePage("design", "Thiết kế KT & Nội thất", "/dich-vu/thiet-ke-kien-truc-noi-that", "thiet-ke-kien-truc-noi-that"),
+      servicePage("design", "Thiết kế Kiến trúc và Nội thất", "/dich-vu/thiet-ke-kien-truc-noi-that", "thiet-ke-kien-truc-noi-that"),
       servicePage("construction", "Thi công xây dựng", "/dich-vu/thi-cong-xay-dung", "thi-cong-xay-dung"),
       servicePage("renovation", "Cải tạo & sửa chữa", "/dich-vu/cai-tao-sua-chua", "cai-tao-sua-chua"),
     ],
@@ -89,7 +90,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
   },
   {
     id: "footer",
-    label: "Footer",
+    label: "Cuối trang",
     publicRoute: "Toàn website",
     resourceKeys: ["settings/footer", "settings/locations", "settings/company"],
     sourceFiles: ["config/site.ts", "lib/components/layout/SiteFooter.tsx"],
@@ -106,11 +107,19 @@ function servicePage(id: string, label: string, publicRoute: string, path: strin
     "cai-tao-sua-chua": "RenovationServicePage",
   };
   const pageFile = pageFiles[path];
+  const pageResourceKeys = Object.keys(adminResourceRegistry).filter((key) =>
+    key.startsWith(prefix),
+  );
+  const companionKeys = new Set(
+    pageResourceKeys
+      .map((key) => adminResourceRegistry[key]?.companionResourceKey)
+      .filter((key): key is string => Boolean(key)),
+  );
   return {
     id,
     label,
     publicRoute,
-    resourceKeys: Object.keys(adminResourceRegistry).filter((key) => key.startsWith(prefix)),
+    resourceKeys: pageResourceKeys.filter((key) => !companionKeys.has(key)),
     sourceFiles: [`features/services/data/${path}.ts`, `features/services/pages/${pageFile}.tsx`],
   };
 }
@@ -123,13 +132,17 @@ export function flattenContentPages() {
   return adminContentPages.flatMap((page) => [page, ...(page.children ?? [])]);
 }
 
-export function getResourceFieldCount(resourceKey: string) {
+export function getResourceFieldCount(resourceKey: string): number {
   const resource = adminResourceRegistry[resourceKey];
   if (!resource) return 0;
-  return resource.sections.reduce(
-    (total, section) => total + section.fields.reduce((count, field) => count + 1 + (field.altKey ? 1 : 0), 0),
+  const ownFields = getEditableAdminSections(resource.sections).reduce(
+    (total, section) => total + section.fields.length,
     0,
   );
+  return ownFields +
+    (resource.companionResourceKey
+      ? getResourceFieldCount(resource.companionResourceKey)
+      : 0);
 }
 
 export function getPageFieldCount(page: AdminContentPageDefinition): number {

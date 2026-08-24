@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowDown, ArrowUp, FilePenLine, Plus, Trash2 } from "lucide-react";
+import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ImageField } from "@/features/admin/components/ImageField";
 import type { AdminProjectCategory } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -17,8 +16,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
-import { Input } from "@/lib/components/ui/input";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export function ProjectTaxonomyPanel({
   categories,
@@ -28,18 +27,6 @@ export function ProjectTaxonomyPanel({
   onChange: (categories: AdminProjectCategory[]) => void;
 }) {
   const [draft, setDraft] = useState<AdminProjectCategory | null>(null);
-
-  function move(id: string, direction: -1 | 1) {
-    const index = categories.findIndex((category) => category.id === id);
-    const target = index + direction;
-    if (target < 0 || target >= categories.length) return;
-    const next = [...categories];
-    const currentItem = next[index];
-    const targetItem = next[target];
-    next[index] = { ...targetItem, order: index + 1 };
-    next[target] = { ...currentItem, order: target + 1 };
-    onChange(next);
-  }
 
   function addCategory() {
     setDraft({
@@ -63,7 +50,7 @@ export function ProjectTaxonomyPanel({
           )
         : [...categories, draft],
     );
-    toast.success("Đã cập nhật danh mục trong local state");
+    toast.success("Đã cập nhật danh mục");
     setDraft(null);
   }
 
@@ -72,11 +59,10 @@ export function ProjectTaxonomyPanel({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold">Projects Page Category</h2>
-            <Badge>P1</Badge>
+            <h2 className="font-semibold">Danh mục dự án</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Icon Desktop/Mobile và active state được quản lý riêng
+            Hình minh họa cho từng danh mục trên máy tính và điện thoại
           </p>
         </div>
         <Button variant="outline" onClick={addCategory}>
@@ -85,29 +71,26 @@ export function ProjectTaxonomyPanel({
       </div>
 
       <div className="divide-y">
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <article
             key={category.id}
             className="grid gap-4 px-5 py-4 transition-colors hover:bg-muted/35 sm:px-6 lg:grid-cols-[minmax(220px,1fr)_minmax(300px,1.2fr)_auto] lg:items-center"
           >
             <div className="flex items-center gap-3">
-              <span className="grid size-9 place-items-center rounded-lg border bg-background text-xs font-bold text-brand">
-                {String(category.order).padStart(2, "0")}
-              </span>
               <div>
                 <h3 className="text-sm font-semibold">{category.label}</h3>
                 <p className="mt-1 text-xs text-muted-foreground">
-                  Category data riêng của Projects Page
+                  Danh mục hiển thị trên trang Dự án
                 </p>
               </div>
             </div>
 
             <div className="grid grid-cols-4 gap-2">
               {[
-                ["Desktop", category.icon],
-                ["Active", category.activeIcon],
-                ["Mobile", category.mobileIcon],
-                ["M. Active", category.mobileActiveIcon],
+                ["Máy tính", category.icon],
+                ["Đang chọn", category.activeIcon],
+                ["Điện thoại", category.mobileIcon],
+                ["ĐT đang chọn", category.mobileActiveIcon],
               ].map(([label, src]) => (
                 <div key={label} className="rounded-lg border bg-muted/45 p-2">
                   <div className="relative mx-auto size-8">
@@ -130,24 +113,6 @@ export function ProjectTaxonomyPanel({
               <Button
                 variant="ghost"
                 size="icon"
-                onClick={() => move(category.id, -1)}
-                disabled={index === 0}
-                aria-label={`Di chuyển ${category.label} lên`}
-              >
-                <ArrowUp />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={() => move(category.id, 1)}
-                disabled={index === categories.length - 1}
-                aria-label={`Di chuyển ${category.label} xuống`}
-              >
-                <ArrowDown />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
                 onClick={() => setDraft(structuredClone(category))}
                 aria-label={`Chỉnh sửa ${category.label}`}
               >
@@ -158,7 +123,7 @@ export function ProjectTaxonomyPanel({
                 size="icon"
                 onClick={() => {
                   onChange(categories.filter((item) => item.id !== category.id));
-                  toast.success("Đã xóa danh mục khỏi local state");
+                  toast.success("Đã xóa danh mục");
                 }}
                 aria-label={`Xóa ${category.label}`}
                 className="text-destructive hover:text-destructive"
@@ -175,13 +140,12 @@ export function ProjectTaxonomyPanel({
           <DialogHeader>
             <DialogTitle>Chỉnh sửa danh mục dự án</DialogTitle>
             <DialogDescription>
-              Chỉ thay label, icon và thứ tự. Cách bố trí category navigation
-              vẫn khóa trong source.
+              Cập nhật tên và hình minh họa của danh mục.
             </DialogDescription>
           </DialogHeader>
           {draft && (
             <div className="mt-5">
-              <div className="grid gap-4 rounded-2xl border p-4 sm:grid-cols-[1fr_140px] sm:p-5">
+              <div className="grid gap-4 rounded-2xl border p-4 sm:p-5">
                 <label className="grid gap-1.5 text-xs font-semibold">
                   Tên danh mục
                   <Input
@@ -196,29 +160,12 @@ export function ProjectTaxonomyPanel({
                     className="h-10"
                   />
                 </label>
-                <label className="grid gap-1.5 text-xs font-semibold">
-                  Thứ tự
-                  <Input
-                    type="number"
-                    min={1}
-                    value={draft.order}
-                    onChange={(event) =>
-                      setDraft((current) =>
-                        current
-                          ? { ...current, order: Number(event.target.value) }
-                          : current,
-                      )
-                    }
-                    className="h-10"
-                  />
-                </label>
               </div>
               <div className="mt-5 grid gap-4 md:grid-cols-2">
                 <ImageField
-                  label="Icon Desktop"
+                  label="Hình trên máy tính"
                   value={draft.icon}
-                  alt={`${draft.label} icon`}
-                  showAlt={false}
+                  alt={`Hình minh họa ${draft.label}`}
                   onChange={(value) =>
                     setDraft((current) =>
                       current ? { ...current, icon: value } : current,
@@ -226,10 +173,9 @@ export function ProjectTaxonomyPanel({
                   }
                 />
                 <ImageField
-                  label="Icon Desktop Active"
+                  label="Hình khi được chọn trên máy tính"
                   value={draft.activeIcon}
-                  alt={`${draft.label} active icon`}
-                  showAlt={false}
+                  alt={`Hình minh họa ${draft.label} khi được chọn`}
                   onChange={(value) =>
                     setDraft((current) =>
                       current ? { ...current, activeIcon: value } : current,
@@ -237,10 +183,9 @@ export function ProjectTaxonomyPanel({
                   }
                 />
                 <ImageField
-                  label="Icon Mobile"
+                  label="Hình trên điện thoại"
                   value={draft.mobileIcon}
-                  alt={`${draft.label} mobile icon`}
-                  showAlt={false}
+                  alt={`Hình minh họa ${draft.label} trên điện thoại`}
                   onChange={(value) =>
                     setDraft((current) =>
                       current ? { ...current, mobileIcon: value } : current,
@@ -248,10 +193,9 @@ export function ProjectTaxonomyPanel({
                   }
                 />
                 <ImageField
-                  label="Icon Mobile Active"
+                  label="Hình khi được chọn trên điện thoại"
                   value={draft.mobileActiveIcon}
-                  alt={`${draft.label} mobile active icon`}
-                  showAlt={false}
+                  alt={`Hình minh họa ${draft.label} khi được chọn trên điện thoại`}
                   onChange={(value) =>
                     setDraft((current) =>
                       current
@@ -265,7 +209,7 @@ export function ProjectTaxonomyPanel({
           )}
           <DialogFooter>
             <DialogClose render={<Button variant="outline" />}>Hủy</DialogClose>
-            <Button onClick={saveCategory}>Save Draft</Button>
+            <Button onClick={saveCategory}>Lưu bản nháp</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

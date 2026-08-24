@@ -6,14 +6,13 @@ import type {
   AdminCrudRecord,
   AdminResourceConfig,
 } from "@/lib/admin/types/crud";
-import { Badge } from "@/lib/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
+} from "@/components/ui/dialog";
 
 export function ResourcePreviewDialog({
   open,
@@ -41,12 +40,10 @@ export function ResourcePreviewDialog({
       <DialogContent className="admin-theme-surface w-[min(62rem,calc(100%-2rem))] max-w-none">
         <DialogHeader>
           <div className="flex flex-wrap items-center gap-2">
-            <DialogTitle>Preview {config.singular}</DialogTitle>
-            <Badge variant="secondary">Layout khóa</Badge>
+            <DialogTitle>Xem trước {config.singular.toLocaleLowerCase("vi")}</DialogTitle>
           </div>
           <DialogDescription>
-            Preview sử dụng hierarchy cố định để kiểm tra nội dung và hình ảnh,
-            không thay đổi thiết kế public.
+            Kiểm tra nội dung và hình ảnh trước khi lưu.
           </DialogDescription>
         </DialogHeader>
 
@@ -64,7 +61,7 @@ export function ResourcePreviewDialog({
               <div className="absolute inset-0 bg-linear-to-t from-black/70 via-black/10 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5 text-white sm:p-8">
                 <p className="text-xs font-bold tracking-[0.12em] uppercase text-white/70">
-                  BMT Decor Content Preview
+                  BMT Decor
                 </p>
                 <h2 className="mt-2 max-w-3xl text-2xl font-bold tracking-[-0.035em] sm:text-4xl">
                   {String(record[config.titleField] ?? config.singular)}

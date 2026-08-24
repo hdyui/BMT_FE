@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Toaster } from "@/lib/components/ui/sonner";
+import { Toaster } from "@/components/ui/sonner";
 import "./globals.css";
 
 const font = localFont({
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi" className={font.variable} suppressHydrationWarning>
-      <body>
+      <body suppressHydrationWarning>
         {children}
         <Toaster position="top-center" richColors />
       </body>

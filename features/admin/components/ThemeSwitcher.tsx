@@ -12,7 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/lib/components/ui/dropdown-menu";
+} from "@/components/ui/dropdown-menu";
+import { Button } from "@/components/ui/button";
 
 const themeOptions = [
   { value: "light", label: "Sáng", icon: Sun },
@@ -32,10 +33,7 @@ export function ThemeSwitcher() {
 
   return (
     <DropdownMenu>
-      <DropdownMenuTrigger
-        className="inline-flex size-9 items-center justify-center rounded-lg border border-border bg-card text-foreground outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
-        aria-label="Chọn giao diện"
-      >
+      <DropdownMenuTrigger render={<Button variant="outline" size="icon" />} aria-label="Chọn giao diện">
         <CurrentIcon className="size-4" strokeWidth={1.8} />
       </DropdownMenuTrigger>
       <DropdownMenuContent

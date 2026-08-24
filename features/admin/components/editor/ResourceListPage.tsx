@@ -2,308 +2,327 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
+import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
-  AlertCircle,
-  ArrowDown,
-  ArrowUp,
-  Eye,
-  FilePenLine,
-  FolderOpen,
-  MoreHorizontal,
-  Plus,
-  Search,
-  Trash2,
-} from "lucide-react";
+  getCoreRowModel,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  useReactTable,
+  type ColumnDef,
+} from "@tanstack/react-table";
+import { FilePenLine, FolderOpen, Images, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
+import { DataTable } from "@/components/data-table/data-table";
+import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
+import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Input } from "@/components/ui/input";
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
 import { DeleteContentDialog } from "@/features/admin/components/editor/DeleteContentDialog";
+import { EmbeddedResourceEditor } from "@/features/admin/components/editor/EmbeddedResourceEditor";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import type {
-  AdminCrudRecord,
-  AdminResourceConfig,
-} from "@/lib/admin/types/crud";
-import type { ViewState } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/lib/components/ui/dropdown-menu";
-import { Input } from "@/lib/components/ui/input";
-import { Skeleton } from "@/lib/components/ui/skeleton";
+import { useDebounce } from "@/hooks/use-debounce";
+import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
+import type { AdminCrudRecord, AdminResourceConfig } from "@/lib/admin/types/crud";
 
-export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
-  const { getRecords, removeRecord, reorderRecords } = useAdminCrud();
+export function ResourceListPage({
+  config,
+  companionConfig,
+}: {
+  config: AdminResourceConfig;
+  companionConfig?: AdminResourceConfig;
+}) {
+  return (
+    <Suspense fallback={<ResourceListPageFallback />}>
+      <ResourceListPageContent config={config} companionConfig={companionConfig} />
+    </Suspense>
+  );
+}
+
+function ResourceListPageContent({
+  config,
+  companionConfig,
+}: {
+  config: AdminResourceConfig;
+  companionConfig?: AdminResourceConfig;
+}) {
+  const { getRecords, removeRecord, updateRecord } = useAdminCrud();
   const records = getRecords(config.key);
-  const [query, setQuery] = useState("");
-  const [viewState, setViewState] = useState<ViewState>("normal");
+  const pathname = usePathname();
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const urlQuery = searchParams.get("q") ?? "";
+  const [query, setQuery] = useState(urlQuery);
+  const debouncedQuery = useDebounce(query, 350);
+  const syncingFromUrlRef = useRef(false);
+  const previousUrlQueryRef = useRef(urlQuery);
   const [deleteTarget, setDeleteTarget] = useState<AdminCrudRecord | null>(null);
   const [deleting, setDeleting] = useState(false);
-  const [reordering, setReordering] = useState(false);
-
+  const imageManager = config.listMode === "image-manager";
   const baseHref = `/admin/${config.module}/${config.path}`;
-  const filtered = useMemo(() => {
-    const normalized = query.trim().toLocaleLowerCase("vi");
-    if (!normalized) return records;
-    return records.filter((item) =>
-      String(item[config.titleField] ?? "")
-        .toLocaleLowerCase("vi")
-        .includes(normalized),
-    );
-  }, [config.titleField, query, records]);
+
+  useEffect(() => {
+    if (previousUrlQueryRef.current === urlQuery) return;
+    previousUrlQueryRef.current = urlQuery;
+    if (urlQuery !== query) {
+      syncingFromUrlRef.current = true;
+      setQuery(urlQuery);
+    }
+  }, [query, urlQuery]);
+
+  useEffect(() => {
+    if (syncingFromUrlRef.current) {
+      if (debouncedQuery === urlQuery) syncingFromUrlRef.current = false;
+      return;
+    }
+
+    const normalizedQuery = debouncedQuery.trim();
+    if (normalizedQuery === urlQuery) return;
+
+    const params = new URLSearchParams(searchParams.toString());
+    if (normalizedQuery) params.set("q", normalizedQuery);
+    else params.delete("q");
+
+    const queryString = params.toString();
+    router.replace(queryString ? `${pathname}?${queryString}` : pathname, { scroll: false });
+  }, [debouncedQuery, pathname, router, searchParams, urlQuery]);
 
   async function confirmDelete() {
     if (!deleteTarget) return;
     setDeleting(true);
     try {
       await removeRecord(config.key, deleteTarget.id);
-      toast.success("Đã xóa nội dung", {
-        description: "Repository adapter đã nhận thay đổi.",
-      });
+      toast.success("Đã xóa nội dung");
       setDeleteTarget(null);
     } finally {
       setDeleting(false);
     }
   }
 
-  async function moveRecord(recordId: string, direction: -1 | 1) {
-    const currentIndex = records.findIndex((item) => item.id === recordId);
-    const targetIndex = currentIndex + direction;
-    if (currentIndex < 0 || targetIndex < 0 || targetIndex >= records.length)
-      return;
+  const replaceImage = useCallback(async (record: AdminCrudRecord, dataUrl: string) => {
+    if (!config.previewField) return;
+    await updateRecord(config.key, record.id, { ...record, [config.previewField]: dataUrl });
+    toast.success("Đã đổi ảnh");
+  }, [config.key, config.previewField, updateRecord]);
 
-    const next = [...records];
-    [next[currentIndex], next[targetIndex]] = [
-      next[targetIndex],
-      next[currentIndex],
+  const columns = useMemo<ColumnDef<AdminCrudRecord>[]>(() => {
+    const definitions: ColumnDef<AdminCrudRecord>[] = [
+      {
+        id: "select",
+        size: 44,
+        enableSorting: false,
+        enableHiding: true,
+        meta: { label: "Chọn" },
+        header: ({ table }) => (
+          <Checkbox
+            checked={table.getIsAllPageRowsSelected()}
+            indeterminate={table.getIsSomePageRowsSelected()}
+            onCheckedChange={(value) => table.toggleAllPageRowsSelected(Boolean(value))}
+            aria-label="Chọn tất cả mục trên trang"
+          />
+        ),
+        cell: ({ row }) => (
+          <Checkbox
+            checked={row.getIsSelected()}
+            onCheckedChange={(value) => row.toggleSelected(Boolean(value))}
+            aria-label={`Chọn ${String(row.original[config.titleField] ?? config.singular)}`}
+          />
+        ),
+      },
+      {
+        id: "index",
+        accessorFn: (item) => records.findIndex((record) => record.id === item.id) + 1,
+        size: 80,
+        enableSorting: true,
+        enableHiding: true,
+        meta: { label: "Thứ tự" },
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Thứ tự" />,
+        cell: ({ row }) => (
+          <span className="text-xs tabular-nums text-muted-foreground">
+            {String(row.getValue<number>("index")).padStart(2, "0")}
+          </span>
+        ),
+      },
     ];
-    const normalized = config.orderField
-      ? next.map((item, index) => ({
-          ...item,
-          [config.orderField as string]: index + 1,
-        }))
-      : next;
 
-    setReordering(true);
-    try {
-      await reorderRecords(config.key, normalized);
-      toast.success("Đã cập nhật thứ tự");
-    } finally {
-      setReordering(false);
+    if (config.previewField) {
+      definitions.push({
+        id: "preview",
+        size: 82,
+        enableSorting: false,
+        meta: { label: "Hình ảnh" },
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Hình ảnh" />,
+        cell: ({ row }) => {
+          const sourceIndex = records.findIndex((record) => record.id === row.original.id);
+          const title = imageManager
+            ? `${config.itemLabel ?? "Ảnh"} ${sourceIndex + 1}`
+            : String(row.original[config.titleField] ?? config.singular);
+          const preview = String(row.original[config.previewField!] ?? "");
+          return (
+            <div className="relative size-12 overflow-hidden rounded-lg border bg-muted">
+              {preview ? (
+                <Image
+                  src={preview}
+                  alt={title}
+                  fill
+                  unoptimized={preview.startsWith("blob:") || preview.startsWith("data:")}
+                  className="object-contain p-1"
+                  sizes="48px"
+                />
+              ) : (
+                <span className="grid size-full place-items-center text-[10px] text-muted-foreground">Chưa có ảnh</span>
+              )}
+            </div>
+          );
+        },
+      });
     }
-  }
+
+    definitions.push({
+      id: "title",
+      accessorFn: (item) => String(item[config.titleField] ?? ""),
+      meta: { label: imageManager ? "Vị trí" : "Tiêu đề" },
+      header: ({ column }) => (
+        <DataTableColumnHeader column={column} title={imageManager ? "Vị trí" : "Tiêu đề"} />
+      ),
+      cell: ({ row }) => {
+        const sourceIndex = records.findIndex((record) => record.id === row.original.id);
+        const title = imageManager
+          ? `${config.itemLabel ?? "Ảnh"} ${sourceIndex + 1}`
+          : String(row.original[config.titleField] ?? config.singular);
+        return imageManager ? (
+          <span className="font-medium">{title}</span>
+        ) : (
+          <Link href={`${baseHref}/${row.original.id}`} className="font-medium hover:text-brand hover:underline hover:underline-offset-4">
+            {title}
+          </Link>
+        );
+      },
+    });
+
+    if (config.enabledField) {
+      definitions.push({
+        id: "enabled",
+        accessorFn: (item) => Boolean(item[config.enabledField!]),
+        enableSorting: false,
+        meta: { label: "Trạng thái" },
+        header: ({ column }) => <DataTableColumnHeader column={column} title="Trạng thái" />,
+        cell: ({ row }) => {
+          const enabled = Boolean(row.original[config.enabledField!]);
+          return (
+            <Badge variant={enabled ? "default" : "secondary"} className={enabled ? "bg-emerald-600 text-white" : undefined}>
+              {enabled ? "Hiển thị" : "Đang ẩn"}
+            </Badge>
+          );
+        },
+      });
+    }
+
+    definitions.push({
+      id: "actions",
+      size: imageManager ? 220 : 170,
+      enableSorting: false,
+      enableHiding: true,
+      meta: { label: "Thao tác" },
+      header: ({ column }) => (
+        <div className="flex justify-center">
+          <DataTableColumnHeader column={column} title="Thao tác" />
+        </div>
+      ),
+      cell: ({ row }) => {
+        const item = row.original;
+        const sourceIndex = records.findIndex((record) => record.id === item.id);
+        const title = imageManager
+          ? `${config.itemLabel ?? "Ảnh"} ${sourceIndex + 1}`
+          : String(item[config.titleField] ?? config.singular);
+        return (
+          <div className="flex items-center justify-center gap-2 whitespace-nowrap">
+            {imageManager ? (
+              <ReplaceImageButton label={title} onSelect={(dataUrl) => replaceImage(item, dataUrl)} />
+            ) : (
+              <Button variant="outline" size="sm" nativeButton={false} render={<Link href={`${baseHref}/${item.id}`} />}>
+                <FilePenLine /> Chỉnh sửa
+              </Button>
+            )}
+            <Button variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => setDeleteTarget(item)}>
+              <Trash2 /> Xóa
+            </Button>
+          </div>
+        );
+      },
+    });
+
+    return definitions;
+  }, [baseHref, config, imageManager, records, replaceImage]);
+
+  // TanStack Table intentionally returns mutable table methods.
+  // eslint-disable-next-line react-hooks/incompatible-library
+  const table = useReactTable({
+    data: records,
+    columns,
+    state: { globalFilter: debouncedQuery },
+    globalFilterFn: (row, _columnId, value) =>
+      String(row.original[config.titleField] ?? "").toLocaleLowerCase("vi").includes(String(value).trim().toLocaleLowerCase("vi")),
+    getRowId: (row) => row.id,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: { pagination: { pageIndex: 0, pageSize: config.key === "news/list" ? 5 : 10 } },
+  });
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
-      <AdminBreadcrumb
-        items={[
-          { label: config.moduleLabel, href: config.moduleHref },
-          { label: config.title },
-        ]}
-      />
+      <AdminBreadcrumb items={[...getResourceBreadcrumb(config), { label: config.title }]} />
       <div className="mt-4">
         <AdminPageHeader
           title={config.title}
           description={config.description}
           actions={
             <div className="flex flex-wrap items-center gap-2">
-              {config.key === "projects/list" && (
-                <Button variant="outline" nativeButton={false} render={<Link href="/admin/projects/details" />}>
-                  Chi tiết dự án
-                </Button>
-              )}
-              <Button nativeButton={false} render={<Link href={`${baseHref}/new`} />}>
-                <Plus /> Thêm {config.singular.toLocaleLowerCase("vi")}
-              </Button>
+              {!imageManager ? (
+                <Button nativeButton={false} render={<Link href={`${baseHref}/new`} />}><Plus /> Thêm {config.singular.toLocaleLowerCase("vi")}</Button>
+              ) : null}
             </div>
           }
         />
       </div>
-      <LockedDesignNotice className="mt-6" />
+      {companionConfig ? <EmbeddedResourceEditor config={companionConfig} /> : null}
 
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-[0_12px_36px_rgb(36_33_34/.035)]">
-        <div className="border-b p-4 sm:p-5">
-          <div>
-            <label className="relative block">
-              <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-              <Input
-                value={query}
-                onChange={(event) => setQuery(event.target.value)}
-                placeholder={`Tìm ${config.singular.toLocaleLowerCase("vi")}...`}
-                className="h-10 pl-9"
-              />
-            </label>
+      <section className="mt-6">
+        <DataTable
+          table={table}
+          emptyState={
+            <ListMessage
+              title={debouncedQuery ? "Không tìm thấy nội dung" : `Chưa có ${config.singular.toLocaleLowerCase("vi")}`}
+              description={debouncedQuery ? "Thử từ khóa khác hoặc xóa bộ lọc hiện tại." : "Thêm nội dung đầu tiên cho danh sách này."}
+              actionLabel={debouncedQuery ? "Xóa tìm kiếm" : `Thêm ${config.singular.toLocaleLowerCase("vi")}`}
+              href={debouncedQuery ? undefined : `${baseHref}/new`}
+              onAction={debouncedQuery ? () => setQuery("") : undefined}
+            />
+          }
+        >
+          <div role="toolbar" className="flex w-full flex-col items-start justify-between gap-2 p-1 sm:flex-row sm:items-center">
+            {!imageManager ? (
+              <label className="relative block w-full sm:min-w-72 sm:max-w-md">
+                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Tìm ${config.singular.toLocaleLowerCase("vi")}...`} className="h-8 pl-9" />
+              </label>
+            ) : <span className="text-sm font-medium">{records.length} ảnh</span>}
+            <DataTableViewOptions table={table} />
           </div>
-          <div className="mt-3 flex flex-wrap justify-between gap-2 text-xs text-muted-foreground">
-            <span>{filtered.length} bản ghi</span>
-            <span>Persistence được giao tiếp qua repository adapter.</span>
-          </div>
-        </div>
-
-        {viewState === "loading" && <ListLoading />}
-        {viewState === "empty" && (
-          <ListMessage
-            title={`Chưa có ${config.singular}`}
-            description="Tạo nội dung đầu tiên để đánh giá flow quản trị."
-            actionLabel={`Thêm ${config.singular.toLocaleLowerCase("vi")}`}
-            href={`${baseHref}/new`}
-          />
-        )}
-        {viewState === "error" && (
-          <ListMessage
-            error
-            title="Không thể tải nội dung"
-            description="Trạng thái Error-ready cho giai đoạn tích hợp dữ liệu sau này."
-            actionLabel="Thử lại"
-            onAction={() => setViewState("normal")}
-          />
-        )}
-        {viewState === "normal" && filtered.length === 0 && (
-          <ListMessage
-            title="Không tìm thấy nội dung"
-            description="Thử từ khóa khác hoặc tạo nội dung mới."
-            actionLabel={`Thêm ${config.singular.toLocaleLowerCase("vi")}`}
-            href={`${baseHref}/new`}
-          />
-        )}
-        {viewState === "normal" && filtered.length > 0 && (
-          <div className="admin-scrollbar overflow-x-auto">
-            <table className="w-full min-w-[780px] text-left text-sm">
-              <thead className="bg-muted/45 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-                <tr>
-                  <th className="w-16 px-5 py-3">#</th>
-                  {config.previewField && <th className="w-20 px-3 py-3">Preview</th>}
-                  <th className="px-4 py-3">Nội dung</th>
-                  {config.enabledField && <th className="px-4 py-3">Trạng thái</th>}
-                  {config.orderField && <th className="px-4 py-3">Thứ tự</th>}
-                  <th className="w-36 px-4 py-3">Sắp xếp</th>
-                  <th className="w-16 px-4 py-3">
-                    <span className="sr-only">Thao tác</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {filtered.map((item, filteredIndex) => {
-                  const sourceIndex = records.findIndex((record) => record.id === item.id);
-                  const title = String(item[config.titleField] ?? config.singular);
-                  const preview = config.previewField
-                    ? String(item[config.previewField] ?? "")
-                    : "";
-                  const enabled = config.enabledField
-                    ? Boolean(item[config.enabledField])
-                    : true;
-
-                  return (
-                    <tr className="border-t transition-colors hover:bg-muted/35" key={item.id}>
-                      <td className="px-5 py-3.5 text-xs tabular-nums text-muted-foreground">
-                        {String(filteredIndex + 1).padStart(2, "0")}
-                      </td>
-                      {config.previewField && (
-                        <td className="px-3 py-3.5">
-                          <div className="relative size-12 overflow-hidden rounded-lg border bg-muted">
-                            {preview ? (
-                              <Image
-                                src={preview}
-                                alt={title}
-                                fill
-                                unoptimized={preview.startsWith("blob:")}
-                                className="object-cover"
-                                sizes="48px"
-                              />
-                            ) : (
-                              <span className="grid size-full place-items-center text-[10px] text-muted-foreground">
-                                No image
-                              </span>
-                            )}
-                          </div>
-                        </td>
-                      )}
-                      <td className="px-4 py-3.5">
-                        <Link
-                          href={`${baseHref}/${item.id}`}
-                          className="font-medium hover:text-brand hover:underline hover:underline-offset-4"
-                        >
-                          {title}
-                        </Link>
-                        <p className="mt-1 text-xs text-muted-foreground">{item.id}</p>
-                      </td>
-                      {config.enabledField && (
-                        <td className="px-4 py-3.5">
-                          <Badge variant={enabled ? "success" : "secondary"}>
-                            {enabled ? "Hiển thị" : "Đang ẩn"}
-                          </Badge>
-                        </td>
-                      )}
-                      {config.orderField && (
-                        <td className="px-4 py-3.5 tabular-nums text-muted-foreground">
-                          {String(item[config.orderField] ?? sourceIndex + 1).padStart(2, "0")}
-                        </td>
-                      )}
-                      <td className="px-4 py-3.5">
-                        <div className="flex items-center gap-1">
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            disabled={reordering || sourceIndex === 0}
-                            aria-label={`Di chuyển ${title} lên`}
-                            onClick={() => moveRecord(item.id, -1)}
-                          >
-                            <ArrowUp />
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            disabled={reordering || sourceIndex === records.length - 1}
-                            aria-label={`Di chuyển ${title} xuống`}
-                            onClick={() => moveRecord(item.id, 1)}
-                          >
-                            <ArrowDown />
-                          </Button>
-                        </div>
-                      </td>
-                      <td className="px-4 py-3.5">
-                        <DropdownMenu>
-                          <DropdownMenuTrigger
-                            className="inline-flex size-8 items-center justify-center rounded-lg outline-none hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
-                            aria-label={`Thao tác với ${title}`}
-                          >
-                            <MoreHorizontal className="size-4" />
-                          </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end" className="admin-theme-surface w-44">
-                            <DropdownMenuItem render={<Link href={`${baseHref}/${item.id}`} />}>
-                              <Eye /> Xem / Chỉnh sửa
-                            </DropdownMenuItem>
-                            <DropdownMenuItem render={<Link href={`${baseHref}/${item.id}`} />}>
-                              <FilePenLine /> Chỉnh sửa
-                            </DropdownMenuItem>
-                            <DropdownMenuSeparator />
-                            <DropdownMenuItem variant="destructive" onClick={() => setDeleteTarget(item)}>
-                              <Trash2 /> Xóa
-                            </DropdownMenuItem>
-                          </DropdownMenuContent>
-                        </DropdownMenu>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        )}
+        </DataTable>
       </section>
 
       <DeleteContentDialog
         open={Boolean(deleteTarget)}
-        title={`Xóa ${config.singular}?`}
+        title={`Xóa ${config.singular.toLocaleLowerCase("vi")}?`}
         itemLabel={String(deleteTarget?.[config.titleField] ?? config.singular)}
         deleting={deleting}
         onOpenChange={(open) => !open && setDeleteTarget(null)}
@@ -313,58 +332,57 @@ export function ResourceListPage({ config }: { config: AdminResourceConfig }) {
   );
 }
 
-function ListLoading() {
+function ResourceListPageFallback() {
   return (
-    <div className="space-y-1 p-5">
-      {Array.from({ length: 5 }).map((_, index) => (
-        <div className="flex items-center gap-4 border-b py-3 last:border-0" key={index}>
-          <Skeleton className="size-11 shrink-0 rounded-lg" />
-          <div className="flex-1">
-            <Skeleton className="h-4 w-48 max-w-full" />
-            <Skeleton className="mt-2 h-3 w-28" />
-          </div>
-          <Skeleton className="h-7 w-20" />
-        </div>
-      ))}
+    <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
+      <div className="h-5 w-48 animate-pulse rounded-md bg-muted" />
+      <div className="mt-8 h-9 w-72 animate-pulse rounded-md bg-muted" />
+      <div className="mt-8 h-96 animate-pulse rounded-2xl border bg-card" />
     </div>
   );
 }
 
-function ListMessage({
-  error,
-  title,
-  description,
-  actionLabel,
-  href,
-  onAction,
-}: {
-  error?: boolean;
-  title: string;
-  description: string;
-  actionLabel: string;
-  href?: string;
-  onAction?: () => void;
-}) {
+function ReplaceImageButton({ label, onSelect }: { label: string; onSelect: (dataUrl: string) => void }) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  function readImage(file: File | undefined) {
+    if (!file || !file.type.startsWith("image/")) return;
+    const reader = new FileReader();
+    reader.addEventListener("load", () => {
+      if (typeof reader.result === "string") onSelect(reader.result);
+    });
+    reader.readAsDataURL(file);
+  }
+
+  return (
+    <>
+      <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()}><Images /> Đổi ảnh</Button>
+      <input
+        ref={inputRef}
+        type="file"
+        accept="image/png,image/jpeg,image/webp,image/svg+xml"
+        aria-label={`Đổi ${label}`}
+        className="sr-only"
+        onChange={(event) => {
+          readImage(event.target.files?.[0]);
+          event.target.value = "";
+        }}
+      />
+    </>
+  );
+}
+
+function ListMessage({ title, description, actionLabel, href, onAction }: { title: string; description: string; actionLabel: string; href?: string; onAction?: () => void }) {
   return (
     <div className="grid min-h-72 place-items-center p-6 text-center">
       <div>
-        <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-muted text-brand">
-          {error ? <AlertCircle className="size-5" /> : <FolderOpen className="size-5" />}
-        </span>
+        <span className="mx-auto grid size-12 place-items-center rounded-xl bg-muted text-brand"><FolderOpen className="size-5" /></span>
         <h3 className="mt-4 font-semibold">{title}</h3>
-        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">
-          {description}
-        </p>
+        <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
         {href ? (
-          <Button className="mt-4" nativeButton={false} render={<Link href={href} />}>
-            {error ? <AlertCircle /> : <Plus />}
-            {actionLabel}
-          </Button>
+          <Button className="mt-4" nativeButton={false} render={<Link href={href} />}><Plus /> {actionLabel}</Button>
         ) : (
-          <Button className="mt-4" onClick={onAction}>
-            {error ? <AlertCircle /> : <Plus />}
-            {actionLabel}
-          </Button>
+          <Button className="mt-4" onClick={onAction}><Search /> {actionLabel}</Button>
         )}
       </div>
     </div>

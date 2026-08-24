@@ -5,14 +5,14 @@ import { useState } from "react";
 import { Monitor, Smartphone } from "lucide-react";
 
 import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
+} from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 export function HomeHeroPreviewDialog({
@@ -34,19 +34,19 @@ export function HomeHeroPreviewDialog({
       <DialogContent className="admin-theme-surface w-[min(72rem,calc(100%-2rem))] max-w-none">
         <DialogHeader>
           <div className="flex flex-wrap items-center gap-2">
-            <DialogTitle>Xem trước Hero Trang chủ</DialogTitle>
-            <Badge variant="secondary">Layout khóa</Badge>
+            <DialogTitle>Xem trước phần mở đầu Trang chủ</DialogTitle>
           </div>
           <DialogDescription>
-            Preview chỉ thay nội dung và ảnh. Typography, spacing, màu sắc và
-            responsive vẫn do component trong source kiểm soát.
+            Kiểm tra nội dung và hình ảnh trên máy tính hoặc điện thoại trước khi lưu.
           </DialogDescription>
         </DialogHeader>
 
         <div className="mt-5 flex items-center justify-between gap-3">
           <div className="inline-flex rounded-xl border bg-muted p-1">
-            <button
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setViewport("desktop")}
               className={cn(
                 "inline-flex h-8 items-center gap-2 rounded-lg px-3 text-xs font-medium transition-colors",
@@ -55,10 +55,12 @@ export function HomeHeroPreviewDialog({
                   : "text-muted-foreground",
               )}
             >
-              <Monitor className="size-3.5" /> Desktop
-            </button>
-            <button
+              <Monitor className="size-3.5" /> Máy tính
+            </Button>
+            <Button
               type="button"
+              variant="ghost"
+              size="sm"
               onClick={() => setViewport("mobile")}
               className={cn(
                 "inline-flex h-8 items-center gap-2 rounded-lg px-3 text-xs font-medium transition-colors",
@@ -67,12 +69,9 @@ export function HomeHeroPreviewDialog({
                   : "text-muted-foreground",
               )}
             >
-              <Smartphone className="size-3.5" /> Mobile
-            </button>
+              <Smartphone className="size-3.5" /> Điện thoại
+            </Button>
           </div>
-          <span className="text-xs text-muted-foreground">
-            Slide #{slide.order}
-          </span>
         </div>
 
         <div className="mt-4 overflow-x-auto rounded-2xl border bg-muted/40 p-3 sm:p-5">
@@ -87,7 +86,7 @@ export function HomeHeroPreviewDialog({
             {image && (
               <Image
                 src={image}
-                alt={alt || "Ảnh Hero xem trước"}
+                alt={alt || "Ảnh mở đầu xem trước"}
                 fill
                 unoptimized={image.startsWith("blob:")}
                 className="object-cover"
@@ -112,7 +111,7 @@ export function HomeHeroPreviewDialog({
                     : "text-[clamp(28px,3.3vw,56px)] leading-[1.02]",
                 )}
               >
-                {slide.title || "Tiêu đề Hero"}
+                {slide.title || "Tiêu đề mở đầu"}
               </h2>
               <p
                 className={cn(
@@ -122,7 +121,7 @@ export function HomeHeroPreviewDialog({
                     : "line-clamp-3 max-w-[62ch] text-[clamp(13px,1vw,16px)] leading-relaxed",
                 )}
               >
-                {slide.description || "Mô tả Hero"}
+                {slide.description || "Mô tả phần mở đầu"}
               </p>
               <span className="mt-5 inline-flex h-10 w-fit items-center rounded-lg bg-brand px-4 text-sm font-bold text-charcoal">
                 {slide.ctaLabel || "Nút hành động"}

@@ -2,13 +2,12 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowDown, ArrowUp, FilePenLine, Plus, Trash2 } from "lucide-react";
+import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ImageField } from "@/features/admin/components/ImageField";
 import type { AdminRelatedProject } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -17,8 +16,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
-import { Input } from "@/lib/components/ui/input";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 export function RelatedProjectsPanel({
   projects,
@@ -28,18 +27,6 @@ export function RelatedProjectsPanel({
   onChange: (projects: AdminRelatedProject[]) => void;
 }) {
   const [draft, setDraft] = useState<AdminRelatedProject | null>(null);
-
-  function move(id: string, direction: -1 | 1) {
-    const index = projects.findIndex((project) => project.id === id);
-    const target = index + direction;
-    if (target < 0 || target >= projects.length) return;
-    const next = [...projects];
-    const currentItem = next[index];
-    const targetItem = next[target];
-    next[index] = { ...targetItem, order: index + 1 };
-    next[target] = { ...currentItem, order: target + 1 };
-    onChange(next);
-  }
 
   function addProject() {
     setDraft({
@@ -62,7 +49,7 @@ export function RelatedProjectsPanel({
           )
         : [...projects, draft],
     );
-    toast.success("Đã cập nhật Related Projects trong local state");
+    toast.success("Đã cập nhật dự án liên quan");
     setDraft(null);
   }
 
@@ -71,11 +58,10 @@ export function RelatedProjectsPanel({
       <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
         <div>
           <div className="flex items-center gap-2">
-            <h2 className="font-semibold">Related Projects</h2>
-            <Badge variant="secondary">P2</Badge>
+            <h2 className="font-semibold">Dự án liên quan</h2>
           </div>
           <p className="mt-1 text-xs text-muted-foreground">
-            Danh sách này không tự động liên kết với Project list hoặc detail
+            Chọn các dự án sẽ xuất hiện trong phần dự án liên quan.
           </p>
         </div>
         <Button variant="outline" onClick={addProject}>
@@ -84,7 +70,7 @@ export function RelatedProjectsPanel({
       </div>
 
       <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-4">
-        {projects.map((project, index) => (
+        {projects.map((project) => (
           <article
             key={project.id}
             className="group overflow-hidden rounded-2xl border bg-background"
@@ -101,9 +87,6 @@ export function RelatedProjectsPanel({
             </div>
             <div className="p-4">
               <div className="flex items-start gap-3">
-                <span className="grid size-7 shrink-0 place-items-center rounded-lg bg-muted text-[11px] font-bold text-brand">
-                  {String(project.order).padStart(2, "0")}
-                </span>
                 <div className="min-w-0">
                   <h3 className="line-clamp-2 text-sm font-semibold leading-snug">
                     {project.title}
@@ -114,24 +97,6 @@ export function RelatedProjectsPanel({
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-end gap-1 border-t pt-3">
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  onClick={() => move(project.id, -1)}
-                  disabled={index === 0}
-                  aria-label={`Di chuyển ${project.title} lên`}
-                >
-                  <ArrowUp />
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="icon-sm"
-                  onClick={() => move(project.id, 1)}
-                  disabled={index === projects.length - 1}
-                  aria-label={`Di chuyển ${project.title} xuống`}
-                >
-                  <ArrowDown />
-                </Button>
                 <Button
                   variant="ghost"
                   size="icon-sm"
@@ -146,7 +111,7 @@ export function RelatedProjectsPanel({
                   className="text-destructive hover:text-destructive"
                   onClick={() => {
                     onChange(projects.filter((item) => item.id !== project.id));
-                    toast.success("Đã xóa khỏi local state");
+                    toast.success("Đã xóa dự án liên quan");
                   }}
                   aria-label={`Xóa ${project.title}`}
                 >
@@ -163,8 +128,7 @@ export function RelatedProjectsPanel({
           <DialogHeader>
             <DialogTitle>Chỉnh sửa dự án liên quan</DialogTitle>
             <DialogDescription>
-              Content này được lưu riêng, không cập nhật Project Card hoặc
-              Project Detail cùng tên.
+              Cập nhật tiêu đề, liên kết và hình ảnh của dự án liên quan.
             </DialogDescription>
           </DialogHeader>
           {draft && (
@@ -198,22 +162,6 @@ export function RelatedProjectsPanel({
                     className="h-10"
                   />
                 </label>
-                <label className="grid gap-1.5 text-xs font-semibold">
-                  Thứ tự
-                  <Input
-                    type="number"
-                    min={1}
-                    value={draft.order}
-                    onChange={(event) =>
-                      setDraft((current) =>
-                        current
-                          ? { ...current, order: Number(event.target.value) }
-                          : current,
-                      )
-                    }
-                    className="h-10"
-                  />
-                </label>
               </div>
               <ImageField
                 label="Ảnh dự án liên quan"
@@ -226,17 +174,12 @@ export function RelatedProjectsPanel({
                     current ? { ...current, image: value } : current,
                   )
                 }
-                onAltChange={(value) =>
-                  setDraft((current) =>
-                    current ? { ...current, imageAlt: value } : current,
-                  )
-                }
               />
             </div>
           )}
           <DialogFooter>
             <DialogClose render={<Button variant="outline" />}>Hủy</DialogClose>
-            <Button onClick={save}>Save Draft</Button>
+            <Button onClick={save}>Lưu bản nháp</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

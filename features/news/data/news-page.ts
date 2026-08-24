@@ -26,6 +26,12 @@ export const featuredNews = [
   },
 ] as const;
 
+export const articleMedia = {
+  desktopImage: "/images/news/article-model.jpg",
+  mobileImage: "/images/news/mobile/article-photo.png",
+  imageAlt: "Mô hình kiến trúc minh họa cho bài viết",
+} as const;
+
 export const articles = [
   "5 lưu ý quan trọng khi lập kế hoạch xây dựng nhà ở",
   "Cách tối ưu ánh sáng tự nhiên cho không gian sống",

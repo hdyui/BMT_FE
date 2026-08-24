@@ -2,7 +2,7 @@
 
 import { LoaderCircle, Trash2 } from "lucide-react";
 
-import { Button } from "@/lib/components/ui/button";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -11,7 +11,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
+} from "@/components/ui/dialog";
 
 export function DeleteContentDialog({
   open,
@@ -34,8 +34,7 @@ export function DeleteContentDialog({
         <DialogHeader>
           <DialogTitle>{title}</DialogTitle>
           <DialogDescription>
-            “{itemLabel}” chỉ bị xóa khỏi dữ liệu mẫu trong phiên hiện tại.
-            Reload trang có thể khôi phục dữ liệu ban đầu.
+            Bạn có chắc muốn xóa “{itemLabel}” khỏi danh sách?
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>

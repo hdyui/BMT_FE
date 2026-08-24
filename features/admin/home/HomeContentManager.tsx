@@ -1,10 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import {
-  ArrowDown,
-  ArrowUp,
   Eye,
   ImageIcon,
   Layers3,
@@ -16,52 +14,51 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { ImageField } from "@/features/admin/components/ImageField";
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
 import { HomeHeroPreviewDialog } from "@/features/admin/home/HomeHeroPreviewDialog";
 import { homeContentService } from "@/lib/admin/services/home-content.service";
 import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
-import { Input } from "@/lib/components/ui/input";
-import { Textarea } from "@/lib/components/ui/textarea";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Switch } from "@/components/ui/switch";
 import { cn } from "@/lib/utils";
 
 const homeSections = [
   {
-    title: "Hero Slider",
-    description: "Text, CTA, ảnh Desktop/Mobile, alt, thứ tự và hiển thị.",
+    title: "Ảnh mở đầu Trang chủ",
+    description: "Tiêu đề, nút bấm, hình ảnh và trạng thái hiển thị.",
     priority: "P1",
     count: "4 slide",
   },
   {
-    title: "Dự án tiêu biểu Home",
-    description: "Data riêng của Homepage, không dùng chung Projects Page.",
+    title: "Dự án tiêu biểu",
+    description: "Các dự án nổi bật hiển thị trên Trang chủ.",
     priority: "P1",
     count: "32 item",
   },
   {
-    title: "Dịch vụ nổi bật Home",
-    description: "Nội dung và hình ảnh riêng theo thiết kế Homepage.",
+    title: "Dịch vụ nổi bật",
+    description: "Nội dung và hình ảnh của các dịch vụ nổi bật.",
     priority: "P1",
     count: "4 dịch vụ",
   },
   {
-    title: "Statistics",
-    description: "Giá trị, nhãn, hậu tố, icon và thứ tự.",
+    title: "Số liệu nổi bật",
+    description: "Giá trị, nhãn, hậu tố và hình minh họa.",
     priority: "P2",
     count: "3 số liệu",
   },
   {
     title: "Vì sao chọn BMT",
-    description: "Tiêu đề, mô tả, icon, ảnh hover và thứ tự.",
+    description: "Tiêu đề, mô tả và hình ảnh.",
     priority: "P2",
     count: "4 lý do",
   },
   {
     title: "Tin nổi bật & Đối tác",
-    description: "Danh sách nội dung, hình ảnh, liên kết và thứ tự.",
+    description: "Danh sách nội dung, hình ảnh và liên kết.",
     priority: "P2",
-    count: "Theo section",
+    count: "Theo từng nhóm",
   },
 ] as const;
 
@@ -98,11 +95,6 @@ export function HomeContentManager({
   const [previewOpen, setPreviewOpen] = useState(false);
   const [saving, setSaving] = useState(false);
 
-  const selectedIndex = useMemo(
-    () => slides.findIndex((slide) => slide.id === selectedId),
-    [selectedId, slides],
-  );
-
   function selectSlide(slide: HomeHeroSlideContent) {
     setSelectedId(slide.id);
     setDraft(structuredClone(slide));
@@ -115,24 +107,11 @@ export function HomeContentManager({
     setDraft((current) => ({ ...current, [key]: value }));
   }
 
-  function moveSelected(direction: -1 | 1) {
-    const targetIndex = selectedIndex + direction;
-    if (targetIndex < 0 || targetIndex >= slides.length) return;
-
-    const next = [...slides];
-    const currentSlide = next[selectedIndex];
-    const targetSlide = next[targetIndex];
-    next[selectedIndex] = { ...targetSlide, order: selectedIndex + 1 };
-    next[targetIndex] = { ...currentSlide, order: targetIndex + 1 };
-    setSlides(next);
-    setDraft((current) => ({ ...current, order: targetIndex + 1 }));
-  }
-
   function addSlide() {
     const newSlide: HomeHeroSlideContent = {
       id: `home-hero-local-${Date.now()}`,
       title: "Slide mới",
-      description: "Nhập mô tả nội dung Hero.",
+      description: "Nhập mô tả cho phần mở đầu.",
       ctaLabel: "Xem thêm",
       ctaHref: "/",
       desktopImage: "/images/home/hero-background-01.webp",
@@ -144,8 +123,8 @@ export function HomeContentManager({
     };
     setSlides((current) => [...current, newSlide]);
     selectSlide(newSlide);
-    toast.info("Đã tạo slide cục bộ", {
-      description: "Bản nháp chỉ tồn tại trong phiên hiện tại.",
+    toast.info("Đã thêm ảnh mới", {
+      description: "Hãy bấm lưu để giữ lại thay đổi.",
     });
   }
 
@@ -156,8 +135,8 @@ export function HomeContentManager({
       setSlides((current) =>
         current.map((slide) => (slide.id === saved.id ? saved : slide)),
       );
-      toast.success("Đã lưu bản nháp trong UI", {
-        description: "Chưa có persistence. Dữ liệu sẽ mất khi tải lại trang.",
+      toast.success("Đã lưu bản nháp", {
+        description: "Nội dung đã được cập nhật.",
       });
     } finally {
       setSaving(false);
@@ -168,15 +147,13 @@ export function HomeContentManager({
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader
         title="Nội dung Trang chủ"
-        description="Quản lý content riêng của Homepage BMT Decor. Module này không liên kết tự động với Projects Page hoặc Service Detail."
+        description="Quản lý nội dung hiển thị trên Trang chủ BMT Decor."
         actions={
           <Button className="h-10 px-4" onClick={addSlide}>
-            <Plus /> Thêm slide
+            <Plus /> Thêm ảnh
           </Button>
         }
       />
-      <LockedDesignNotice className="mt-6" />
-
       <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-[0_12px_36px_rgb(36_33_34/.035)]">
         <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
           <div>
@@ -184,34 +161,11 @@ export function HomeContentManager({
               <span className="grid size-8 place-items-center rounded-lg bg-brand/10 text-brand">
                 <Sparkles className="size-4" />
               </span>
-              <h2 className="font-semibold">Hero Slider</h2>
-              <Badge>P1</Badge>
+              <h2 className="font-semibold">Ảnh mở đầu Trang chủ</h2>
             </div>
             <p className="mt-1.5 text-xs text-muted-foreground">
-              Editor mẫu hoàn chỉnh cho content và image management
+              Chỉnh sửa nội dung và hình ảnh mở đầu Trang chủ
             </p>
-          </div>
-          <div className="flex items-center gap-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => moveSelected(-1)}
-              disabled={selectedIndex <= 0}
-              aria-label="Di chuyển slide lên"
-            >
-              <ArrowUp />
-              <span className="hidden sm:inline">Lên</span>
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => moveSelected(1)}
-              disabled={selectedIndex === slides.length - 1}
-              aria-label="Di chuyển slide xuống"
-            >
-              <ArrowDown />
-              <span className="hidden sm:inline">Xuống</span>
-            </Button>
           </div>
         </div>
 
@@ -221,12 +175,13 @@ export function HomeContentManager({
               {slides.map((slide) => {
                 const active = slide.id === selectedId;
                 return (
-                  <button
+                  <Button
                     key={slide.id}
                     type="button"
+                    variant="ghost"
                     onClick={() => selectSlide(slide)}
                     className={cn(
-                      "flex min-w-[245px] items-center gap-3 rounded-xl border p-2.5 text-left outline-none transition-colors xl:min-w-0 xl:w-full",
+                      "h-auto min-w-[245px] justify-start gap-3 whitespace-normal rounded-xl border p-2.5 text-left xl:min-w-0 xl:w-full",
                       active
                         ? "border-brand/25 bg-card shadow-sm"
                         : "border-transparent hover:bg-card/70",
@@ -244,9 +199,6 @@ export function HomeContentManager({
                     </div>
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold text-brand">
-                          #{String(slide.order).padStart(2, "0")}
-                        </span>
                         <span
                           className={cn(
                             "text-[10px] font-medium",
@@ -262,7 +214,7 @@ export function HomeContentManager({
                         {slide.title}
                       </p>
                     </div>
-                  </button>
+                  </Button>
                 );
               })}
             </div>
@@ -276,10 +228,9 @@ export function HomeContentManager({
                     <div>
                       <h3 className="font-semibold">Nội dung</h3>
                       <p className="mt-1 text-xs text-muted-foreground">
-                        Văn bản và liên kết hiển thị trong Hero
+                        Văn bản và liên kết hiển thị ở phần mở đầu
                       </p>
                     </div>
-                    <Badge variant="outline">Slide #{draft.order}</Badge>
                   </div>
 
                   <div className="mt-5 grid gap-4">
@@ -309,21 +260,12 @@ export function HomeContentManager({
                         className="min-h-28"
                       />
                     </FieldLabel>
-                    <div className="grid gap-4 sm:grid-cols-2">
-                      <FieldLabel label="Nhãn CTA">
+                    <div className="grid gap-4">
+                      <FieldLabel label="Chữ trên nút bấm">
                         <Input
                           value={draft.ctaLabel}
                           onChange={(event) =>
                             updateDraft("ctaLabel", event.target.value)
-                          }
-                          className="h-10"
-                        />
-                      </FieldLabel>
-                      <FieldLabel label="Liên kết CTA">
-                        <Input
-                          value={draft.ctaHref}
-                          onChange={(event) =>
-                            updateDraft("ctaHref", event.target.value)
                           }
                           className="h-10"
                         />
@@ -335,93 +277,63 @@ export function HomeContentManager({
                 <section className="rounded-2xl border bg-card p-4 sm:p-5">
                   <h3 className="font-semibold">Cài đặt nội dung</h3>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    Chỉ quản lý thứ tự và trạng thái khi component hỗ trợ
+                    Trạng thái hiển thị
                   </p>
                   <div className="mt-5 flex flex-wrap items-end justify-between gap-5">
-                    <FieldLabel label="Thứ tự">
-                      <Input
-                        type="number"
-                        min={1}
-                        value={draft.order}
-                        onChange={(event) =>
-                          updateDraft("order", Number(event.target.value))
-                        }
-                        className="h-10 w-24"
+                    <div className="flex items-center gap-3 rounded-xl border px-3 py-2.5">
+                      <Switch
+                        checked={draft.enabled}
+                        onCheckedChange={(checked) => updateDraft("enabled", checked)}
+                        aria-label="Hiển thị hình ảnh này"
                       />
-                    </FieldLabel>
-                    <button
-                      type="button"
-                      role="switch"
-                      aria-checked={draft.enabled}
-                      onClick={() => updateDraft("enabled", !draft.enabled)}
-                      className="flex items-center gap-3 rounded-xl border px-3 py-2.5 text-left outline-none focus-visible:ring-3 focus-visible:ring-ring/30"
-                    >
-                      <span
-                        className={cn(
-                          "relative h-5 w-9 rounded-full transition-colors",
-                          draft.enabled ? "bg-brand" : "bg-muted",
-                        )}
-                      >
-                        <span
-                          className={cn(
-                            "absolute top-0.5 size-4 rounded-full bg-white shadow-sm transition-transform",
-                            draft.enabled ? "translate-x-[18px]" : "translate-x-0.5",
-                          )}
-                        />
-                      </span>
                       <span>
                         <span className="block text-xs font-semibold">
-                          Hiển thị slide
+                          Hiển thị hình ảnh này
                         </span>
                         <span className="mt-0.5 block text-[11px] text-muted-foreground">
                           {draft.enabled ? "Đang bật" : "Đang tắt"}
                         </span>
                       </span>
-                    </button>
+                    </div>
                   </div>
                 </section>
               </div>
 
               <div className="grid min-w-0 gap-5 md:grid-cols-2 2xl:grid-cols-1">
                 <ImageField
-                  label="Ảnh Desktop"
+                  label="Ảnh trên máy tính"
                   value={draft.desktopImage}
                   alt={draft.desktopAlt}
                   ratio="16:9"
                   recommendedSize="1920 × 1080px"
                   onChange={(value) => updateDraft("desktopImage", value)}
-                  onAltChange={(value) => updateDraft("desktopAlt", value)}
                 />
                 <ImageField
-                  label="Ảnh Mobile"
+                  label="Ảnh trên điện thoại"
                   value={draft.mobileImage}
                   alt={draft.mobileAlt}
                   ratio="9:16"
                   recommendedSize="1080 × 1920px"
                   onChange={(value) => updateDraft("mobileImage", value)}
-                  onAltChange={(value) => updateDraft("mobileAlt", value)}
                 />
               </div>
             </div>
 
-            <div className="mt-6 flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-xs leading-relaxed text-muted-foreground">
-                Save Draft hiện chỉ cập nhật local state trong phiên làm việc.
-              </p>
+            <div className="mt-6 flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-end">
               <div className="flex gap-2">
                 <Button
                   variant="outline"
                   className="h-10 flex-1 px-4 sm:flex-none"
                   onClick={() => setPreviewOpen(true)}
                 >
-                  <Eye /> Preview
+                  <Eye /> Xem trước
                 </Button>
                 <Button
                   className="h-10 flex-1 px-4 sm:flex-none"
                   onClick={saveDraft}
                   disabled={saving}
                 >
-                  <Save /> {saving ? "Đang lưu..." : "Save Draft"}
+                  <Save /> {saving ? "Đang lưu..." : "Lưu bản nháp"}
                 </Button>
               </div>
             </div>
@@ -435,9 +347,9 @@ export function HomeContentManager({
             <Layers3 className="size-4" />
           </span>
           <div>
-            <h2 className="font-semibold">Các section Trang chủ</h2>
+            <h2 className="font-semibold">Các nhóm nội dung Trang chủ</h2>
             <p className="mt-0.5 text-xs text-muted-foreground">
-              Mỗi section giữ data riêng theo design hiện tại
+              Chọn nhóm để xem và cập nhật nội dung
             </p>
           </div>
         </div>
@@ -452,11 +364,6 @@ export function HomeContentManager({
                   <ImageIcon className="size-4 text-brand" />
                   <h3 className="text-sm font-semibold">{section.title}</h3>
                 </div>
-                <Badge
-                  variant={section.priority === "P1" ? "default" : "secondary"}
-                >
-                  {section.priority}
-                </Badge>
               </div>
               <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
                 {section.description}

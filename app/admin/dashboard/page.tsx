@@ -4,7 +4,7 @@ import { DashboardView } from "@/features/admin/dashboard/DashboardView";
 import { projectContentService } from "@/lib/admin/services/project-content.service";
 
 export const metadata: Metadata = {
-  title: "Dashboard",
+  title: "Tổng quan",
 };
 
 export default async function DashboardPage() {

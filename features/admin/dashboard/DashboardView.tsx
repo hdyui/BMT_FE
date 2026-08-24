@@ -13,8 +13,16 @@ import {
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import type { ProjectContentBundle } from "@/lib/admin/types/content";
-import { Badge } from "@/lib/components/ui/badge";
-import { buttonVariants } from "@/lib/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { cn } from "@/lib/utils";
 
 const completion = [
@@ -27,8 +35,8 @@ const completion = [
 
 const activities = [
   {
-    title: "Hero Trang chủ đã được rà soát",
-    detail: "4 slide có đủ tiêu đề, ảnh và alt text",
+    title: "Phần mở đầu Trang chủ đã được rà soát",
+    detail: "4 ảnh có đủ tiêu đề và mô tả hình ảnh",
     time: "12 phút trước",
     done: true,
   },
@@ -40,12 +48,12 @@ const activities = [
   },
   {
     title: "Danh mục dự án",
-    detail: "Đã cập nhật thứ tự hiển thị",
+    detail: "Đã cập nhật nội dung hiển thị",
     time: "Hôm nay, 09:20",
     done: true,
   },
   {
-    title: "Footer & Social",
+    title: "Cuối trang và mạng xã hội",
     detail: "Cần bổ sung liên kết mạng xã hội",
     time: "Hôm qua, 16:40",
     done: false,
@@ -63,21 +71,21 @@ export function DashboardView({
 
   const stats = [
     {
-      label: "Hero Trang chủ",
+      label: "Ảnh mở đầu Trang chủ",
       value: "04",
-      detail: "4/4 slide đang hiển thị",
+      detail: "4/4 ảnh đang hiển thị",
       icon: House,
       href: "/admin/content/home",
     },
     {
-      label: "Dự án trang Home",
+      label: "Dự án trên Trang chủ",
       value: "32",
-      detail: "Data riêng của Homepage",
+      detail: "Dự án nổi bật trên Trang chủ",
       icon: Layers3,
       href: "/admin/content/home",
     },
     {
-      label: "Projects Page",
+      label: "Danh sách dự án",
       value: String(projectContent.cards.length).padStart(2, "0"),
       detail: `${publishedCount} nội dung đã xuất bản`,
       icon: FolderKanban,
@@ -86,7 +94,7 @@ export function DashboardView({
     {
       label: "Hồ sơ chi tiết",
       value: String(projectContent.details.length).padStart(2, "0"),
-      detail: "Data độc lập với danh sách",
+      detail: "Hồ sơ chi tiết của từng dự án",
       icon: ListTree,
       href: "/admin/projects",
     },
@@ -95,8 +103,8 @@ export function DashboardView({
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader
-        title="Dashboard"
-        description="Tổng quan workspace nội dung website BMT Decor và các điểm quản trị đang được định nghĩa."
+        title="Tổng quan"
+        description="Theo dõi và cập nhật các nội dung chính trên website BMT Decor."
         actions={
           <Link
             href="/admin/content/home"
@@ -144,11 +152,8 @@ export function DashboardView({
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div>
               <h2 className="font-semibold">Mức độ hoàn thiện nội dung</h2>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Theo checklist field bắt buộc trong prototype
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">Theo các nội dung cần hoàn thiện</p>
             </div>
-            <Badge variant="secondary">Dữ liệu mẫu</Badge>
           </div>
 
           <div className="mt-7 space-y-5">
@@ -175,10 +180,7 @@ export function DashboardView({
             ))}
           </div>
 
-          <div className="mt-7 flex flex-wrap items-center justify-between gap-3 rounded-xl border bg-muted/45 px-4 py-3">
-            <p className="text-xs leading-relaxed text-muted-foreground">
-              Tiến độ chỉ phản ánh mock checklist, không phải dữ liệu analytics.
-            </p>
+          <div className="mt-7 flex flex-wrap items-center justify-end gap-3 rounded-xl border bg-muted/45 px-4 py-3">
             <Link
               href="/admin/settings"
               className="text-xs font-semibold text-brand hover:underline hover:underline-offset-4"
@@ -192,9 +194,7 @@ export function DashboardView({
           <div className="flex items-center justify-between border-b px-5 py-4 sm:px-6">
             <div>
               <h2 className="font-semibold">Hoạt động gần đây</h2>
-              <p className="mt-1 text-xs text-muted-foreground">
-                Nhật ký mô phỏng trong UI
-              </p>
+              <p className="mt-1 text-xs text-muted-foreground">Các thay đổi nội dung mới nhất</p>
             </div>
             <Clock3 className="size-4 text-muted-foreground" />
           </div>
@@ -240,9 +240,7 @@ export function DashboardView({
         <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
           <div>
             <h2 className="font-semibold">Nội dung dự án gần đây</h2>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Projects Page Cards, không phải Home Featured Projects
-            </p>
+            <p className="mt-1 text-xs text-muted-foreground">Các dự án vừa được thêm hoặc cập nhật</p>
           </div>
           <Link
             href="/admin/projects"
@@ -252,19 +250,19 @@ export function DashboardView({
           </Link>
         </div>
         <div className="overflow-x-auto">
-          <table className="w-full min-w-[720px] text-left text-sm">
-            <thead className="bg-muted/45 text-[11px] font-semibold tracking-[0.08em] text-muted-foreground uppercase">
-              <tr>
-                <th className="px-5 py-3 sm:px-6">Dự án</th>
-                <th className="px-4 py-3">Danh mục</th>
-                <th className="px-4 py-3">Trạng thái</th>
-                <th className="px-5 py-3 text-right sm:px-6">Ngày tạo</th>
-              </tr>
-            </thead>
-            <tbody>
+          <Table className="min-w-[720px]">
+            <TableHeader>
+              <TableRow>
+                <TableHead className="px-5 sm:px-6">Dự án</TableHead>
+                <TableHead>Danh mục</TableHead>
+                <TableHead>Trạng thái</TableHead>
+                <TableHead className="px-5 text-right sm:px-6">Ngày tạo</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {projectContent.cards.slice(0, 5).map((project) => (
-                <tr key={project.id} className="border-t transition-colors hover:bg-muted/40">
-                  <td className="px-5 py-3.5 sm:px-6">
+                <TableRow key={project.id}>
+                  <TableCell className="px-5 sm:px-6">
                     <div className="flex items-center gap-3">
                       <div className="relative size-11 shrink-0 overflow-hidden rounded-lg bg-muted">
                         <Image
@@ -277,16 +275,13 @@ export function DashboardView({
                       </div>
                       <div className="min-w-0">
                         <p className="truncate font-medium">{project.title}</p>
-                        <p className="mt-0.5 truncate text-xs text-muted-foreground">
-                          {project.slug}
-                        </p>
                       </div>
                     </div>
-                  </td>
-                  <td className="px-4 py-3.5 text-muted-foreground">
+                  </TableCell>
+                  <TableCell className="text-muted-foreground">
                     {project.category}
-                  </td>
-                  <td className="px-4 py-3.5">
+                  </TableCell>
+                  <TableCell>
                     <Badge
                       variant={
                         project.status === "published" ? "success" : "warning"
@@ -294,14 +289,14 @@ export function DashboardView({
                     >
                       {project.status === "published" ? "Đã xuất bản" : "Bản nháp"}
                     </Badge>
-                  </td>
-                  <td className="px-5 py-3.5 text-right tabular-nums text-muted-foreground sm:px-6">
+                  </TableCell>
+                  <TableCell className="px-5 text-right tabular-nums text-muted-foreground sm:px-6">
                     {project.createdAt}
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         </div>
       </section>
     </div>

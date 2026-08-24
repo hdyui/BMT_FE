@@ -10,21 +10,24 @@ import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
 import { EditorActionBar } from "@/features/admin/components/editor/EditorActionBar";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
+import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
 import {
   EditorLayout,
-  EditorScopeCard,
   EditorSection,
 } from "@/features/admin/components/editor/EditorLayout";
 import { ResourcePreviewDialog } from "@/features/admin/components/editor/ResourcePreviewDialog";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
+import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
   AdminResourceConfig,
   AdminValidationErrors,
 } from "@/lib/admin/types/crud";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function ResourceEditorPage({
   config,
@@ -59,8 +62,25 @@ export function ResourceEditorPage({
   const [errors, setErrors] = useState<AdminValidationErrors>({});
   const [saving, setSaving] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  const [history, setHistory] = useState<FieldHistoryEntry[]>([]);
+  const editableSections = useMemo(
+    () => getEditableAdminSections(config.sections),
+    [config.sections],
+  );
 
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedSnapshot);
+  const dirtyKeys = useMemo(() => {
+    const keys = editableSections.flatMap((section) =>
+      section.fields.map((field) => field.key),
+    );
+    return new Set(keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])));
+  }, [draft, editableSections, savedSnapshot]);
+  const dirtyCount = dirtyKeys.size;
+  const topActionEditor =
+    config.module === "services" ||
+    config.module === "quotation" ||
+    config.key === "settings/capability-profile";
+  const allowPreview = !topActionEditor && config.module !== "services";
 
   if (mode !== "create" && !existing) {
     return (
@@ -71,7 +91,7 @@ export function ResourceEditorPage({
           </span>
           <h1 className="mt-4 text-xl font-bold">Không tìm thấy nội dung</h1>
           <p className="mt-2 text-sm text-muted-foreground">
-            ID có thể không tồn tại trong dữ liệu mẫu của phiên hiện tại.
+            Nội dung này có thể đã bị xóa hoặc đường dẫn không đúng.
           </p>
           <Button className="mt-5" nativeButton={false} render={<Link href={baseHref} />}>
             Quay lại danh sách
@@ -82,7 +102,15 @@ export function ResourceEditorPage({
   }
 
   function updateField(key: string, value: AdminFieldValue) {
-    setDraft((current) => ({ ...current, [key]: value }));
+    const previous = draft[key] ?? "";
+    if (sameValue(previous, value)) return;
+    const next = { ...draft, [key]: value };
+    setDraft(next);
+    setHistory((current) => [
+      ...current,
+      { key, previous: cloneValue(previous) },
+    ]);
+    if (JSON.stringify(next) === JSON.stringify(savedSnapshot)) setHistory([]);
     setErrors((current) => {
       if (!current[key]) return current;
       const next = { ...current };
@@ -91,12 +119,28 @@ export function ResourceEditorPage({
     });
   }
 
+  function undoLast() {
+    const action = history.at(-1);
+    if (!action) return;
+    const next = { ...draft, [action.key]: cloneValue(action.previous) };
+    setDraft(next);
+    setHistory((current) =>
+      JSON.stringify(next) === JSON.stringify(savedSnapshot) ? [] : current.slice(0, -1),
+    );
+  }
+
+  function undoAll() {
+    setDraft(structuredClone(savedSnapshot));
+    setHistory([]);
+    setErrors({});
+  }
+
   async function saveDraft() {
-    const nextErrors = validateRecord(config, draft);
+    const nextErrors = validateRecord({ ...config, sections: editableSections }, draft);
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
-      toast.error("Vui lòng kiểm tra các field chưa hợp lệ", {
-        description: `${Object.keys(nextErrors).length} field cần được cập nhật.`,
+      toast.error("Vui lòng kiểm tra các nội dung chưa hợp lệ", {
+        description: `${Object.keys(nextErrors).length} nội dung cần được cập nhật.`,
       });
       return;
     }
@@ -106,16 +150,14 @@ export function ResourceEditorPage({
       if (mode === "create") {
         const saved = await createRecord(config.key, draft);
         setSavedSnapshot(structuredClone(saved));
-        toast.success("Đã tạo bản nháp", {
-          description: "Save adapter đã nhận nội dung mới.",
-        });
+        setHistory([]);
+        toast.success("Đã tạo bản nháp");
         router.replace(`${baseHref}/${saved.id}`);
       } else {
         const saved = await updateRecord(config.key, draft.id, draft);
         setSavedSnapshot(structuredClone(saved));
-        toast.success("Đã cập nhật nội dung", {
-          description: "Save adapter đã nhận thay đổi.",
-        });
+        setHistory([]);
+        toast.success("Đã cập nhật nội dung");
       }
     } finally {
       setSaving(false);
@@ -131,7 +173,7 @@ export function ResourceEditorPage({
     <div className="mx-auto w-full max-w-[1320px] p-4 pb-8 sm:p-6 lg:p-8">
       <AdminBreadcrumb
         items={[
-          { label: config.moduleLabel, href: config.moduleHref },
+          ...getResourceBreadcrumb(config),
           {
             label: config.title,
             href: config.kind === "collection" ? baseHref : undefined,
@@ -153,80 +195,170 @@ export function ResourceEditorPage({
           title={pageTitle}
           description={config.description}
           actions={
+            topActionEditor ? (
+              <EditorTopActions
+                dirty={dirty}
+                dirtyCount={dirtyCount}
+                saving={saving}
+                onUndo={undoLast}
+                onUndoAll={undoAll}
+                onSave={saveDraft}
+              />
+            ) : (
             <div className="flex items-center gap-2">
-              {dirty && <Badge variant="warning">Có thay đổi chưa lưu</Badge>}
-              <Button variant="outline" onClick={() => setPreviewOpen(true)}>
-                Preview
-              </Button>
+              {dirty && (
+                <Badge variant="warning" className="gap-2">
+                  <span className="size-2 rounded-full bg-brand" />
+                  {dirtyCount} thay đổi chưa lưu
+                </Badge>
+              )}
+              {allowPreview && (
+                <Button variant="outline" onClick={() => setPreviewOpen(true)}>
+                  Xem trước
+                </Button>
+              )}
             </div>
+            )
           }
         />
       </div>
 
       <EditorLayout
-        aside={
+        aside={topActionEditor ? undefined : (
           <>
-            <EditorScopeCard />
             <div className="rounded-2xl border bg-card p-4">
-              <h2 className="text-sm font-semibold">Thông tin bản nháp</h2>
+              <h2 className="text-sm font-semibold">Trạng thái nội dung</h2>
               <div className="mt-4 space-y-3 text-xs text-muted-foreground">
                 <p className="flex items-start gap-2">
                   <Hash className="mt-0.5 size-3.5 shrink-0" />
-                  <span className="break-all">ID: {draft.id}</span>
+                  <span>Nội dung đang chỉnh sửa</span>
                 </p>
                 <p className="flex items-start gap-2">
                   <FileText className="mt-0.5 size-3.5 shrink-0" />
                   <span>
                     {config.kind === "singleton"
-                      ? "Nội dung singleton"
-                      : "Resource dạng danh sách"}
+                      ? "Nội dung dùng chung"
+                      : "Một mục trong danh sách"}
                   </span>
                 </p>
               </div>
             </div>
           </>
-        }
+        )}
       >
-        {config.sections.map((editorSection) => (
-          <EditorSection
-            title={editorSection.title}
-            description={editorSection.description}
-            key={editorSection.id}
-          >
-            {editorSection.fields.map((field) => (
-              <EditorField
-                field={field}
-                value={draft[field.key]}
-                altValue={field.altKey ? String(draft[field.altKey] ?? "") : undefined}
-                error={errors[field.key]}
-                onChange={(value) => updateField(field.key, value)}
-                onAltChange={
-                  field.altKey
-                    ? (value) => updateField(field.altKey as string, value)
-                    : undefined
-                }
-                key={field.key}
-              />
-            ))}
-          </EditorSection>
-        ))}
+        {topActionEditor ? (
+          <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
+            {editableSections.map((editorSection, sectionIndex) => {
+              const fields = editorSection.fields;
+              const imageCount = fields.filter((field) => field.type === "image").length;
+              const threeColumnText = imageCount === 0 && fields.length === 3;
+
+              return (
+                <div
+                  className={cn(
+                    "p-4 sm:p-5",
+                    sectionIndex > 0 && "border-t",
+                  )}
+                  key={editorSection.id}
+                >
+                  {editableSections.length > 1 && (
+                    <div className="mb-4">
+                      <h2 className="text-sm font-semibold">{editorSection.title}</h2>
+                      {editorSection.description && (
+                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                          {editorSection.description}
+                        </p>
+                      )}
+                    </div>
+                  )}
+                  <div
+                    className={cn(
+                      "grid items-start gap-4 lg:gap-5",
+                      fields.length > 1 && "md:grid-cols-2",
+                      threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4",
+                    )}
+                  >
+                    {fields.map((field) => (
+                      <div
+                        className={cn(
+                          !threeColumnText && fields.length === 1 && "xl:col-span-4",
+                          !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
+                          !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                        )}
+                        key={field.key}
+                      >
+                        <EditorField
+                          field={field}
+                          value={draft[field.key]}
+                          error={errors[field.key]}
+                          dirty={dirtyKeys.has(field.key)}
+                          onChange={(value) => updateField(field.key, value)}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              );
+            })}
+          </section>
+        ) : (
+          editableSections.map((editorSection) => (
+            <EditorSection
+              title={editorSection.title}
+              description={editorSection.description}
+              dirtyCount={editorSection.fields.reduce(
+                (count, field) =>
+                  count + (dirtyKeys.has(field.key) ? 1 : 0),
+                0,
+              )}
+              key={editorSection.id}
+            >
+              {editorSection.fields.map((field) => (
+                <EditorField
+                  field={field}
+                  value={draft[field.key]}
+                  error={errors[field.key]}
+                  dirty={dirtyKeys.has(field.key)}
+                  onChange={(value) => updateField(field.key, value)}
+                  key={field.key}
+                />
+              ))}
+            </EditorSection>
+          ))
+        )}
       </EditorLayout>
 
-      <EditorActionBar
+      {!topActionEditor && <EditorActionBar
         dirty={dirty}
         saving={saving}
-        onPreview={() => setPreviewOpen(true)}
+        dirtyCount={dirtyCount}
+        onPreview={allowPreview ? () => setPreviewOpen(true) : undefined}
+        onUndo={undoLast}
+        onUndoAll={undoAll}
         onSave={saveDraft}
-      />
+      />}
 
-      <ResourcePreviewDialog
+      {!topActionEditor && <ResourcePreviewDialog
         open={previewOpen}
         config={config}
         record={draft}
         onOpenChange={setPreviewOpen}
-      />
+      />}
     </div>
   );
+}
+
+interface FieldHistoryEntry {
+  key: string;
+  previous: AdminFieldValue;
+}
+
+function cloneValue(value: AdminFieldValue) {
+  return Array.isArray(value) ? [...value] : value;
+}
+
+function sameValue(left: AdminFieldValue | undefined, right: AdminFieldValue | undefined) {
+  return JSON.stringify(left) === JSON.stringify(right);
 }
 
 function createEmptyRecord(config: AdminResourceConfig, order: number) {
@@ -261,12 +393,12 @@ function validateRecord(
       (Array.isArray(value) && value.filter(Boolean).length === 0);
 
     if (field.required && empty) {
-      errors[field.key] = "Field này là bắt buộc.";
+      errors[field.key] = "Nội dung này là bắt buộc.";
       continue;
     }
 
     if (field.type === "url" && !empty && !isValidContentUrl(String(value))) {
-      errors[field.key] = "Dùng đường dẫn tương đối /... hoặc URL https:// hợp lệ.";
+      errors[field.key] = "Vui lòng nhập một liên kết hợp lệ.";
     }
 
     if (

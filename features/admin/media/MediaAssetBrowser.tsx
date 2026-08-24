@@ -2,21 +2,18 @@
 
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { Check, Copy, Eye, ImageIcon, Search } from "lucide-react";
-import { toast } from "sonner";
+import { Eye, ImageIcon, Search } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
-import { Input } from "@/lib/components/ui/input";
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
 
 const assets = [
   "/images/home/hero-background-01.webp",
@@ -42,7 +39,6 @@ const assets = [
 
 export function MediaAssetBrowser() {
   const [query, setQuery] = useState("");
-  const [selected, setSelected] = useState<string | null>(assets[0]);
   const [preview, setPreview] = useState<string | null>(null);
 
   const filtered = useMemo(() => {
@@ -54,19 +50,13 @@ export function MediaAssetBrowser() {
       : assets;
   }, [query]);
 
-  async function copyPath(path: string) {
-    await navigator.clipboard.writeText(path);
-    toast.success("Đã copy đường dẫn asset", { description: path });
-  }
-
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader
-        title="Media Asset Browser"
-        description="Tìm, xem trước và copy đường dẫn asset hiện có. Không có upload server trong phase FE-only."
-        actions={<Badge variant="secondary">{assets.length} assets mẫu</Badge>}
+        title="Thư viện ảnh"
+        description="Tìm và xem các hình ảnh đang có trên website."
+        actions={<Badge variant="secondary">{assets.length} hình ảnh</Badge>}
       />
-      <LockedDesignNotice className="mt-6" />
 
       <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
         <div className="border-b p-4 sm:p-5">
@@ -75,51 +65,40 @@ export function MediaAssetBrowser() {
             <Input
               value={query}
               onChange={(event) => setQuery(event.target.value)}
-              placeholder="Tìm theo tên file hoặc thư mục..."
+              placeholder="Tìm hình ảnh..."
               className="h-10 pl-9"
             />
           </label>
         </div>
 
         <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-5 lg:grid-cols-3 2xl:grid-cols-4">
-          {filtered.map((asset) => {
-            const active = selected === asset;
+          {filtered.map((asset, index) => {
             return (
               <article
-                className={`group overflow-hidden rounded-2xl border transition-colors ${active ? "border-brand bg-brand/5" : "bg-background hover:border-foreground/20"}`}
+                className="group overflow-hidden rounded-2xl border bg-background transition-colors hover:border-foreground/20"
                 key={asset}
               >
-                <button
+                <Button
                   type="button"
-                  className="relative block aspect-[4/3] w-full overflow-hidden bg-muted outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30"
-                  onClick={() => setSelected(asset)}
+                  variant="ghost"
+                  className="relative block h-auto aspect-[4/3] w-full overflow-hidden rounded-none bg-muted p-0"
+                  onClick={() => setPreview(asset)}
                 >
                   <Image
                     src={asset}
-                    alt="Asset preview"
+                    alt="Xem trước hình ảnh"
                     fill
                     className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
                     sizes="(max-width: 768px) 100vw, 360px"
                   />
-                  {active && (
-                    <span className="absolute top-3 right-3 grid size-7 place-items-center rounded-full bg-brand text-charcoal shadow-sm">
-                      <Check className="size-4" />
-                    </span>
-                  )}
-                </button>
+                </Button>
                 <div className="p-3.5">
-                  <p className="truncate text-xs font-medium" title={asset}>
-                    {asset.split("/").at(-1)}
+                  <p className="truncate text-xs font-medium">
+                    Hình ảnh {String(index + 1).padStart(2, "0")}
                   </p>
-                  <p className="mt-1 truncate text-[11px] text-muted-foreground" title={asset}>
-                    {asset}
-                  </p>
-                  <div className="mt-3 grid grid-cols-2 gap-2">
-                    <Button type="button" variant="outline" size="sm" onClick={() => copyPath(asset)}>
-                      <Copy /> Copy Path
-                    </Button>
+                  <div className="mt-3">
                     <Button type="button" variant="ghost" size="sm" onClick={() => setPreview(asset)}>
-                      <Eye /> Preview
+                      <Eye /> Xem trước
                     </Button>
                   </div>
                 </div>
@@ -132,7 +111,7 @@ export function MediaAssetBrowser() {
           <div className="grid min-h-60 place-items-center p-6 text-center">
             <div>
               <ImageIcon className="mx-auto size-7 text-brand" />
-              <h2 className="mt-3 font-semibold">Không tìm thấy asset</h2>
+              <h2 className="mt-3 font-semibold">Không tìm thấy hình ảnh</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Thử từ khóa hoặc tên thư mục khác.
               </p>
@@ -141,25 +120,19 @@ export function MediaAssetBrowser() {
         )}
       </section>
 
-      <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-        File picker trong editor chỉ tạo preview cục bộ bằng URL object. Trình
-        duyệt không ghi file vào source hoặc production.
-      </p>
-
       <Dialog
         open={Boolean(preview)}
         onOpenChange={(open) => !open && setPreview(null)}
       >
         <DialogContent className="admin-theme-surface w-[min(64rem,calc(100%-2rem))] max-w-none">
           <DialogHeader>
-            <DialogTitle>Preview Asset</DialogTitle>
-            <DialogDescription>{preview}</DialogDescription>
+            <DialogTitle>Xem trước hình ảnh</DialogTitle>
           </DialogHeader>
           {preview && (
             <div className="relative aspect-[16/9] overflow-hidden rounded-2xl border bg-muted">
               <Image
                 src={preview}
-                alt="Asset preview"
+                alt="Xem trước hình ảnh"
                 fill
                 className="object-contain"
                 sizes="(max-width: 768px) 100vw, 900px"

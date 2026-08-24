@@ -66,6 +66,9 @@ export interface AdminResourceConfig {
   previewField?: string;
   orderField?: string;
   enabledField?: string;
+  listMode?: "default" | "image-manager";
+  itemLabel?: string;
+  companionResourceKey?: string;
   sections: AdminEditorSectionConfig[];
   initialRecords: AdminCrudRecord[];
 }

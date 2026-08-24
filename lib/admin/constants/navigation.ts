@@ -26,7 +26,7 @@ export const adminNavigation: AdminNavigationSection[] = [
   {
     label: "Tổng quan",
     items: [
-      { label: "Dashboard", href: "/admin/dashboard", icon: LayoutDashboard },
+      { label: "Tổng quan", href: "/admin/dashboard", icon: LayoutDashboard },
     ],
   },
   {
@@ -50,8 +50,8 @@ export const adminNavigation: AdminNavigationSection[] = [
   {
     label: "Hệ thống",
     items: [
-      { label: "Media", href: "/admin/media", icon: ImageIcon },
-      { label: "SEO", href: "/admin/seo", icon: SearchCheck },
+      { label: "Thư viện ảnh", href: "/admin/media", icon: ImageIcon },
+      { label: "Thông tin tìm kiếm", href: "/admin/seo", icon: SearchCheck },
       { label: "Cấu hình", href: "/admin/settings", icon: Settings2 },
     ],
   },
@@ -62,16 +62,16 @@ export const adminPageMeta: Record<
   { title: string; description: string }
 > = {
   "/admin/dashboard": {
-    title: "Dashboard",
+    title: "Tổng quan",
     description: "Tổng quan nội dung website BMT Decor",
   },
   "/admin/home": {
     title: "Trang chủ",
-    description: "Quản lý nội dung riêng của Homepage",
+    description: "Quản lý nội dung riêng của Trang chủ",
   },
   "/admin/content": {
     title: "Nội dung trang",
-    description: "Quản lý content theo đúng public page và section nguồn",
+    description: "Quản lý nội dung theo từng trang trên website",
   },
   "/admin/about": {
     title: "Giới thiệu",
@@ -97,21 +97,25 @@ export const adminPageMeta: Record<
     title: "Báo giá",
     description: "Quản lý bảng giá và nội dung công cụ ước tính",
   },
+  "/admin/capability-profile": {
+    title: "Hồ sơ năng lực",
+    description: "Quản lý nội dung và hình ảnh Hồ sơ năng lực",
+  },
   "/admin/contacts": {
     title: "Liên hệ",
     description: "Quản lý nội dung biểu mẫu liên hệ",
   },
   "/admin/media": {
-    title: "Media",
-    description: "Xem và chọn đường dẫn asset cho nội dung",
+    title: "Thư viện ảnh",
+    description: "Xem và chọn hình ảnh cho nội dung",
   },
   "/admin/seo": {
-    title: "SEO",
-    description: "Quản lý metadata nội dung",
+    title: "Thông tin tìm kiếm",
+    description: "Quản lý tiêu đề và mô tả hiển thị trên công cụ tìm kiếm",
   },
   "/admin/settings": {
     title: "Cấu hình",
-    description: "Thông tin doanh nghiệp, header và footer",
+    description: "Thông tin doanh nghiệp, đầu trang và cuối trang",
   },
 };
 

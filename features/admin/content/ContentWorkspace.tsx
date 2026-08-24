@@ -2,18 +2,20 @@
 
 import Link from "next/link";
 import { useMemo, useState } from "react";
-import { ArrowRight, FileText, LockKeyhole, Search } from "lucide-react";
+import { ArrowRight, Layers3, Search } from "lucide-react";
 
-import { LockedDesignNotice } from "@/features/admin/components/LockedDesignNotice";
 import {
   adminContentPages,
   getContentPage,
   getPageFieldCount,
   getResourceFieldCount,
 } from "@/lib/admin/content-pages";
-import { adminResourceRegistry } from "@/lib/admin/mock-data/resource-registry";
-import { Badge } from "@/lib/components/ui/badge";
-import { Input } from "@/lib/components/ui/input";
+import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  adminResourceRegistry,
+  getAdminResourceGroup,
+} from "@/lib/admin/mock-data/resource-registry";
+import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string }) {
@@ -28,6 +30,22 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
     }),
     [normalized],
   );
+  const serviceGroupKey = serviceGroupByContentPage[selected.id];
+  const serviceGroup = serviceGroupKey
+    ? getAdminResourceGroup(`services/${serviceGroupKey}`)
+    : undefined;
+  const standaloneGroupItems = ["quotation", "capability-profile"].includes(selected.id)
+    ? selected.resourceKeys.flatMap((resourceKey) => {
+        const resource = adminResourceRegistry[resourceKey];
+        if (!resource) return [];
+        return [{
+          title: resource.title,
+          description: resource.description,
+          count: `${getResourceFieldCount(resourceKey)} trường`,
+          href: getContentResourceHref(resourceKey),
+        }];
+      })
+    : undefined;
 
   return (
     <div className="grid min-h-[calc(100dvh-72px)] lg:grid-cols-[286px_minmax(0,1fr)]">
@@ -67,9 +85,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
               <p className="text-[11px] font-bold tracking-[0.14em] text-brand uppercase">Trang</p>
               <h1 className="mt-1 text-2xl font-bold tracking-tight">{selected.label}</h1>
               <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-                <span>{getPageFieldCount(selected)} trường</span>
-                <span aria-hidden="true">·</span>
-                <span>{selected.publicRoute}</span>
+                <span>{getPageFieldCount(selected)} nội dung có thể chỉnh sửa</span>
               </div>
             </div>
             <Link
@@ -81,13 +97,40 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             </Link>
           </header>
 
-          <LockedDesignNotice className="mt-6" />
-
+          {selected.id === "services" ? (
+            <ContentGroupGrid
+              title="Các trang Dịch vụ"
+              description="Chọn trang cần quản lý nội dung."
+              items={(selected.children ?? []).map((page) => ({
+                title: page.label,
+                description: getServicePageDescription(page.id),
+                count: `${getPageFieldCount(page)} trường`,
+                href: `/admin/content/${page.id}`,
+              }))}
+            />
+          ) : serviceGroup ? (
+            <ContentGroupGrid
+              title="Các phần nội dung"
+              description={`Chọn phần cần cập nhật trên trang ${selected.label}.`}
+              items={serviceGroup.items.map((item) => ({
+                title: item.title,
+                description: item.description,
+                count: item.count,
+                href: item.href,
+              }))}
+            />
+          ) : standaloneGroupItems ? (
+            <ContentGroupGrid
+              title="Các phần nội dung"
+              description={`Chọn phần cần cập nhật trên trang ${selected.label}.`}
+              items={standaloneGroupItems}
+            />
+          ) : (
           <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
             <div className="border-b px-5 py-4 sm:px-6">
-              <h2 className="font-semibold">Content sections</h2>
+              <h2 className="font-semibold">Các nhóm nội dung</h2>
               <p className="mt-1 text-sm text-muted-foreground">
-                Field được nhóm theo module nguồn. Số lượng bên dưới được tính từ content definition thực tế.
+                Chọn nhóm cần cập nhật cho trang này.
               </p>
             </div>
             {selected.resourceKeys.length > 0 ? (
@@ -95,16 +138,12 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
                 {selected.resourceKeys.map((resourceKey) => {
                   const resource = adminResourceRegistry[resourceKey];
                   if (!resource) return null;
-                  const fieldLabels = resource.sections.flatMap((section) =>
-                    section.fields.flatMap((field) => [field.label, ...(field.altKey ? ["Alt text"] : [])]),
-                  );
+                  const fieldLabels = getResourceFieldLabels(resourceKey);
                   return (
                     <article className="grid gap-4 p-5 sm:p-6 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center" key={resourceKey}>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="font-semibold">{resource.title}</h3>
-                          <Badge variant={resource.priority === "P1" ? "default" : "secondary"}>{resource.priority}</Badge>
-                          <span className="text-xs text-muted-foreground">{getResourceFieldCount(resourceKey)} trường</span>
                         </div>
                         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{resource.description}</p>
                         <div className="mt-3 flex flex-wrap gap-1.5">
@@ -126,28 +165,103 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
               </div>
             ) : (
               <div className="p-8 text-center text-sm text-muted-foreground">
-                Chọn một trang con của Dịch vụ để xem content definition riêng.
+                Chọn một trang dịch vụ cụ thể để xem và chỉnh sửa nội dung.
               </div>
             )}
           </section>
-
-          <section className="mt-5 grid gap-4 rounded-2xl border bg-muted/20 p-5 sm:grid-cols-2 sm:p-6">
-            <div>
-              <h2 className="flex items-center gap-2 text-sm font-semibold"><FileText className="size-4 text-brand" /> Source đã trace</h2>
-              <ul className="mt-3 space-y-1.5 text-xs text-muted-foreground">
-                {selected.sourceFiles.map((source) => <li className="break-all font-mono" key={source}>{source}</li>)}
-              </ul>
-            </div>
-            <div>
-              <h2 className="flex items-center gap-2 text-sm font-semibold"><LockKeyhole className="size-4 text-brand" /> Design bị khóa</h2>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                Typography, màu, spacing, layout, breakpoint, layer, animation, CSS/Tailwind và toàn bộ geometry trang trí vẫn nằm trong source code.
-              </p>
-            </div>
-          </section>
+          )}
         </div>
       </main>
     </div>
+  );
+}
+
+function getResourceFieldLabels(resourceKey: string): string[] {
+  const resource = adminResourceRegistry[resourceKey];
+  if (!resource) return [];
+  const ownLabels = getEditableAdminSections(resource.sections).flatMap((section) =>
+    section.fields.map((field) => field.label),
+  );
+  return resource.companionResourceKey
+    ? [...getResourceFieldLabels(resource.companionResourceKey), ...ownLabels]
+    : ownLabels;
+}
+
+function getContentResourceHref(resourceKey: string) {
+  if (resourceKey === "settings/capability-profile") {
+    return "/admin/capability-profile/content";
+  }
+  const resource = adminResourceRegistry[resourceKey];
+  return resource ? `/admin/${resource.module}/${resource.path}` : "/admin/content";
+}
+
+const serviceGroupByContentPage: Record<string, string> = {
+  "services-overview": "overview",
+  turnkey: "xay-dung-tron-goi",
+  design: "thiet-ke-kien-truc-noi-that",
+  construction: "thi-cong-xay-dung",
+  renovation: "cai-tao-sua-chua",
+};
+
+function getServicePageDescription(id: string) {
+  const descriptions: Record<string, string> = {
+    "services-overview": "Phần mở đầu, danh sách dịch vụ, quy trình và câu hỏi thường gặp.",
+    turnkey: "Phần mở đầu, dự án tiêu biểu, giải pháp và quy trình xây dựng trọn gói.",
+    design: "Phần mở đầu, thư viện ảnh, giải pháp và quy trình thiết kế.",
+    construction: "Phần mở đầu, dự án, quy trình và nội dung riêng trên điện thoại.",
+    renovation: "Phần mở đầu, dự án, giải pháp và nội dung cải tạo, sửa chữa.",
+  };
+  return descriptions[id] ?? "Quản lý các phần nội dung của trang dịch vụ.";
+}
+
+function ContentGroupGrid({
+  title,
+  description,
+  items,
+}: {
+  title: string;
+  description: string;
+  items: Array<{ title: string; description: string; count?: string; href: string }>;
+}) {
+  return (
+    <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
+      <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
+        <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
+          <Layers3 className="size-4" />
+        </span>
+        <div>
+          <h2 className="text-sm font-semibold">{title}</h2>
+          <p className="text-xs text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      <div className={cn("grid", items.length > 1 && "md:grid-cols-2")}>
+        {items.map((item, index) => (
+          <Link
+            className={cn(
+              "group flex min-h-36 items-start gap-4 border-b p-5 outline-none transition-colors hover:bg-muted/55 focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6",
+              items.length > 1 && "md:odd:border-r",
+              index >= items.length - (items.length % 2 || 2) && "md:border-b-0",
+            )}
+            href={item.href}
+            key={item.href}
+          >
+            <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand">
+              {String(index + 1).padStart(2, "0")}
+            </span>
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <h3 className="font-semibold">{item.title}</h3>
+                {item.count && <span className="text-xs text-muted-foreground">{item.count}</span>}
+              </div>
+              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
+              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
+                Quản lý <ArrowRight className="size-3.5" />
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
   );
 }
 

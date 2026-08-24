@@ -23,6 +23,7 @@ import { ListDivider } from "@/lib/components/shared/ListDivider";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
 import {
+  articleMedia,
   articles,
   featuredNews,
 } from "@/features/news/data/news-page";
@@ -105,15 +106,15 @@ function ArticleCard({
         <div className={styles.articleImageWrap}>
           <Image
             className={`${styles.articleImage} ${styles.articleImageDesktop}`}
-            src="/images/news/article-model.jpg"
-            alt="Mô hình kiến trúc minh họa cho bài viết"
+            src={articleMedia.desktopImage}
+            alt={articleMedia.imageAlt}
             fill
             sizes="300px"
           />
           <Image
             className={`${styles.articleImage} ${styles.articleImageMobile}`}
-            src="/images/news/mobile/article-photo.png"
-            alt="Mô hình kiến trúc minh họa cho bài viết"
+            src={articleMedia.mobileImage}
+            alt={articleMedia.imageAlt}
             width={3600}
             height={2160}
             sizes="calc(100vw - 28px)"
