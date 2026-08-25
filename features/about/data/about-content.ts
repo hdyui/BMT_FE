@@ -1,5 +1,9 @@
 const imageRoot = "/images/about/source";
 
+export const aboutJourneySection = {
+  title: "Hành trình của BMT Decor",
+} as const;
+
 export const aboutJourneyMilestones = [
   {
     year: "2011",

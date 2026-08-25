@@ -15,6 +15,7 @@ import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
 import {
   homeNews as news,
+  homeSectionContent,
   homeTrustReasons as trustReasons,
 } from "@/features/home/data/home-content";
 
@@ -39,13 +40,12 @@ function ProjectSectionHeading() {
     <div className="text-center">
       <Reveal>
         <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
-          Dự án tiêu biểu
+          {homeSectionContent.featuredProjects.title}
         </h2>
       </Reveal>
       <Reveal delay={140}>
         <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
-          Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công,
-          khẳng định năng lực và chất lượng trong từng hạng mục.
+          {homeSectionContent.featuredProjects.description}
         </p>
       </Reveal>
     </div>
@@ -245,7 +245,7 @@ export function HomePage() {
           aria-hidden="true"
         />
         <div className="relative mx-auto w-[min(1100px,calc(100%-2.25rem))]">
-          <SectionHeading title="Tin nổi bật" />
+          <SectionHeading title={homeSectionContent.featuredNews.title} />
           <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
             <Reveal className="self-start">
               <Link className="group block" href="/tin-tuc">

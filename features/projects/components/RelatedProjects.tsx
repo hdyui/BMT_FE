@@ -14,6 +14,7 @@ import { Reveal } from "@/lib/components/shared/Reveal";
 import {
   relatedProjects,
   relatedProjectsDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
+  relatedProjectsSection,
   type RelatedProjectData as RelatedProject,
 } from "@/features/projects/data/related-projects";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
@@ -104,7 +105,7 @@ export function RelatedProjects() {
     >
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
         <ProjectSectionHeading centered delay={80} duration={950}>
-          <span id="related-title">Tham khảo dự án liên quan</span>
+          <span id="related-title">{relatedProjectsSection.title}</span>
         </ProjectSectionHeading>
 
         <BuildingRule

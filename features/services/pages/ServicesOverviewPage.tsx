@@ -7,7 +7,10 @@ import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { FaqAccordion } from "@/features/services/components/FaqAccordion";
 import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
 import { ServiceTabs } from "@/features/services/components/ServiceTabs";
-import { heroCards } from "@/features/services/data/overview";
+import {
+  heroCards,
+  servicesOverviewSectionContent,
+} from "@/features/services/data/overview";
 import { SERVICE_HERO_CLASS_NAME } from "@/features/services/config/layout";
 
 const cardPositions = [
@@ -45,16 +48,16 @@ export function ServicesOverviewPage() {
           <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center lg:ml-[7.3%] lg:translate-y-[3.5vw] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
               <p className="mb-4 inline-block text-base max-md:border-b-2 max-md:border-charcoal max-md:pb-0 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
-                GIẢI PHÁP
+                {servicesOverviewSectionContent.hero.eyebrow}
               </p>
               <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
-                <span className="block lg:whitespace-nowrap">
-                  THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ
-                </span>
-
-                <span className="block lg:whitespace-nowrap">
-                  CẢI TẠO TRỌN GÓI
-                </span>
+                {servicesOverviewSectionContent.hero.title
+                  .split("\n")
+                  .map((line) => (
+                    <span className="block lg:whitespace-nowrap" key={line}>
+                      {line}
+                    </span>
+                  ))}
               </h1>
             </Reveal>
 
@@ -66,8 +69,7 @@ export function ServicesOverviewPage() {
 
             <Reveal delay={320} from="left">
               <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] sm:text-base lg:whitespace-nowrap">
-                ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG{" "}
-                MẠI
+                {servicesOverviewSectionContent.hero.supportingTitle}
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty sm:text-base">
                 <p className="leading-normal lg:w-full lg:text-justify">
@@ -78,9 +80,7 @@ export function ServicesOverviewPage() {
                     width={86}
                     height={91}
                   />
-                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải
-                  tạo trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công
-                  trình chất lượng và đáp ứng nhu cầu sử dụng.
+                  {servicesOverviewSectionContent.hero.description}
                 </p>
               </span>
             </Reveal>
@@ -125,7 +125,7 @@ export function ServicesOverviewPage() {
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center lg:mb-10">
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
-              QUY TRÌNH LÀM VIỆC
+              {servicesOverviewSectionContent.process.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
@@ -133,11 +133,12 @@ export function ServicesOverviewPage() {
                 "quy trình 6 bước". Ngắt dòng chỉ bật từ md trở lên để màn nhỏ
                 vẫn tự xuống hàng theo bề rộng. */}
             <p className="mx-auto mt-3 max-w-180 text-sm leading-relaxed sm:text-base">
-              <strong className="font-bold">BMT Decor</strong> triển khai dự án
-              theo <strong className="font-bold">quy trình 6 bước</strong> rõ
-              ràng, đảm bảo tiến độ,
-              <br className="hidden md:inline" /> chất lượng và đồng hành cùng
-              khách hàng trong từng giai đoạn.
+              <HighlightedCopy
+                copy={servicesOverviewSectionContent.process.descriptionLineOne}
+                highlights={["BMT Decor", "quy trình 6 bước"]}
+              />
+              <br className="hidden md:inline" />{" "}
+              {servicesOverviewSectionContent.process.descriptionLineTwo}
             </p>
           </Reveal>
           {/* Cùng lý do với đường kẻ ở phần FAQ: ảnh 1388×128 rất dẹt, khoá
@@ -183,14 +184,14 @@ export function ServicesOverviewPage() {
 
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-lg:text-center max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-3xl lg:text-4xl">
-              CÁC CÂU HỎI THƯỜNG GẶP
+              {servicesOverviewSectionContent.faq.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-lg:mx-auto max-lg:text-center">
-              Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ
-              <br className="hidden md:inline" /> hơn về quy trình và dịch vụ
-              của BMT Decor
+              {servicesOverviewSectionContent.faq.descriptionLineOne}
+              <br className="hidden md:inline" />{" "}
+              {servicesOverviewSectionContent.faq.descriptionLineTwo}
             </p>
           </Reveal>
           {/* Ảnh gốc rule-orange.png tỉ lệ 1388×128 (~10.8:1) rất dẹt: khoá
@@ -218,4 +219,30 @@ export function ServicesOverviewPage() {
       <SiteFooter hideTopBorderOnMobile />
     </div>
   );
+}
+
+function HighlightedCopy({
+  copy,
+  highlights,
+}: {
+  copy: string;
+  highlights: string[];
+}) {
+  const parts: React.ReactNode[] = [];
+  let remainder = copy;
+
+  highlights.forEach((highlight) => {
+    const index = remainder.indexOf(highlight);
+    if (index < 0) return;
+    parts.push(remainder.slice(0, index));
+    parts.push(
+      <strong className="font-bold" key={highlight}>
+        {highlight}
+      </strong>,
+    );
+    remainder = remainder.slice(index + highlight.length);
+  });
+  parts.push(remainder);
+
+  return <>{parts}</>;
 }

@@ -1,3 +1,22 @@
+export const homeSectionContent = {
+  featuredProjects: {
+    title: "Dự án tiêu biểu",
+    description:
+      "Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công, khẳng định năng lực và chất lượng trong từng hạng mục.",
+  },
+  featuredServices: {
+    title: "Dịch vụ nổi bật",
+    description:
+      "BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa dạng nhu cầu từ nhà ở đến không gian kinh doanh.",
+  },
+  featuredNews: {
+    title: "Tin nổi bật",
+  },
+  partners: {
+    title: "Đối tác của BMT Decor",
+  },
+} as const;
+
 export const homeHeroSlides = [
   {
     image: "/images/home/hero-background-01.webp",

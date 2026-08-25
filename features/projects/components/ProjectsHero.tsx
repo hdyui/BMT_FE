@@ -1,5 +1,8 @@
 import Image from "next/image";
+import { projectsPageHeroContent } from "@/features/projects/data/projects-page";
 import styles from "./ProjectsHero.module.css";
+
+const projectHeroTitleLines = projectsPageHeroContent.title.split("\n");
 
 export function ProjectsHero() {
   return (
@@ -89,9 +92,9 @@ export function ProjectsHero() {
           <h1
             className={`text-[clamp(21px,5.75vw,24px)] leading-[1.02] font-extrabold tracking-[-0.045em] sm:text-[clamp(34px,2.8vw,68px)] sm:leading-[1.12] sm:font-bold ${styles.heroTitle}`}
           >
-            MỖI CÔNG TRÌNH
+            {projectHeroTitleLines[0]}
             <br />
-            MỘT CAM KẾT CHẤT LƯỢNG
+            {projectHeroTitleLines[1]}
           </h1>
           <Image
             src="/images/projects/section-rule.png"
@@ -112,19 +115,43 @@ export function ProjectsHero() {
               className="mr-[5px] inline-block h-[0.95em] w-auto align-[-0.12em] sm:hidden"
               aria-hidden="true"
             />
-            Mỗi dự án là minh chứng cho năng lực{" "}
-            <strong className="font-bold">thiết kế thi công</strong> và sự tận
-            tâm của <strong className="font-bold">BMT Decor.</strong> Từ những
-            công trình xây mới đến các dự án{" "}
-            <strong className="font-bold">
-              cải tạo trọn gói, thi công nội thất và sửa chữa nhà,
-            </strong>{" "}
-            chúng tôi luôn đồng hành cùng khách hàng từ ý tưởng đến hoàn thiện,
-            tạo nên những không gian bền vững, thẩm mỹ và phù hợp với nhu cầu sử
-            dụng thực tế.
+            <HighlightedCopy
+              copy={projectsPageHeroContent.description}
+              highlights={[
+                "thiết kế thi công",
+                "BMT Decor.",
+                "cải tạo trọn gói, thi công nội thất và sửa chữa nhà,",
+              ]}
+            />
           </p>
         </div>
       </div>
     </section>
   );
+}
+
+function HighlightedCopy({
+  copy,
+  highlights,
+}: {
+  copy: string;
+  highlights: string[];
+}) {
+  const parts: React.ReactNode[] = [];
+  let remainder = copy;
+
+  highlights.forEach((highlight) => {
+    const index = remainder.indexOf(highlight);
+    if (index < 0) return;
+    parts.push(remainder.slice(0, index));
+    parts.push(
+      <strong className="font-bold" key={highlight}>
+        {highlight}
+      </strong>,
+    );
+    remainder = remainder.slice(index + highlight.length);
+  });
+  parts.push(remainder);
+
+  return <>{parts}</>;
 }

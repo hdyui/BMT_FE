@@ -5,6 +5,10 @@ export type RelatedProjectData = {
 
 export const relatedProjectsDetailSlug = "nha-pho-2-tang-quan-9";
 
+export const relatedProjectsSection = {
+  title: "Tham khảo dự án liên quan",
+} as const;
+
 export const relatedProjects: RelatedProjectData[] = [
   {
     title: "Chung cư La Astoria Q.2",
