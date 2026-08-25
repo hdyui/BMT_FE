@@ -9,6 +9,7 @@ export default function AdminAboutPage() {
     <AdminModuleShell
       title="Nội dung Giới thiệu"
       description="Quản lý từng nhóm nội dung trên trang Giới thiệu BMT Decor."
+      singleColumnOrange
       items={[
         {
           title: "Mở đầu trang Giới thiệu",

@@ -6,7 +6,6 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
-import { DeleteContentDialog } from "@/features/admin/components/editor/DeleteContentDialog";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
@@ -18,6 +17,7 @@ import type {
   AdminResourceConfig,
 } from "@/lib/admin/types/crud";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 type DraftMap = Record<string, AdminCrudRecord[]>;
 
@@ -28,11 +28,6 @@ interface HistoryEntry {
   previous: AdminFieldValue;
 }
 
-interface DeleteTarget {
-  config: AdminResourceConfig;
-  record: AdminCrudRecord;
-}
-
 export function UnifiedResourceEditorPage({
   config,
   companionConfig,
@@ -40,7 +35,7 @@ export function UnifiedResourceEditorPage({
   config: AdminResourceConfig;
   companionConfig?: AdminResourceConfig;
 }) {
-  const { getRecords, removeRecord, reorderRecords } = useAdminCrud();
+  const { getRecords, reorderRecords } = useAdminCrud();
   const editableConfigs = useMemo(
     () => (companionConfig ? [companionConfig, config] : [config]),
     [companionConfig, config],
@@ -57,8 +52,6 @@ export function UnifiedResourceEditorPage({
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
-  const [deleteTarget, setDeleteTarget] = useState<DeleteTarget | null>(null);
-  const [deleting, setDeleting] = useState(false);
 
   const dirtyKeys = useMemo(() => {
     const keys = new Set<string>();
@@ -66,7 +59,7 @@ export function UnifiedResourceEditorPage({
       for (const record of drafts[itemConfig.key] ?? []) {
         const savedRecord = (savedSnapshot[itemConfig.key] ?? []).find((item) => item.id === record.id);
         for (const field of getEditableAdminSections(itemConfig.sections).flatMap((section) => section.fields)) {
-          for (const fieldKey of [field.key]) {
+          for (const fieldKey of field.altKey ? [field.key, field.altKey] : [field.key]) {
             if (!sameValue(record[fieldKey], savedRecord?.[fieldKey])) {
               keys.add(fieldIdentity(itemConfig.key, record.id, fieldKey));
             }
@@ -146,26 +139,6 @@ export function UnifiedResourceEditorPage({
     }
   }
 
-  async function confirmDelete() {
-    if (!deleteTarget) return;
-    const { config: targetConfig, record } = deleteTarget;
-    setDeleting(true);
-    try {
-      await removeRecord(targetConfig.key, record.id);
-      const removeFrom = (current: DraftMap) => ({
-        ...current,
-        [targetConfig.key]: (current[targetConfig.key] ?? []).filter((item) => item.id !== record.id),
-      });
-      setDrafts(removeFrom);
-      setSavedSnapshot(removeFrom);
-      setHistory((current) => current.filter((entry) => entry.recordId !== record.id));
-      setDeleteTarget(null);
-      toast.success("Đã xóa nội dung");
-    } finally {
-      setDeleting(false);
-    }
-  }
-
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 pb-8 sm:p-6 lg:p-8">
       <AdminBreadcrumb
@@ -197,21 +170,12 @@ export function UnifiedResourceEditorPage({
               dirtyKeys={dirtyKeys}
               errors={errors}
               onChange={updateField}
-              onDelete={(record) => setDeleteTarget({ config: itemConfig, record })}
               key={itemConfig.key}
             />
           ))}
         </div>
       </section>
 
-      <DeleteContentDialog
-        open={Boolean(deleteTarget)}
-        title={`Xóa ${deleteTarget?.config.singular ?? "nội dung"}?`}
-        itemLabel={deleteTarget?.config.singular ?? "nội dung"}
-        deleting={deleting}
-        onOpenChange={(open) => !open && setDeleteTarget(null)}
-        onConfirm={confirmDelete}
-      />
     </div>
   );
 }
@@ -222,18 +186,18 @@ function ResourceEditorGroup({
   dirtyKeys,
   errors,
   onChange,
-  onDelete,
 }: {
   config: AdminResourceConfig;
   records: AdminCrudRecord[];
   dirtyKeys: Set<string>;
   errors: Record<string, string>;
   onChange: (resourceKey: string, recordId: string, fieldKey: string, value: AdminFieldValue) => void;
-  onDelete: (record: AdminCrudRecord) => void;
 }) {
   const editableFields = getEditableAdminSections(config.sections).flatMap(
     (section) => section.fields,
   );
+  const singleColumnContentEditor = isSingleColumnContentEditor(config);
+  const requestedContentEditor = isRequestedContentEditor(config);
   const imageOnlyCollection =
     config.kind === "collection" &&
     editableFields.length === 1 &&
@@ -245,7 +209,12 @@ function ResourceEditorGroup({
     return records.length === 0 ? (
       <p className="p-6 text-sm text-muted-foreground">Chưa có nội dung để chỉnh sửa.</p>
     ) : (
-      <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-4">
+      <div
+        className={cn(
+          "grid gap-4 p-4 sm:p-5",
+          !singleColumnContentEditor && "sm:grid-cols-2 xl:grid-cols-4",
+        )}
+      >
         {records.map((record, recordIndex) => {
           const identity = fieldIdentity(config.key, record.id, imageField.key);
           const recordLabel = `${config.itemLabel ?? config.singular} ${String(recordIndex + 1).padStart(2, "0")}`;
@@ -257,7 +226,11 @@ function ResourceEditorGroup({
               labelOverride={recordLabel}
               error={errors[identity]}
               dirty={isFieldDirty(config, record, imageField.key, dirtyKeys)}
+              altValue={imageField.altKey ? record[imageField.altKey] : undefined}
+              altDirty={Boolean(imageField.altKey && isFieldDirty(config, record, imageField.altKey, dirtyKeys))}
+              contentEditorStyle={requestedContentEditor}
               onChange={(value) => onChange(config.key, record.id, imageField.key, value)}
+              onAltChange={imageField.altKey ? (value) => onChange(config.key, record.id, imageField.altKey!, value) : undefined}
               key={record.id}
             />
           );
@@ -282,7 +255,12 @@ function ResourceEditorGroup({
               <article className="p-4 sm:p-5" key={record.id}>
                 <div className="mb-3 flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-3">
-                    <h3 className="flex min-w-0 items-center gap-2 font-semibold">
+                    <h3
+                      className={cn(
+                        "flex min-w-0 items-center gap-2",
+                        requestedContentEditor ? "text-lg font-bold" : "font-semibold",
+                      )}
+                    >
                       {recordDirtyCount > 0 && (
                         <span className="size-2 shrink-0 rounded-full bg-brand" aria-label={`${recordDirtyCount} thay đổi chưa lưu`} />
                       )}
@@ -295,13 +273,19 @@ function ResourceEditorGroup({
                       variant="ghost"
                       size="sm"
                       className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => onDelete(record)}
+                      disabled
+                      title="Số lượng mục được cố định theo layout website"
                     >
                       <Trash2 /> Xóa
                     </Button>
                   )}
                 </div>
-                <div className={`grid gap-4 lg:gap-5 ${editableFields.length > 1 ? "md:grid-cols-2" : ""}`}>
+                <div
+                  className={cn(
+                    "grid gap-4 lg:gap-5",
+                    !singleColumnContentEditor && editableFields.length > 1 && "md:grid-cols-2",
+                  )}
+                >
                   {editableFields.map((field) => {
                     const identity = fieldIdentity(config.key, record.id, field.key);
                     return (
@@ -310,7 +294,11 @@ function ResourceEditorGroup({
                         value={record[field.key]}
                         error={errors[identity]}
                         dirty={isFieldDirty(config, record, field.key, dirtyKeys)}
+                        altValue={field.altKey ? record[field.altKey] : undefined}
+                        altDirty={Boolean(field.altKey && isFieldDirty(config, record, field.altKey, dirtyKeys))}
+                        contentEditorStyle={requestedContentEditor}
                         onChange={(value) => onChange(config.key, record.id, field.key, value)}
+                        onAltChange={field.altKey ? (value) => onChange(config.key, record.id, field.altKey!, value) : undefined}
                         key={field.key}
                       />
                     );
@@ -361,7 +349,9 @@ function countRecordDirtyFields(
   return getEditableAdminSections(config.sections)
     .flatMap((section) => section.fields)
     .reduce(
-      (count, field) => count + (isFieldDirty(config, record, field.key, dirtyKeys) ? 1 : 0),
+      (count, field) => count +
+        (isFieldDirty(config, record, field.key, dirtyKeys) ? 1 : 0) +
+        (field.altKey && isFieldDirty(config, record, field.altKey, dirtyKeys) ? 1 : 0),
       0,
     );
 }
@@ -385,6 +375,38 @@ function validateDrafts(configs: AdminResourceConfig[], drafts: DraftMap) {
     }
   }
   return errors;
+}
+
+function isSingleColumnContentEditor(config: AdminResourceConfig) {
+  return (
+    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
+      config.module,
+    ) ||
+    [
+      "settings/branding",
+      "settings/navigation",
+      "settings/footer",
+      "settings/locations",
+      "settings/company",
+    ].includes(
+      config.key,
+    )
+  );
+}
+
+function isRequestedContentEditor(config: AdminResourceConfig) {
+  return (
+    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
+      config.module,
+    ) ||
+    [
+      "settings/branding",
+      "settings/navigation",
+      "settings/footer",
+      "settings/locations",
+      "settings/company",
+    ].includes(config.key)
+  );
 }
 
 function cloneValue(value: AdminFieldValue) {

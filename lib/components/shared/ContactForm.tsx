@@ -16,10 +16,24 @@ export function ContactForm({
   showTopNotch = false,
   title = "Liên hệ tư vấn",
   description,
+  nameLabel = "Tên khách hàng",
+  namePlaceholder = "Tên khách hàng...",
+  phoneLabel = "Số điện thoại",
+  phonePlaceholder = "Số điện thoại...",
+  submitLabel = "Gửi ngay",
+  successMessage = "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+  backgroundImage = "/images/contact/mobile/form-background.png",
 }: {
   showTopNotch?: boolean;
   title?: ReactNode;
   description?: ReactNode;
+  nameLabel?: string;
+  namePlaceholder?: string;
+  phoneLabel?: string;
+  phonePlaceholder?: string;
+  submitLabel?: string;
+  successMessage?: string;
+  backgroundImage?: string;
 }) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
@@ -77,9 +91,7 @@ export function ContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    toast.success(
-      "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
-    );
+    toast.success(successMessage);
     formElement.reset();
     setErrors({});
   }
@@ -107,7 +119,7 @@ export function ContactForm({
       />
       <Image
         className={`absolute left-0 top-0 z-[1] h-auto w-full ${showTopNotch ? "block lg:left-[calc(49.96%-54.308901vw)] lg:w-[109.690989vw] lg:max-w-none" : "hidden max-lg:block"}`}
-        src="/images/contact/mobile/form-background.png"
+        src={backgroundImage}
         alt=""
         width={3884}
         height={2109}
@@ -172,7 +184,7 @@ export function ContactForm({
           >
             <div className="grid gap-[13px] lg:grid-cols-2 lg:gap-x-8">
               <label>
-                <span className="sr-only">Tên khách hàng</span>
+                <span className="sr-only">{nameLabel}</span>
                 <Input
                   className={inputClassName}
                   aria-describedby={
@@ -181,7 +193,7 @@ export function ContactForm({
                   aria-invalid={Boolean(errors.name)}
                   name="name"
                   onChange={() => clearFieldError("name")}
-                  placeholder="Tên khách hàng..."
+                  placeholder={namePlaceholder}
                 />
                 {errors.name && (
                   <span className={errorClassName} id="contact-name-error">
@@ -191,7 +203,7 @@ export function ContactForm({
               </label>
 
               <label>
-                <span className="sr-only">Số điện thoại</span>
+                <span className="sr-only">{phoneLabel}</span>
                 <Input
                   className={inputClassName}
                   aria-describedby={
@@ -200,7 +212,7 @@ export function ContactForm({
                   aria-invalid={Boolean(errors.phone)}
                   name="phone"
                   onChange={() => clearFieldError("phone")}
-                  placeholder="Số điện thoại..."
+                  placeholder={phonePlaceholder}
                   type="tel"
                 />
                 {errors.phone && (
@@ -220,7 +232,7 @@ export function ContactForm({
               className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform] duration-300 ease-out hover:scale-[1.015] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:scale-[.985] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
             >
-              Gửi ngay
+              {submitLabel}
             </Button>
           </div>
         </form>

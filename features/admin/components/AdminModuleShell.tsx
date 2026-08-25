@@ -9,35 +9,47 @@ export function AdminModuleShell({
   description,
   items,
   footnote,
+  singleColumnOrange = false,
 }: {
   title: string;
   description: string;
   items: AdminModuleScopeItem[];
   footnote?: string;
+  singleColumnOrange?: boolean;
 }) {
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader title={title} description={description} />
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-        <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
-          <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
-            <Layers3 className="size-4" />
-          </span>
-          <div>
-            <h2 className="text-sm font-semibold">Các nhóm nội dung</h2>
-            <p className="text-xs text-muted-foreground">
-              Chọn nhóm cần xem hoặc cập nhật
-            </p>
+      <section
+        className={
+          singleColumnOrange
+            ? "mt-6 space-y-4"
+            : "mt-6 overflow-hidden rounded-2xl border bg-card"
+        }
+      >
+        {!singleColumnOrange && (
+          <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
+            <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
+              <Layers3 className="size-4" />
+            </span>
+            <div>
+              <h2 className="text-sm font-semibold">Các nhóm nội dung</h2>
+              <p className="text-xs text-muted-foreground">
+                Chọn nhóm cần xem hoặc cập nhật
+              </p>
+            </div>
           </div>
-        </div>
-        <div className="grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
+        )}
+        <div className={singleColumnOrange ? "space-y-4" : "grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0"}>
           {items.map((item, index) => {
-            const className = `group flex min-h-36 items-start gap-4 p-5 transition-colors hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6 ${
-              index >= 2 ? "md:border-t" : ""
-            }`;
+            const className = singleColumnOrange
+              ? "group flex min-h-32 items-start gap-4 rounded-2xl border border-brand/25 bg-brand/[0.035] p-5 shadow-[0_10px_28px_rgb(244_122_42/.06)] outline-none transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.055] hover:shadow-[0_14px_34px_rgb(244_122_42/.1)] focus-visible:ring-3 focus-visible:ring-brand/25 sm:p-6"
+              : `group flex min-h-36 items-start gap-4 p-5 transition-colors hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6 ${
+                  index >= 2 ? "md:border-t" : ""
+                }`;
             const content = (
               <>
-              <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand">
+              <span className={`grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand ${singleColumnOrange ? "border-brand/25" : ""}`}>
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0 flex-1">
@@ -59,7 +71,7 @@ export function AdminModuleShell({
                 )}
               </div>
               {item.href && (
-                <ArrowRight className="mt-1 size-4 shrink-0 text-muted-foreground transition-transform group-hover:translate-x-0.5 group-hover:text-brand" />
+                <ArrowRight className={`mt-1 size-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${singleColumnOrange ? "text-brand" : "text-muted-foreground group-hover:text-brand"}`} />
               )}
               </>
             );

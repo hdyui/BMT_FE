@@ -13,7 +13,16 @@ const heroDecorations = [
   { src: "/images/contact/decorations/transparent/decor-11.png", className: styles.bottomComposite, delay: "640ms" },
 ] as const;
 
-export function ContactHero() {
+export const defaultContactHeroContent = {
+  title: "LIÊN HỆ NGAY",
+  description: "Hãy chia sẻ nhu cầu về thiết kế kiến trúc, thiết kế nội thất, xây dựng, cải tạo hoặc sửa chữa nhà để đội ngũ BMT Decor tư vấn giải pháp phù hợp với không gian và ngân sách của bạn.",
+  ctaLabel: "LIÊN HỆ NGAY",
+  ctaHref: "#contact-form",
+  photo: "/images/contact/contact-consultant.jpg",
+  photoAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng về thiết kế và thi công",
+};
+
+export function ContactHero({ content = defaultContactHeroContent }: { content?: typeof defaultContactHeroContent }) {
   return (
     <section className={styles.hero} aria-labelledby="contact-hero-title">
       <div className={styles.heroCanvas}>
@@ -52,7 +61,7 @@ export function ContactHero() {
         <div className={styles.inner}>
           <div className={styles.copy}>
             <h1 className={styles.title} id="contact-hero-title">
-              <span>LIÊN HỆ NGAY</span>
+              <span>{content.title}</span>
               <Image
                 className={styles.brandLogo}
                 src="/images/contact/contact-wordmark-transparent.png"
@@ -76,13 +85,11 @@ export function ContactHero() {
                 aria-hidden="true"
               />
               <Image className={styles.mobileDescriptionIcon} src="/images/contact/mobile/description-icon.png" alt="" width={86} height={91} sizes="14px" aria-hidden="true" />
-              Hãy chia sẻ nhu cầu về thiết kế kiến trúc, thiết kế nội thất, xây dựng,
-              cải tạo hoặc sửa chữa nhà để đội ngũ BMT Decor tư vấn giải pháp phù hợp
-              với không gian và ngân sách của bạn.
+              {content.description}
             </p>
 
             <div className={styles.ctaSlot}>
-              <BmtCta href="#contact-form">LIÊN HỆ NGAY</BmtCta>
+              <BmtCta href={content.ctaHref}>{content.ctaLabel}</BmtCta>
             </div>
           </div>
 
@@ -95,8 +102,8 @@ export function ContactHero() {
         <div className={styles.photoFrame}>
           <Image
             className={styles.photo}
-            src="/images/contact/contact-consultant.jpg"
-            alt="Tư vấn viên BMT Decor hỗ trợ khách hàng về thiết kế và thi công"
+            src={content.photo}
+            alt={content.photoAlt}
             fill
             preload
             unoptimized

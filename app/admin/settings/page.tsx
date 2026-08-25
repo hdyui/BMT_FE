@@ -32,15 +32,15 @@ export default function AdminSettingsPage() {
           href: "/admin/settings/locations",
         },
         {
-          title: "Đầu trang và danh mục",
+          title: "Danh mục đầu trang",
           description:
-            "Tên, liên kết, hình minh họa và trạng thái hiển thị.",
+            "Tên hiển thị, liên kết và thứ tự của các mục trong danh mục.",
           priority: "P2",
           href: "/admin/settings/navigation",
         },
         {
-          title: "Logo và biểu tượng website",
-          description: "Thay logo và biểu tượng hiển thị trên thẻ trình duyệt.",
+          title: "Logo đầu trang",
+          description: "Thay logo hiển thị ở đầu trang.",
           priority: "P2",
           href: "/admin/settings/branding",
         },

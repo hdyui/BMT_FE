@@ -36,7 +36,7 @@ export function AdminCrudRoute({
   if (exactResource) {
     const directCollectionEditor =
       exactResource.kind === "collection" &&
-      ["services", "quotation"].includes(exactResource.module);
+      exactResource.collectionMode !== "dynamic";
 
     if (directCollectionEditor) {
       return (

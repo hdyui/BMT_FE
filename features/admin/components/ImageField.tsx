@@ -5,6 +5,7 @@ import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { ImageIcon, Trash2, Upload } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 interface ImageFieldProps {
   label: string;
@@ -13,6 +14,7 @@ interface ImageFieldProps {
   ratio?: string;
   recommendedSize?: string;
   dirty?: boolean;
+  streamlined?: boolean;
   onChange: (value: string) => void;
 }
 
@@ -23,6 +25,7 @@ export function ImageField({
   ratio,
   recommendedSize,
   dirty = false,
+  streamlined = false,
   onChange,
 }: ImageFieldProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -46,19 +49,23 @@ export function ImageField({
   }
 
   return (
-    <section className="rounded-xl border bg-card p-4">
+    <section
+      className={cn(
+        streamlined ? "py-1" : "rounded-xl border bg-card p-4",
+      )}
+    >
       <div>
-          <h3 className="flex items-center gap-2 text-sm font-semibold">
-            {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
-            {label}
-          </h3>
-          {(ratio || recommendedSize) && (
-            <p className="mt-1 text-xs text-muted-foreground">
-              {ratio && `Tỷ lệ đề xuất: ${ratio}`}
-              {ratio && recommendedSize && " | "}
-              {recommendedSize && `Kích thước: ${recommendedSize}`}
-            </p>
-          )}
+        <h3 className="flex items-center gap-2 text-sm font-semibold">
+          {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+          {label}
+        </h3>
+        {(ratio || recommendedSize) && (
+          <p className="mt-1 text-xs text-muted-foreground">
+            {ratio && `Tỷ lệ đề xuất: ${ratio}`}
+            {ratio && recommendedSize && " | "}
+            {recommendedSize && `Kích thước: ${recommendedSize}`}
+          </p>
+        )}
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-3">
@@ -88,7 +95,8 @@ export function ImageField({
               variant="outline"
               size="sm"
               className="border-destructive/35 text-destructive hover:bg-destructive/10 hover:text-destructive"
-              onClick={() => { setLocalPreview(null); onChange(""); }}
+              disabled
+              title="Ảnh là một slot cố định của layout. Hãy dùng Đổi ảnh để cập nhật nội dung."
             >
               <Trash2 /> Xóa ảnh
             </Button>

@@ -25,17 +25,26 @@ export function EditorSection({
   title,
   description,
   dirtyCount = 0,
+  prominent = false,
+  singleColumn = false,
   children,
 }: {
   title: string;
   description?: string;
   dirtyCount?: number;
+  prominent?: boolean;
+  singleColumn?: boolean;
   children: ReactNode;
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
       <div className="border-b px-5 py-4 sm:px-6">
-        <h2 className="flex items-center gap-2 text-sm font-semibold">
+        <h2
+          className={cn(
+            "flex items-center gap-2",
+            prominent ? "text-lg font-bold" : "text-sm font-semibold",
+          )}
+        >
           {dirtyCount > 0 && (
             <span className="size-2 rounded-full bg-brand" aria-label={`${dirtyCount} thay đổi chưa lưu`} />
           )}
@@ -47,7 +56,14 @@ export function EditorSection({
           </p>
         )}
       </div>
-      <div className="grid gap-5 p-5 lg:grid-cols-2 sm:p-6">{children}</div>
+      <div
+        className={cn(
+          "grid gap-5 p-5 sm:p-6",
+          !singleColumn && "lg:grid-cols-2",
+        )}
+      >
+        {children}
+      </div>
     </section>
   );
 }

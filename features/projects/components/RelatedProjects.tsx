@@ -13,7 +13,6 @@ import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
 import {
   relatedProjects,
-  relatedProjectsDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
   type RelatedProjectData as RelatedProject,
 } from "@/features/projects/data/related-projects";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
@@ -40,7 +39,7 @@ function getVisibleProjectCount() {
 function RelatedProjectCard({ project }: { project: RelatedProject }) {
   return (
     <Link
-      href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
+      href={project.href}
       className="group block rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
       aria-label={`Xem chi tiết dự án ${project.title}`}
     >

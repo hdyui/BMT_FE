@@ -4,6 +4,7 @@ import { useLayoutEffect, useRef } from "react";
 import { Plus, Trash2 } from "lucide-react";
 
 import { ImageField } from "@/features/admin/components/ImageField";
+import { RichTextField } from "@/features/admin/components/editor/RichTextField";
 import type {
   AdminFieldConfig,
   AdminFieldValue,
@@ -19,6 +20,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 
 export function EditorField({
   field,
@@ -26,18 +28,26 @@ export function EditorField({
   labelOverride,
   error,
   dirty = false,
+  altValue,
+  altDirty = false,
+  contentEditorStyle = false,
   onChange,
+  onAltChange,
 }: {
   field: AdminFieldConfig;
   value: AdminFieldValue | undefined;
   labelOverride?: string;
   error?: string;
   dirty?: boolean;
+  altValue?: AdminFieldValue;
+  altDirty?: boolean;
+  contentEditorStyle?: boolean;
   onChange: (value: AdminFieldValue) => void;
+  onAltChange?: (value: AdminFieldValue) => void;
 }) {
   if (field.type === "image") {
     return (
-      <div>
+      <div className="grid gap-3">
         <ImageField
           label={labelOverride ?? getConciseImageLabel(field.label)}
           value={String(value ?? "")}
@@ -45,8 +55,27 @@ export function EditorField({
           ratio={field.ratio}
           recommendedSize={field.recommendedSize}
           dirty={dirty}
+          streamlined={contentEditorStyle}
           onChange={onChange}
         />
+        {field.altKey && onAltChange && (
+          <label className="grid gap-2 text-sm font-normal">
+            <span
+              className={cn(
+                "flex items-center gap-2",
+                contentEditorStyle ? "font-semibold" : "font-medium",
+              )}
+            >
+              {altDirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+              Văn bản thay thế (alt)
+            </span>
+            <Input
+              value={String(altValue ?? "")}
+              className="h-10 bg-background font-normal"
+              onChange={(event) => onAltChange(event.target.value)}
+            />
+          </label>
+        )}
         {error && <FieldError>{error}</FieldError>}
       </div>
     );
@@ -57,7 +86,12 @@ export function EditorField({
     return (
       <div className="flex items-center justify-between gap-4 rounded-xl border bg-muted/25 px-4 py-3">
         <div>
-          <p className="flex items-center gap-2 text-sm font-medium">
+          <p
+            className={cn(
+              "flex items-center gap-2 text-sm",
+              contentEditorStyle ? "font-semibold" : "font-medium",
+            )}
+          >
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {field.label}
           </p>
@@ -69,6 +103,8 @@ export function EditorField({
         </div>
         <Switch
           checked={enabled}
+          disabled={field.disabled}
+          title={field.disabledReason}
           onCheckedChange={(checked) => onChange(checked)}
           aria-label={enabled ? "Đang hiển thị" : "Đang ẩn"}
         />
@@ -82,7 +118,9 @@ export function EditorField({
         label={field.label}
         description={field.description}
         dirty={dirty}
+        emphasized={contentEditorStyle}
         values={Array.isArray(value) ? value : []}
+        mode={field.listMode ?? "dynamic"}
         onChange={onChange}
       />
     );
@@ -94,9 +132,14 @@ export function EditorField({
     : undefined;
 
   return (
-    <label className="grid gap-2 text-sm font-medium">
+    <label className="grid gap-2 text-sm font-normal">
       <span className="flex flex-wrap items-center justify-between gap-2">
-        <span className="flex items-center gap-2">
+        <span
+          className={cn(
+            "flex items-center gap-2",
+            contentEditorStyle ? "font-semibold" : "font-medium",
+          )}
+        >
           {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
           {field.label}
         </span>
@@ -106,7 +149,16 @@ export function EditorField({
           </span>
         )}
       </span>
-      {field.type === "textarea" ? (
+      {field.type === "richtext" ? (
+        <div className="font-normal">
+          <RichTextField
+            value={currentValue}
+            placeholder={field.placeholder}
+            invalid={Boolean(error)}
+            onChange={onChange}
+          />
+        </div>
+      ) : field.type === "textarea" ? (
         <AutoGrowTextarea
           value={currentValue}
           placeholder={field.placeholder}
@@ -116,10 +168,10 @@ export function EditorField({
         />
       ) : field.type === "select" ? (
         <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
-          <SelectTrigger className="w-full" aria-invalid={Boolean(error)}>
+          <SelectTrigger className="w-full font-normal" aria-invalid={Boolean(error)}>
             <SelectValue placeholder="Chọn giá trị" />
           </SelectTrigger>
-          <SelectContent>
+          <SelectContent className="font-normal">
             {field.options?.map((option) => (
               <SelectItem value={option} key={option}>{option}</SelectItem>
             ))}
@@ -134,7 +186,7 @@ export function EditorField({
           maxLength={field.maxLength}
           placeholder={field.placeholder}
           aria-invalid={Boolean(error)}
-          className="h-10 bg-background"
+          className="h-10 bg-background font-normal"
           onChange={(event) =>
             onChange(
               field.type === "number"
@@ -181,7 +233,7 @@ function AutoGrowTextarea({
       ref={ref}
       value={value}
       rows={1}
-      className="min-h-10 resize-none overflow-hidden bg-background"
+      className="min-h-10 resize-none overflow-hidden bg-background font-normal"
     />
   );
 }
@@ -190,20 +242,29 @@ function ArrayField({
   label,
   description,
   dirty,
+  emphasized,
   values,
+  mode,
   onChange,
 }: {
   label: string;
   description?: string;
   dirty: boolean;
+  emphasized: boolean;
   values: string[];
+  mode: "fixed" | "dynamic";
   onChange: (values: string[]) => void;
 }) {
   return (
     <div className="grid gap-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="flex items-center gap-2 text-sm font-medium">
+          <p
+            className={cn(
+              "flex items-center gap-2 text-sm",
+              emphasized ? "font-semibold" : "font-medium",
+            )}
+          >
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {label}
           </p>
@@ -215,6 +276,8 @@ function ArrayField({
           type="button"
           variant="outline"
           size="sm"
+          disabled={mode === "fixed"}
+          title={mode === "fixed" ? "Số lượng mục được cố định theo layout website" : undefined}
           onClick={() => onChange([...values, ""])}
         >
           <Plus /> Thêm dòng
@@ -233,7 +296,7 @@ function ArrayField({
               </span>
               <Input
                 value={item}
-                className="h-10 bg-background"
+                className="h-10 bg-background font-normal"
                 onChange={(event) => {
                   const next = [...values];
                   next[index] = event.target.value;
@@ -246,6 +309,8 @@ function ArrayField({
                 size="icon"
                 className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                 aria-label="Xóa dòng"
+                disabled={mode === "fixed"}
+                title={mode === "fixed" ? "Số lượng mục được cố định theo layout website" : undefined}
                 onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))}
               >
                 <Trash2 />

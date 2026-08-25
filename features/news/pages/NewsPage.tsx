@@ -22,11 +22,7 @@ import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { ListDivider } from "@/lib/components/shared/ListDivider";
 import { SiteFooter } from "@/lib/components/layout/SiteFooter";
 import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import {
-  articleMedia,
-  articles,
-  featuredNews,
-} from "@/features/news/data/news-page";
+import { articles, featuredNews, type NewsArticle } from "@/features/news/data/news-page";
 import styles from "./NewsPage.module.css";
 
 const desktopPageSize = 5;
@@ -70,9 +66,9 @@ function ArticleReveal({
   );
 }
 
-function MoreLink() {
+function MoreLink({ href }: { href: string }) {
   return (
-    <Link className={styles.articleMoreLink} href="#contact-form">
+    <Link className={styles.articleMoreLink} href={href}>
       Xem chi tiết
       <ArrowUpRight
         className={styles.articleMoreIconDesktop}
@@ -91,10 +87,10 @@ function MoreLink() {
 }
 
 function ArticleCard({
-  title,
+  article,
   showDivider,
 }: {
-  title: (typeof articles)[number];
+  article: NewsArticle;
   showDivider: boolean;
 }) {
   return (
@@ -106,29 +102,27 @@ function ArticleCard({
         <div className={styles.articleImageWrap}>
           <Image
             className={`${styles.articleImage} ${styles.articleImageDesktop}`}
-            src={articleMedia.desktopImage}
-            alt={articleMedia.imageAlt}
+            src={article.desktopImage}
+            alt={article.imageAlt}
             fill
             sizes="300px"
           />
           <Image
             className={`${styles.articleImage} ${styles.articleImageMobile}`}
-            src={articleMedia.mobileImage}
-            alt={articleMedia.imageAlt}
+            src={article.mobileImage}
+            alt={article.imageAlt}
             width={3600}
             height={2160}
             sizes="calc(100vw - 28px)"
           />
         </div>
         <div className={styles.articleContent}>
-          <h2 className={styles.articleTitle}>{title}</h2>
+          <h2 className={styles.articleTitle}>{article.title}</h2>
           <p className={styles.articleDescription}>
-            BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết kế và thi
-            công, giúp gia chủ chủ động hơn trong từng quyết định về công năng,
-            vật liệu và ngân sách.
+            {article.excerpt}
           </p>
           <div className={styles.articleContentMore}>
-            <MoreLink />
+            <MoreLink href={article.href} />
           </div>
         </div>
       </article>
@@ -445,16 +439,16 @@ export function NewsPage() {
                         <div className={styles.featuredImageWrap}>
                           <Image
                             className={`${styles.featuredCardImage} ${styles.featuredCardImageDesktop}`}
-                            src="/images/news/article-model.jpg"
-                            alt="Mô hình kiến trúc trên bản vẽ thiết kế"
+                            src={item.desktopImage}
+                            alt={item.imageAlt}
                             fill
                             loading="eager"
                             sizes="(min-width: 1024px) 37vw, 70vw"
                           />
                           <Image
                             className={styles.featuredCardImageMobile}
-                            src="/images/news/mobile/featured-photo.png"
-                            alt="Mô hình kiến trúc trên bản vẽ thiết kế"
+                            src={item.mobileImage}
+                            alt={item.imageAlt}
                             width={3165}
                             height={1625}
                             loading="eager"
@@ -479,7 +473,7 @@ export function NewsPage() {
                             {item.title}
                           </h3>
                           <p className={styles.featuredCardDescription}>
-                            {item.description}
+                            {item.excerpt}
                           </p>
                           <Image
                             className={styles.featuredDivider}
@@ -491,7 +485,7 @@ export function NewsPage() {
                           />
                           <Link
                             className={styles.featuredMoreLink}
-                            href="#contact-form"
+                            href={item.href}
                           >
                             Xem chi tiết
                             <Image
@@ -600,9 +594,9 @@ export function NewsPage() {
               aria-busy={isPageLeaving}
               aria-live="polite"
             >
-              {visibleArticles.map((title, index) => (
-                <ArticleReveal delay={120 + index * 45} key={title}>
-                  <ArticleCard title={title} showDivider={index > 0} />
+              {visibleArticles.map((article, index) => (
+                <ArticleReveal delay={120 + index * 45} key={article.id}>
+                  <ArticleCard article={article} showDivider={index > 0} />
                 </ArticleReveal>
               ))}
             </div>
@@ -612,9 +606,9 @@ export function NewsPage() {
               className={`${styles.articlePage} ${styles.mobileArticleList}`}
               aria-live="polite"
             >
-              {mobileVisibleArticles.map((title, index) => (
-                <ArticleReveal delay={80 + (index % mobileBatchSize) * 45} key={title}>
-                  <ArticleCard title={title} showDivider={index > 0} />
+              {mobileVisibleArticles.map((article, index) => (
+                <ArticleReveal delay={80 + (index % mobileBatchSize) * 45} key={article.id}>
+                  <ArticleCard article={article} showDivider={index > 0} />
                 </ArticleReveal>
               ))}
             </div>

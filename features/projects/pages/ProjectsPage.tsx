@@ -20,7 +20,6 @@ import {
   projectCards,
   projectCategories as categories,
   projectPageImages as projectImages,
-  tempProjectDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
   type ProjectCategory as Category,
   type ProjectCardData,
 } from "@/features/projects/data/projects-page";
@@ -135,7 +134,7 @@ function ProjectCard({
   const wrapperClassName = `group relative aspect-[1.04/1] rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-sm:aspect-[1.28/1] max-sm:rounded-[24px] ${hiddenOnMobile ? "max-sm:hidden" : ""}`;
   return (
     <Link
-      href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
+      href={project.href}
       className={wrapperClassName}
       aria-label={`Xem chi tiết dự án ${project.title}`}
     >

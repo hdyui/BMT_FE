@@ -1,33 +1,38 @@
 export type RelatedProjectData = {
   title: string;
   image: string;
+  href: string;
 };
-
-export const relatedProjectsDetailSlug = "nha-pho-2-tang-quan-9";
 
 export const relatedProjects: RelatedProjectData[] = [
   {
     title: "Chung cư La Astoria Q.2",
     image: "/images/projects/project-03.png",
+    href: "/du-an/chung-cu-la-astoria-q2",
   },
   {
     title: "Căn hộ The Opera Residence",
     image: "/images/projects/project-05.png",
+    href: "/du-an/can-ho-the-opera-residence",
   },
   {
     title: "Nhà phố 2 tầng Quận 9",
     image: "/images/projects/project-06.png",
+    href: "/du-an/nha-pho-2-tang-quan-9",
   },
   {
     title: "Nhà phố Bình Chánh",
     image: "/images/projects/project-07.png",
+    href: "/du-an/nha-pho-binh-chanh",
   },
   {
     title: "Căn hộ chung cư Q9",
     image: "/images/projects/project-08.png",
+    href: "/du-an/can-ho-chung-cu-q9",
   },
   {
     title: "Căn hộ chung cư Q7",
     image: "/images/projects/project-09.png",
+    href: "/du-an/can-ho-chung-cu-q7",
   },
 ];

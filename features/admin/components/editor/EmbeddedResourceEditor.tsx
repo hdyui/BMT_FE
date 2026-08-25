@@ -14,6 +14,7 @@ import type {
   AdminResourceConfig,
 } from "@/lib/admin/types/crud";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function EmbeddedResourceEditor({
   config,
@@ -35,6 +36,7 @@ export function EmbeddedResourceEditor({
     [config.sections],
   );
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedDraft);
+  const requestedContentEditor = isRequestedContentEditor(config);
   const dirtyKeys = useMemo(() => {
     const keys = editableSections.flatMap((section) =>
       section.fields.map((field) => field.key),
@@ -80,7 +82,12 @@ export function EmbeddedResourceEditor({
     <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
       <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
         <div>
-          <h2 className="flex items-center gap-2 font-semibold">
+          <h2
+            className={cn(
+              "flex items-center gap-2",
+              requestedContentEditor ? "text-lg font-bold" : "font-semibold",
+            )}
+          >
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {config.title}
           </h2>
@@ -101,11 +108,18 @@ export function EmbeddedResourceEditor({
           </Button>
         </div>
       </div>
-      <div className="grid gap-5 p-5 sm:p-6 xl:grid-cols-2">
+      <div
+        className={cn(
+          "grid gap-5 p-5 sm:p-6",
+          !requestedContentEditor && "xl:grid-cols-2",
+        )}
+      >
         {editableSections.map((editorSection) => (
           <EditorSection
             title={editorSection.title}
             description={editorSection.description}
+            prominent={requestedContentEditor}
+            singleColumn={requestedContentEditor}
             dirtyCount={editorSection.fields.reduce(
               (count, field) => count + (dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false) ? 1 : 0),
               0,
@@ -117,6 +131,7 @@ export function EmbeddedResourceEditor({
                 field={field}
                 value={draft[field.key]}
                 dirty={dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false)}
+                contentEditorStyle={requestedContentEditor}
                 onChange={(value) => updateField(field.key, value)}
                 key={field.key}
               />
@@ -125,5 +140,20 @@ export function EmbeddedResourceEditor({
         ))}
       </div>
     </section>
+  );
+}
+
+function isRequestedContentEditor(config: AdminResourceConfig) {
+  return (
+    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
+      config.module,
+    ) ||
+    [
+      "settings/branding",
+      "settings/navigation",
+      "settings/footer",
+      "settings/locations",
+      "settings/company",
+    ].includes(config.key)
   );
 }

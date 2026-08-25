@@ -22,6 +22,7 @@ export interface AdminCrudRecord {
 export type AdminFieldType =
   | "text"
   | "textarea"
+  | "richtext"
   | "number"
   | "url"
   | "image"
@@ -42,6 +43,9 @@ export interface AdminFieldConfig {
   altKey?: string;
   ratio?: string;
   recommendedSize?: string;
+  listMode?: "fixed" | "dynamic";
+  disabled?: boolean;
+  disabledReason?: string;
 }
 
 export interface AdminEditorSectionConfig {
@@ -51,6 +55,30 @@ export interface AdminEditorSectionConfig {
   fields: AdminFieldConfig[];
 }
 
+export interface AdminSectionSettingsConfig {
+  key: string;
+  title: string;
+  description?: string;
+  fields: AdminFieldConfig[];
+  initialRecord: AdminCrudRecord;
+  previewTitleField: string;
+}
+
+export interface AdminModuleNavigationItem {
+  label: string;
+  href: string;
+}
+
+export interface AdminModuleNavigationGroup {
+  label: string;
+  items: AdminModuleNavigationItem[];
+}
+
+export interface AdminNavigationContext {
+  primary: AdminModuleNavigationGroup;
+  secondary?: AdminModuleNavigationGroup;
+}
+
 export interface AdminResourceConfig {
   key: string;
   module: AdminModuleKey;
@@ -58,10 +86,12 @@ export interface AdminResourceConfig {
   moduleHref: string;
   path: string;
   title: string;
+  navigationLabel?: string;
   singular: string;
   description: string;
   priority: Priority;
   kind: "collection" | "singleton";
+  collectionMode?: "fixed" | "dynamic";
   titleField: string;
   previewField?: string;
   orderField?: string;

@@ -1,6 +1,6 @@
 import type { AdminEditorSectionConfig, AdminFieldConfig } from "@/lib/admin/types/crud";
 
-const HIDDEN_EDITOR_FIELD_KEYS = new Set(["order", "ctaHref"]);
+const HIDDEN_EDITOR_FIELD_KEYS = new Set(["order"]);
 
 export function isAdminFieldEditable(field: AdminFieldConfig) {
   return !HIDDEN_EDITOR_FIELD_KEYS.has(field.key);

@@ -9,7 +9,14 @@ export default function AdminContactsPage() {
     <AdminModuleShell
       title="Nội dung Liên hệ"
       description="Quản lý biểu mẫu và hình ảnh trên trang Liên hệ."
+      singleColumnOrange
       items={[
+        {
+          title: "Mở đầu trang Liên hệ",
+          description: "Tiêu đề, mô tả, CTA và ảnh tư vấn viên.",
+          priority: "P1",
+          href: "/admin/contacts/hero",
+        },
         {
           title: "Biểu mẫu liên hệ",
           description:
@@ -18,11 +25,10 @@ export default function AdminContactsPage() {
           href: "/admin/contacts/form",
         },
         {
-          title: "Hình ảnh biểu mẫu và ảnh nền",
-          description:
-            "Thay hình ảnh biểu mẫu hoặc ảnh nền của trang Liên hệ.",
+          title: "Bản đồ liên hệ",
+          description: "Tiêu đề hỗ trợ truy cập và liên kết Google Maps.",
           priority: "P2",
-          href: "/admin/contacts/form",
+          href: "/admin/contacts/map",
         },
       ]}
       footnote="Danh sách khách hàng liên hệ là phạm vi tương lai và chưa phải tính năng của bản FE-only này."

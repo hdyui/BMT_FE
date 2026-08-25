@@ -8,7 +8,6 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
-import { EditorActionBar } from "@/features/admin/components/editor/EditorActionBar";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
 import {
@@ -71,16 +70,15 @@ export function ResourceEditorPage({
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedSnapshot);
   const dirtyKeys = useMemo(() => {
     const keys = editableSections.flatMap((section) =>
-      section.fields.map((field) => field.key),
+      section.fields.flatMap((field) => field.altKey ? [field.key, field.altKey] : [field.key]),
     );
     return new Set(keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])));
   }, [draft, editableSections, savedSnapshot]);
   const dirtyCount = dirtyKeys.size;
-  const topActionEditor =
-    config.module === "services" ||
-    config.module === "quotation" ||
-    config.key === "settings/capability-profile";
+  const topActionEditor = true;
   const allowPreview = !topActionEditor && config.module !== "services";
+  const singleColumnContentEditor = isSingleColumnContentEditor(config);
+  const requestedContentEditor = isRequestedContentEditor(config);
 
   if (mode !== "create" && !existing) {
     return (
@@ -263,7 +261,13 @@ export function ResourceEditorPage({
                 >
                   {editableSections.length > 1 && (
                     <div className="mb-4">
-                      <h2 className="text-sm font-semibold">{editorSection.title}</h2>
+                      <h2
+                        className={cn(
+                          requestedContentEditor ? "text-lg font-bold" : "text-sm font-semibold",
+                        )}
+                      >
+                        {editorSection.title}
+                      </h2>
                       {editorSection.description && (
                         <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
                           {editorSection.description}
@@ -274,16 +278,17 @@ export function ResourceEditorPage({
                   <div
                     className={cn(
                       "grid items-start gap-4 lg:gap-5",
-                      fields.length > 1 && "md:grid-cols-2",
-                      threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4",
+                      !singleColumnContentEditor && fields.length > 1 && "md:grid-cols-2",
+                      !singleColumnContentEditor &&
+                        (threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4"),
                     )}
                   >
                     {fields.map((field) => (
                       <div
                         className={cn(
-                          !threeColumnText && fields.length === 1 && "xl:col-span-4",
-                          !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
-                          !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                          !singleColumnContentEditor && !threeColumnText && fields.length === 1 && "xl:col-span-4",
+                          !singleColumnContentEditor && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
+                          !singleColumnContentEditor && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
                         )}
                         key={field.key}
                       >
@@ -292,7 +297,11 @@ export function ResourceEditorPage({
                           value={draft[field.key]}
                           error={errors[field.key]}
                           dirty={dirtyKeys.has(field.key)}
+                          altValue={field.altKey ? draft[field.altKey] : undefined}
+                          altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
+                          contentEditorStyle={requestedContentEditor}
                           onChange={(value) => updateField(field.key, value)}
+                          onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
                         />
                       </div>
                     ))}
@@ -306,6 +315,8 @@ export function ResourceEditorPage({
             <EditorSection
               title={editorSection.title}
               description={editorSection.description}
+              prominent={requestedContentEditor}
+              singleColumn={singleColumnContentEditor}
               dirtyCount={editorSection.fields.reduce(
                 (count, field) =>
                   count + (dirtyKeys.has(field.key) ? 1 : 0),
@@ -319,7 +330,11 @@ export function ResourceEditorPage({
                   value={draft[field.key]}
                   error={errors[field.key]}
                   dirty={dirtyKeys.has(field.key)}
+                  altValue={field.altKey ? draft[field.altKey] : undefined}
+                  altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
+                  contentEditorStyle={requestedContentEditor}
                   onChange={(value) => updateField(field.key, value)}
+                  onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
                   key={field.key}
                 />
               ))}
@@ -327,16 +342,6 @@ export function ResourceEditorPage({
           ))
         )}
       </EditorLayout>
-
-      {!topActionEditor && <EditorActionBar
-        dirty={dirty}
-        saving={saving}
-        dirtyCount={dirtyCount}
-        onPreview={allowPreview ? () => setPreviewOpen(true) : undefined}
-        onUndo={undoLast}
-        onUndoAll={undoAll}
-        onSave={saveDraft}
-      />}
 
       {!topActionEditor && <ResourcePreviewDialog
         open={previewOpen}
@@ -416,4 +421,36 @@ function validateRecord(
 
 function isValidContentUrl(value: string) {
   return /^(\/(?!\/)|https?:\/\/|mailto:|tel:|#)/i.test(value.trim());
+}
+
+function isSingleColumnContentEditor(config: AdminResourceConfig) {
+  return (
+    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
+      config.module,
+    ) ||
+    [
+      "settings/branding",
+      "settings/navigation",
+      "settings/footer",
+      "settings/locations",
+      "settings/company",
+    ].includes(
+      config.key,
+    )
+  );
+}
+
+function isRequestedContentEditor(config: AdminResourceConfig) {
+  return (
+    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
+      config.module,
+    ) ||
+    [
+      "settings/branding",
+      "settings/navigation",
+      "settings/footer",
+      "settings/locations",
+      "settings/company",
+    ].includes(config.key)
+  );
 }
