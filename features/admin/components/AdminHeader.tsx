@@ -1,9 +1,16 @@
 "use client";
 
+import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Bell, Search } from "lucide-react";
+import { Bell, LogOut, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
 import { adminPageMeta } from "@/lib/admin/constants/navigation";
@@ -18,30 +25,35 @@ export function AdminHeader({ hideNavigation = false }: { hideNavigation?: boole
   return (
     <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur sm:px-5 lg:px-6">
       {!hideNavigation && <SidebarTrigger aria-label="Đóng hoặc mở danh mục" />}
-      <div className="min-w-0">
-        <p className="truncate text-sm font-semibold sm:text-[15px]">{meta.title}</p>
-        <p className="hidden truncate text-xs text-muted-foreground sm:block">
-          {meta.description}
-        </p>
-      </div>
+      {hideNavigation ? (
+        <Link
+          href="/admin/dashboard"
+          className="text-xs font-bold tracking-[0.12em] text-foreground"
+        >
+          BMT ADMIN
+        </Link>
+      ) : (
+        <p className="min-w-0 truncate text-sm font-semibold sm:hidden">{meta.title}</p>
+      )}
 
       <div className="ml-auto flex items-center gap-2">
-        <Button
-          type="button"
-          variant="outline"
-          className="hidden w-[min(20vw,240px)] justify-start text-muted-foreground lg:flex"
-          aria-label="Tìm kiếm nội dung"
-        >
-          <Search />
-          <span className="truncate">Tìm nội dung</span>
-          <kbd className="ml-auto rounded border bg-muted px-1.5 py-0.5 text-[10px] font-medium">
-            Ctrl K
-          </kbd>
-        </Button>
         <ThemeSwitcher />
         <Button type="button" variant="outline" size="icon" aria-label="Thông báo">
           <Bell strokeWidth={1.8} />
         </Button>
+        <DropdownMenu>
+          <DropdownMenuTrigger
+            render={<Button type="button" variant="outline" size="icon" />}
+            aria-label="Tài khoản quản trị BMT"
+          >
+            <UserRound strokeWidth={1.8} />
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end" sideOffset={6} className="w-40">
+            <DropdownMenuItem disabled>
+              <LogOut /> Đăng xuất
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
       </div>
     </header>
   );

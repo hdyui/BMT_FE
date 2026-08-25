@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
-import { ArrowRight, Layers3, Search } from "lucide-react";
+import { ArrowRight, Layers3 } from "lucide-react";
 
 import {
   adminContentPages,
@@ -15,21 +14,18 @@ import {
   adminResourceRegistry,
   getAdminResourceGroup,
 } from "@/lib/admin/mock-data/resource-registry";
-import { Input } from "@/components/ui/input";
-import { cn } from "@/lib/utils";
+import {
+  SidebarMenu,
+  SidebarMenuBadge,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
+  SidebarMenuSubButton,
+  SidebarMenuSubItem,
+} from "@/components/ui/sidebar";
 
 export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string }) {
-  const [query, setQuery] = useState("");
   const selected = getContentPage(selectedId) ?? getContentPage("home")!;
-  const normalized = query.trim().toLocaleLowerCase("vi");
-  const visiblePages = useMemo(
-    () => adminContentPages.filter((page) => {
-      if (!normalized) return true;
-      return page.label.toLocaleLowerCase("vi").includes(normalized) ||
-        page.children?.some((child) => child.label.toLocaleLowerCase("vi").includes(normalized));
-    }),
-    [normalized],
-  );
   const serviceGroupKey = serviceGroupByContentPage[selected.id];
   const serviceGroup = serviceGroupKey
     ? getAdminResourceGroup(`services/${serviceGroupKey}`)
@@ -40,7 +36,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
         if (!resource) return [];
         return [{
           title: resource.title,
-          description: resource.description,
+          description: getDetailedResourceDescription(resource.description, resourceKey),
           count: `${getResourceFieldCount(resourceKey)} trường`,
           href: getContentResourceHref(resourceKey),
         }];
@@ -58,39 +54,38 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
   ].includes(selected.id);
 
   return (
-    <div className="grid min-h-[calc(100dvh-72px)] lg:grid-cols-[286px_minmax(0,1fr)]">
-      <aside className="border-b bg-muted/25 lg:border-r lg:border-b-0">
-        <div className="admin-scrollbar sticky top-[72px] max-h-[48dvh] overflow-y-auto p-4 lg:max-h-[calc(100dvh-72px)]">
-          <label className="relative block">
-            <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-            <Input
-              className="h-10 bg-background pl-9"
-              value={query}
-              onChange={(event) => setQuery(event.target.value)}
-              placeholder="Tìm nội dung..."
-            />
-          </label>
-
-          <nav className="mt-4 space-y-1" aria-label="Các trang nội dung">
-            {visiblePages.map((page) => (
-              <div key={page.id}>
-                <ContentPageLink page={page} active={selected.id === page.id} />
-                {page.children && (
-                  <div className="ml-4 border-l pl-2">
-                    {page.children.map((child) => (
-                      <ContentPageLink page={child} active={selected.id === child.id} nested key={child.id} />
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
-          </nav>
-        </div>
-      </aside>
+    <div className="grid min-h-[calc(100dvh-64px)] lg:grid-cols-[232px_minmax(0,1fr)]">
+      <div className="border-b border-sidebar-border bg-sidebar lg:border-b-0">
+        <aside
+          data-content-sidebar
+          className="bg-sidebar text-sidebar-foreground lg:fixed lg:top-16 lg:bottom-0 lg:w-[232px] lg:border-r lg:border-sidebar-border"
+        >
+          <div className="admin-scrollbar max-h-[48dvh] overflow-y-auto p-3 lg:h-full lg:max-h-none">
+            <nav aria-label="Các trang nội dung">
+              <SidebarMenu className="gap-1">
+                {adminContentPages.map((page) => (
+                  <SidebarMenuItem key={page.id}>
+                    <ContentPageLink page={page} active={selected.id === page.id} />
+                    {page.children && (
+                      <SidebarMenuSub className="mt-1.5 gap-1">
+                        {page.children.map((child) => (
+                          <SidebarMenuSubItem key={child.id}>
+                            <ContentPageLink page={child} active={selected.id === child.id} nested />
+                          </SidebarMenuSubItem>
+                        ))}
+                      </SidebarMenuSub>
+                    )}
+                  </SidebarMenuItem>
+                ))}
+              </SidebarMenu>
+            </nav>
+          </div>
+        </aside>
+      </div>
 
       <main className="min-w-0 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-[1180px]">
-          <header className="flex flex-col gap-4 border-b pb-6 sm:flex-row sm:items-end sm:justify-between">
+          <header className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
               <p className="text-[11px] font-bold tracking-[0.14em] text-brand uppercase">Trang</p>
               <h1 className="mt-1 text-2xl font-bold tracking-tight">{selected.label}</h1>
@@ -101,7 +96,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             <Link
               href={selected.publicRoute === "Toàn website" ? "/" : selected.publicRoute}
               target="_blank"
-              className="inline-flex h-10 items-center justify-center rounded-lg border bg-background px-4 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
+              className="inline-flex h-8 items-center justify-center rounded-md border bg-background px-3 text-xs font-bold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
             >
               Xem trang thật
             </Link>
@@ -124,7 +119,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
               description={`Chọn phần cần cập nhật trên trang ${selected.label}.`}
               items={serviceGroup.items.map((item) => ({
                 title: item.title,
-                description: item.description,
+                description: getDetailedResourceDescription(item.description, getResourceKeyFromHref(item.href)),
                 count: item.count,
                 href: item.href,
               }))}
@@ -175,29 +170,29 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             )}
           </section>
           ) : (
-          <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-            <div className="border-b px-5 py-4 sm:px-6">
+          <section className="mt-5">
+            <div className="py-5">
               <h2 className="font-semibold">Các nhóm nội dung</h2>
               <p className="mt-1 text-sm text-muted-foreground">
                 Chọn nhóm cần cập nhật cho trang này.
               </p>
             </div>
             {selected.resourceKeys.length > 0 ? (
-              <div className="divide-y">
+              <div className="border-t border-border/70">
                 {selected.resourceKeys.map((resourceKey) => {
                   const resource = adminResourceRegistry[resourceKey];
                   if (!resource) return null;
                   const fieldLabels = getResourceFieldLabels(resourceKey);
                   return (
-                    <article className="grid gap-4 p-5 sm:p-6 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center" key={resourceKey}>
+                    <article className="grid gap-4 border-b border-border/70 py-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center" key={resourceKey}>
                       <div className="min-w-0">
                         <div className="flex flex-wrap items-center gap-2">
                           <h3 className="font-semibold">{resource.title}</h3>
                         </div>
                         <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{resource.description}</p>
-                        <div className="mt-3 flex flex-wrap gap-1.5">
+                        <div className="mt-3 flex flex-wrap gap-x-2 gap-y-1">
                           {fieldLabels.slice(0, 8).map((label, index) => (
-                            <span className="rounded-md bg-muted px-2 py-1 text-[11px] text-muted-foreground" key={`${label}-${index}`}>{label}</span>
+                            <span className="text-[11px] text-muted-foreground after:ml-2 after:content-[','] last:after:content-none" key={`${label}-${index}`}>{label}</span>
                           ))}
                           {fieldLabels.length > 8 && <span className="px-1 py-1 text-[11px] text-muted-foreground">+{fieldLabels.length - 8}</span>}
                         </div>
@@ -247,6 +242,38 @@ function getContentResourceHref(resourceKey: string) {
   return resource ? `/admin/${resource.module}/${resource.path}` : "/admin/content";
 }
 
+function getResourceKeyFromHref(href: string) {
+  return Object.keys(adminResourceRegistry).find(
+    (resourceKey) => getContentResourceHref(resourceKey) === href,
+  );
+}
+
+function getDetailedResourceDescription(description: string, resourceKey?: string) {
+  if (!resourceKey) return description;
+  const labels = Array.from(
+    new Set(getResourceFieldLabels(resourceKey).map(getConciseFieldLabel).filter(Boolean)),
+  );
+  if (labels.length === 0) return description;
+
+  const visibleLabels = labels.slice(0, 5);
+  const remainingCount = labels.length - visibleLabels.length;
+  const fieldSummary = formatVietnameseList(visibleLabels);
+  const remainingSummary = remainingCount > 0 ? ` và ${remainingCount} nội dung liên quan khác` : "";
+  return `${description} Có thể chỉnh sửa ${fieldSummary}${remainingSummary}.`;
+}
+
+function getConciseFieldLabel(label: string) {
+  return (label.split("·").at(-1)?.trim() ?? label)
+    .replace(/\s*\([^)]*\)\s*/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+
+function formatVietnameseList(items: string[]) {
+  if (items.length <= 1) return items[0] ?? "";
+  return `${items.slice(0, -1).join(", ")} và ${items.at(-1)}`;
+}
+
 const serviceGroupByContentPage: Record<string, string> = {
   "services-overview": "overview",
   turnkey: "xay-dung-tron-goi",
@@ -257,11 +284,11 @@ const serviceGroupByContentPage: Record<string, string> = {
 
 function getServicePageDescription(id: string) {
   const descriptions: Record<string, string> = {
-    "services-overview": "Phần mở đầu, danh sách dịch vụ, quy trình và câu hỏi thường gặp.",
-    turnkey: "Phần mở đầu, dự án tiêu biểu, giải pháp và quy trình xây dựng trọn gói.",
-    design: "Phần mở đầu, thư viện ảnh, giải pháp và quy trình thiết kế.",
-    construction: "Phần mở đầu, dự án, quy trình và nội dung riêng trên điện thoại.",
-    renovation: "Phần mở đầu, dự án, giải pháp và nội dung cải tạo, sửa chữa.",
+    "services-overview": "Quản lý nội dung phần mở đầu, danh sách dịch vụ, quy trình làm việc và các câu hỏi thường gặp trên trang tổng quan.",
+    turnkey: "Quản lý phần mở đầu, dự án tiêu biểu, các giải pháp thi công và quy trình xây dựng trọn gói.",
+    design: "Quản lý phần mở đầu, thư viện hình ảnh, các giải pháp nổi bật và quy trình thiết kế kiến trúc, nội thất.",
+    construction: "Quản lý phần mở đầu, danh sách dự án, quy trình thi công và nội dung hiển thị riêng trên thiết bị di động.",
+    renovation: "Quản lý phần mở đầu, dự án tiêu biểu, các giải pháp và nội dung dành cho dịch vụ cải tạo, sửa chữa.",
   };
   return descriptions[id] ?? "Quản lý các phần nội dung của trang dịch vụ.";
 }
@@ -276,28 +303,22 @@ function ContentGroupGrid({
   items: Array<{ title: string; description: string; count?: string; href: string }>;
 }) {
   return (
-    <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-      <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
-        <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
-          <Layers3 className="size-4" />
-        </span>
+    <section className="mt-1">
+      <div className="flex items-center gap-3 py-5">
+        <Layers3 className="size-4 text-brand" />
         <div>
           <h2 className="text-sm font-semibold">{title}</h2>
           <p className="text-xs text-muted-foreground">{description}</p>
         </div>
       </div>
-      <div className={cn("grid", items.length > 1 && "md:grid-cols-2")}>
+      <div>
         {items.map((item, index) => (
           <Link
-            className={cn(
-              "group flex min-h-36 items-start gap-4 border-b p-5 outline-none transition-colors hover:bg-muted/55 focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6",
-              items.length > 1 && "md:odd:border-r",
-              index >= items.length - (items.length % 2 || 2) && "md:border-b-0",
-            )}
+            className="flex items-start gap-4 border-b border-border/70 py-5 outline-none last:border-b-0 focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:gap-5"
             href={item.href}
             key={item.href}
           >
-            <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand">
+            <span className="mt-0.5 shrink-0 text-xs font-semibold tabular-nums text-brand">
               {String(index + 1).padStart(2, "0")}
             </span>
             <div className="min-w-0 flex-1">
@@ -318,18 +339,33 @@ function ContentGroupGrid({
 }
 
 function ContentPageLink({ page, active, nested = false }: { page: (typeof adminContentPages)[number]; active: boolean; nested?: boolean }) {
+  const href = `/admin/content/${page.id}`;
+
+  if (nested) {
+    return (
+      <SidebarMenuSubButton
+        render={<Link href={href} aria-current={active ? "page" : undefined} />}
+        isActive={active}
+        size="sm"
+        className="h-7 px-2.5 text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
+      >
+        <span className="min-w-0 flex-1 truncate">{page.label}</span>
+        <span className="shrink-0 text-[10px] font-normal tabular-nums text-sidebar-foreground/50">{getPageFieldCount(page)}</span>
+      </SidebarMenuSubButton>
+    );
+  }
+
   return (
-    <Link
-      href={`/admin/content/${page.id}`}
-      aria-current={active ? "page" : undefined}
-      className={cn(
-        "flex min-h-10 items-center justify-between gap-3 rounded-lg px-3 text-sm outline-none transition-colors focus-visible:ring-3 focus-visible:ring-ring/30",
-        nested && "min-h-9 text-xs",
-        active ? "bg-background font-semibold text-foreground shadow-sm" : "text-muted-foreground hover:bg-background/70 hover:text-foreground",
-      )}
+    <SidebarMenuButton
+      render={<Link href={href} aria-current={active ? "page" : undefined} />}
+      isActive={active}
+      size="sm"
+      className="px-2.5 text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
     >
       <span className="truncate">{page.label}</span>
-      <span className="shrink-0 text-[11px] tabular-nums text-muted-foreground">{getPageFieldCount(page)}</span>
-    </Link>
+      <SidebarMenuBadge className="text-[10px] font-normal text-sidebar-foreground/50 peer-data-active/menu-button:text-sidebar-accent-foreground/60">
+        {getPageFieldCount(page)}
+      </SidebarMenuBadge>
+    </SidebarMenuButton>
   );
 }

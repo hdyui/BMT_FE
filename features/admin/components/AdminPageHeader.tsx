@@ -22,9 +22,11 @@ export function AdminPageHeader({
         <h1 className="text-2xl font-bold tracking-[-0.035em] sm:text-[30px]">
           {title}
         </h1>
-        <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
-          {description}
-        </p>
+        {description && (
+          <p className="mt-1.5 max-w-2xl text-sm leading-relaxed text-muted-foreground sm:text-[15px]">
+            {description}
+          </p>
+        )}
       </div>
       {actions && <div className="shrink-0">{actions}</div>}
     </div>

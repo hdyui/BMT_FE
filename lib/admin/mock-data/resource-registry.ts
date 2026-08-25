@@ -15,10 +15,14 @@ import {
 } from "@/features/home/data/home-content";
 import { articles, featuredNews } from "@/features/news/data/news-page";
 import {
+  quotationAreaInput,
+  quotationBudgetInput,
   quotationBuildingTypes,
-  quotationRates,
+  quotationNavLabels,
+  quotationResultIncludeLabel,
   quotationServiceTypes,
   quotationStepCopy,
+  quotationMobileHeroImage,
   quotationSteps,
 } from "@/features/quotation/data/quotation-estimator";
 import {
@@ -29,17 +33,19 @@ import {
 } from "@/features/services/data/overview";
 import {
   featuredProjects as turnkeyProjects,
+  mobileHeroArtwork as turnkeyMobileHeroArtwork,
   processSteps as turnkeyProcess,
   solutionCards as turnkeySolutions,
 } from "@/features/services/data/xay-dung-tron-goi";
 import {
   featuredProjects as designProjects,
-  heroCards as designHeroCards,
+  mobileHeroArtwork as designMobileHeroArtwork,
   processSteps as designProcess,
   solutionCards as designSolutions,
 } from "@/features/services/data/thiet-ke-kien-truc-noi-that";
 import {
   featuredProjects as constructionProjects,
+  mobileHeroBlueprint as constructionMobileHeroBlueprint,
   processSteps as constructionProcess,
   solutionCards as constructionSolutions,
 } from "@/features/services/data/thi-cong-xay-dung";
@@ -72,12 +78,6 @@ const textarea = (
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "textarea", ...options });
 
-const richtext = (
-  key: string,
-  label: string,
-  options: Partial<AdminFieldConfig> = {},
-): AdminFieldConfig => ({ key, label, type: "richtext", ...options });
-
 const number = (
   key: string,
   label: string,
@@ -95,6 +95,9 @@ const image = (
   label: string,
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "image", ...options });
+
+const lockedImage = (key: string, label: string): AdminFieldConfig =>
+  image(key, label, { editable: false });
 
 const boolean = (key: string, label: string): AdminFieldConfig => ({
   key,
@@ -137,7 +140,7 @@ const moduleLabels: Record<AdminModuleKey, string> = {
   recruitment: "Tuyển dụng",
   quotation: "Báo giá",
   contacts: "Liên hệ",
-  seo: "Thông tin tìm kiếm",
+  seo: "SEO",
   settings: "Cấu hình",
 };
 
@@ -967,7 +970,7 @@ function serviceCollection(
     path,
     title,
     singular,
-    description: `Quản lý ${title.toLocaleLowerCase("vi")}.`,
+    description: "",
     priority: "P1",
     kind: "collection",
     titleField: fields.find((field) => field.key === "title") ? "title" : fields[0].key,
@@ -986,11 +989,14 @@ const processFields = [
   textarea("description", "Mô tả", { required: true }),
   image("image", "Hình ảnh"),
 ];
+// Dòng chữ đứng ngay trên danh sách gạch đầu dòng của mỗi thẻ giải pháp.
+const SOLUTION_CHECKLIST_LABEL = "BMT Decor cung cấp:";
 const solutionFields = [
   text("titlePrefix", "Tiêu đề dòng 1", { required: true }),
   text("titleCategory", "Tiêu đề dòng 2", { required: true }),
   text("tagline", "Dòng giới thiệu"),
   textarea("description", "Mô tả"),
+  text("checklistLabel", "Dòng chữ phía trên danh sách", { required: true }),
   list("checklist", "Danh sách nội dung", { listMode: "fixed" }),
   text("ctaLabel", "Chữ trên nút bấm"),
   url("ctaHref", "Liên kết của nút bấm"),
@@ -1006,9 +1012,9 @@ const serviceResources: AdminResourceConfig[] = [
   resource({
     module: "services",
     path: "overview/hero-content",
-    title: "Nội dung và hình trang trí phần mở đầu",
+    title: "Nội dung phần mở đầu",
     singular: "Nội dung phần mở đầu",
-    description: "Thay đổi nội dung ở cột trái và các hình trang trí của phần mở đầu trang Tổng quan Dịch vụ.",
+    description: "Thay đổi nội dung ở cột trái của phần mở đầu trang Tổng quan Dịch vụ.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -1021,8 +1027,8 @@ const serviceResources: AdminResourceConfig[] = [
         textarea("description", "Khối Hero · Nội dung mô tả", { required: true }),
       ]),
       section("images", "Hình ảnh trang trí", [
-        image("introLogo", "Khối Hero · Logo màu cam (đầu đoạn text)"),
-        image("lineLogo", "Khối Hero · Logo line đen"),
+        lockedImage("introLogo", "Khối Hero · Logo màu cam (đầu đoạn text)"),
+        lockedImage("lineLogo", "Khối Hero · Logo line đen"),
         image("backgroundImage", "Khối Hero · Ảnh nền Banner (Background)"),
       ]),
     ],
@@ -1064,15 +1070,15 @@ const serviceResources: AdminResourceConfig[] = [
     sections: [
       section("content", "Giới thiệu quy trình", [
         text("title", "Tiêu đề quy trình", { required: true }),
-        richtext("description", "Nội dung giới thiệu", { required: true }),
-        image("lineImage", "Đường kẻ màu cam"),
+        textarea("description", "Nội dung giới thiệu", { required: true }),
+        lockedImage("lineImage", "Đường kẻ màu cam"),
       ]),
     ],
     initialRecords: [
       record("overview-process-intro", {
         title: "QUY TRÌNH LÀM VIỆC",
         description:
-          "BMT Decor triển khai dự án theo quy trình 6 bước rõ ràng, đảm bảo tiến độ, chất lượng và đồng hành cùng khách hàng trong từng giai đoạn.",
+          "BMT Decor triển khai dự án theo quy trình 6 bước rõ ràng, đảm bảo tiến độ,\nchất lượng và đồng hành cùng khách hàng trong từng giai đoạn.",
         lineImage: "/images/services/rule-orange.png",
       }),
     ],
@@ -1088,18 +1094,18 @@ const serviceResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "photo",
     sections: [
-      section("content", "Giới thiệu câu hỏi thường gặp", [
+      section("content", "Nội dung", [
         text("title", "Tiêu đề câu hỏi thường gặp", { required: true }),
         textarea("description", "Nội dung giới thiệu", { required: true }),
         image("photo", "Ảnh không gian bên trái"),
-        image("lineImage", "Đường kẻ màu cam"),
+        lockedImage("lineImage", "Đường kẻ màu cam"),
       ]),
     ],
     initialRecords: [
       record("overview-faq-intro", {
         title: "CÁC CÂU HỎI THƯỜNG GẶP",
         description:
-          "Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ hơn về quy trình và dịch vụ của BMT Decor.",
+          "Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ\nhơn về quy trình và dịch vụ của BMT Decor",
         photo: "/images/services/faq-photo.webp",
         lineImage: "/images/services/rule-orange.png",
       }),
@@ -1111,6 +1117,7 @@ const serviceResources: AdminResourceConfig[] = [
     "Dịch vụ",
     serviceTabs.map((item, index) =>
       record(`service-tab-${index + 1}`, {
+        tabLabel: item.tabLabel,
         title: item.label,
         tagline: item.tagline,
         description: item.copy,
@@ -1119,7 +1126,13 @@ const serviceResources: AdminResourceConfig[] = [
         order: index + 1,
       }),
     ),
-    [text("title", "Tiêu đề", { required: true }), text("tagline", "Dòng giới thiệu"), textarea("description", "Mô tả"), image("image", "Hình ảnh", { altKey: "imageAlt" })],
+    [
+      text("tabLabel", "Tiêu đề trên thanh chuyển", { required: true }),
+      text("title", "Tiêu đề nội dung", { required: true }),
+      textarea("tagline", "Dòng giới thiệu"),
+      textarea("description", "Mô tả"),
+      image("image", "Hình ảnh", { altKey: "imageAlt" }),
+    ],
     "image",
   ),
   serviceCollection(
@@ -1145,20 +1158,20 @@ const serviceResources: AdminResourceConfig[] = [
 const serviceHeroPresets = {
   "xay-dung-tron-goi": {
     title: "DỊCH VỤ THIẾT KẾ THI CÔNG\n& XÂY DỰNG TRỌN GÓI",
-    subtitle: "Kiến tạo công trình bền vững từ thiết kế đến thi công",
+    subtitle: "Kiến tạo công trình bền vững từ\nthiết kế đến thi công",
     images: [
       ["desktopArtwork", "Khối Hero · Cụm ảnh chính", "/images/xay-dung-tron-goi/hero-cluster.png"],
-      ["mobileArtwork", "Khối Hero · Cụm ảnh trên điện thoại", "/images/xay-dung-tron-goi/mobile/hero-artwork.png"],
+      ["mobileArtwork", "Khối Hero · Cụm ảnh trên điện thoại", turnkeyMobileHeroArtwork],
       ["accentLine", "Khối Hero · Thanh màu cam", "/images/xay-dung-tron-goi/hero-bar.png"],
       ["lineLogo", "Khối Hero · Logo line đen", "/images/services/rule-dark.png"],
       ["introLogo", "Khối Hero · Logo đầu đoạn text", "/images/services/icon-house.png"],
       ["dotsImage", "Khối Hero · Họa tiết chấm", "/images/xay-dung-tron-goi/hero-dots.png"],
-      ["sideDecoration", "Khối Hero · Hình trang trí cạnh phải", "/images/xay-dung-tron-goi/dong%20goi%20trang%20dich%20vu%20-%20xay%20dung%20tron%20goi%20web%20BMT%20decor-01.png"],
+      ["sideDecoration", "Khối Hero · Hình phác thảo cạnh phải", "/images/xay-dung-tron-goi/dong%20goi%20trang%20dich%20vu%20-%20xay%20dung%20tron%20goi%20web%20BMT%20decor-01.png"],
     ],
   },
   "thiet-ke-kien-truc-noi-that": {
-    title: "DỊCH VỤ THIẾT KẾ KIẾN TRÚC\n& NỘI THẤT CHUYÊN NGHIỆP",
-    subtitle: "Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng",
+    title: "DỊCH VỤ THIẾT KẾ KIẾN TRÚC &\nNỘI THẤT CHUYÊN NGHIỆP",
+    subtitle: "Kiến tạo không gian hài hòa giữa\nthẩm mỹ và công năng",
     images: [
       ["backgroundImage", "Khối Hero · Ảnh nền Banner", "/images/thiet-ke-kien-truc-noi-that/background-banner.png"],
       ["wireframeImage", "Khối Hero · Hình phác thảo nền", "/images/thiet-ke-kien-truc-noi-that/hero-wireframe-original.png"],
@@ -1168,18 +1181,19 @@ const serviceHeroPresets = {
       ["leftImage", "Khối Hero · Ảnh bên trái", "/images/thiet-ke-kien-truc-noi-that/left-corner.png"],
       ["centerImage", "Khối Hero · Ảnh ở giữa", "/images/thiet-ke-kien-truc-noi-that/between.png"],
       ["rightImage", "Khối Hero · Ảnh bên phải", "/images/thiet-ke-kien-truc-noi-that/right-corner.png"],
-      ["mobileArtwork", "Khối Hero · Cụm ảnh trên điện thoại", "/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png"],
+      ["mobileArtwork", "Khối Hero · Cụm ảnh trên điện thoại", designMobileHeroArtwork],
     ],
   },
   "thi-cong-xay-dung": {
     title: "DỊCH VỤ THI CÔNG\nXÂY DỰNG",
-    subtitle: "Đồng hành kiến tạo công trình bền vững",
+    subtitle: "Đồng Hành Kiến Tạo Công Trình\nBền Vững",
     images: [
       ["wireframeImage", "Khối Hero · Hình phác thảo nền", "/images/thi-cong-xay-dung/hero-wireframe.png"],
-      ["topImage", "Khối Hero · Ảnh phía trên", "/images/thi-cong-xay-dung/hero-diamond-top.webp"],
-      ["rightImage", "Khối Hero · Ảnh bên phải", "/images/thi-cong-xay-dung/hero-diamond-right.webp"],
-      ["bottomImage", "Khối Hero · Ảnh phía dưới", "/images/thi-cong-xay-dung/hero-diamond-bottom.webp"],
-      ["leftImage", "Khối Hero · Ảnh bên trái", "/images/thi-cong-xay-dung/hero-diamond-left.webp"],
+      ["topImage", "Khối Hero · Ảnh phía trên", "/images/thi-cong-xay-dung/hero-frame-top.webp"],
+      ["rightImage", "Khối Hero · Ảnh bên phải", "/images/thi-cong-xay-dung/hero-frame-right.webp"],
+      ["bottomImage", "Khối Hero · Ảnh phía dưới", "/images/thi-cong-xay-dung/hero-frame-bottom.webp"],
+      ["leftImage", "Khối Hero · Ảnh bên trái", "/images/thi-cong-xay-dung/hero-frame-left.webp"],
+      ["mobileBlueprint", "Khối Hero · Ảnh nền trên điện thoại", constructionMobileHeroBlueprint],
       ["accentLine", "Khối Hero · Thanh màu cam", "/images/thi-cong-xay-dung/accent-tick.png"],
       ["lineLogo", "Khối Hero · Logo line đen", "/images/services/rule-dark.png"],
       ["dotsImage", "Khối Hero · Họa tiết chấm", "/images/thi-cong-xay-dung/dots-pattern.png"],
@@ -1187,7 +1201,7 @@ const serviceHeroPresets = {
   },
   "cai-tao-sua-chua": {
     title: "DỊCH VỤ CẢI TẠO &\nSỬA CHỮA TRỌN GÓI",
-    subtitle: "Cải tạo không gian – Nâng tầm giá trị công trình",
+    subtitle: "Cải Tạo Không Gian – Nâng Tầm\nGiá Trị Công Trình",
     images: [
       ["backgroundImage", "Khối Hero · Ảnh nền Banner", "/images/cai-tao-sua-chua/hero-background.png"],
       ["wireframeImage", "Khối Hero · Hình phác thảo nền", "/images/cai-tao-sua-chua/hero-wireframe.png"],
@@ -1201,11 +1215,22 @@ const serviceHeroPresets = {
   },
 } as const;
 
+// Mở cho admin sửa các hình phác thảo khung công trình (`wireframeImage`,
+// `sideDecoration`). Ảnh nền banner của mấy trang này là gradient trắng-xám
+// trơn, phần còn lại là đồ trang trí: thanh cam, logo line, icon, hoạ tiết chấm.
+const lockedServiceHeroImageKeys = new Set<string>([
+  "backgroundImage",
+  "accentLine",
+  "lineLogo",
+  "introLogo",
+  "dotsImage",
+]);
+
 const serviceSectionIntroPresets = {
   "xay-dung-tron-goi": {
     featured: {
       title: "TỐI ƯU MÔ HÌNH THIẾT KẾ THI CÔNG TRỌN GÓI",
-      description: "Dịch vụ thiết kế thi công và xây dựng trọn gói giúp chủ đầu tư triển khai công trình đồng bộ từ ý tưởng, thiết kế đến thi công hoàn thiện, tiết kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh.",
+      description: "Dịch vụ thiết kế thi công và xây dựng trọn gói giúp chủ đầu tư triển khai công trình một cách đồng bộ, từ ý tưởng,\nthiết kế đến thi công hoàn thiện. Thay vì làm việc với nhiều đơn vị, khách hàng chỉ cần một đầu mối duy nhất để quản\nlý toàn bộ dự án, giúp tiết kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh trong quá trình xây dựng.",
       lineImage: "/images/xay-dung-tron-goi/rule-orange.png",
     },
     solutions: {
@@ -1214,7 +1239,7 @@ const serviceSectionIntroPresets = {
       lineImage: "/images/cai-tao-sua-chua/rule-orange-center.png",
     },
     process: {
-      title: "QUY TRÌNH THIẾT KẾ THI CÔNG & XÂY NHÀ TRỌN GÓI",
+      title: "QUY TRÌNH THIẾT KẾ THI CÔNG &\nXÂY NHÀ TRỌN GÓI",
       description: "Triển khai đồng bộ, kiểm soát chất lượng trong từng giai đoạn",
       lineImage: "/images/xay-dung-tron-goi/rule-orange.png",
     },
@@ -1222,7 +1247,7 @@ const serviceSectionIntroPresets = {
   "thiet-ke-kien-truc-noi-that": {
     featured: {
       title: "GIẢI PHÁP THIẾT KẾ TỐI ƯU CHO MỌI KHÔNG GIAN",
-      description: "BMT Decor cung cấp dịch vụ thiết kế kiến trúc, thiết kế nội thất và giải pháp thiết kế đồng bộ cho nhà ở, văn phòng, showroom, spa, nhà hàng và khách sạn, tối ưu công năng, ngân sách và giá trị sử dụng lâu dài.",
+      description: "BMT Decor cung cấp dịch vụ thiết kế kiến trúc, thiết kế nội thất và giải pháp thiết kế đồng bộ cho nhà ở, văn\nphòng, showroom, spa, nhà hàng và khách sạn. Mỗi phương án đều được nghiên cứu kỹ lưỡng nhằm tối ưu công\nnăng, ngân sách và giá trị sử dụng lâu dài.",
       lineImage: "/images/xay-dung-tron-goi/rule-orange.png",
     },
     solutions: {
@@ -1231,15 +1256,17 @@ const serviceSectionIntroPresets = {
       lineImage: "/images/cai-tao-sua-chua/rule-orange-center.png",
     },
     process: {
-      title: "QUY TRÌNH THIẾT KẾ TẠI BMT DECOR",
+      // Trên site chỉ có chữ "QUY TRÌNH THIẾT KẾ TẠI", phần "BMT Decor" là ảnh logo.
+      title: "QUY TRÌNH THIẾT KẾ TẠI",
       description: "",
       lineImage: "/images/thiet-ke-kien-truc-noi-that/rule-orange.png",
+      brandLogo: "/images/thiet-ke-kien-truc-noi-that/process-brand-logo.png",
     },
   },
   "thi-cong-xay-dung": {
     featured: {
       title: "THI CÔNG XÂY DỰNG TỪ PHẦN THÔ ĐẾN HOÀN THIỆN",
-      description: "BMT Decor triển khai xây dựng phần thô, thi công hoàn thiện và các hạng mục theo đúng hồ sơ kỹ thuật, kiểm soát chặt chẽ chất lượng vật liệu, tiến độ và an toàn lao động.",
+      description: "Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ của công trình. BMT Decor triển khai xây dựng phần thô, thi công hoàn\nthiện và các hạng mục xây dựng theo đúng hồ sơ kỹ thuật, đảm bảo quy trình thi công đồng bộ, kiểm soát chặt chẽ chất lượng vật liệu,\ntiến độ và an toàn lao động. Mỗi công trình đều được giám sát xuyên suốt nhằm hạn chế phát sinh và đảm bảo chất lượng khi bàn giao.",
       lineImage: "/images/xay-dung-tron-goi/rule-orange.png",
     },
     solutions: {
@@ -1256,7 +1283,7 @@ const serviceSectionIntroPresets = {
   "cai-tao-sua-chua": {
     featured: {
       title: "GIẢI PHÁP CẢI TẠO PHÙ HỢP CHO MỌI CÔNG TRÌNH",
-      description: "BMT Decor cung cấp dịch vụ cải tạo nhà ở, văn phòng, showroom, nhà hàng, sửa chữa nhà và nâng cấp không gian theo nhu cầu thực tế, tối ưu công năng và nâng cao giá trị sử dụng.",
+      description: "BMT Decor cung cấp dịch vụ cải tạo nhà ở, cải tạo văn phòng, cải tạo showroom, cải tạo nhà hàng, sửa chữa\nnhà và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục các hạng mục xuống cấp, tối ưu công năng và nâng\ncao giá trị sử dụng với chi phí hợp lý.",
       lineImage: "/images/xay-dung-tron-goi/rule-orange.png",
     },
     solutions: {
@@ -1264,11 +1291,9 @@ const serviceSectionIntroPresets = {
       description: "Giải pháp cải tạo tối ưu cho từng không gian",
       lineImage: "/images/cai-tao-sua-chua/rule-orange-center.png",
     },
-    process: {
-      title: "QUY TRÌNH CẢI TẠO & SỬA CHỮA TẠI BMT DECOR",
-      description: "",
-      lineImage: "/images/cai-tao-sua-chua/logo.png",
-    },
+    // Site không hiển thị tiêu đề quy trình của trang này (khối h2 đang bị
+    // comment trong RenovationServicePage), nên admin cũng không có mục này.
+    process: null,
   },
 } as const;
 
@@ -1276,14 +1301,19 @@ function serviceSectionIntro(
   base: string,
   sectionPath: "featured-project" | "solutions" | "process",
   label: string,
-  preset: { readonly title: string; readonly description: string; readonly lineImage: string },
+  preset: {
+    readonly title: string;
+    readonly description: string;
+    readonly lineImage: string;
+    readonly brandLogo?: string;
+  },
 ) {
   return resource({
     module: "services",
     path: `${base}/${sectionPath}-intro`,
     title: `Giới thiệu ${label}`,
     singular: `Giới thiệu ${label}`,
-    description: `Tiêu đề, nội dung và hình ảnh hiển thị cùng phần ${label.toLocaleLowerCase("vi")}.`,
+    description: `Tiêu đề và nội dung hiển thị cùng phần ${label.toLocaleLowerCase("vi")}.`,
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -1291,15 +1321,19 @@ function serviceSectionIntro(
     sections: [
       section("content", `Giới thiệu ${label}`, [
         textarea("title", "Tiêu đề", { required: true }),
-        ...(preset.description
-          ? [sectionPath === "featured-project"
-              ? richtext("description", "Nội dung giới thiệu", { required: true })
-              : textarea("description", "Nội dung giới thiệu", { required: true })]
+        ...(preset.description ? [textarea("description", "Nội dung giới thiệu", { required: true })] : []),
+        ...(preset.brandLogo
+          ? [image("brandLogo", "Logo BMT Decor nằm trong tiêu đề", { altKey: "brandLogoAlt" })]
           : []),
-        image("lineImage", "Hình trang trí dưới tiêu đề"),
+        lockedImage("lineImage", "Hình trang trí dưới tiêu đề"),
       ]),
     ],
-    initialRecords: [record(`${base}-${sectionPath}-intro`, { ...preset })],
+    initialRecords: [
+      record(`${base}-${sectionPath}-intro`, {
+        ...preset,
+        ...(preset.brandLogo ? { brandLogoAlt: "BMT Decor" } : {}),
+      }),
+    ],
   });
 }
 
@@ -1308,7 +1342,7 @@ function addServicePageResources(
   label: string,
   projects: ReadonlyArray<{ id: string; title: string; tag: string; image: string }>,
   solutions: ReadonlyArray<{ titlePrefix: string; titleCategory: string; tagline: string; description: string; checklist: readonly string[]; cta: string; image: string }>,
-  processes: ReadonlyArray<{ title: string; description?: string; copy?: string; icon?: string }>,
+  processes: ReadonlyArray<{ title: string; subtitle?: string; description?: string; copy?: string; icon?: string }>,
 ) {
   const heroPreset = serviceHeroPresets[base as keyof typeof serviceHeroPresets];
   const sectionPresets = serviceSectionIntroPresets[base as keyof typeof serviceSectionIntroPresets];
@@ -1331,7 +1365,11 @@ function addServicePageResources(
         section(
           "media",
           "Hình ảnh phần mở đầu",
-          heroPreset.images.map(([key, fieldLabel]) => image(key, fieldLabel)),
+          heroPreset.images.map(([key, fieldLabel]) =>
+            lockedServiceHeroImageKeys.has(key)
+              ? lockedImage(key, fieldLabel)
+              : image(key, fieldLabel),
+          ),
         ),
       ],
       initialRecords: [
@@ -1344,7 +1382,9 @@ function addServicePageResources(
     }),
     serviceSectionIntro(base, "featured-project", "dự án tiêu biểu", sectionPresets.featured),
     serviceSectionIntro(base, "solutions", "giải pháp", sectionPresets.solutions),
-    serviceSectionIntro(base, "process", "quy trình", sectionPresets.process),
+    ...(sectionPresets.process
+      ? [serviceSectionIntro(base, "process", "quy trình", sectionPresets.process)]
+      : []),
     serviceCollection(
       `${base}/featured-project`,
       `Dự án tiêu biểu ${label}`,
@@ -1358,7 +1398,7 @@ function addServicePageResources(
       `${base}/solutions`,
       `Giải pháp ${label}`,
       "Giải pháp",
-      solutions.map((item, index) => record(`${base}-solution-${index + 1}`, { titlePrefix: item.titlePrefix, titleCategory: item.titleCategory, tagline: item.tagline, description: item.description, checklist: [...item.checklist], ctaLabel: item.cta, ctaHref: "/du-an", image: item.image, imageAlt: `${item.titlePrefix} ${item.titleCategory}`, order: index + 1 })),
+      solutions.map((item, index) => record(`${base}-solution-${index + 1}`, { titlePrefix: item.titlePrefix, titleCategory: item.titleCategory, tagline: item.tagline, description: item.description, checklistLabel: SOLUTION_CHECKLIST_LABEL, checklist: [...item.checklist], ctaLabel: item.cta, ctaHref: "/du-an", image: item.image, imageAlt: `${item.titlePrefix.trim()} ${item.titleCategory}`, order: index + 1 })),
       solutionFields,
       "image",
       { companionResourceKey: `services/${base}/solutions-intro` },
@@ -1367,10 +1407,14 @@ function addServicePageResources(
       `${base}/process`,
       `Quy trình ${label}`,
       "Bước quy trình",
-      processes.map((item, index) => record(`${base}-process-${index + 1}`, { title: item.title, description: item.description ?? item.copy ?? "", image: item.icon ?? "", order: index + 1 })),
+      // Trang Thi công và Cải tạo tách tiêu đề bước thành 2 dòng (title +
+      // subtitle), site render mỗi phần một dòng nên admin cũng phải như vậy.
+      processes.map((item, index) => record(`${base}-process-${index + 1}`, { title: item.subtitle ? `${item.title.trim()}\n${item.subtitle}` : item.title, description: item.description ?? item.copy ?? "", image: item.icon ?? "", order: index + 1 })),
       processFields,
       "image",
-      { companionResourceKey: `services/${base}/process-intro` },
+      sectionPresets.process
+        ? { companionResourceKey: `services/${base}/process-intro` }
+        : undefined,
     ),
   );
 }
@@ -1380,78 +1424,6 @@ addServicePageResources("thiet-ke-kien-truc-noi-that", "Thiết kế Kiến trú
 addServicePageResources("thi-cong-xay-dung", "Thi công xây dựng", constructionProjects, constructionSolutions, constructionProcess);
 addServicePageResources("cai-tao-sua-chua", "Cải tạo & sửa chữa", renovationProjects, renovationSolutions, renovationProcess);
 
-serviceResources.push(
-  serviceCollection(
-    "thiet-ke-kien-truc-noi-that/gallery",
-    "Thư viện ảnh Thiết kế Kiến trúc & Nội thất",
-    "Ảnh trong thư viện",
-    designHeroCards.map((item, index) => record(`design-gallery-${index + 1}`, { title: item.alt, image: item.image, imageAlt: item.alt, order: index + 1 })),
-    [text("title", "Tiêu đề", { required: true }), image("image", "Ảnh", { altKey: "imageAlt" })],
-    "image",
-  ),
-  serviceCollection(
-    "thi-cong-xay-dung/images",
-    "Hình ảnh Thi công xây dựng",
-    "Hình ảnh",
-    constructionSolutions.map((item, index) =>
-      record(`construction-image-${index + 1}`, {
-        title: `${item.titlePrefix} ${item.titleCategory}`,
-        image: item.image,
-        imageAlt: `${item.titlePrefix} ${item.titleCategory}`,
-        order: index + 1,
-      }),
-    ),
-    [
-      text("title", "Tiêu đề", { required: true }),
-      image("image", "Hình ảnh", { altKey: "imageAlt" }),
-    ],
-    "image",
-  ),
-  serviceCollection(
-    "cai-tao-sua-chua/images",
-    "Hình ảnh Cải tạo & sửa chữa",
-    "Hình ảnh",
-    renovationSolutions.map((item, index) =>
-      record(`renovation-image-${index + 1}`, {
-        title: `${item.titlePrefix} ${item.titleCategory}`,
-        image: item.image,
-        imageAlt: `${item.titlePrefix} ${item.titleCategory}`,
-        order: index + 1,
-      }),
-    ),
-    [
-      text("title", "Tiêu đề", { required: true }),
-      image("image", "Hình ảnh", { altKey: "imageAlt" }),
-    ],
-    "image",
-  ),
-  resource({
-    module: "services",
-    path: "thi-cong-xay-dung/mobile-content",
-    title: "Nội dung trên điện thoại của trang Thi công xây dựng",
-    singular: "Nội dung trên điện thoại",
-    description: "Nội dung dành riêng cho người xem bằng điện thoại.",
-    priority: "P1",
-    kind: "singleton",
-    titleField: "title",
-    previewField: "image",
-    sections: [section("content", "Nội dung", [text("title", "Tiêu đề"), textarea("description", "Mô tả"), image("image", "Hình ảnh", { altKey: "imageAlt" })])],
-    initialRecords: [record("construction-mobile", { title: "Thi công xây dựng", description: "Nội dung tối ưu cho người xem bằng điện thoại.", image: constructionProjects[0].image, imageAlt: constructionProjects[0].title })],
-  }),
-  resource({
-    module: "services",
-    path: "cai-tao-sua-chua/mobile-content",
-    title: "Nội dung trên điện thoại của trang Cải tạo và sửa chữa",
-    singular: "Nội dung trên điện thoại",
-    description: "Nội dung dành riêng cho người xem bằng điện thoại.",
-    priority: "P1",
-    kind: "singleton",
-    titleField: "title",
-    previewField: "image",
-    sections: [section("content", "Nội dung", [text("title", "Tiêu đề"), textarea("description", "Mô tả"), image("image", "Hình ảnh", { altKey: "imageAlt" })])],
-    initialRecords: [record("renovation-mobile", { title: "Cải tạo & sửa chữa", description: "Nội dung tối ưu cho người xem bằng điện thoại.", image: renovationProjects[0].image, imageAlt: renovationProjects[0].title })],
-  }),
-);
 
 const remainingResources: AdminResourceConfig[] = [
   resource({
@@ -1505,25 +1477,25 @@ const remainingResources: AdminResourceConfig[] = [
         url("ctaHref", "Khối Hero · Liên kết nút liên hệ"),
       ]),
       section("main-media", "Hình ảnh chính", [
-        image("desktopBackground", "Khối Hero · Ảnh nền trên máy tính"),
-        image("tabletBackground", "Khối Hero · Ảnh nền trên máy tính bảng"),
+        lockedImage("desktopBackground", "Khối Hero · Ảnh nền trên máy tính"),
+        lockedImage("tabletBackground", "Khối Hero · Ảnh nền trên máy tính bảng"),
         image("mobileImage", "Khối Hero · Ảnh trên điện thoại", { altKey: "mobileAlt" }),
         image("mainPhoto", "Khối Hero · Ảnh kiến trúc sư", { altKey: "mainPhotoAlt" }),
-        image("accentLine", "Khối Hero · Thanh màu cam"),
-        image("introLogo", "Khối Hero · Logo đầu đoạn text"),
-        image("buttonBackground", "Khối Hero · Ảnh nền nút liên hệ"),
+        lockedImage("accentLine", "Khối Hero · Thanh màu cam"),
+        lockedImage("introLogo", "Khối Hero · Logo đầu đoạn text"),
+        lockedImage("buttonBackground", "Khối Hero · Ảnh nền nút liên hệ"),
       ]),
       section("decor", "Hình ảnh trang trí", [
-        image("decor01", "Khối Hero · Hình trang trí 1"),
-        image("decor02", "Khối Hero · Hình trang trí 2"),
-        image("decor03", "Khối Hero · Hình trang trí 3"),
-        image("decor04", "Khối Hero · Hình trang trí 4"),
-        image("decor08", "Khối Hero · Hình trang trí 5"),
-        image("decor09", "Khối Hero · Hình trang trí 6"),
-        image("decor10", "Khối Hero · Hình trang trí 7"),
-        image("decor11", "Khối Hero · Hình trang trí 8"),
-        image("decor12", "Khối Hero · Hình trang trí 9"),
-        image("decor13", "Khối Hero · Hình trang trí 10"),
+        lockedImage("decor01", "Khối Hero · Hình trang trí 1"),
+        lockedImage("decor02", "Khối Hero · Hình trang trí 2"),
+        lockedImage("decor03", "Khối Hero · Hình trang trí 3"),
+        lockedImage("decor04", "Khối Hero · Hình trang trí 4"),
+        lockedImage("decor08", "Khối Hero · Hình trang trí 5"),
+        lockedImage("decor09", "Khối Hero · Hình trang trí 6"),
+        lockedImage("decor10", "Khối Hero · Hình trang trí 7"),
+        lockedImage("decor11", "Khối Hero · Hình trang trí 8"),
+        lockedImage("decor12", "Khối Hero · Hình trang trí 9"),
+        lockedImage("decor13", "Khối Hero · Hình trang trí 10"),
       ]),
     ],
     initialRecords: [record("quotation-hero", {
@@ -1534,7 +1506,7 @@ const remainingResources: AdminResourceConfig[] = [
       ctaHref: "/lien-he",
       desktopBackground: "/images/bao-gia/decor-06.jpg",
       tabletBackground: "/images/bao-gia/decor-14.jpg",
-      mobileImage: "/images/bao-gia/mobile/quotation-hero.png",
+      mobileImage: quotationMobileHeroImage,
       mobileAlt: "Kiến trúc sư BMT Decor đang tính toán phương án thiết kế",
       mainPhoto: "/images/bao-gia/decor-07.jpg",
       mainPhotoAlt: "Kiến trúc sư BMT Decor đang tính toán phương án thiết kế",
@@ -1599,23 +1571,23 @@ const remainingResources: AdminResourceConfig[] = [
       ]),
       section("hero-media", "Hình ảnh phần mở đầu", [
         image("heroImage", "Khối Hero · Ảnh Hồ sơ năng lực", { altKey: "heroAlt" }),
-        image("lineLogo", "Khối Hero · Logo line đen"),
-        image("decor04", "Khối Hero · Hình trang trí 1"),
-        image("decor05", "Khối Hero · Hình trang trí 2"),
-        image("decor06", "Khối Hero · Hình trang trí 3"),
-        image("decor07", "Khối Hero · Hình trang trí 4"),
-        image("decor08", "Khối Hero · Hình trang trí 5"),
-        image("decor09", "Khối Hero · Hình trang trí 6"),
-        image("decor11", "Khối Hero · Hình trang trí 7"),
+        lockedImage("lineLogo", "Khối Hero · Logo line đen"),
+        image("decor08", "Khối Hero · Hình phác thảo công trình"),
+        lockedImage("decor04", "Khối Hero · Hình trang trí 1"),
+        lockedImage("decor05", "Khối Hero · Hình trang trí 2"),
+        lockedImage("decor06", "Khối Hero · Hình trang trí 3"),
+        lockedImage("decor07", "Khối Hero · Hình trang trí 4"),
+        lockedImage("decor09", "Khối Hero · Hình trang trí 5"),
+        lockedImage("decor11", "Khối Hero · Hình trang trí 6"),
       ]),
       section("document", "Phần tài liệu", [
         text("documentHeading", "Tiêu đề phần hồ sơ"),
-        image("documentLine", "Logo line đen dưới tiêu đề"),
+        lockedImage("documentLine", "Logo line đen dưới tiêu đề"),
       ]),
     ],
     initialRecords: [record("capability-profile", {
       title: "HỒ SƠ NĂNG LỰC\nBMT DECOR",
-      subtitle: "Khẳng định năng lực - Đồng hành kiến tạo giá trị bền vững",
+      subtitle: "KHẲNG ĐỊNH NĂNG LỰC - ĐỒNG HÀNH KIẾN TẠO GIÁ TRỊ BỀN VỮNG",
       description: "Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ chuyên môn, quy trình triển khai và các dự án tiêu biểu, phản ánh năng lực thiết kế, thi công và cải tạo công trình một cách chuyên nghiệp và đồng bộ.",
       heroImage: "/images/capability-profile/hero-profile.webp",
       heroAlt: "Bộ hồ sơ năng lực BMT Decor được trưng bày trên bàn gỗ",
@@ -1726,27 +1698,67 @@ const remainingResources: AdminResourceConfig[] = [
   }),
   resource({
     module: "quotation",
-    path: "pricing-rules",
-    title: "Mức giá dịch vụ",
-    singular: "Mức giá dịch vụ",
-    description: "Quản lý mức giá thấp và cao của từng dịch vụ.",
-    priority: "P1",
-    kind: "collection",
-    titleField: "service",
-    sections: [section("pricing", "Mức giá", [text("service", "Dịch vụ", { required: true }), number("lowRate", "Mức thấp", { required: true }), number("highRate", "Mức cao", { required: true })])],
-    initialRecords: Object.entries(quotationRates).map(([service, rates], index) => record(`pricing-${index + 1}`, { service, lowRate: rates[0], highRate: rates[1] })),
-  }),
-  resource({
-    module: "quotation",
     path: "estimator",
     title: "Nội dung công cụ ước tính",
     singular: "Nội dung công cụ ước tính",
     description: "Quản lý hướng dẫn và lựa chọn trong công cụ ước tính.",
     priority: "P1",
     kind: "singleton",
-    titleField: "heading",
-    sections: [section("content", "Nội dung công cụ", [list("stepLabels", "Tên các bước"), text("heading", "Tiêu đề"), textarea("instruction", "Hướng dẫn"), text("placeholder", "Chữ gợi ý"), list("serviceOptions", "Các dịch vụ"), list("buildingOptions", "Các loại công trình")])],
-    initialRecords: [record("quotation-estimator", { stepLabels: [...quotationSteps], heading: quotationStepCopy[0][0], instruction: quotationStepCopy[0][1], placeholder: "Chọn loại hình", serviceOptions: [...quotationServiceTypes], buildingOptions: [...quotationBuildingTypes] })],
+    titleField: "heading1",
+    sections: [
+      section("steps", "Thanh tiến trình", [list("stepLabels", "Tên các bước")]),
+      section(`step-01`, `Bước 01 · ${quotationSteps[0]}`, [
+        text("heading1", "Tiêu đề", { required: true }),
+        textarea("instruction1", "Hướng dẫn"),
+        list("buildingOptions", "Các loại hình"),
+      ]),
+      section(`step-02`, `Bước 02 · ${quotationSteps[1]}`, [
+        text("heading2", "Tiêu đề", { required: true }),
+        textarea("instruction2", "Hướng dẫn"),
+        text("areaPlaceholder", "Chữ gợi ý trong ô nhập"),
+        text("areaUnit", "Đơn vị hiển thị trong ô nhập"),
+      ]),
+      section(`step-03`, `Bước 03 · ${quotationSteps[2]}`, [
+        text("heading3", "Tiêu đề", { required: true }),
+        textarea("instruction3", "Hướng dẫn"),
+        text("budgetPlaceholder", "Chữ gợi ý trong ô nhập"),
+        text("budgetUnit", "Đơn vị hiển thị trong ô nhập"),
+      ]),
+      section(`step-04`, `Bước 04 · ${quotationSteps[3]}`, [
+        text("heading4", "Tiêu đề", { required: true }),
+        textarea("instruction4", "Hướng dẫn"),
+        list("serviceOptions", "Các gói"),
+      ]),
+      // Bước 05 đang chạy trên dữ liệu giả, chưa nối API nên chỉ mở đúng dòng
+      // chữ tĩnh trong câu kết quả.
+      section(`step-05`, `Bước 05 · ${quotationSteps[4]}`, [
+        text("resultIncludeLabel", "Chữ đứng trước tên gói ở dòng kết quả"),
+      ]),
+      section("nav", "Nút chuyển bước", [
+        text("backLabel", "Chữ trên nút lùi lại", { required: true }),
+        text("nextLabel", "Chữ trên nút đi tiếp", { required: true }),
+      ]),
+    ],
+    initialRecords: [record("quotation-estimator", {
+      stepLabels: [...quotationSteps],
+      heading1: quotationStepCopy[0][0],
+      instruction1: quotationStepCopy[0][1],
+      buildingOptions: [...quotationBuildingTypes],
+      heading2: quotationStepCopy[1][0],
+      instruction2: quotationStepCopy[1][1],
+      areaPlaceholder: quotationAreaInput.placeholder,
+      areaUnit: quotationAreaInput.unit,
+      heading3: quotationStepCopy[2][0],
+      instruction3: quotationStepCopy[2][1],
+      budgetPlaceholder: quotationBudgetInput.placeholder,
+      budgetUnit: quotationBudgetInput.unit,
+      heading4: quotationStepCopy[3][0],
+      instruction4: quotationStepCopy[3][1],
+      serviceOptions: [...quotationServiceTypes],
+      resultIncludeLabel: quotationResultIncludeLabel,
+      backLabel: quotationNavLabels.back,
+      nextLabel: quotationNavLabels.next,
+    })],
   }),
   resource({
     module: "contacts",
@@ -1763,34 +1775,6 @@ const remainingResources: AdminResourceConfig[] = [
       section("media", "Hình ảnh", [image("backgroundImage", "Ảnh nền"), image("formImage", "Ảnh biểu mẫu", { altKey: "formImageAlt" })]),
     ],
     initialRecords: [record("contact-form", { title: "Liên hệ tư vấn", description: "Chia sẻ nhu cầu để đội ngũ BMT Decor tư vấn giải pháp phù hợp.", nameLabel: "Tên khách hàng", namePlaceholder: "Tên khách hàng...", phoneLabel: "Số điện thoại", phonePlaceholder: "Số điện thoại...", submitLabel: "Gửi ngay", successMessage: "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ trong thời gian sớm nhất.", backgroundImage: "/images/contact/mobile/form-background.png", formImage: "/images/contact/contact-consultant.jpg", formImageAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng" })],
-  }),
-  resource({
-    module: "seo",
-    path: "global",
-    title: "Thông tin tìm kiếm chung",
-    singular: "Thông tin tìm kiếm chung",
-    description: "Thông tin đại diện chung của toàn website trên công cụ tìm kiếm.",
-    priority: "P2",
-    kind: "singleton",
-    titleField: "siteName",
-    previewField: "ogImage",
-    sections: [section("seo", "Thông tin hiển thị", [text("siteName", "Tên website", { required: true }), text("title", "Tiêu đề", { required: true, maxLength: 60 }), textarea("description", "Mô tả", { required: true, maxLength: 160 }), image("ogImage", "Hình ảnh đại diện", { altKey: "ogImageAlt", ratio: "1.91:1", recommendedSize: "1200 × 630px" })])],
-    initialRecords: [record("global-seo", { siteName: "BMT Decor", title: "BMT Decor | Thiết kế và thi công trọn gói", description: "BMT Decor cung cấp dịch vụ thiết kế nội thất, thi công xây dựng và cải tạo trọn gói tại TP.HCM.", ogImage: "/images/home/hero-background-01.webp", ogImageAlt: "BMT Decor" })],
-  }),
-  resource({
-    module: "seo",
-    path: "pages",
-    title: "Thông tin tìm kiếm từng trang",
-    singular: "Thông tin tìm kiếm của trang",
-    description: "Thông tin đại diện riêng của từng trang trên công cụ tìm kiếm.",
-    priority: "P2",
-    kind: "collection",
-    titleField: "pageLabel",
-    previewField: "ogImage",
-    sections: [section("seo", "Thông tin hiển thị của trang", [text("pageLabel", "Tên trang", { required: true }), text("metaTitle", "Tiêu đề tìm kiếm", { maxLength: 60 }), textarea("metaDescription", "Mô tả tìm kiếm", { maxLength: 160 }), image("ogImage", "Hình ảnh đại diện", { altKey: "ogImageAlt" }), text("slug", "Đường dẫn")])],
-    initialRecords: [
-      ["Trang chủ", "/"], ["Giới thiệu", "/gioi-thieu"], ["Dịch vụ", "/dich-vu"], ["Dự án", "/du-an"], ["Tin tức", "/tin-tuc"], ["Tuyển dụng", "/tuyen-dung"], ["Liên hệ", "/lien-he"],
-    ].map(([pageLabel, slug], index) => record(`page-seo-${index + 1}`, { pageLabel, metaTitle: `${pageLabel} | BMT Decor`, metaDescription: `Thông tin ${pageLabel.toLocaleLowerCase("vi")} tại BMT Decor.`, ogImage: "/images/home/hero-background-01.webp", ogImageAlt: pageLabel, slug })),
   }),
   resource({
     module: "settings",
@@ -1898,9 +1882,6 @@ export const adminResourceGroups: Record<string, AdminResourceGroupConfig> = {
           { title: "Dự án tiêu biểu", description: "Dữ liệu dự án tiêu biểu riêng của dịch vụ.", priority: "P1", href: `/admin/services/${slug}/featured-project` },
           { title: "Giải pháp", description: "Các giải pháp và danh sách nội dung đi kèm.", priority: "P1", href: `/admin/services/${slug}/solutions` },
           { title: "Quy trình", description: "Các bước quy trình của dịch vụ.", priority: "P1", href: `/admin/services/${slug}/process` },
-          ...(slug === "thiet-ke-kien-truc-noi-that" ? [{ title: "Thư viện ảnh", description: "Thư viện ảnh thiết kế.", priority: "P1" as const, href: `/admin/services/${slug}/gallery` }] : []),
-          ...(["thi-cong-xay-dung", "cai-tao-sua-chua"].includes(slug) ? [{ title: "Nội dung trên điện thoại", description: "Nội dung riêng cho người xem bằng điện thoại.", priority: "P1" as const, href: `/admin/services/${slug}/mobile-content` }] : []),
-          ...(["thi-cong-xay-dung", "cai-tao-sua-chua"].includes(slug) ? [{ title: "Hình ảnh", description: "Danh sách hình ảnh riêng của dịch vụ.", priority: "P1" as const, href: `/admin/services/${slug}/images` }] : []),
         ],
       },
     ]),

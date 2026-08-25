@@ -31,6 +31,7 @@ export function EditorField({
   altValue,
   altDirty = false,
   contentEditorStyle = false,
+  multilineText = false,
   onChange,
   onAltChange,
 }: {
@@ -42,6 +43,8 @@ export function EditorField({
   altValue?: AdminFieldValue;
   altDirty?: boolean;
   contentEditorStyle?: boolean;
+  /** Cho phép ô text/list nhận Enter khi nội dung website có ngắt dòng chủ động. */
+  multilineText?: boolean;
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;
 }) {
@@ -119,6 +122,7 @@ export function EditorField({
         description={field.description}
         dirty={dirty}
         emphasized={contentEditorStyle}
+        multilineText={multilineText}
         values={Array.isArray(value) ? value : []}
         mode={field.listMode ?? "dynamic"}
         onChange={onChange}
@@ -158,7 +162,7 @@ export function EditorField({
             onChange={onChange}
           />
         </div>
-      ) : field.type === "textarea" ? (
+      ) : field.type === "textarea" || (multilineText && field.type === "text") ? (
         <AutoGrowTextarea
           value={currentValue}
           placeholder={field.placeholder}
@@ -216,6 +220,7 @@ function getConciseImageLabel(label: string) {
 
 function AutoGrowTextarea({
   value,
+  className,
   ...props
 }: React.ComponentProps<typeof Textarea>) {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -233,7 +238,10 @@ function AutoGrowTextarea({
       ref={ref}
       value={value}
       rows={1}
-      className="min-h-10 resize-none overflow-hidden bg-background font-normal"
+      className={cn(
+        "min-h-10 resize-none overflow-hidden bg-background font-normal",
+        className,
+      )}
     />
   );
 }
@@ -243,6 +251,7 @@ function ArrayField({
   description,
   dirty,
   emphasized,
+  multilineText = false,
   values,
   mode,
   onChange,
@@ -251,6 +260,7 @@ function ArrayField({
   description?: string;
   dirty: boolean;
   emphasized: boolean;
+  multilineText?: boolean;
   values: string[];
   mode: "fixed" | "dynamic";
   onChange: (values: string[]) => void;
@@ -290,19 +300,31 @@ function ArrayField({
       ) : (
         <div className="space-y-2">
           {values.map((item, index) => (
-            <div className="flex items-center gap-2" key={index}>
-              <span className="w-7 shrink-0 text-center text-xs tabular-nums text-muted-foreground">
+            <div className="flex items-start gap-2" key={index}>
+              <span className="mt-3 w-7 shrink-0 text-center text-xs tabular-nums text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <Input
-                value={item}
-                className="h-10 bg-background font-normal"
-                onChange={(event) => {
-                  const next = [...values];
-                  next[index] = event.target.value;
-                  onChange(next);
-                }}
-              />
+              {multilineText ? (
+                <AutoGrowTextarea
+                  className="flex-1"
+                  value={item}
+                  onChange={(event) => {
+                    const next = [...values];
+                    next[index] = event.target.value;
+                    onChange(next);
+                  }}
+                />
+              ) : (
+                <Input
+                  value={item}
+                  className="h-10 bg-background font-normal"
+                  onChange={(event) => {
+                    const next = [...values];
+                    next[index] = event.target.value;
+                    onChange(next);
+                  }}
+                />
+              )}
               <Button
                 type="button"
                 variant="ghost"

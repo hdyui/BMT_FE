@@ -34,6 +34,7 @@ export interface AdminFieldConfig {
   key: string;
   label: string;
   type: AdminFieldType;
+  editable?: boolean;
   placeholder?: string;
   description?: string;
   required?: boolean;

@@ -18,7 +18,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
   return (
     <SidebarProvider
       defaultOpen
-      className="admin-shell min-h-dvh overflow-x-hidden bg-background text-foreground"
+      className="admin-shell min-h-dvh overflow-x-clip bg-background text-foreground"
     >
       {!fullWidthEditor && <AppSidebar />}
       <SidebarInset className="min-h-dvh min-w-0">

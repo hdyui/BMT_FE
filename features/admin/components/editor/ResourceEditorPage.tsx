@@ -17,7 +17,11 @@ import {
 import { ResourcePreviewDialog } from "@/features/admin/components/editor/ResourcePreviewDialog";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  LINE_BREAK_EDITOR_HINT,
+  getEditableAdminSections,
+  isRefinedEditorResource,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
@@ -75,10 +79,13 @@ export function ResourceEditorPage({
     return new Set(keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])));
   }, [draft, editableSections, savedSnapshot]);
   const dirtyCount = dirtyKeys.size;
+  const refinedEditor = isRefinedEditorResource(config);
   const topActionEditor = true;
   const allowPreview = !topActionEditor && config.module !== "services";
   const singleColumnContentEditor = isSingleColumnContentEditor(config);
   const requestedContentEditor = isRequestedContentEditor(config);
+  const stackedFields =
+    singleColumnContentEditor || config.key === "settings/capability-profile";
 
   if (mode !== "create" && !existing) {
     return (
@@ -221,6 +228,12 @@ export function ResourceEditorPage({
         />
       </div>
 
+      {refinedEditor && (
+        <p className="mt-3 text-xs text-muted-foreground">
+          {LINE_BREAK_EDITOR_HINT}
+        </p>
+      )}
+
       <EditorLayout
         aside={topActionEditor ? undefined : (
           <>
@@ -278,17 +291,17 @@ export function ResourceEditorPage({
                   <div
                     className={cn(
                       "grid items-start gap-4 lg:gap-5",
-                      !singleColumnContentEditor && fields.length > 1 && "md:grid-cols-2",
-                      !singleColumnContentEditor &&
+                      !stackedFields && fields.length > 1 && "md:grid-cols-2",
+                      !stackedFields &&
                         (threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4"),
                     )}
                   >
                     {fields.map((field) => (
                       <div
                         className={cn(
-                          !singleColumnContentEditor && !threeColumnText && fields.length === 1 && "xl:col-span-4",
-                          !singleColumnContentEditor && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
-                          !singleColumnContentEditor && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                          !stackedFields && !threeColumnText && fields.length === 1 && "xl:col-span-4",
+                          !stackedFields && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
+                          !stackedFields && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
                         )}
                         key={field.key}
                       >
@@ -300,6 +313,7 @@ export function ResourceEditorPage({
                           altValue={field.altKey ? draft[field.altKey] : undefined}
                           altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
                           contentEditorStyle={requestedContentEditor}
+                          multilineText={refinedEditor}
                           onChange={(value) => updateField(field.key, value)}
                           onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
                         />
@@ -333,6 +347,7 @@ export function ResourceEditorPage({
                   altValue={field.altKey ? draft[field.altKey] : undefined}
                   altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
                   contentEditorStyle={requestedContentEditor}
+                  multilineText={refinedEditor}
                   onChange={(value) => updateField(field.key, value)}
                   onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
                   key={field.key}

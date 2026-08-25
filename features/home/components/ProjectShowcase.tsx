@@ -7,10 +7,7 @@ import { BmtCta } from "@/lib/components/shared/BmtCta";
 import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
-import {
-  homeProjectCategories as categories,
-  type HomeProject as Project,
-} from "@/features/home/data/home-content";
+import { homeProjectCategories as categories } from "@/features/home/data/home-content";
 
 const cardContainerVariants: Variants = {
   hidden: {},

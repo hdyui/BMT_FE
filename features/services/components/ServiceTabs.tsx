@@ -123,7 +123,7 @@ export function ServiceTabs() {
         aria-label="Các dịch vụ"
       >
         {serviceTabs.map((service, index) => (
-          <Reveal delay={index * 110} from="left" key={service.label}>
+          <Reveal delay={index * 110} from="left" key={service.tabLabel}>
             <button
               className={cn(
                 // Cùng font / độ đậm / viết hoa với tiêu đề trong phần nội dung
@@ -151,7 +151,7 @@ export function ServiceTabs() {
                   ))}
                 </span>
                 <span className="hidden lg:inline">
-                  {service.label.toUpperCase()}
+                  {service.tabLabel.toUpperCase()}
                 </span>
               </span>
             </button>
@@ -265,8 +265,8 @@ export function ServiceTabs() {
             type="button"
             role="tab"
             aria-selected={index === active}
-            aria-label={service.label}
-            key={service.label}
+            aria-label={service.tabLabel}
+            key={service.tabLabel}
           >
             {index === active && (
               <span className="size-3.5 rounded-full bg-brand" aria-hidden="true" />

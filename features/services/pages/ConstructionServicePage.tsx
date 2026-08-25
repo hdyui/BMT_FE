@@ -69,7 +69,7 @@ import {
 const HERO_DIAMONDS = [
   {
     key: "top",
-    src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-top.webp",
     alt: "Thi công nhà hàng",
     // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` đã hạ 9,2% -> 15,8%
     // (xuống 40px) để hình hiện ra nhiều hơn: phần thấy được dưới header đi từ
@@ -82,7 +82,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "right",
-    src: "/images/thi-cong-xay-dung/hero-diamond-right.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-right.webp",
     alt: "Thi công thẩm mỹ viện",
     // Mép phải hình này là mép phải của cả cụm: 48,9% + 0.7071 x 37,9% x 0.423
     // = 60,2% bề rộng banner, dừng đúng ở thanh cam của khối chữ bên phải.
@@ -93,7 +93,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "bottom",
-    src: "/images/thi-cong-xay-dung/hero-diamond-bottom.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-bottom.webp",
     alt: "Thi công nhà ở",
     // To hơn mockup (38,4% -> 44,6%) để chìm 6,5% dưới cạnh đáy banner:
     // đỉnh dưới ở 72,6% + 0.7071 x 44,6% = 104,1% chiều cao banner.
@@ -104,7 +104,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "left",
-    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-left.webp",
     alt: "Thi công văn phòng",
     // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
     // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
