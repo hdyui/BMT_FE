@@ -8,6 +8,7 @@ import type {
   AdminFieldConfig,
   AdminFieldValue,
 } from "@/lib/admin/types/crud";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -26,6 +27,7 @@ export function EditorField({
   labelOverride,
   error,
   dirty = false,
+  multilineText = false,
   onChange,
 }: {
   field: AdminFieldConfig;
@@ -33,6 +35,8 @@ export function EditorField({
   labelOverride?: string;
   error?: string;
   dirty?: boolean;
+  /** Cho phép ô chữ một dòng nhận Enter và hiển thị đúng chỗ ngắt dòng như trên website. */
+  multilineText?: boolean;
   onChange: (value: AdminFieldValue) => void;
 }) {
   if (field.type === "image") {
@@ -55,9 +59,9 @@ export function EditorField({
   if (field.type === "boolean") {
     const enabled = Boolean(value);
     return (
-      <div className="flex items-center justify-between gap-4 rounded-xl border bg-muted/25 px-4 py-3">
+      <div className="flex items-center justify-between gap-4 py-3">
         <div>
-          <p className="flex items-center gap-2 text-sm font-medium">
+          <p className="flex items-center gap-2 text-sm font-semibold">
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {field.label}
           </p>
@@ -82,6 +86,7 @@ export function EditorField({
         label={field.label}
         description={field.description}
         dirty={dirty}
+        multilineText={multilineText}
         values={Array.isArray(value) ? value : []}
         onChange={onChange}
       />
@@ -94,9 +99,9 @@ export function EditorField({
     : undefined;
 
   return (
-    <label className="grid gap-2 text-sm font-medium">
+    <label className="grid gap-2 text-sm">
       <span className="flex flex-wrap items-center justify-between gap-2">
-        <span className="flex items-center gap-2">
+        <span className="flex items-center gap-2 font-semibold">
           {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
           {field.label}
         </span>
@@ -106,7 +111,7 @@ export function EditorField({
           </span>
         )}
       </span>
-      {field.type === "textarea" ? (
+      {field.type === "textarea" || (multilineText && field.type === "text") ? (
         <AutoGrowTextarea
           value={currentValue}
           placeholder={field.placeholder}
@@ -164,6 +169,7 @@ function getConciseImageLabel(label: string) {
 
 function AutoGrowTextarea({
   value,
+  className,
   ...props
 }: React.ComponentProps<typeof Textarea>) {
   const ref = useRef<HTMLTextAreaElement>(null);
@@ -181,7 +187,7 @@ function AutoGrowTextarea({
       ref={ref}
       value={value}
       rows={1}
-      className="min-h-10 resize-none overflow-hidden bg-background"
+      className={cn("min-h-10 resize-none overflow-hidden bg-background", className)}
     />
   );
 }
@@ -190,12 +196,14 @@ function ArrayField({
   label,
   description,
   dirty,
+  multilineText = false,
   values,
   onChange,
 }: {
   label: string;
   description?: string;
   dirty: boolean;
+  multilineText?: boolean;
   values: string[];
   onChange: (values: string[]) => void;
 }) {
@@ -203,7 +211,7 @@ function ArrayField({
     <div className="grid gap-3">
       <div className="flex items-center justify-between gap-3">
         <div>
-          <p className="flex items-center gap-2 text-sm font-medium">
+          <p className="flex items-center gap-2 text-sm font-semibold">
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {label}
           </p>
@@ -227,19 +235,31 @@ function ArrayField({
       ) : (
         <div className="space-y-2">
           {values.map((item, index) => (
-            <div className="flex items-center gap-2" key={index}>
-              <span className="w-7 shrink-0 text-center text-xs tabular-nums text-muted-foreground">
+            <div className="flex items-start gap-2" key={index}>
+              <span className="mt-3 w-7 shrink-0 text-center text-xs tabular-nums text-muted-foreground">
                 {String(index + 1).padStart(2, "0")}
               </span>
-              <Input
-                value={item}
-                className="h-10 bg-background"
-                onChange={(event) => {
-                  const next = [...values];
-                  next[index] = event.target.value;
-                  onChange(next);
-                }}
-              />
+              {multilineText ? (
+                <AutoGrowTextarea
+                  className="flex-1"
+                  value={item}
+                  onChange={(event) => {
+                    const next = [...values];
+                    next[index] = event.target.value;
+                    onChange(next);
+                  }}
+                />
+              ) : (
+                <Input
+                  value={item}
+                  className="h-10 bg-background"
+                  onChange={(event) => {
+                    const next = [...values];
+                    next[index] = event.target.value;
+                    onChange(next);
+                  }}
+                />
+              )}
               <Button
                 type="button"
                 variant="ghost"

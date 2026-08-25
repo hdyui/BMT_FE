@@ -9,7 +9,6 @@ export type AdminModuleKey =
   | "recruitment"
   | "quotation"
   | "contacts"
-  | "seo"
   | "settings";
 
 export type AdminFieldValue = string | number | boolean | string[];
@@ -33,6 +32,7 @@ export interface AdminFieldConfig {
   key: string;
   label: string;
   type: AdminFieldType;
+  editable?: boolean;
   placeholder?: string;
   description?: string;
   required?: boolean;

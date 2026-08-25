@@ -169,3 +169,7 @@ export const processSteps = [
     copy: "Bàn giao đầy đủ hồ sơ thiết kế và các tài\nliệu liên quan cho chủ đầu tư hoặc đơn\nvị thi công, đảm bảo sẵn sàng triển khai\ndự án.",
   },
 ] as const;
+
+/** Cụm ảnh mở đầu vẽ riêng cho khổ điện thoại (MobileHeroArtwork). */
+export const mobileHeroArtwork =
+  "/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png";

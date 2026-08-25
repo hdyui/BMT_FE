@@ -78,7 +78,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "quotation",
     label: "Báo giá",
     publicRoute: "/bao-gia",
-    resourceKeys: ["quotation/hero", "quotation/pricing-rules", "quotation/estimator"],
+    resourceKeys: ["quotation/hero", "quotation/estimator"],
     sourceFiles: ["features/quotation/data/quotation-estimator.ts", "features/quotation/pages/QuotationPage.tsx"],
   },
   {

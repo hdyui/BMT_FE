@@ -18,11 +18,9 @@ export function AdminModuleShell({
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
       <AdminPageHeader title={title} description={description} />
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-        <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
-          <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
-            <Layers3 className="size-4" />
-          </span>
+      <section className="mt-8">
+        <div className="flex items-center gap-3 py-5">
+          <Layers3 className="size-4 text-brand" />
           <div>
             <h2 className="text-sm font-semibold">Các nhóm nội dung</h2>
             <p className="text-xs text-muted-foreground">
@@ -30,14 +28,14 @@ export function AdminModuleShell({
             </p>
           </div>
         </div>
-        <div className="grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0">
+        <div className="grid border-t border-border/70 md:grid-cols-2">
           {items.map((item, index) => {
-            const className = `group flex min-h-36 items-start gap-4 p-5 transition-colors hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6 ${
-              index >= 2 ? "md:border-t" : ""
+            const className = `group flex min-h-32 items-start gap-4 border-b border-border/70 py-5 transition-colors hover:bg-muted/30 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 md:px-5 ${
+              index % 2 === 0 ? "md:border-r md:pl-0" : "md:pr-0"
             }`;
             const content = (
               <>
-              <span className="grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand">
+              <span className="mt-0.5 shrink-0 text-xs font-semibold tabular-nums text-brand">
                 {String(index + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0 flex-1">

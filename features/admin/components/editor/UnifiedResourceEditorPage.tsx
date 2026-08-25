@@ -11,13 +11,17 @@ import { EditorField } from "@/features/admin/components/editor/EditorField";
 import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  LINE_BREAK_EDITOR_HINT,
+  getEditableAdminSections,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
   AdminResourceConfig,
 } from "@/lib/admin/types/crud";
 import { Button } from "@/components/ui/button";
+import { Switch } from "@/components/ui/switch";
 
 type DraftMap = Record<string, AdminCrudRecord[]>;
 
@@ -174,7 +178,7 @@ export function UnifiedResourceEditorPage({
       <div className="mt-4">
         <AdminPageHeader
           title={config.title}
-          description={config.description}
+          description=""
           actions={
             <EditorTopActions
               dirty={dirty}
@@ -188,20 +192,21 @@ export function UnifiedResourceEditorPage({
         />
       </div>
 
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-        <div className="divide-y">
-          {editableConfigs.map((itemConfig) => (
-            <ResourceEditorGroup
-              config={itemConfig}
-              records={drafts[itemConfig.key] ?? []}
-              dirtyKeys={dirtyKeys}
-              errors={errors}
-              onChange={updateField}
-              onDelete={(record) => setDeleteTarget({ config: itemConfig, record })}
-              key={itemConfig.key}
-            />
-          ))}
-        </div>
+      <p className="mt-3 text-xs text-muted-foreground">{LINE_BREAK_EDITOR_HINT}</p>
+
+      <section className="mt-7 space-y-10">
+        {editableConfigs.map((itemConfig, groupIndex) => (
+          <ResourceEditorGroup
+            config={itemConfig}
+            separated={groupIndex > 0}
+            records={drafts[itemConfig.key] ?? []}
+            dirtyKeys={dirtyKeys}
+            errors={errors}
+            onChange={updateField}
+            onDelete={(record) => setDeleteTarget({ config: itemConfig, record })}
+            key={itemConfig.key}
+          />
+        ))}
       </section>
 
       <DeleteContentDialog
@@ -223,8 +228,10 @@ function ResourceEditorGroup({
   errors,
   onChange,
   onDelete,
+  separated = false,
 }: {
   config: AdminResourceConfig;
+  separated?: boolean;
   records: AdminCrudRecord[];
   dirtyKeys: Set<string>;
   errors: Record<string, string>;
@@ -238,40 +245,68 @@ function ResourceEditorGroup({
     config.kind === "collection" &&
     editableFields.length === 1 &&
     editableFields[0].type === "image";
+  const inlineToggleField =
+    config.kind === "collection"
+      ? editableFields.find((field) => field.type === "boolean")
+      : undefined;
+  const contentFields = inlineToggleField
+    ? editableFields.filter((field) => field.key !== inlineToggleField.key)
+    : editableFields;
+  const groupTitle = imageOnlyCollection
+    ? "Hình ảnh"
+    : getEditableAdminSections(config.sections)[0]?.title ?? config.singular;
+
+  const groupHeader = !imageOnlyCollection && !isGenericGroupTitle(groupTitle) && (
+    <header className="mb-5 flex items-end justify-between gap-4">
+      <div>
+        <h2 className="text-base font-bold">{groupTitle}</h2>
+      </div>
+      {config.kind === "collection" && (
+        <span className="shrink-0 text-xs tabular-nums text-muted-foreground">
+          {records.length} mục
+        </span>
+      )}
+    </header>
+  );
 
   if (imageOnlyCollection) {
     const imageField = editableFields[0];
 
-    return records.length === 0 ? (
-      <p className="p-6 text-sm text-muted-foreground">Chưa có nội dung để chỉnh sửa.</p>
-    ) : (
-      <div className="grid gap-4 p-4 sm:grid-cols-2 sm:p-5 xl:grid-cols-4">
-        {records.map((record, recordIndex) => {
-          const identity = fieldIdentity(config.key, record.id, imageField.key);
-          const recordLabel = `${config.itemLabel ?? config.singular} ${String(recordIndex + 1).padStart(2, "0")}`;
+    return (
+      <section className={groupSeparatorClass(separated)}>
+        {records.length === 0 ? (
+          <p className="py-6 text-sm text-muted-foreground">Chưa có nội dung để chỉnh sửa.</p>
+        ) : (
+          <div className="grid gap-x-8 gap-y-8 sm:grid-cols-2 xl:grid-cols-4">
+            {records.map((record, recordIndex) => {
+              const identity = fieldIdentity(config.key, record.id, imageField.key);
+              const recordLabel = `${config.itemLabel ?? config.singular} ${String(recordIndex + 1).padStart(2, "0")}`;
 
-          return (
-            <EditorField
-              field={imageField}
-              value={record[imageField.key]}
-              labelOverride={recordLabel}
-              error={errors[identity]}
-              dirty={isFieldDirty(config, record, imageField.key, dirtyKeys)}
-              onChange={(value) => onChange(config.key, record.id, imageField.key, value)}
-              key={record.id}
-            />
-          );
-        })}
-      </div>
+              return (
+                <EditorField
+                  field={imageField}
+                  value={record[imageField.key]}
+                  labelOverride={recordLabel}
+                  error={errors[identity]}
+                  dirty={isFieldDirty(config, record, imageField.key, dirtyKeys)}
+                  onChange={(value) => onChange(config.key, record.id, imageField.key, value)}
+                  key={record.id}
+                />
+              );
+            })}
+          </div>
+        )}
+      </section>
     );
   }
 
   return (
-    <>
+    <section className={groupSeparatorClass(separated, groupHeader ? "pt-8" : "pt-2")}>
+      {groupHeader}
       {records.length === 0 ? (
-        <p className="p-6 text-sm text-muted-foreground">Chưa có nội dung để chỉnh sửa.</p>
+        <p className="py-6 text-sm text-muted-foreground">Chưa có nội dung để chỉnh sửa.</p>
       ) : (
-        <div className="divide-y first:border-t-0">
+        <div className={config.kind === "collection" ? "divide-y divide-border/60" : undefined}>
           {records.map((record, recordIndex) => {
             const recordDirtyCount = countRecordDirtyFields(config, record, dirtyKeys);
             const recordLabel =
@@ -279,49 +314,69 @@ function ResourceEditorGroup({
                 ? config.singular
                 : `${config.itemLabel ?? config.singular} ${String(recordIndex + 1).padStart(2, "0")}`;
             return (
-              <article className="p-4 sm:p-5" key={record.id}>
-                <div className="mb-3 flex items-center justify-between gap-3">
-                  <div className="flex min-w-0 items-center gap-3">
-                    <h3 className="flex min-w-0 items-center gap-2 font-semibold">
+              <article className={config.kind === "collection" ? "py-6" : undefined} key={record.id}>
+                {config.kind === "collection" && (
+                  <div className="mb-4 flex items-center justify-between gap-3">
+                    <div className="flex min-w-0 items-center gap-3">
+                      <h3 className="flex min-w-0 items-center gap-2 font-semibold">
                       {recordDirtyCount > 0 && (
                         <span className="size-2 shrink-0 rounded-full bg-brand" aria-label={`${recordDirtyCount} thay đổi chưa lưu`} />
                       )}
                       <span className="truncate">{recordLabel}</span>
-                    </h3>
+                      </h3>
+                    </div>
+                    <div className="flex shrink-0 items-center gap-2">
+                      {inlineToggleField && (
+                        <label className="flex h-8 items-center gap-2 px-1 text-xs font-medium text-muted-foreground">
+                          {isFieldDirty(config, record, inlineToggleField.key, dirtyKeys) && (
+                            <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />
+                          )}
+                          <span>{inlineToggleField.label}</span>
+                          <Switch
+                            checked={Boolean(record[inlineToggleField.key])}
+                            onCheckedChange={(checked) =>
+                              onChange(config.key, record.id, inlineToggleField.key, checked)
+                            }
+                            aria-label={inlineToggleField.label}
+                          />
+                        </label>
+                      )}
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="sm"
+                        className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                        onClick={() => onDelete(record)}
+                      >
+                        <Trash2 /> Xóa
+                      </Button>
+                    </div>
                   </div>
-                  {config.kind === "collection" && (
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => onDelete(record)}
-                    >
-                      <Trash2 /> Xóa
-                    </Button>
-                  )}
-                </div>
-                <div className={`grid gap-4 lg:gap-5 ${editableFields.length > 1 ? "md:grid-cols-2" : ""}`}>
-                  {editableFields.map((field) => {
-                    const identity = fieldIdentity(config.key, record.id, field.key);
-                    return (
-                      <EditorField
-                        field={field}
-                        value={record[field.key]}
-                        error={errors[identity]}
-                        dirty={isFieldDirty(config, record, field.key, dirtyKeys)}
-                        onChange={(value) => onChange(config.key, record.id, field.key, value)}
-                        key={field.key}
-                      />
-                    );
-                  })}
-                </div>
+                )}
+                {contentFields.length > 0 && (
+                  <div className={`grid gap-4 lg:gap-5 ${contentFields.length > 1 ? "md:grid-cols-2" : ""}`}>
+                    {contentFields.map((field) => {
+                      const identity = fieldIdentity(config.key, record.id, field.key);
+                      return (
+                        <EditorField
+                          field={field}
+                          value={record[field.key]}
+                          error={errors[identity]}
+                          dirty={isFieldDirty(config, record, field.key, dirtyKeys)}
+                          multilineText
+                          onChange={(value) => onChange(config.key, record.id, field.key, value)}
+                          key={field.key}
+                        />
+                      );
+                    })}
+                  </div>
+                )}
               </article>
             );
           })}
         </div>
       )}
-    </>
+    </section>
   );
 }
 
@@ -397,4 +452,12 @@ function sameValue(left: AdminFieldValue | undefined, right: AdminFieldValue | u
 
 function sameDrafts(left: DraftMap, right: DraftMap) {
   return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function groupSeparatorClass(separated: boolean, topPadding = "pt-10") {
+  return separated ? `border-t border-border/60 ${topPadding}` : undefined;
+}
+
+function isGenericGroupTitle(title: string) {
+  return /^(nội dung|nội dung chữ|nội dung và hình ảnh|thông tin)$/i.test(title.trim());
 }

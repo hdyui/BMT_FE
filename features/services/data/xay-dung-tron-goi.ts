@@ -154,3 +154,7 @@ export const processSteps = [
     copy: "Hoàn thiện công trình, nghiệm thu, bàn giao và thực hiện bảo hành theo đúng cam kết.",
   },
 ] as const;
+
+/** Cụm ảnh mở đầu vẽ riêng cho khổ điện thoại (MobileHeroArtwork). */
+export const mobileHeroArtwork =
+  "/images/xay-dung-tron-goi/mobile/hero-artwork.png";

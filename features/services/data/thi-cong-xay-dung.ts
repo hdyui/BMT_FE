@@ -158,3 +158,7 @@ export const processSteps = [
       "Kiểm tra chất lượng từng hạng mục, hoàn thiện công trình và bàn giao đúng tiến độ.",
   },
 ];
+
+/** Ảnh nền bản vẽ ở khối mở đầu, chỉ dùng cho khổ điện thoại. */
+export const mobileHeroBlueprint =
+  "/images/thi-cong-xay-dung/mobile/hero-blueprint.png";

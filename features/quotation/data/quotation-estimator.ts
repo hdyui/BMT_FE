@@ -33,9 +33,31 @@ export const quotationStepCopy = [
   ["CHỌN MỨC DỊCH VỤ", "Có thể đổi bất cứ lúc nào, chỉ ảnh hưởng đến ước tính"],
 ] as const;
 
+/** Ô nhập ở bước 02 (diện tích) và 03 (ngân sách). */
+export const quotationAreaInput = {
+  placeholder: "Diện tích sàn...",
+  unit: "m²",
+};
+export const quotationBudgetInput = {
+  placeholder: "Ngân sách ...",
+  unit: "đ",
+};
+
+/** Chữ đứng trước tên gói ở dòng kết quả bước 05. */
+export const quotationResultIncludeLabel = "Bao gồm";
+
+/** Hai nút điều hướng giữa các bước. */
+export const quotationNavLabels = {
+  back: "Quay lại",
+  next: "Tiếp tục",
+};
+
 export const quotationRates: Record<string, [number, number]> = {
   "Xây dựng trọn gói": [315000, 402500],
   "Thiết kế kiến trúc & nội thất": [220000, 285000],
   "Thi công xây dựng": [4800000, 6200000],
   "Cải tạo & sửa chữa": [2100000, 3800000],
 };
+
+/** Ảnh mở đầu vẽ riêng cho khổ điện thoại (QuotationHero, ẩn từ md trở lên). */
+export const quotationMobileHeroImage = "/images/bao-gia/mobile/quotation-hero.png";

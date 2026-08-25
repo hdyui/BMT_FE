@@ -3,11 +3,9 @@ import {
   BriefcaseBusiness,
   FolderKanban,
   GalleryVerticalEnd,
-  ImageIcon,
   LayoutDashboard,
   LayoutTemplate,
   Newspaper,
-  SearchCheck,
   Settings2,
 } from "lucide-react";
 
@@ -49,11 +47,7 @@ export const adminNavigation: AdminNavigationSection[] = [
   },
   {
     label: "Hệ thống",
-    items: [
-      { label: "Thư viện ảnh", href: "/admin/media", icon: ImageIcon },
-      { label: "Thông tin tìm kiếm", href: "/admin/seo", icon: SearchCheck },
-      { label: "Cấu hình", href: "/admin/settings", icon: Settings2 },
-    ],
+    items: [{ label: "Cấu hình", href: "/admin/settings", icon: Settings2 }],
   },
 ];
 
@@ -104,14 +98,6 @@ export const adminPageMeta: Record<
   "/admin/contacts": {
     title: "Liên hệ",
     description: "Quản lý nội dung biểu mẫu liên hệ",
-  },
-  "/admin/media": {
-    title: "Thư viện ảnh",
-    description: "Xem và chọn hình ảnh cho nội dung",
-  },
-  "/admin/seo": {
-    title: "Thông tin tìm kiếm",
-    description: "Quản lý tiêu đề và mô tả hiển thị trên công cụ tìm kiếm",
   },
   "/admin/settings": {
     title: "Cấu hình",

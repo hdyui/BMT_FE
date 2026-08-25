@@ -5,8 +5,12 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import styles from "@/features/quotation/quotation.module.css";
 import { ContactForm } from "@/lib/components/shared/ContactForm";
 import {
+  quotationAreaInput,
+  quotationBudgetInput,
   quotationBuildingTypes as buildingTypes,
+  quotationNavLabels,
   quotationRates,
+  quotationResultIncludeLabel,
   quotationServiceTypes as serviceTypes,
   quotationStepCopy as stepCopy,
   quotationSteps as steps,
@@ -260,9 +264,9 @@ export function QuotationEstimator() {
           {step === 1 && (
             <UnitInput
               id="area"
-              placeholder="Diện tích sàn..."
+              placeholder={quotationAreaInput.placeholder}
               value={area}
-              unit="m²"
+              unit={quotationAreaInput.unit}
               error={areaError}
               valid={areaTouched && !areaError && digitsOnly(area)}
               onBlur={validateArea}
@@ -273,9 +277,9 @@ export function QuotationEstimator() {
           {step === 2 && (
             <UnitInput
               id="budget"
-              placeholder="Ngân sách ..."
+              placeholder={quotationBudgetInput.placeholder}
               value={budget}
-              unit="đ"
+              unit={quotationBudgetInput.unit}
               error={budgetError}
               valid={
                 budgetTouched &&
@@ -319,16 +323,16 @@ export function QuotationEstimator() {
                 className={`mt-5 mb-0 text-[0.8125rem] leading-[1.45] md:text-[0.9375rem] md:leading-normal ${styles.animResultCaption}`}
               >
                 ~ {formatNumber(estimate.rate)} đ/m² - {building}{" "}
-                {estimate.squareMeters} m² - Bao gồm{" "}
+                {estimate.squareMeters} {quotationAreaInput.unit} - {quotationResultIncludeLabel}{" "}
                 {service.toLocaleLowerCase("vi")}
               </p>
             </div>
           )}
 
           <div className="mt-5 flex items-center justify-between md:mt-[2.1875rem]">
-            <StepButton onClick={previous} label="Quay lại" icon="left" />
+            <StepButton onClick={previous} label={quotationNavLabels.back} icon="left" />
             {step < 4 && (
-              <StepButton onClick={next} label="Tiếp tục" icon="right" />
+              <StepButton onClick={next} label={quotationNavLabels.next} icon="right" />
             )}
           </div>
         </div>

@@ -2,21 +2,9 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChevronsUpDown, LogOut, UserRound } from "lucide-react";
-
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuGroup,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import {
   Sidebar,
   SidebarContent,
-  SidebarFooter,
   SidebarGroup,
   SidebarGroupContent,
   SidebarGroupLabel,
@@ -27,19 +15,15 @@ import {
   SidebarRail,
   useSidebar,
 } from "@/components/ui/sidebar";
-import {
-  adminBrandIcon,
-  adminNavigation,
-} from "@/lib/admin/constants/navigation";
+import { adminNavigation } from "@/lib/admin/constants/navigation";
 
 export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
   const pathname = usePathname();
   const { isMobile, setOpenMobile } = useSidebar();
-  const BrandIcon = adminBrandIcon;
 
   return (
     <Sidebar collapsible="icon" {...props}>
-      <SidebarHeader className="border-b border-sidebar-border p-2">
+      <SidebarHeader className="p-2 pb-1">
         <SidebarMenu>
           <SidebarMenuItem>
             <SidebarMenuButton
@@ -47,17 +31,14 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               tooltip="BMT Admin"
               render={<Link href="/admin/dashboard" />}
               onClick={() => isMobile && setOpenMobile(false)}
-              className="data-active:bg-sidebar-accent"
+              className="data-active:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-1!"
             >
-              <span className="grid aspect-square size-8 place-items-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                <BrandIcon className="size-4" strokeWidth={1.8} />
-              </span>
-              <span className="grid min-w-0 flex-1 text-left leading-tight">
-                <span className="truncate text-sm font-bold tracking-[0.08em]">
-                  BMT ADMIN
+              <span className="flex min-w-0 items-baseline gap-2 whitespace-nowrap group-data-[collapsible=icon]:gap-0">
+                <span className="text-[27px] font-bold leading-none tracking-[-0.045em] text-brand group-data-[collapsible=icon]:text-[9px] group-data-[collapsible=icon]:tracking-[-0.04em]">
+                  BMT
                 </span>
-                <span className="truncate text-xs text-muted-foreground">
-                  Quản lý nội dung
+                <span className="text-[25px] font-normal leading-none tracking-[-0.035em] text-sidebar-foreground group-data-[collapsible=icon]:hidden">
+                  Admin
                 </span>
               </span>
             </SidebarMenuButton>
@@ -68,7 +49,9 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent className="admin-scrollbar">
         {adminNavigation.map((section) => (
           <SidebarGroup key={section.label}>
-            <SidebarGroupLabel>{section.label}</SidebarGroupLabel>
+            <SidebarGroupLabel className="text-[10px] font-semibold tracking-[0.1em] uppercase">
+              {section.label}
+            </SidebarGroupLabel>
             <SidebarGroupContent>
               <SidebarMenu>
                 {section.items.map((item) => {
@@ -83,6 +66,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         tooltip={item.label}
                         render={<Link href={item.href} />}
                         onClick={() => isMobile && setOpenMobile(false)}
+                        className="text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
                       >
                         <Icon strokeWidth={1.8} />
                         <span>{item.label}</span>
@@ -96,50 +80,6 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
         ))}
       </SidebarContent>
 
-      <SidebarFooter className="border-t border-sidebar-border">
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <DropdownMenu>
-              <DropdownMenuTrigger
-                render={
-                  <SidebarMenuButton
-                    size="lg"
-                    className="aria-expanded:bg-sidebar-accent"
-                  />
-                }
-              >
-                <span className="grid aspect-square size-8 place-items-center rounded-lg bg-foreground text-xs font-bold text-background">
-                  BA
-                </span>
-                <span className="grid min-w-0 flex-1 text-left leading-tight">
-                  <span className="truncate text-sm font-semibold">Quản trị BMT</span>
-                  <span className="truncate text-xs text-muted-foreground">
-                    Quản lý nội dung
-                  </span>
-                </span>
-                <ChevronsUpDown className="ml-auto size-4" />
-              </DropdownMenuTrigger>
-              <DropdownMenuContent
-                className="w-56"
-                side={isMobile ? "bottom" : "right"}
-                align="end"
-                sideOffset={6}
-              >
-                <DropdownMenuGroup>
-                  <DropdownMenuLabel>Tài khoản</DropdownMenuLabel>
-                  <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <UserRound /> Hồ sơ
-                  </DropdownMenuItem>
-                  <DropdownMenuItem disabled>
-                    <LogOut /> Đăng xuất
-                  </DropdownMenuItem>
-                </DropdownMenuGroup>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
       <SidebarRail />
     </Sidebar>
   );

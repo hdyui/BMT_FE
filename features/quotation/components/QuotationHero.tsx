@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/features/quotation/quotation.module.css";
+import { quotationMobileHeroImage } from "@/features/quotation/data/quotation-estimator";
 
 /**
  * Banner trang báo giá.
@@ -119,7 +120,7 @@ export function QuotationHero() {
       {/* Artwork mobile tổng hợp từ đúng bộ asset của mockup. */}
       <Image
         className={`absolute inset-x-0 top-[calc(5.3125rem+0.25rem)] bottom-auto !h-[154vw] object-fill md:hidden ${styles.animMobileArtwork}`}
-        src="/images/bao-gia/mobile/quotation-hero.png"
+        src={quotationMobileHeroImage}
         alt="Kiến trúc sư BMT Decor đang tính toán phương án thiết kế"
         fill
         sizes="100vw"

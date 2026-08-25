@@ -77,14 +77,16 @@ export function EmbeddedResourceEditor({
   }
 
   return (
-    <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-      <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+    <section className="mt-6 overflow-hidden rounded-xl border bg-card shadow-[0_1px_2px_rgb(36_33_34/.035)]">
+      <div className="flex flex-col gap-3 border-b bg-muted/20 px-5 py-4 sm:flex-row sm:items-start sm:justify-between sm:px-6">
         <div>
           <h2 className="flex items-center gap-2 font-semibold">
             {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
             {config.title}
           </h2>
-          <p className="mt-1 text-sm text-muted-foreground">{config.description}</p>
+          {config.description && (
+            <p className="mt-1 text-sm text-muted-foreground">{config.description}</p>
+          )}
           {dirty && <p className="mt-2 text-xs font-medium text-brand">{dirtyKeys.size} thay đổi chưa lưu</p>}
         </div>
         <div className="flex flex-wrap justify-end gap-2">
@@ -101,7 +103,7 @@ export function EmbeddedResourceEditor({
           </Button>
         </div>
       </div>
-      <div className="grid gap-5 p-5 sm:p-6 xl:grid-cols-2">
+      <div className="grid gap-6 p-5 sm:p-6 xl:grid-cols-2">
         {editableSections.map((editorSection) => (
           <EditorSection
             title={editorSection.title}

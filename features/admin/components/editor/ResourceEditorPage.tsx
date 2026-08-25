@@ -18,7 +18,11 @@ import {
 import { ResourcePreviewDialog } from "@/features/admin/components/editor/ResourcePreviewDialog";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  LINE_BREAK_EDITOR_HINT,
+  getEditableAdminSections,
+  isRefinedEditorResource,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
@@ -76,10 +80,13 @@ export function ResourceEditorPage({
     return new Set(keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])));
   }, [draft, editableSections, savedSnapshot]);
   const dirtyCount = dirtyKeys.size;
-  const topActionEditor =
-    config.module === "services" ||
-    config.module === "quotation" ||
-    config.key === "settings/capability-profile";
+  // Dịch vụ, Báo giá và Hồ sơ năng lực: nút lưu ở đầu trang, bỏ mô tả ngắn,
+  // và mọi ô chữ đều nhận Enter để xuống dòng đúng như website.
+  const refinedEditor = isRefinedEditorResource(config);
+  const topActionEditor = refinedEditor;
+  // Trang Hồ sơ năng lực chỉ có vài ô: xếp dọc cho mỗi ô rộng hết khung thay vì
+  // chia 2-4 cột rồi để trống nửa hàng.
+  const stackedFields = config.key === "settings/capability-profile";
   const allowPreview = !topActionEditor && config.module !== "services";
 
   if (mode !== "create" && !existing) {
@@ -193,7 +200,7 @@ export function ResourceEditorPage({
         )}
         <AdminPageHeader
           title={pageTitle}
-          description={config.description}
+          description={refinedEditor ? "" : config.description}
           actions={
             topActionEditor ? (
               <EditorTopActions
@@ -223,10 +230,14 @@ export function ResourceEditorPage({
         />
       </div>
 
+      {refinedEditor && (
+        <p className="mt-3 text-xs text-muted-foreground">{LINE_BREAK_EDITOR_HINT}</p>
+      )}
+
       <EditorLayout
         aside={topActionEditor ? undefined : (
           <>
-            <div className="rounded-2xl border bg-card p-4">
+            <div className="rounded-xl border bg-card p-4 shadow-[0_1px_2px_rgb(36_33_34/.035)]">
               <h2 className="text-sm font-semibold">Trạng thái nội dung</h2>
               <div className="mt-4 space-y-3 text-xs text-muted-foreground">
                 <p className="flex items-start gap-2">
@@ -247,7 +258,7 @@ export function ResourceEditorPage({
         )}
       >
         {topActionEditor ? (
-          <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
+          <section className="space-y-8">
             {editableSections.map((editorSection, sectionIndex) => {
               const fields = editorSection.fields;
               const imageCount = fields.filter((field) => field.type === "image").length;
@@ -256,12 +267,11 @@ export function ResourceEditorPage({
               return (
                 <div
                   className={cn(
-                    "p-4 sm:p-5",
-                    sectionIndex > 0 && "border-t",
+                    sectionIndex > 0 && "border-t border-border/60 pt-8",
                   )}
                   key={editorSection.id}
                 >
-                  {editableSections.length > 1 && (
+                  {editableSections.length > 1 && !isGenericSectionTitle(editorSection.title) && (
                     <div className="mb-4">
                       <h2 className="text-sm font-semibold">{editorSection.title}</h2>
                       {editorSection.description && (
@@ -274,16 +284,17 @@ export function ResourceEditorPage({
                   <div
                     className={cn(
                       "grid items-start gap-4 lg:gap-5",
-                      fields.length > 1 && "md:grid-cols-2",
-                      threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4",
+                      !stackedFields && fields.length > 1 && "md:grid-cols-2",
+                      !stackedFields &&
+                        (threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4"),
                     )}
                   >
                     {fields.map((field) => (
                       <div
                         className={cn(
-                          !threeColumnText && fields.length === 1 && "xl:col-span-4",
-                          !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
-                          !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                          !stackedFields && !threeColumnText && fields.length === 1 && "xl:col-span-4",
+                          !stackedFields && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
+                          !stackedFields && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
                         )}
                         key={field.key}
                       >
@@ -292,6 +303,7 @@ export function ResourceEditorPage({
                           value={draft[field.key]}
                           error={errors[field.key]}
                           dirty={dirtyKeys.has(field.key)}
+                          multilineText={refinedEditor}
                           onChange={(value) => updateField(field.key, value)}
                         />
                       </div>
@@ -319,6 +331,7 @@ export function ResourceEditorPage({
                   value={draft[field.key]}
                   error={errors[field.key]}
                   dirty={dirtyKeys.has(field.key)}
+                  multilineText={refinedEditor}
                   onChange={(value) => updateField(field.key, value)}
                   key={field.key}
                 />
@@ -416,4 +429,8 @@ function validateRecord(
 
 function isValidContentUrl(value: string) {
   return /^(\/(?!\/)|https?:\/\/|mailto:|tel:|#)/i.test(value.trim());
+}
+
+function isGenericSectionTitle(title: string) {
+  return /^(nội dung|thông tin)\b/i.test(title.trim());
 }
