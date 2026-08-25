@@ -10,6 +10,12 @@ export type ProjectCardData = {
   href: string;
 };
 
+export const projectsPageHeroContent = {
+  title: "MỖI CÔNG TRÌNH\nMỘT CAM KẾT CHẤT LƯỢNG",
+  description:
+    "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor. Từ những công trình xây mới đến các dự án cải tạo trọn gói, thi công nội thất và sửa chữa nhà, chúng tôi luôn đồng hành cùng khách hàng từ ý tưởng đến hoàn thiện, tạo nên những không gian bền vững, thẩm mỹ và phù hợp với nhu cầu sử dụng thực tế.",
+} as const;
+
 const card = (title: string, slug: string): ProjectCardData => ({ title, slug, href: `/du-an/${slug}` });
 
 export const projectCategories: {

@@ -56,6 +56,10 @@ export const aboutCapabilities: readonly AboutCapability[] = [
   },
 ] as const;
 
+export const aboutJourneySection = {
+  title: "Hành trình của BMT Decor",
+} as const;
+
 export const aboutJourneyMilestones = [
   {
     year: "2011",

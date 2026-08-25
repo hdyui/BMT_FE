@@ -4,6 +4,10 @@ export type RelatedProjectData = {
   href: string;
 };
 
+export const relatedProjectsSection = {
+  title: "Tham khảo dự án liên quan",
+} as const;
+
 export const relatedProjects: RelatedProjectData[] = [
   {
     title: "Chung cư La Astoria Q.2",

@@ -7,7 +7,10 @@ import { ContactForm } from "@/lib/components/shared/ContactForm";
 import { FaqAccordion } from "@/features/services/components/FaqAccordion";
 import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
 import { ServiceTabs } from "@/features/services/components/ServiceTabs";
-import { heroCards } from "@/features/services/data/overview";
+import {
+  heroCards,
+  servicesOverviewSectionContent,
+} from "@/features/services/data/overview";
 import { SERVICE_HERO_CLASS_NAME } from "@/features/services/config/layout";
 
 const cardPositions = [
@@ -54,7 +57,7 @@ export function ServicesOverviewPage() {
                   Đổi sang cùng kiểu gạch chân như bản PC — 1px, nhưng offset 4px
                   thay vì 8px để sát chữ hơn. Giá trị md/lg giữ nguyên. */}
               <p className="mb-4 inline-block text-base max-md:underline max-md:decoration-1 max-md:underline-offset-4 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
-                GIẢI PHÁP
+                {servicesOverviewSectionContent.hero.eyebrow}
               </p>
               {/* Dưới md: cỡ chữ 5,6vw cho ngang các trang dịch vụ con (5,9vw),
                   kèm ngắt dòng theo mockup — "VÀ" xuống dòng 2. Ngắt cũ để "VÀ"
@@ -64,12 +67,13 @@ export function ServicesOverviewPage() {
                   ngắt dòng cũ của bản desktop. */}
               <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand max-md:text-[clamp(1.1rem,5.6vw,1.75rem)] lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
                 <span className="block lg:whitespace-nowrap">
-                  THIẾT KẾ THI CÔNG, XÂY DỰNG
+                  {servicesOverviewSectionContent.hero.title.split("\n")[0].replace(/\s+VÀ$/, "")}
                   <span className="max-md:hidden">{" "}VÀ</span>
                 </span>
 
                 <span className="block lg:whitespace-nowrap">
-                  <span className="md:hidden">VÀ </span>CẢI TẠO TRỌN GÓI
+                  <span className="md:hidden">VÀ </span>
+                  {servicesOverviewSectionContent.hero.title.split("\n")[1]}
                 </span>
               </h1>
             </Reveal>
@@ -90,8 +94,7 @@ export function ServicesOverviewPage() {
                   Chặn dưới hạ 0,5625rem -> 0,5rem vì 9px cố định sẽ tràn 108%
                   khung ở màn 320px. */}
               <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] max-md:whitespace-nowrap max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base lg:whitespace-nowrap">
-                ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG{" "}
-                MẠI
+                {servicesOverviewSectionContent.hero.supportingTitle}
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base">
                 {/* Căn đều 2 lề cả ở mobile/tablet chứ không chỉ từ lg. Cần
@@ -105,9 +108,7 @@ export function ServicesOverviewPage() {
                     width={86}
                     height={91}
                   />
-                  BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải
-                  tạo trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công
-                  trình chất lượng và đáp ứng nhu cầu sử dụng.
+                  {servicesOverviewSectionContent.hero.description}
                 </p>
               </span>
             </Reveal>
@@ -155,7 +156,7 @@ export function ServicesOverviewPage() {
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center max-md:w-[calc(100%-1.5rem)] lg:mb-10">
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
-              QUY TRÌNH LÀM VIỆC
+              {servicesOverviewSectionContent.process.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
@@ -171,11 +172,12 @@ export function ServicesOverviewPage() {
                 và chỗ ngắt greedy hiện tại đã đúng là chỗ cân nhất, nên không
                 thể moi thêm bằng cách ngắt lại. Dòng 1 lấp 98,6% khung. */}
             <p className="mx-auto mt-3 max-w-180 text-sm leading-relaxed max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] sm:text-base">
-              <strong className="font-bold max-md:font-normal">BMT Decor</strong> triển khai dự án
-              theo <strong className="font-bold max-md:font-normal">quy trình 6 bước</strong> rõ
-              ràng, đảm bảo tiến độ,
-              <br className="hidden md:inline" /> chất lượng và đồng hành cùng
-              khách hàng trong từng giai đoạn.
+              <HighlightedCopy
+                copy={servicesOverviewSectionContent.process.descriptionLineOne}
+                highlights={["BMT Decor", "quy trình 6 bước"]}
+              />
+              <br className="hidden md:inline" />{" "}
+              {servicesOverviewSectionContent.process.descriptionLineTwo}
             </p>
           </Reveal>
           {/* Cùng lý do với đường kẻ ở phần FAQ: ảnh 1388×128 rất dẹt, khoá
@@ -221,14 +223,14 @@ export function ServicesOverviewPage() {
 
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-lg:text-center max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-3xl lg:text-4xl">
-              CÁC CÂU HỎI THƯỜNG GẶP
+              {servicesOverviewSectionContent.faq.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] max-lg:mx-auto max-lg:text-center">
-              Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ
-              <br className="hidden md:inline" /> hơn về quy trình và dịch vụ
-              của BMT Decor
+              {servicesOverviewSectionContent.faq.descriptionLineOne}
+              <br className="hidden md:inline" />{" "}
+              {servicesOverviewSectionContent.faq.descriptionLineTwo}
             </p>
           </Reveal>
           {/* Ảnh gốc rule-orange.png tỉ lệ 1388×128 (~10.8:1) rất dẹt: khoá
@@ -256,4 +258,30 @@ export function ServicesOverviewPage() {
       <SiteFooter hideTopBorderOnMobile />
     </div>
   );
+}
+
+function HighlightedCopy({
+  copy,
+  highlights,
+}: {
+  copy: string;
+  highlights: string[];
+}) {
+  const parts: React.ReactNode[] = [];
+  let remainder = copy;
+
+  highlights.forEach((highlight) => {
+    const index = remainder.indexOf(highlight);
+    if (index < 0) return;
+    parts.push(remainder.slice(0, index));
+    parts.push(
+      <strong className="font-bold max-md:font-normal" key={highlight}>
+        {highlight}
+      </strong>,
+    );
+    remainder = remainder.slice(index + highlight.length);
+  });
+  parts.push(remainder);
+
+  return <>{parts}</>;
 }

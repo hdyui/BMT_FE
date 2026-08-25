@@ -1,4 +1,5 @@
 import { ServiceShowcase } from "@/features/home/components/ServiceShowcase";
+import { homeSectionContent } from "@/features/home/data/home-content";
 import { BuildingRule } from "@/lib/components/shared/BuildingRule";
 import { Reveal } from "@/lib/components/shared/Reveal";
 
@@ -7,13 +8,12 @@ function ServiceSectionHeading() {
     <div className="text-center">
       <Reveal>
         <h2 className="text-4xl font-extrabold uppercase tracking-[-0.035em] max-sm:text-[30px] max-sm:leading-tight sm:text-5xl">
-          Dịch vụ nổi bật
+          {homeSectionContent.featuredServices.title}
         </h2>
       </Reveal>
       <Reveal delay={140}>
         <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
-          BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa
-          dạng nhu cầu từ nhà ở đến không gian kinh doanh.
+          {homeSectionContent.featuredServices.description}
         </p>
       </Reveal>
       <BuildingRule

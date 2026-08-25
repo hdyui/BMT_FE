@@ -1,3 +1,27 @@
+export const servicesOverviewSectionContent = {
+  hero: {
+    eyebrow: "GIẢI PHÁP",
+    title: "THIẾT KẾ THI CÔNG, XÂY DỰNG VÀ\nCẢI TẠO TRỌN GÓI",
+    supportingTitle:
+      "ĐÁP ỨNG ĐA DẠNG NHU CẦU CHO NHÀ Ở VÀ CÔNG TRÌNH THƯƠNG\u00A0MẠI",
+    description:
+      "BMT Decor mang đến dịch vụ thiết kế thi công, xây dựng và cải tạo trọn gói từ ý tưởng đến hoàn thiện, tạo nên những công trình chất lượng và đáp ứng nhu cầu sử dụng.",
+  },
+  process: {
+    title: "QUY TRÌNH LÀM VIỆC",
+    descriptionLineOne:
+      "BMT Decor triển khai dự án theo quy trình 6 bước rõ ràng, đảm bảo tiến độ,",
+    descriptionLineTwo:
+      "chất lượng và đồng hành cùng khách hàng trong từng giai đoạn.",
+  },
+  faq: {
+    title: "CÁC CÂU HỎI THƯỜNG GẶP",
+    descriptionLineOne:
+      "Giải đáp những thắc mắc phổ biến giúp khách hàng hiểu rõ",
+    descriptionLineTwo: "hơn về quy trình và dịch vụ của BMT Decor",
+  },
+} as const;
+
 export const heroCards = [
   { image: "/images/services/hero-card-01.webp", alt: "Thi công vách kính tại công trình BMT Decor" },
   { image: "/images/services/hero-card-02.webp", alt: "Không gian bếp và phòng ăn hoàn thiện" },
