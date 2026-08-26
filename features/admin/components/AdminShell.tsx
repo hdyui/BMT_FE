@@ -23,7 +23,7 @@ export function AdminShell({ children }: { children: React.ReactNode }) {
       {!fullWidthEditor && <AppSidebar />}
       <SidebarInset className="min-h-dvh min-w-0">
         <AdminHeader hideNavigation={fullWidthEditor} />
-        <div className="min-w-0 flex-1">{children}</div>
+        <div className="min-w-0 flex-1 pt-16">{children}</div>
       </SidebarInset>
     </SidebarProvider>
   );

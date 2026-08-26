@@ -11,19 +11,29 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { SidebarTrigger } from "@/components/ui/sidebar";
+import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
 import { adminPageMeta } from "@/lib/admin/constants/navigation";
 
 export function AdminHeader({ hideNavigation = false }: { hideNavigation?: boolean }) {
   const pathname = usePathname();
+  const { isMobile, state } = useSidebar();
   const metaKey = Object.keys(adminPageMeta)
     .filter((key) => pathname === key || pathname.startsWith(`${key}/`))
     .sort((a, b) => b.length - a.length)[0];
   const meta = adminPageMeta[metaKey] ?? adminPageMeta["/admin/dashboard"];
+  const leftOffset =
+    hideNavigation || isMobile
+      ? "0px"
+      : state === "collapsed"
+        ? "var(--sidebar-width-icon)"
+        : "var(--sidebar-width)";
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 shrink-0 items-center gap-3 border-b bg-background/95 px-4 backdrop-blur sm:px-5 lg:px-6">
+    <header
+      className="fixed inset-x-0 top-0 z-40 flex h-16 shrink-0 items-center gap-3 border-b bg-background/95 px-4 shadow-sm backdrop-blur transition-[left] duration-200 ease-linear sm:px-5 lg:px-6"
+      style={{ left: leftOffset }}
+    >
       {!hideNavigation && <SidebarTrigger aria-label="Đóng hoặc mở danh mục" />}
       {hideNavigation ? (
         <Link
