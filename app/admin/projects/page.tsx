@@ -8,5 +8,10 @@ export const metadata: Metadata = {
 };
 
 export default function AdminProjectsPage() {
-  return <ResourceListPage config={getAdminResource("projects/list")} />;
+  return (
+    <ResourceListPage
+      config={getAdminResource("projects/list")}
+      baseHref="/admin/projects"
+    />
+  );
 }

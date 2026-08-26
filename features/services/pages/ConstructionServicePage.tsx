@@ -26,6 +26,8 @@ import {
 } from "@/features/services/config/layout";
 
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
   featuredProjects,
   solutionCards,
 } from "@/features/services/data/thi-cong-xay-dung";
@@ -628,7 +630,7 @@ export function ConstructionServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -761,7 +763,7 @@ export function ConstructionServicePage() {
         </div>
       </section>
 
-      <ContactForm />
+      <ContactForm {...contactFormContent} />
       <SiteFooter />
     </div>
   );

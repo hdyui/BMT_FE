@@ -7,6 +7,7 @@ import { ImageField } from "@/features/admin/components/ImageField";
 import { RichTextField } from "@/features/admin/components/editor/RichTextField";
 import type {
   AdminFieldConfig,
+  AdminFieldOption,
   AdminFieldValue,
 } from "@/lib/admin/types/crud";
 import { Button } from "@/components/ui/button";
@@ -32,6 +33,9 @@ export function EditorField({
   altDirty = false,
   contentEditorStyle = false,
   multilineText = false,
+  lockItemCount = false,
+  hideAlt = false,
+  imageSize = "thumb",
   onChange,
   onAltChange,
 }: {
@@ -45,12 +49,27 @@ export function EditorField({
   contentEditorStyle?: boolean;
   /** Cho phép ô text/list nhận Enter khi nội dung website có ngắt dòng chủ động. */
   multilineText?: boolean;
+  /**
+   * Khóa số lượng dòng của ô danh sách: chỉ sửa nội dung từng dòng, không thêm
+   * hay xóa. Dùng cho các trang có layout cố định theo số mục.
+   */
+  lockItemCount?: boolean;
+  /**
+   * Ẩn ô "Văn bản thay thế" đi kèm ảnh — dùng khi bố cục đã tách nó sang cột
+   * chữ để bám đúng vị trí trên website.
+   */
+  hideAlt?: boolean;
+  /**
+   * Cỡ ảnh xem trước. `fill` cho ô ảnh cao hết cột chứa nó — dùng ở bố cục ảnh
+   * một bên, chữ một bên để cột ảnh không còn là một mẩu nhỏ trên vùng trống.
+   */
+  imageSize?: "thumb" | "large" | "wide" | "fill";
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;
 }) {
   if (field.type === "image") {
     return (
-      <div className="grid gap-3">
+      <div className={cn("grid gap-3", imageSize === "fill" && "min-h-0 flex-1")}>
         <ImageField
           label={labelOverride ?? getConciseImageLabel(field.label)}
           value={String(value ?? "")}
@@ -59,9 +78,10 @@ export function EditorField({
           recommendedSize={field.recommendedSize}
           dirty={dirty}
           streamlined={contentEditorStyle}
+          size={imageSize}
           onChange={onChange}
         />
-        {field.altKey && onAltChange && (
+        {!hideAlt && field.altKey && onAltChange && (
           <label className="grid gap-2 text-sm font-normal">
             <span
               className={cn(
@@ -70,7 +90,7 @@ export function EditorField({
               )}
             >
               {altDirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
-              Văn bản thay thế (alt)
+              Văn bản thay thế
             </span>
             <Input
               value={String(altValue ?? "")}
@@ -124,7 +144,8 @@ export function EditorField({
         emphasized={contentEditorStyle}
         multilineText={multilineText}
         values={Array.isArray(value) ? value : []}
-        mode={field.listMode ?? "dynamic"}
+        mode={lockItemCount ? "fixed" : field.listMode ?? "dynamic"}
+        inline={field.listLayout === "inline"}
         onChange={onChange}
       />
     );
@@ -173,11 +194,20 @@ export function EditorField({
       ) : field.type === "select" ? (
         <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
           <SelectTrigger className="w-full font-normal" aria-invalid={Boolean(error)}>
-            <SelectValue placeholder="Chọn giá trị" />
+            <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"} />
           </SelectTrigger>
-          <SelectContent className="font-normal">
-            {field.options?.map((option) => (
-              <SelectItem value={option} key={option}>{option}</SelectItem>
+          {/* `alignItemWithTrigger={false}`: mặc định base-ui đặt mục đang chọn
+              chồng lên nút bấm kiểu select của macOS, che mất cả nhãn lẫn giá
+              trị hiện tại. Cho thả xuống dưới, canh mép trái nút. */}
+          <SelectContent
+            className="font-normal"
+            align="start"
+            alignItemWithTrigger={false}
+          >
+            {getSelectOptions(field, currentValue).map((option) => (
+              <SelectItem value={option.value} key={option.value}>
+                {option.label}
+              </SelectItem>
             ))}
           </SelectContent>
         </Select>
@@ -210,6 +240,29 @@ export function EditorField({
   );
 }
 
+/**
+ * Chuẩn hóa danh sách lựa chọn của ô `select`.
+ *
+ * Nếu giá trị đang lưu không còn nằm trong danh sách (trang đã bị xóa hoặc đổi
+ * đường dẫn) thì vẫn đưa nó lên đầu kèm ghi chú, để admin nhìn ra là đang trỏ
+ * vào một địa chỉ hỏng thay vì thấy ô trống không rõ đang trỏ đâu.
+ */
+function getSelectOptions(
+  field: AdminFieldConfig,
+  currentValue: string,
+): AdminFieldOption[] {
+  const options = (field.options ?? []).map((option) =>
+    typeof option === "string" ? { value: option, label: option } : option,
+  );
+  if (!currentValue || options.some((option) => option.value === currentValue)) {
+    return options;
+  }
+  return [
+    { value: currentValue, label: `${currentValue} — liên kết không còn trang` },
+    ...options,
+  ];
+}
+
 function getConciseImageLabel(label: string) {
   const concise = label.split("·").at(-1)?.trim() ?? label;
   return concise
@@ -218,6 +271,22 @@ function getConciseImageLabel(label: string) {
     .trim();
 }
 
+/**
+ * `field-sizing: content` (đã có sẵn trong `Textarea`) cho ô tự cao theo nội
+ * dung. Trình duyệt chưa hỗ trợ thì mới cần đo bằng JS.
+ */
+const supportsFieldSizing =
+  typeof CSS !== "undefined" && typeof CSS.supports === "function"
+    ? CSS.supports("field-sizing", "content")
+    : false;
+
+/**
+ * Ô nhiều dòng luôn cao vừa đủ để thấy hết nội dung.
+ *
+ * Bản cũ gán cứng `height` đo một lần theo `value` rồi `overflow-hidden`, nên
+ * mỗi khi bề ngang ô đổi (lưới 12 cột đổi theo khổ màn hình, thanh cuộn xuất
+ * hiện, font tải xong) số dòng đổi theo mà chiều cao thì không — chữ bị cắt mất.
+ */
 function AutoGrowTextarea({
   value,
   className,
@@ -226,10 +295,27 @@ function AutoGrowTextarea({
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
+    if (supportsFieldSizing) return;
     const textarea = ref.current;
     if (!textarea) return;
-    textarea.style.height = "auto";
-    textarea.style.height = `${textarea.scrollHeight}px`;
+
+    const resize = () => {
+      textarea.style.height = "auto";
+      textarea.style.height = `${textarea.scrollHeight}px`;
+    };
+    resize();
+
+    if (typeof ResizeObserver === "undefined") return;
+    // Chỉ đo lại khi bề ngang đổi — nếu bắt cả chiều cao thì chính việc gán
+    // chiều cao lại kích hoạt observer, thành vòng lặp vô tận.
+    let lastWidth = textarea.clientWidth;
+    const observer = new ResizeObserver(() => {
+      if (textarea.clientWidth === lastWidth) return;
+      lastWidth = textarea.clientWidth;
+      resize();
+    });
+    observer.observe(textarea);
+    return () => observer.disconnect();
   }, [value]);
 
   return (
@@ -239,7 +325,9 @@ function AutoGrowTextarea({
       value={value}
       rows={1}
       className={cn(
-        "min-h-10 resize-none overflow-hidden bg-background font-normal",
+        // Bỏ `overflow-hidden`: lỡ chiều cao có đo hụt thì nội dung vẫn cuộn
+        // được để đọc tiếp, chứ không biến mất.
+        "min-h-10 resize-none bg-background font-normal",
         className,
       )}
     />
@@ -254,6 +342,7 @@ function ArrayField({
   multilineText = false,
   values,
   mode,
+  inline = false,
   onChange,
 }: {
   label: string;
@@ -263,6 +352,8 @@ function ArrayField({
   multilineText?: boolean;
   values: string[];
   mode: "fixed" | "dynamic";
+  /** Xếp các dòng nằm ngang cạnh nhau, như cách website bày chúng. */
+  inline?: boolean;
   onChange: (values: string[]) => void;
 }) {
   return (
@@ -281,27 +372,49 @@ function ArrayField({
           {description && (
             <p className="mt-0.5 text-xs text-muted-foreground">{description}</p>
           )}
+          {mode === "fixed" && (
+            <p className="mt-0.5 text-xs text-muted-foreground">
+              Số dòng cố định theo layout website — chỉ sửa được nội dung từng dòng.
+            </p>
+          )}
         </div>
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
-          disabled={mode === "fixed"}
-          title={mode === "fixed" ? "Số lượng mục được cố định theo layout website" : undefined}
-          onClick={() => onChange([...values, ""])}
-        >
-          <Plus /> Thêm dòng
-        </Button>
+        {mode === "dynamic" && (
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={() => onChange([...values, ""])}
+          >
+            <Plus /> Thêm dòng
+          </Button>
+        )}
       </div>
       {values.length === 0 ? (
         <div className="rounded-xl border border-dashed px-4 py-6 text-center text-xs text-muted-foreground">
           Chưa có nội dung trong danh sách.
         </div>
       ) : (
-        <div className="space-y-2">
+        <div
+          className={cn(
+            inline
+              ? // Xếp ngang: mỗi dòng một cột, số thứ tự nằm trên ô nhập cho gọn.
+                "grid gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5"
+              : "space-y-2",
+          )}
+        >
           {values.map((item, index) => (
-            <div className="flex items-start gap-2" key={index}>
-              <span className="mt-3 w-7 shrink-0 text-center text-xs tabular-nums text-muted-foreground">
+            <div
+              className={cn(
+                inline ? "flex flex-col gap-1" : "flex items-start gap-2",
+              )}
+              key={index}
+            >
+              <span
+                className={cn(
+                  "shrink-0 text-xs tabular-nums text-muted-foreground",
+                  inline ? "font-semibold" : "mt-3 w-7 text-center",
+                )}
+              >
                 {String(index + 1).padStart(2, "0")}
               </span>
               {multilineText ? (
@@ -325,18 +438,18 @@ function ArrayField({
                   }}
                 />
               )}
-              <Button
-                type="button"
-                variant="ghost"
-                size="icon"
-                className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                aria-label="Xóa dòng"
-                disabled={mode === "fixed"}
-                title={mode === "fixed" ? "Số lượng mục được cố định theo layout website" : undefined}
-                onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))}
-              >
-                <Trash2 />
-              </Button>
+              {mode === "dynamic" && (
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                  aria-label="Xóa dòng"
+                  onClick={() => onChange(values.filter((_, itemIndex) => itemIndex !== index))}
+                >
+                  <Trash2 />
+                </Button>
+              )}
             </div>
           ))}
         </div>

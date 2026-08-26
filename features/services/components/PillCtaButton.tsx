@@ -3,6 +3,10 @@ import Link from "next/link";
 
 type PillCtaButtonProps = {
   href: string;
+  /**
+   * Chữ trên nút, hiện đúng như truyền vào — không ép `uppercase` bằng CSS để
+   * admin gõ sao thì site hiện y vậy. Dữ liệu đang lưu sẵn dạng in hoa.
+   */
   label: string;
   image: string;
   imageWidth: number;
@@ -63,7 +67,7 @@ export function PillCtaButton({
         />
         {/* 3. Ghép textClassName vào đoạn thẻ span này */}
         <span
-          className={`absolute inset-0 flex items-center justify-center text-sm font-semibold whitespace-nowrap text-white uppercase ${textClassName ?? ""}`}
+          className={`absolute inset-0 flex items-center justify-center text-sm font-semibold whitespace-nowrap text-white ${textClassName ?? ""}`}
           style={{ paddingRight: `${textPaddingRightPercent}%` }}
         >
           {label}
@@ -90,7 +94,7 @@ export function PillCtaButton({
           aria-hidden="true"
         />
         <span
-          className={`absolute inset-0 flex items-center justify-center text-[0.625rem] leading-tight font-semibold text-white uppercase sm:text-[0.6875rem] md:pl-[5%] md:text-xs md:whitespace-nowrap ${textClassName ?? ""}`}
+          className={`absolute inset-0 flex items-center justify-center text-[0.625rem] leading-tight font-semibold text-white sm:text-[0.6875rem] md:pl-[5%] md:text-xs md:whitespace-nowrap ${textClassName ?? ""}`}
           style={{ paddingRight: `${mobileIconPaddingPercent}%` }}
         >
           {label}
@@ -110,7 +114,7 @@ export function PillCtaButton({
           aria-hidden="true"
         />
         <span
-          className={`absolute inset-0 flex items-center justify-center pr-[22%] pl-[8%] text-sm font-semibold whitespace-nowrap text-white uppercase ${textClassName ?? ""}`}
+          className={`absolute inset-0 flex items-center justify-center pr-[22%] pl-[8%] text-sm font-semibold whitespace-nowrap text-white ${textClassName ?? ""}`}
         >
           {label}
         </span>

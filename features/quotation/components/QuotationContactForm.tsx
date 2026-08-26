@@ -6,6 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/lib/components/ui/button";
 import { Input } from "@/lib/components/ui/input";
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
 
 /**
  * Contact form riêng cho trang báo giá — cùng style/font/size/bold với
@@ -17,11 +18,16 @@ import { Input } from "@/lib/components/ui/input";
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
 
-const requiredMessage = "Vui lòng nhập thông tin.";
-
 export function QuotationContactForm({
   showTopNotch = false,
-}: {
+  title,
+  description,
+  namePlaceholder,
+  phonePlaceholder,
+  submitLabel,
+  requiredMessage,
+  successMessage,
+}: ContactFormContent & {
   showTopNotch?: boolean;
 }) {
   const [errors, setErrors] = useState<Errors>({});
@@ -80,9 +86,7 @@ export function QuotationContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    toast.success(
-      "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ gửi báo giá chi tiết trong thời gian sớm nhất.",
-    );
+    toast.success(successMessage);
     formElement.reset();
     setErrors({});
   }
@@ -131,14 +135,16 @@ export function QuotationContactForm({
           <div
             className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
           >
-            <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
-              Nhận báo giá chi tiết
+            {/* Không ép `uppercase` bằng CSS: tiêu đề lưu sẵn dạng in hoa nên
+                admin gõ sao thì site hiện y vậy. */}
+            <h2 className="mb-2 text-3xl font-bold lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
+              {title}
             </h2>
             {/* Dưới lg câu này dài hơn bề ngang khung nên `whitespace-nowrap`
                 làm phần đuôi tràn ra và bị `overflow-hidden` của section cắt
                 mất — cho xuống hàng ở mobile/tablet, desktop vẫn một dòng. */}
             <p className="whitespace-nowrap text-sm leading-relaxed text-white/90 lg:text-base max-lg:whitespace-normal max-lg:text-[11px] max-lg:leading-[1.4]">
-              Để lại thông tin, chúng tôi sẽ gửi báo giá chi tiết theo từng hạng mục miễn phí, không ràng buộc.
+              {description}
             </p>
           </div>
           <div className="relative h-4 w-full lg:h-10" aria-hidden="true">
@@ -185,7 +191,7 @@ export function QuotationContactForm({
                   aria-invalid={Boolean(errors.name)}
                   name="name"
                   onChange={() => clearFieldError("name")}
-                  placeholder="Tên khách hàng..."
+                  placeholder={namePlaceholder}
                 />
                 {errors.name && (
                   <span
@@ -207,7 +213,7 @@ export function QuotationContactForm({
                   aria-invalid={Boolean(errors.phone)}
                   name="phone"
                   onChange={() => clearFieldError("phone")}
-                  placeholder="Số điện thoại..."
+                  placeholder={phonePlaceholder}
                   type="tel"
                 />
                 {errors.phone && (
@@ -230,7 +236,7 @@ export function QuotationContactForm({
               className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:translate-y-[2px] active:scale-[0.99] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
             >
-              Gửi ngay
+              {submitLabel}
             </Button>
           </div>
         </form>

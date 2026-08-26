@@ -1,3 +1,5 @@
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+
 // Khớp với type FeaturedProject.
 // Thứ tự đặt theo mockup: carousel lấy index 0 làm thẻ giữa, index 2 nằm bên
 // trái và index 1 nằm bên phải.
@@ -162,3 +164,20 @@ export const processSteps = [
 /** Ảnh nền bản vẽ ở khối mở đầu, chỉ dùng cho khổ điện thoại. */
 export const mobileHeroBlueprint =
   "/images/thi-cong-xay-dung/mobile/hero-blueprint.png";
+
+// Nội dung riêng của section "Liên hệ tư vấn" trên trang Thi công xây dựng.
+// Cố ý khai báo đầy đủ (không dùng chung với các trang khác) để admin sửa trang
+// này thì chỉ trang này đổi.
+export const contactFormContent: ContactFormContent = {
+  title: "LIÊN HỆ TƯ VẤN",
+  namePlaceholder: "Tên khách hàng...",
+  phonePlaceholder: "Số điện thoại...",
+  submitLabel: "Gửi ngay",
+  requiredMessage: "Vui lòng nhập thông tin.",
+  successMessage:
+    "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+};
+
+// Chữ trên nút bấm dưới danh sách dự án tiêu biểu. Khai riêng từng trang để
+// admin sửa trang nào thì chỉ trang đó đổi.
+export const featuredProjectCtaLabel = "TƯ VẤN MIỄN PHÍ";

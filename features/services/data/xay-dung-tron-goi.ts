@@ -1,3 +1,5 @@
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+
 export const featuredProjects = [
   {
     id: "van-phong-thu-duc",
@@ -158,3 +160,20 @@ export const processSteps = [
 /** Cụm ảnh mở đầu vẽ riêng cho khổ điện thoại (MobileHeroArtwork). */
 export const mobileHeroArtwork =
   "/images/xay-dung-tron-goi/mobile/hero-artwork.png";
+
+// Nội dung riêng của section "Liên hệ tư vấn" trên trang Xây dựng trọn gói.
+// Cố ý khai báo đầy đủ (không dùng chung với các trang khác) để admin sửa trang
+// này thì chỉ trang này đổi.
+export const contactFormContent: ContactFormContent = {
+  title: "LIÊN HỆ TƯ VẤN",
+  namePlaceholder: "Tên khách hàng...",
+  phonePlaceholder: "Số điện thoại...",
+  submitLabel: "Gửi ngay",
+  requiredMessage: "Vui lòng nhập thông tin.",
+  successMessage:
+    "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+};
+
+// Chữ trên nút bấm dưới danh sách dự án tiêu biểu. Khai riêng từng trang để
+// admin sửa trang nào thì chỉ trang đó đổi.
+export const featuredProjectCtaLabel = "TƯ VẤN MIỄN PHÍ";

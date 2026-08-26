@@ -26,39 +26,55 @@ import {
   quotationSteps,
 } from "@/features/quotation/data/quotation-estimator";
 import {
+  contactFormContent as overviewContactForm,
   frequentlyAskedQuestions,
   heroCards as overviewHeroCards,
   processSteps as overviewProcess,
   serviceTabs,
 } from "@/features/services/data/overview";
 import {
+  contactFormContent as turnkeyContactForm,
+  featuredProjectCtaLabel as turnkeyFeaturedCta,
   featuredProjects as turnkeyProjects,
   mobileHeroArtwork as turnkeyMobileHeroArtwork,
   processSteps as turnkeyProcess,
   solutionCards as turnkeySolutions,
 } from "@/features/services/data/xay-dung-tron-goi";
 import {
+  contactFormContent as designContactForm,
+  featuredProjectCtaLabel as designFeaturedCta,
   featuredProjects as designProjects,
   mobileHeroArtwork as designMobileHeroArtwork,
   processSteps as designProcess,
   solutionCards as designSolutions,
 } from "@/features/services/data/thiet-ke-kien-truc-noi-that";
 import {
+  contactFormContent as constructionContactForm,
+  featuredProjectCtaLabel as constructionFeaturedCta,
   featuredProjects as constructionProjects,
   mobileHeroBlueprint as constructionMobileHeroBlueprint,
   processSteps as constructionProcess,
   solutionCards as constructionSolutions,
 } from "@/features/services/data/thi-cong-xay-dung";
 import {
+  contactFormContent as renovationContactForm,
+  featuredProjectCtaLabel as renovationFeaturedCta,
+  processHeading as renovationProcessHeading,
+  processLogo as renovationProcessLogo,
   featuredProjects as renovationProjects,
   processSteps as renovationProcess,
   solutionCards as renovationSolutions,
 } from "@/features/services/data/cai-tao-sua-chua";
+import { contactFormContent as quotationContactForm } from "@/features/quotation/data/quotation-contact-form";
+import { contactFormContent as capabilityProfileContactForm } from "@/features/capability-profile/data/contact-form";
 import { mockHomeHeroSlides } from "@/lib/admin/mock-data/home";
 import { mockProjectContent } from "@/lib/admin/mock-data/projects";
 import { projects as publicProjectDetails } from "@/features/projects/data/project-details";
+import { siteLinkOptions } from "@/lib/admin/site-links";
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
 import type {
   AdminCrudRecord,
+  AdminEditorRecordLayout,
   AdminEditorSectionConfig,
   AdminFieldConfig,
   AdminModuleKey,
@@ -84,11 +100,30 @@ const number = (
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "number", min: 0, ...options });
 
+/** Liên kết ra ngoài website (mạng xã hội, Google Maps) — phải tự nhập. */
 const url = (
   key: string,
   label: string,
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "url", ...options });
+
+/**
+ * Liên kết tới một trang của chính website. Cho chọn từ danh sách địa chỉ có
+ * thật (`lib/admin/site-links.ts`) thay vì gõ tay, để admin không thể lưu một
+ * đường dẫn sai rồi dẫn người xem vào trang 404.
+ */
+const siteLink = (
+  key: string,
+  label: string,
+  options: Partial<AdminFieldConfig> = {},
+): AdminFieldConfig => ({
+  key,
+  label,
+  type: "select",
+  options: siteLinkOptions,
+  placeholder: "Chọn trang trên website",
+  ...options,
+});
 
 const image = (
   key: string,
@@ -196,7 +231,7 @@ const homeResources: AdminResourceConfig[] = [
         textarea("title", "Tiêu đề", { required: true, maxLength: 120 }),
         textarea("description", "Mô tả", { required: true, maxLength: 260 }),
         text("ctaLabel", "Chữ trên nút bấm", { required: true }),
-        url("ctaHref", "Liên kết của nút bấm", { required: true, placeholder: "/gioi-thieu" }),
+        siteLink("ctaHref", "Liên kết của nút bấm", { required: true }),
       ]),
       section("desktop", "Ảnh trên máy tính", [
         image("desktopImage", "Ảnh trên máy tính", {
@@ -277,7 +312,7 @@ const homeResources: AdminResourceConfig[] = [
         text("title", "Tiêu đề", { required: true }),
         textarea("description", "Mô tả", { required: true }),
         text("ctaLabel", "Chữ trên nút bấm"),
-        url("ctaHref", "Liên kết của nút bấm", { required: true }),
+        siteLink("ctaHref", "Liên kết của nút bấm", { required: true }),
       ]),
       section("media", "Hình ảnh", [
         image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt", ratio: "16:9" }),
@@ -388,7 +423,7 @@ const homeResources: AdminResourceConfig[] = [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),
         textarea("description", "Mô tả"),
-        url("href", "Liên kết", { required: true }),
+        siteLink("href", "Liên kết", { required: true }),
       ]),
       section("media", "Hình ảnh", [image("image", "Ảnh", { altKey: "imageAlt" })]),
       section("display", "Thứ tự", [orderField]),
@@ -419,7 +454,7 @@ const homeResources: AdminResourceConfig[] = [
     sections: [
       section("content", "Thông tin đối tác", [
         text("name", "Tên đối tác", { required: true }),
-        url("href", "Liên kết"),
+        siteLink("href", "Liên kết"),
         image("logoImage", "Logo", { altKey: "logoAlt", ratio: "5:4" }),
         orderField,
       ]),
@@ -508,7 +543,7 @@ const homeResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "image",
-    sections: [section("content", "Nội dung section", [textarea("title", "Tiêu đề"), text("subtitle", "Tiêu đề phụ"), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), url("ctaHref", "Liên kết của nút bấm"), image("image", "Ảnh hồ sơ", { altKey: "imageAlt" })])],
+    sections: [section("content", "Nội dung section", [textarea("title", "Tiêu đề"), text("subtitle", "Tiêu đề phụ"), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm"), image("image", "Ảnh hồ sơ", { altKey: "imageAlt" })])],
     initialRecords: [record("home-profile-section-content", {
       title: "HỒ SƠ NĂNG LỰC BMT DECOR",
       subtitle: "Khẳng định năng lực",
@@ -529,7 +564,7 @@ const homeResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "featuredImage",
-    sections: [section("content", "Nội dung section", [text("title", "Tiêu đề section"), text("featuredTitle", "Tiêu đề tin chính"), textarea("featuredExcerpt", "Mô tả tin chính"), image("featuredImage", "Ảnh tin chính", { altKey: "featuredImageAlt" }), url("featuredHref", "Liên kết tin chính"), text("ctaLabel", "Chữ xem tất cả"), url("ctaHref", "Liên kết xem tất cả")])],
+    sections: [section("content", "Nội dung section", [text("title", "Tiêu đề section"), text("featuredTitle", "Tiêu đề tin chính"), textarea("featuredExcerpt", "Mô tả tin chính"), image("featuredImage", "Ảnh tin chính", { altKey: "featuredImageAlt" }), siteLink("featuredHref", "Liên kết tin chính"), text("ctaLabel", "Chữ xem tất cả"), siteLink("ctaHref", "Liên kết xem tất cả")])],
     initialRecords: [record("home-news-section-content", {
       title: "Tin nổi bật",
       featuredTitle: "Bí quyết kiến tạo không gian sống hiện đại và bền vững",
@@ -749,61 +784,22 @@ const aboutResources: AdminResourceConfig[] = [
 const projectResources: AdminResourceConfig[] = [
   resource({
     module: "projects",
-    path: "list-section-content",
-    title: "Nội dung section Danh sách dự án",
-    singular: "Section Danh sách dự án",
-    description: "Quản lý tiêu đề, mô tả và bốn nhóm danh mục cố định nằm phía trên danh sách dự án.",
-    priority: "P1",
-    kind: "singleton",
-    titleField: "title",
-    sections: [
-      section("intro", "Giới thiệu section", [
-        text("title", "Tiêu đề"),
-        textarea("description", "Mô tả"),
-      ]),
-      ...mockProjectContent.categories.map((_, index) =>
-        section(`category-${index + 1}`, `Danh mục ${index + 1}`, [
-          text(`category${index + 1}Label`, "Tên danh mục", { required: true }),
-          image(`category${index + 1}Icon`, "Hình mặc định trên máy tính"),
-          image(`category${index + 1}ActiveIcon`, "Hình khi được chọn trên máy tính"),
-          image(`category${index + 1}MobileIcon`, "Hình mặc định trên điện thoại"),
-          image(`category${index + 1}MobileActiveIcon`, "Hình khi được chọn trên điện thoại"),
-        ]),
-      ),
-    ],
-    initialRecords: [record("projects-list-section-content", {
-      title: "DỰ ÁN BMT DECOR ĐÃ THI CÔNG",
-      description: "Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công, khẳng định năng lực và chất lượng trong từng hạng mục.",
-      ...Object.fromEntries(
-        mockProjectContent.categories.flatMap((item, index) => [
-          [`category${index + 1}Label`, item.label],
-          [`category${index + 1}Icon`, item.icon],
-          [`category${index + 1}ActiveIcon`, item.activeIcon],
-          [`category${index + 1}MobileIcon`, item.mobileIcon],
-          [`category${index + 1}MobileActiveIcon`, item.mobileActiveIcon],
-        ]),
-      ),
-    })],
-  }),
-  resource({
-    module: "projects",
     path: "list",
     title: "Danh sách dự án",
     singular: "Dự án",
-    description: "Quản lý trọn section Danh sách dự án gồm tiêu đề, mô tả, bốn danh mục cố định và toàn bộ các dự án, ảnh đại diện, nhóm danh mục.",
+    description: "Quản lý danh sách dự án, ảnh đại diện, liên kết và nhóm danh mục. Phần tiêu đề, mô tả và icon danh mục được cố định theo giao diện website.",
     priority: "P1",
     kind: "collection",
     collectionMode: "dynamic",
     titleField: "title",
     previewField: "thumbnail",
     orderField: "order",
-    companionResourceKey: "projects/list-section-content",
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),
         text("slug", "Đường dẫn", { required: true }),
         text("category", "Nhóm danh mục", { required: true }),
-        url("href", "Liên kết", { required: true }),
+        siteLink("href", "Liên kết", { required: true }),
       ]),
       section("media", "Hình ảnh", [image("thumbnail", "Ảnh đại diện", { altKey: "imageAlt", ratio: "4:3" })]),
       section("display", "Thứ tự", [orderField]),
@@ -930,7 +926,7 @@ const projectResources: AdminResourceConfig[] = [
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),
-        url("href", "Liên kết", { required: true }),
+        siteLink("href", "Liên kết", { required: true }),
         image("image", "Ảnh", { altKey: "imageAlt" }),
         orderField,
       ]),
@@ -962,7 +958,7 @@ function serviceCollection(
   previewField?: string,
   options: Partial<Pick<
     AdminResourceConfig,
-    "listMode" | "itemLabel" | "companionResourceKey" | "description"
+    "listMode" | "itemLabel" | "companionResourceKey" | "description" | "editorLayout"
   >> = {},
 ): AdminResourceConfig {
   return resource({
@@ -999,7 +995,7 @@ const solutionFields = [
   text("checklistLabel", "Dòng chữ phía trên danh sách", { required: true }),
   list("checklist", "Danh sách nội dung", { listMode: "fixed" }),
   text("ctaLabel", "Chữ trên nút bấm"),
-  url("ctaHref", "Liên kết của nút bấm"),
+  siteLink("ctaHref", "Liên kết của nút bấm"),
   image("image", "Hình ảnh", { altKey: "imageAlt" }),
 ];
 const featuredProjectFields = [
@@ -1007,6 +1003,55 @@ const featuredProjectFields = [
   text("tag", "Nhãn"),
   image("image", "Hình ảnh", { altKey: "imageAlt" }),
 ];
+
+/**
+ * Section "Liên hệ tư vấn" ở cuối trang. Mỗi trang có một resource riêng lấy
+ * dữ liệu từ file data của chính trang đó, nên sửa trang này không đụng trang
+ * khác. Ảnh nền/khấc của form là đồ trang trí nên không mở field.
+ */
+function contactFormResource(
+  module: AdminModuleKey,
+  path: string,
+  label: string,
+  content: ContactFormContent,
+): AdminResourceConfig {
+  const { description, ...rest } = content;
+  return resource({
+    module,
+    path,
+    title: "Liên hệ tư vấn",
+    singular: `Biểu mẫu liên hệ trang ${label}`,
+    description: `Nội dung biểu mẫu liên hệ ở cuối trang ${label}. Nội dung này chỉ áp dụng cho trang ${label}.`,
+    priority: "P1",
+    kind: "singleton",
+    titleField: "title",
+    sections: [
+      // `span` xếp các ô đúng như biểu mẫu ngoài site: tiêu đề và mô tả trải hết
+      // bề ngang, 2 ô nhập nằm cạnh nhau, nút gửi nhỏ bên cạnh dòng báo lỗi.
+      section("content", "Nội dung biểu mẫu liên hệ", [
+        text("title", "Tiêu đề", {
+          required: true,
+          span: 12,
+          description: "Hiện trên site đúng như gõ ở đây, nên giữ dạng in hoa.",
+        }),
+        ...(description === undefined
+          ? []
+          : [textarea("description", "Nội dung mô tả dưới tiêu đề", { required: true, span: 12 })]),
+        text("namePlaceholder", "Chữ gợi ý ô Tên khách hàng", { required: true, span: 6 }),
+        text("phonePlaceholder", "Chữ gợi ý ô Số điện thoại", { required: true, span: 6 }),
+        text("submitLabel", "Chữ trên nút gửi", { required: true, span: 4 }),
+        text("requiredMessage", "Thông báo khi bỏ trống ô nhập", { required: true, span: 8 }),
+        textarea("successMessage", "Thông báo sau khi gửi thành công", { required: true, span: 12 }),
+      ]),
+    ],
+    initialRecords: [
+      record(
+        `${module}-${path.replace(/\//g, "-")}`,
+        description === undefined ? rest : { ...rest, description },
+      ),
+    ],
+  });
+}
 
 const serviceResources: AdminResourceConfig[] = [
   resource({
@@ -1019,6 +1064,9 @@ const serviceResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "backgroundImage",
+    // Site: cụm chữ bên trái, ảnh nền bên phải. Cột phải chỉ có đúng ô ảnh nền
+    // nên để cỡ `wide`, chứ tem nhỏ đứng cạnh 4 ô chữ trông hụt hẳn.
+    editorLayout: { mediaSide: "right", mediaPreview: "wide" },
     sections: [
       section("text", "Nội dung chữ", [
         text("eyebrow", "Khối Hero · Nhãn Giải pháp", { required: true }),
@@ -1093,6 +1141,8 @@ const serviceResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "photo",
+    // Site xếp ảnh chiếm nửa trái, panel chữ nửa phải — admin xếp y vậy.
+    editorLayout: { mediaSide: "left" },
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề câu hỏi thường gặp", { required: true }),
@@ -1129,11 +1179,22 @@ const serviceResources: AdminResourceConfig[] = [
     [
       text("tabLabel", "Tiêu đề trên thanh chuyển", { required: true }),
       text("title", "Tiêu đề nội dung", { required: true }),
-      textarea("tagline", "Dòng giới thiệu"),
+      text("tagline", "Dòng giới thiệu"),
       textarea("description", "Mô tả"),
       image("image", "Hình ảnh", { altKey: "imageAlt" }),
     ],
     "image",
+    {
+      // Mô phỏng đúng section trên website: một hàng 4 nhãn của thanh chuyển,
+      // rồi từng dịch vụ với ảnh bên trái và cụm chữ bên phải. Cột trái chỉ có
+      // đúng ô ảnh nên để cỡ `wide` cho ảnh choán hết chỗ thay vì tem nhỏ.
+      editorLayout: {
+        sharedRowField: "tabLabel",
+        sharedRowLabel: "Thanh chuyển dịch vụ",
+        mediaSide: "left",
+        mediaPreview: "wide",
+      },
+    },
   ),
   serviceCollection(
     "overview/process",
@@ -1142,7 +1203,11 @@ const serviceResources: AdminResourceConfig[] = [
     overviewProcess.map((item, index) => record(`overview-process-${index + 1}`, { title: item.title, description: item.copy, image: item.image, imageOpen: item.imageOpen, order: index + 1 })),
     [...processFields, image("imageOpen", "Ảnh khi mở")],
     "image",
-    { companionResourceKey: "services/overview/process-intro" },
+    {
+      companionResourceKey: "services/overview/process-intro",
+      // Mỗi bước trên site là một hàng: ảnh trái ~1/3, tiêu đề và mô tả bên phải.
+      editorLayout: { mediaSide: "left", mediaWidth: "third" },
+    },
   ),
   serviceCollection(
     "overview/faq",
@@ -1152,6 +1217,12 @@ const serviceResources: AdminResourceConfig[] = [
     [text("question", "Câu hỏi", { required: true }), textarea("answer", "Câu trả lời", { required: true })],
     undefined,
     { companionResourceKey: "services/overview/faq-intro" },
+  ),
+  contactFormResource(
+    "services",
+    "overview/contact-form",
+    "Tổng quan Dịch vụ",
+    overviewContactForm,
   ),
 ];
 
@@ -1291,9 +1362,15 @@ const serviceSectionIntroPresets = {
       description: "Giải pháp cải tạo tối ưu cho từng không gian",
       lineImage: "/images/cai-tao-sua-chua/rule-orange-center.png",
     },
-    // Site không hiển thị tiêu đề quy trình của trang này (khối h2 đang bị
-    // comment trong RenovationServicePage), nên admin cũng không có mục này.
-    process: null,
+    // Tiêu đề nằm ngay trong `RenovationProcessSteps` (chữ đứng trước logo BMT)
+    // chứ không phải trong trang, nên trước đây bị bỏ sót. Section này không có
+    // dòng mô tả lẫn hình trang trí, để trống hai giá trị đó.
+    process: {
+      title: renovationProcessHeading,
+      description: "",
+      lineImage: "",
+      brandLogo: renovationProcessLogo,
+    },
   },
 } as const;
 
@@ -1306,8 +1383,20 @@ function serviceSectionIntro(
     readonly description: string;
     readonly lineImage: string;
     readonly brandLogo?: string;
+    /** Chỉ phần Dự án tiêu biểu mới có nút bấm đứng dưới danh sách. */
+    readonly ctaLabel?: string;
   },
 ) {
+  // Bố cục biên tập mô phỏng site: có logo thì chữ bên trái – logo bên phải;
+  // phần Dự án tiêu biểu chia đôi 50/50 với tiêu đề và chữ trên nút bấm xếp dọc
+  // ở cột trái, đoạn giới thiệu ở cột phải. Hai cột xếp dọc riêng nên nút bấm
+  // nằm sát ngay dưới tiêu đề, không phải chờ hết chiều cao ô bên phải.
+  const editorLayout: AdminEditorRecordLayout | undefined = preset.brandLogo
+    ? { mediaSide: "right", mediaWidth: "third" }
+    : preset.ctaLabel === undefined
+      ? undefined
+      : { splitColumns: { left: ["title", "ctaLabel"], right: ["description"] } };
+
   return resource({
     module: "services",
     path: `${base}/${sectionPath}-intro`,
@@ -1318,13 +1407,28 @@ function serviceSectionIntro(
     kind: "singleton",
     titleField: "title",
     previewField: "lineImage",
+    ...(editorLayout ? { editorLayout } : {}),
     sections: [
       section("content", `Giới thiệu ${label}`, [
         textarea("title", "Tiêu đề", { required: true }),
-        ...(preset.description ? [textarea("description", "Nội dung giới thiệu", { required: true })] : []),
+        ...(preset.description
+          ? [textarea("description", "Nội dung giới thiệu", { required: true })]
+          : []),
         ...(preset.brandLogo
           ? [image("brandLogo", "Logo BMT Decor nằm trong tiêu đề", { altKey: "brandLogoAlt" })]
           : []),
+        // Nút đứng dưới danh sách dự án; xếp sau đoạn giới thiệu để rơi xuống
+        // ngay dưới tiêu đề ở cột trái.
+        ...(preset.ctaLabel === undefined
+          ? []
+          : [
+              text("ctaLabel", "Chữ trên nút bấm dưới danh sách", {
+                required: true,
+                description: "Hiện trên site đúng như gõ ở đây, nên giữ dạng in hoa.",
+              }),
+            ]),
+        // Hình trang trí là ảnh khung cố định của layout, không phải nội dung —
+        // giữ giá trị để site vẫn hiển thị nhưng không cho admin chỉnh.
         lockedImage("lineImage", "Hình trang trí dưới tiêu đề"),
       ]),
     ],
@@ -1337,12 +1441,31 @@ function serviceSectionIntro(
   });
 }
 
+/**
+ * Quy trình của 4 trang dịch vụ con dùng 4 component khác hẳn nhau, nên bố cục
+ * biên tập cũng phải khác nhau cho khớp:
+ * - Xây dựng trọn gói: lưới 2 cột (ProcessStepsGrid).
+ * - Thiết kế: timeline dọc, cụm chữ bên trái và icon bên phải (2/1).
+ * - Thi công: hàng ngang icon trái, tiêu đề và mô tả bên phải.
+ * - Cải tạo: site xếp 5 bước thành 5 cột với chữ đè trong ảnh, nhưng nhồi 5 thẻ
+ *   nhập liệu lên một hàng thì cột nào cũng hẹp tới mức vỡ. Nên đổi lại: mỗi
+ *   bước là một hàng ngang (tiêu đề · mô tả · ảnh), 5 bước xếp dọc xuống — đó
+ *   cũng là bố cục mặc định nên không cần khai gì thêm.
+ */
+const serviceProcessLayouts: Record<string, AdminEditorRecordLayout> = {
+  "xay-dung-tron-goi": { recordsPerRow: 2 },
+  "thiet-ke-kien-truc-noi-that": { mediaSide: "right", mediaWidth: "third" },
+  "thi-cong-xay-dung": { mediaSide: "left", mediaWidth: "third" },
+};
+
 function addServicePageResources(
   base: string,
   label: string,
   projects: ReadonlyArray<{ id: string; title: string; tag: string; image: string }>,
   solutions: ReadonlyArray<{ titlePrefix: string; titleCategory: string; tagline: string; description: string; checklist: readonly string[]; cta: string; image: string }>,
   processes: ReadonlyArray<{ title: string; subtitle?: string; description?: string; copy?: string; icon?: string }>,
+  contactForm: ContactFormContent,
+  featuredCtaLabel: string,
 ) {
   const heroPreset = serviceHeroPresets[base as keyof typeof serviceHeroPresets];
   const sectionPresets = serviceSectionIntroPresets[base as keyof typeof serviceSectionIntroPresets];
@@ -1380,7 +1503,10 @@ function addServicePageResources(
         }),
       ],
     }),
-    serviceSectionIntro(base, "featured-project", "dự án tiêu biểu", sectionPresets.featured),
+    serviceSectionIntro(base, "featured-project", "dự án tiêu biểu", {
+      ...sectionPresets.featured,
+      ctaLabel: featuredCtaLabel,
+    }),
     serviceSectionIntro(base, "solutions", "giải pháp", sectionPresets.solutions),
     ...(sectionPresets.process
       ? [serviceSectionIntro(base, "process", "quy trình", sectionPresets.process)]
@@ -1392,7 +1518,12 @@ function addServicePageResources(
       projects.map((item, index) => record(`${base}-project-${item.id}`, { title: item.title, tag: item.tag, image: item.image, imageAlt: item.title, order: index + 1 })),
       featuredProjectFields,
       "image",
-      { companionResourceKey: `services/${base}/featured-project-intro` },
+      {
+        companionResourceKey: `services/${base}/featured-project-intro`,
+        // Tiêu đề, nhãn và văn bản thay thế bên trái; hình ảnh bên phải. Thẻ chỉ
+        // có 3 ô chữ nên ảnh xem trước để cỡ vừa, không kéo cao bằng cột chữ.
+        editorLayout: { mediaSide: "right", mediaWidth: "third", mediaPreview: "large" },
+      },
     ),
     serviceCollection(
       `${base}/solutions`,
@@ -1401,7 +1532,12 @@ function addServicePageResources(
       solutions.map((item, index) => record(`${base}-solution-${index + 1}`, { titlePrefix: item.titlePrefix, titleCategory: item.titleCategory, tagline: item.tagline, description: item.description, checklistLabel: SOLUTION_CHECKLIST_LABEL, checklist: [...item.checklist], ctaLabel: item.cta, ctaHref: "/du-an", image: item.image, imageAlt: `${item.titlePrefix.trim()} ${item.titleCategory}`, order: index + 1 })),
       solutionFields,
       "image",
-      { companionResourceKey: `services/${base}/solutions-intro` },
+      {
+        companionResourceKey: `services/${base}/solutions-intro`,
+        // Thẻ giải pháp trên site: ảnh 1/3, chữ 2/3, và đảo bên qua từng thẻ.
+        // Cột chữ có tới 9 ô nên để ảnh cao bằng cột chữ cho hai bên bằng nhau.
+        editorLayout: { mediaSide: "alternate", mediaWidth: "third", mediaPreview: "fill" },
+      },
     ),
     serviceCollection(
       `${base}/process`,
@@ -1412,17 +1548,21 @@ function addServicePageResources(
       processes.map((item, index) => record(`${base}-process-${index + 1}`, { title: item.subtitle ? `${item.title.trim()}\n${item.subtitle}` : item.title, description: item.description ?? item.copy ?? "", image: item.icon ?? "", order: index + 1 })),
       processFields,
       "image",
-      sectionPresets.process
-        ? { companionResourceKey: `services/${base}/process-intro` }
-        : undefined,
+      {
+        ...(sectionPresets.process
+          ? { companionResourceKey: `services/${base}/process-intro` }
+          : {}),
+        editorLayout: serviceProcessLayouts[base],
+      },
     ),
+    contactFormResource("services", `${base}/contact-form`, label, contactForm),
   );
 }
 
-addServicePageResources("xay-dung-tron-goi", "Xây dựng trọn gói", turnkeyProjects, turnkeySolutions, turnkeyProcess.map((item) => ({ title: item.title, copy: item.copy, icon: item.icon })));
-addServicePageResources("thiet-ke-kien-truc-noi-that", "Thiết kế Kiến trúc & Nội thất", designProjects, designSolutions, designProcess.map((item) => ({ title: item.title, copy: item.copy, icon: item.icon })));
-addServicePageResources("thi-cong-xay-dung", "Thi công xây dựng", constructionProjects, constructionSolutions, constructionProcess);
-addServicePageResources("cai-tao-sua-chua", "Cải tạo & sửa chữa", renovationProjects, renovationSolutions, renovationProcess);
+addServicePageResources("xay-dung-tron-goi", "Xây dựng trọn gói", turnkeyProjects, turnkeySolutions, turnkeyProcess.map((item) => ({ title: item.title, copy: item.copy, icon: item.icon })), turnkeyContactForm, turnkeyFeaturedCta);
+addServicePageResources("thiet-ke-kien-truc-noi-that", "Thiết kế Kiến trúc & Nội thất", designProjects, designSolutions, designProcess.map((item) => ({ title: item.title, copy: item.copy, icon: item.icon })), designContactForm, designFeaturedCta);
+addServicePageResources("thi-cong-xay-dung", "Thi công xây dựng", constructionProjects, constructionSolutions, constructionProcess, constructionContactForm, constructionFeaturedCta);
+addServicePageResources("cai-tao-sua-chua", "Cải tạo & sửa chữa", renovationProjects, renovationSolutions, renovationProcess, renovationContactForm, renovationFeaturedCta);
 
 
 const remainingResources: AdminResourceConfig[] = [
@@ -1437,7 +1577,7 @@ const remainingResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "desktopImage",
     sections: [
-      section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), url("ctaHref", "Liên kết của nút bấm")]),
+      section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
     ],
     initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/lien-he", desktopImage: "/images/projects/hero-composition.png", desktopAlt: "Các dự án tiêu biểu của BMT Decor", mobileImage: "/images/projects/mobile/hero-composition.png", mobileAlt: "Các dự án tiêu biểu của BMT Decor" })],
@@ -1453,7 +1593,7 @@ const remainingResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "desktopImage",
     sections: [
-      section("content", "Nội dung", [text("eyebrow", "Dòng giới thiệu"), textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), url("ctaHref", "Liên kết của nút bấm")]),
+      section("content", "Nội dung", [text("eyebrow", "Dòng giới thiệu"), textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
     ],
     initialRecords: [record("news-page-hero", { eyebrow: "KIẾN THỨC", title: "THIẾT KẾ & THI CÔNG", description: "Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ BMT Decor.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "/lien-he", desktopImage: "/images/news/hero-house.jpg", desktopAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế", mobileImage: "/images/news/mobile/hero-photo.png", mobileAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế" })],
@@ -1468,13 +1608,20 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "mainPhoto",
+    // Site: dòng giới thiệu + tiêu đề + nút nằm cột trái, mô tả cột phải.
+    editorLayout: {
+      splitColumns: {
+        left: ["eyebrow", "title", "ctaLabel"],
+        right: ["description", "ctaHref"],
+      },
+    },
     sections: [
       section("content", "Nội dung phần mở đầu", [
         text("eyebrow", "Khối Hero · Dòng giới thiệu"),
         textarea("title", "Khối Hero · Tiêu đề chính", { required: true }),
         textarea("description", "Khối Hero · Nội dung mô tả"),
         text("ctaLabel", "Khối Hero · Chữ trên nút liên hệ"),
-        url("ctaHref", "Khối Hero · Liên kết nút liên hệ"),
+        siteLink("ctaHref", "Khối Hero · Liên kết nút liên hệ"),
       ]),
       section("main-media", "Hình ảnh chính", [
         lockedImage("desktopBackground", "Khối Hero · Ảnh nền trên máy tính"),
@@ -1525,6 +1672,13 @@ const remainingResources: AdminResourceConfig[] = [
       decor13: "/images/bao-gia/decor-13.jpg",
     })],
   }),
+  contactFormResource("quotation", "contact-form", "Báo giá", quotationContactForm),
+  contactFormResource(
+    "settings",
+    "capability-profile/contact-form",
+    "Hồ sơ năng lực",
+    capabilityProfileContactForm,
+  ),
   resource({
     module: "contacts",
     path: "hero",
@@ -1536,7 +1690,7 @@ const remainingResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "photo",
     sections: [
-      section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), url("ctaHref", "Liên kết của nút bấm")]),
+      section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("media", "Hình ảnh", [image("photo", "Ảnh tư vấn viên", { altKey: "photoAlt" })]),
     ],
     initialRecords: [record("contact-hero", { title: "LIÊN HỆ NGAY", description: "Hãy chia sẻ nhu cầu về thiết kế kiến trúc, thiết kế nội thất, xây dựng, cải tạo hoặc sửa chữa nhà để đội ngũ BMT Decor tư vấn giải pháp phù hợp với không gian và ngân sách của bạn.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "#contact-form", photo: "/images/contact/contact-consultant.jpg", photoAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng về thiết kế và thi công" })],
@@ -1563,10 +1717,15 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "heroImage",
+    // Phần mở đầu chia đôi: hai dòng tiêu đề xếp dọc ở cột trái, đoạn mô tả ở
+    // cột phải. Các section khác không khớp danh sách này nên giữ lưới 12 cột.
+    editorLayout: {
+      splitColumns: { left: ["title", "subtitle"], right: ["description"] },
+    },
     sections: [
       section("hero-copy", "Nội dung phần mở đầu", [
         textarea("title", "Khối Hero · Tiêu đề chính", { required: true }),
-        textarea("subtitle", "Khối Hero · Tiêu đề phụ"),
+        text("subtitle", "Khối Hero · Tiêu đề phụ"),
         textarea("description", "Khối Hero · Nội dung mô tả"),
       ]),
       section("hero-media", "Hình ảnh phần mở đầu", [
@@ -1615,7 +1774,7 @@ const remainingResources: AdminResourceConfig[] = [
     previewField: "desktopImage",
     orderField: "order",
     companionResourceKey: "news/featured-section-content",
-    sections: [section("content", "Nội dung", [text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả"), image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "imageAlt" }), url("href", "Liên kết"), orderField])],
+    sections: [section("content", "Nội dung", [text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả"), image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "imageAlt" }), siteLink("href", "Liên kết"), orderField])],
     initialRecords: featuredNews.map((item, index) => record(item.id, { ...item, order: index + 1 })),
   }),
   resource({
@@ -1643,7 +1802,7 @@ const remainingResources: AdminResourceConfig[] = [
     previewField: "desktopImage",
     orderField: "order",
     sections: [
-      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn", { required: true }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), url("href", "Liên kết")]),
+      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn", { required: true }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), siteLink("href", "Liên kết")]),
       section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "imageAlt" })]),
       section("body", "Nội dung bài viết", [textarea("body", "Nội dung", { required: true }), orderField]),
     ],
@@ -1660,7 +1819,7 @@ const remainingResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "desktopImage",
     sections: [
-      section("content", "Nội dung", [textarea("title", "Tiêu đề", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), url("ctaHref", "Liên kết của nút bấm")]),
+      section("content", "Nội dung", [textarea("title", "Tiêu đề", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("desktop", "Ảnh trên máy tính", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" })]),
       section("mobile", "Ảnh trên điện thoại", [image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
     ],
@@ -1706,28 +1865,28 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "heading1",
     sections: [
-      section("steps", "Thanh tiến trình", [list("stepLabels", "Tên các bước")]),
+      section("steps", "Thanh tiến trình", [list("stepLabels", "Tên các bước", { listMode: "fixed", listLayout: "inline" })]),
       section(`step-01`, `Bước 01 · ${quotationSteps[0]}`, [
         text("heading1", "Tiêu đề", { required: true }),
-        textarea("instruction1", "Hướng dẫn"),
-        list("buildingOptions", "Các loại hình"),
+        text("instruction1", "Hướng dẫn"),
+        list("buildingOptions", "Các loại hình", { listMode: "fixed", listLayout: "inline" }),
       ]),
       section(`step-02`, `Bước 02 · ${quotationSteps[1]}`, [
         text("heading2", "Tiêu đề", { required: true }),
-        textarea("instruction2", "Hướng dẫn"),
+        text("instruction2", "Hướng dẫn"),
         text("areaPlaceholder", "Chữ gợi ý trong ô nhập"),
         text("areaUnit", "Đơn vị hiển thị trong ô nhập"),
       ]),
       section(`step-03`, `Bước 03 · ${quotationSteps[2]}`, [
         text("heading3", "Tiêu đề", { required: true }),
-        textarea("instruction3", "Hướng dẫn"),
+        text("instruction3", "Hướng dẫn"),
         text("budgetPlaceholder", "Chữ gợi ý trong ô nhập"),
         text("budgetUnit", "Đơn vị hiển thị trong ô nhập"),
       ]),
       section(`step-04`, `Bước 04 · ${quotationSteps[3]}`, [
         text("heading4", "Tiêu đề", { required: true }),
-        textarea("instruction4", "Hướng dẫn"),
-        list("serviceOptions", "Các gói"),
+        text("instruction4", "Hướng dẫn"),
+        list("serviceOptions", "Các gói", { listMode: "fixed", listLayout: "inline" }),
       ]),
       // Bước 05 đang chạy trên dữ liệu giả, chưa nối API nên chỉ mở đúng dòng
       // chữ tĩnh trong câu kết quả.
@@ -1825,7 +1984,7 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "collection",
     titleField: "label",
     orderField: "order",
-    sections: [section("menu", "Mục trong danh mục", [text("label", "Tên hiển thị", { required: true }), url("href", "Liên kết", { required: true }), orderField])],
+    sections: [section("menu", "Mục trong danh mục", [text("label", "Tên hiển thị", { required: true }), siteLink("href", "Liên kết", { required: true }), orderField])],
     initialRecords: navigation.map((item, index) => record(`navigation-${index + 1}`, { label: item.label, href: item.href, order: index + 1 })),
   }),
   resource({
@@ -1863,6 +2022,7 @@ export const adminResourceGroups: Record<string, AdminResourceGroupConfig> = {
       { title: "Danh sách dịch vụ", description: "Tên, dòng giới thiệu và hình ảnh của các dịch vụ.", priority: "P1", count: `${serviceTabs.length} mục`, href: "/admin/services/overview/service-list" },
       { title: "Quy trình", description: "Các bước quy trình và ảnh mở rộng.", priority: "P1", count: `${overviewProcess.length} bước`, href: "/admin/services/overview/process" },
       { title: "Câu hỏi thường gặp", description: "Câu hỏi, câu trả lời và trạng thái hiển thị.", priority: "P2", count: `${frequentlyAskedQuestions.length} câu`, href: "/admin/services/overview/faq" },
+      { title: "Liên hệ tư vấn", description: "Nội dung biểu mẫu liên hệ ở cuối trang, chỉ áp dụng cho trang này.", priority: "P1", count: `${Object.keys(overviewContactForm).length} trường`, href: "/admin/services/overview/contact-form" },
     ],
   },
   ...Object.fromEntries(
@@ -1882,6 +2042,7 @@ export const adminResourceGroups: Record<string, AdminResourceGroupConfig> = {
           { title: "Dự án tiêu biểu", description: "Dữ liệu dự án tiêu biểu riêng của dịch vụ.", priority: "P1", href: `/admin/services/${slug}/featured-project` },
           { title: "Giải pháp", description: "Các giải pháp và danh sách nội dung đi kèm.", priority: "P1", href: `/admin/services/${slug}/solutions` },
           { title: "Quy trình", description: "Các bước quy trình của dịch vụ.", priority: "P1", href: `/admin/services/${slug}/process` },
+          { title: "Liên hệ tư vấn", description: "Nội dung biểu mẫu liên hệ ở cuối trang, chỉ áp dụng cho trang này.", priority: "P1", href: `/admin/services/${slug}/contact-form` },
         ],
       },
     ]),
