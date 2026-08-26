@@ -749,55 +749,16 @@ const aboutResources: AdminResourceConfig[] = [
 const projectResources: AdminResourceConfig[] = [
   resource({
     module: "projects",
-    path: "list-section-content",
-    title: "Nội dung section Danh sách dự án",
-    singular: "Section Danh sách dự án",
-    description: "Quản lý tiêu đề, mô tả và bốn nhóm danh mục cố định nằm phía trên danh sách dự án.",
-    priority: "P1",
-    kind: "singleton",
-    titleField: "title",
-    sections: [
-      section("intro", "Giới thiệu section", [
-        text("title", "Tiêu đề"),
-        textarea("description", "Mô tả"),
-      ]),
-      ...mockProjectContent.categories.map((_, index) =>
-        section(`category-${index + 1}`, `Danh mục ${index + 1}`, [
-          text(`category${index + 1}Label`, "Tên danh mục", { required: true }),
-          image(`category${index + 1}Icon`, "Hình mặc định trên máy tính"),
-          image(`category${index + 1}ActiveIcon`, "Hình khi được chọn trên máy tính"),
-          image(`category${index + 1}MobileIcon`, "Hình mặc định trên điện thoại"),
-          image(`category${index + 1}MobileActiveIcon`, "Hình khi được chọn trên điện thoại"),
-        ]),
-      ),
-    ],
-    initialRecords: [record("projects-list-section-content", {
-      title: "DỰ ÁN BMT DECOR ĐÃ THI CÔNG",
-      description: "Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công, khẳng định năng lực và chất lượng trong từng hạng mục.",
-      ...Object.fromEntries(
-        mockProjectContent.categories.flatMap((item, index) => [
-          [`category${index + 1}Label`, item.label],
-          [`category${index + 1}Icon`, item.icon],
-          [`category${index + 1}ActiveIcon`, item.activeIcon],
-          [`category${index + 1}MobileIcon`, item.mobileIcon],
-          [`category${index + 1}MobileActiveIcon`, item.mobileActiveIcon],
-        ]),
-      ),
-    })],
-  }),
-  resource({
-    module: "projects",
     path: "list",
     title: "Danh sách dự án",
     singular: "Dự án",
-    description: "Quản lý trọn section Danh sách dự án gồm tiêu đề, mô tả, bốn danh mục cố định và toàn bộ các dự án, ảnh đại diện, nhóm danh mục.",
+    description: "Quản lý danh sách dự án, ảnh đại diện, liên kết và nhóm danh mục. Phần tiêu đề, mô tả và icon danh mục được cố định theo giao diện website.",
     priority: "P1",
     kind: "collection",
     collectionMode: "dynamic",
     titleField: "title",
     previewField: "thumbnail",
     orderField: "order",
-    companionResourceKey: "projects/list-section-content",
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),

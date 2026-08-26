@@ -115,8 +115,6 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             />
           ) : serviceGroup ? (
             <ContentGroupGrid
-              title="Các phần nội dung"
-              description={`Chọn phần cần cập nhật trên trang ${selected.label}.`}
               items={serviceGroup.items.map((item) => ({
                 title: item.title,
                 description: getDetailedResourceDescription(item.description, getResourceKeyFromHref(item.href)),
@@ -126,49 +124,20 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             />
           ) : standaloneGroupItems ? (
             <ContentGroupGrid
-              title="Các phần nội dung"
-              description={`Chọn phần cần cập nhật trên trang ${selected.label}.`}
               items={standaloneGroupItems}
             />
           ) : useSingleColumnResourceList ? (
-          <section className="mt-6 space-y-4">
-            {selected.resourceKeys.length > 0 ? (
-              <div className="space-y-4">
-                {selected.resourceKeys.map((resourceKey, index) => {
-                  const resource = adminResourceRegistry[resourceKey];
-                  if (!resource) return null;
-                  return (
-                    <Link
-                      href={getContentResourceHref(resourceKey)}
-                      className="group grid gap-3 overflow-hidden rounded-2xl border border-brand/25 bg-brand/[0.035] p-4 outline-none shadow-[0_10px_28px_rgb(244_122_42/.06)] transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.055] hover:shadow-[0_14px_34px_rgb(244_122_42/.1)] focus-visible:ring-3 focus-visible:ring-brand/25 sm:p-5 md:h-[128px] xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center"
-                      key={resourceKey}
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-start gap-3">
-                          <span className="mt-0.5 shrink-0 text-sm font-extrabold tabular-nums text-brand">
-                            {String(index + 1).padStart(2, "0")}
-                          </span>
-                          <div className="min-w-0">
-                            <h3 className="font-semibold text-foreground">{resource.title}</h3>
-                            <p className="mt-2 max-w-4xl text-sm leading-relaxed text-muted-foreground md:line-clamp-2">
-                              {resource.description}
-                            </p>
-                          </div>
-                        </div>
-                      </div>
-                      <span className="inline-flex items-center justify-center gap-2 text-sm font-semibold text-brand transition-colors group-hover:text-brand/75">
-                        Quản lý <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
-                      </span>
-                    </Link>
-                  );
-                })}
-              </div>
-            ) : (
-              <div className="rounded-2xl border border-dashed border-brand/25 bg-brand/[0.025] p-8 text-center text-sm text-muted-foreground">
-                Chưa có nhóm nội dung để chỉnh sửa cho trang này.
-              </div>
-            )}
-          </section>
+            <ContentGroupGrid
+              items={selected.resourceKeys.flatMap((resourceKey) => {
+                const resource = adminResourceRegistry[resourceKey];
+                if (!resource) return [];
+                return [{
+                  title: resource.title,
+                  description: resource.description,
+                  href: getContentResourceHref(resourceKey),
+                }];
+              })}
+            />
           ) : (
           <section className="mt-5">
             <div className="py-5">
@@ -232,6 +201,9 @@ function getResourceFieldLabels(resourceKey: string): string[] {
 }
 
 function getContentResourceHref(resourceKey: string) {
+  if (resourceKey === "projects/list") {
+    return "/admin/projects";
+  }
   if (resourceKey === "recruitment/jobs") {
     return "/admin/recruitment";
   }
@@ -298,19 +270,21 @@ function ContentGroupGrid({
   description,
   items,
 }: {
-  title: string;
-  description: string;
+  title?: string;
+  description?: string;
   items: Array<{ title: string; description: string; count?: string; href: string }>;
 }) {
   return (
     <section className="mt-1">
-      <div className="flex items-center gap-3 py-5">
-        <Layers3 className="size-4 text-brand" />
-        <div>
-          <h2 className="text-sm font-semibold">{title}</h2>
-          <p className="text-xs text-muted-foreground">{description}</p>
+      {(title || description) && (
+        <div className="flex items-center gap-3 py-5">
+          <Layers3 className="size-4 text-brand" />
+          <div>
+            {title && <h2 className="text-sm font-semibold">{title}</h2>}
+            {description && <p className="text-xs text-muted-foreground">{description}</p>}
+          </div>
         </div>
-      </div>
+      )}
       <div>
         {items.map((item, index) => (
           <Link
