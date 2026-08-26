@@ -10,7 +10,10 @@ import { EditorField } from "@/features/admin/components/editor/EditorField";
 import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  getEditableAdminSections,
+  isHomeStyleEditor,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
@@ -196,8 +199,8 @@ function ResourceEditorGroup({
   const editableFields = getEditableAdminSections(config.sections).flatMap(
     (section) => section.fields,
   );
-  const singleColumnContentEditor = isSingleColumnContentEditor(config);
-  const requestedContentEditor = isRequestedContentEditor(config);
+  const singleColumnContentEditor = isHomeStyleEditor(config);
+  const requestedContentEditor = singleColumnContentEditor;
   const imageOnlyCollection =
     config.kind === "collection" &&
     editableFields.length === 1 &&
@@ -375,38 +378,6 @@ function validateDrafts(configs: AdminResourceConfig[], drafts: DraftMap) {
     }
   }
   return errors;
-}
-
-function isSingleColumnContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(
-      config.key,
-    )
-  );
-}
-
-function isRequestedContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(config.key)
-  );
 }
 
 function cloneValue(value: AdminFieldValue) {

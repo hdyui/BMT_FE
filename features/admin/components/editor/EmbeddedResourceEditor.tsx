@@ -7,7 +7,10 @@ import { toast } from "sonner";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import { EditorSection } from "@/features/admin/components/editor/EditorLayout";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  getEditableAdminSections,
+  isHomeStyleEditor,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
@@ -36,7 +39,7 @@ export function EmbeddedResourceEditor({
     [config.sections],
   );
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedDraft);
-  const requestedContentEditor = isRequestedContentEditor(config);
+  const requestedContentEditor = isHomeStyleEditor(config);
   const dirtyKeys = useMemo(() => {
     const keys = editableSections.flatMap((section) =>
       section.fields.map((field) => field.key),
@@ -140,20 +143,5 @@ export function EmbeddedResourceEditor({
         ))}
       </div>
     </section>
-  );
-}
-
-function isRequestedContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(config.key)
   );
 }

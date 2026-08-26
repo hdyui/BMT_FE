@@ -19,6 +19,36 @@ export function isRefinedEditorResource(config: AdminResourceConfig) {
   );
 }
 
+const HOME_STYLE_EDITOR_MODULES = [
+  "home",
+  "about",
+  "projects",
+  "news",
+  "recruitment",
+  "contacts",
+];
+
+const HOME_STYLE_EDITOR_KEYS = [
+  "settings/branding",
+  "settings/navigation",
+  "settings/footer",
+  "settings/locations",
+  "settings/company",
+];
+
+/**
+ * Các trang dùng bố cục biên tập giống trang chủ: mỗi field xếp dọc hết chiều
+ * ngang, tiêu đề mục in đậm. Nhóm trang đã tinh chỉnh (Dịch vụ, Báo giá, Hồ sơ
+ * năng lực) dùng chung bố cục này để toàn bộ admin đồng bộ.
+ */
+export function isHomeStyleEditor(config: AdminResourceConfig) {
+  return (
+    HOME_STYLE_EDITOR_MODULES.includes(config.module) ||
+    HOME_STYLE_EDITOR_KEYS.includes(config.key) ||
+    isRefinedEditorResource(config)
+  );
+}
+
 const HIDDEN_EDITOR_FIELD_KEYS = new Set(["order"]);
 
 export function isAdminFieldEditable(field: AdminFieldConfig) {

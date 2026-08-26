@@ -20,6 +20,7 @@ import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
 import {
   LINE_BREAK_EDITOR_HINT,
   getEditableAdminSections,
+  isHomeStyleEditor,
   isRefinedEditorResource,
 } from "@/lib/admin/editor-field-visibility";
 import type {
@@ -82,10 +83,9 @@ export function ResourceEditorPage({
   const refinedEditor = isRefinedEditorResource(config);
   const topActionEditor = true;
   const allowPreview = !topActionEditor && config.module !== "services";
-  const singleColumnContentEditor = isSingleColumnContentEditor(config);
-  const requestedContentEditor = isRequestedContentEditor(config);
-  const stackedFields =
-    singleColumnContentEditor || config.key === "settings/capability-profile";
+  const singleColumnContentEditor = isHomeStyleEditor(config);
+  const requestedContentEditor = singleColumnContentEditor;
+  const stackedFields = singleColumnContentEditor;
 
   if (mode !== "create" && !existing) {
     return (
@@ -438,34 +438,3 @@ function isValidContentUrl(value: string) {
   return /^(\/(?!\/)|https?:\/\/|mailto:|tel:|#)/i.test(value.trim());
 }
 
-function isSingleColumnContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(
-      config.key,
-    )
-  );
-}
-
-function isRequestedContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(config.key)
-  );
-}
