@@ -10,14 +10,16 @@ export interface AdminContentPageDefinition {
   children?: AdminContentPageDefinition[];
 }
 
+/**
+ * Thứ tự các trang khớp đúng thứ tự mục trên thanh header của website
+ * (`navigation` trong config/site.ts): Trang chủ → Giới thiệu → Dịch vụ →
+ * Dự án → Hồ sơ năng lực → Báo giá → Tin tức → Tuyển dụng. Trang Liên hệ
+ * không nằm trên header nên xếp cuối.
+ *
+ * Đầu trang và Cuối trang không phải là trang nội dung nên nằm ở
+ * Hệ thống → Cấu hình (`app/admin/settings/page.tsx`), không liệt kê ở đây.
+ */
 export const adminContentPages: AdminContentPageDefinition[] = [
-  {
-    id: "header",
-    label: "Đầu trang",
-    publicRoute: "Toàn website",
-    resourceKeys: ["settings/branding", "settings/navigation"],
-    sourceFiles: ["config/site.ts", "lib/components/layout/SiteHeader.tsx"],
-  },
   {
     id: "home",
     label: "Trang chủ",
@@ -54,6 +56,20 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     sourceFiles: ["features/projects/data/projects-page.ts", "features/projects/data/related-projects.ts"],
   },
   {
+    id: "capability-profile",
+    label: "Hồ sơ năng lực",
+    publicRoute: "/ho-so-nang-luc",
+    resourceKeys: ["settings/capability-profile", "settings/capability-profile/contact-form"],
+    sourceFiles: ["features/capability-profile/components/CapabilityHero.tsx", "features/capability-profile/components/ProfileDocumentSection.tsx"],
+  },
+  {
+    id: "quotation",
+    label: "Báo giá",
+    publicRoute: "/bao-gia",
+    resourceKeys: ["quotation/hero", "quotation/estimator", "quotation/contact-form"],
+    sourceFiles: ["features/quotation/data/quotation-estimator.ts", "features/quotation/pages/QuotationPage.tsx"],
+  },
+  {
     id: "news",
     label: "Tin tức",
     publicRoute: "/tin-tuc",
@@ -67,33 +83,13 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     resourceKeys: ["recruitment/hero", "recruitment/jobs"],
     sourceFiles: ["features/careers/components/CareersHero.tsx"],
   },
-  {
-    id: "capability-profile",
-    label: "Hồ sơ năng lực",
-    publicRoute: "/ho-so-nang-luc",
-    resourceKeys: ["settings/capability-profile"],
-    sourceFiles: ["features/capability-profile/components/CapabilityHero.tsx", "features/capability-profile/components/ProfileDocumentSection.tsx"],
-  },
-  {
-    id: "quotation",
-    label: "Báo giá",
-    publicRoute: "/bao-gia",
-    resourceKeys: ["quotation/hero", "quotation/estimator"],
-    sourceFiles: ["features/quotation/data/quotation-estimator.ts", "features/quotation/pages/QuotationPage.tsx"],
-  },
+  // Trang Liên hệ không có trên thanh header nên xếp sau các mục của header.
   {
     id: "contact",
     label: "Liên hệ",
     publicRoute: "/lien-he",
     resourceKeys: ["contacts/hero", "contacts/form", "contacts/map"],
     sourceFiles: ["features/contact/pages/ContactPage.tsx", "lib/components/shared/ContactForm.tsx"],
-  },
-  {
-    id: "footer",
-    label: "Cuối trang",
-    publicRoute: "Toàn website",
-    resourceKeys: ["settings/footer", "settings/locations", "settings/company"],
-    sourceFiles: ["config/site.ts", "lib/components/layout/SiteFooter.tsx"],
   },
 ];
 

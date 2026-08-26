@@ -8,6 +8,7 @@ import { FaqAccordion } from "@/features/services/components/FaqAccordion";
 import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
 import { ServiceTabs } from "@/features/services/components/ServiceTabs";
 import {
+  contactFormContent,
   heroCards,
   servicesOverviewSectionContent,
 } from "@/features/services/data/overview";
@@ -252,7 +253,7 @@ export function ServicesOverviewPage() {
           FAQ không đảm bảo khớp pixel ở mọi khổ màn hình, nên thêm nền chắc
           chắn ở đây để phần khuyết luôn lộ đúng màu xám thay vì trắng. */}
       <div className="bg-neutral-100">
-        <ContactForm showTopNotch />
+        <ContactForm showTopNotch {...contactFormContent} />
       </div>
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />

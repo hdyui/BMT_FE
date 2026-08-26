@@ -1,3 +1,5 @@
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+
 export const servicesOverviewSectionContent = {
   hero: {
     eyebrow: "GIẢI PHÁP",
@@ -151,3 +153,16 @@ export const frequentlyAskedQuestions = [
       "Khách hàng có thể liên hệ qua hotline, website hoặc để lại thông tin trên biểu mẫu. Đội ngũ BMT Decor sẽ phản hồi và tư vấn trong thời gian sớm nhất.",
   },
 ] as const;
+
+// Nội dung riêng của section "Liên hệ tư vấn" trên trang Tổng quan dịch vụ.
+// Cố ý khai báo đầy đủ (không dùng chung với các trang khác) để admin sửa trang
+// này thì chỉ trang này đổi.
+export const contactFormContent: ContactFormContent = {
+  title: "LIÊN HỆ TƯ VẤN",
+  namePlaceholder: "Tên khách hàng...",
+  phonePlaceholder: "Số điện thoại...",
+  submitLabel: "Gửi ngay",
+  requiredMessage: "Vui lòng nhập thông tin.",
+  successMessage:
+    "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+};

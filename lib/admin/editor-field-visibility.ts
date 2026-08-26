@@ -5,7 +5,7 @@ import type {
 } from "@/lib/admin/types/crud";
 
 export const LINE_BREAK_EDITOR_HINT =
-  "Mẹo: nhấn Enter trong bất kỳ ô nào để xuống dòng — website sẽ hiển thị đúng chỗ ngắt dòng đó.";
+  "Mẹo: những ô cao nhiều dòng nhận phím Enter để xuống dòng — website hiển thị đúng chỗ ngắt đó. Ô một dòng là nội dung website luôn in liền một hàng.";
 
 /**
  * Nhóm trang đã được tinh chỉnh giao diện chỉnh sửa: 5 trang Dịch vụ, Báo giá
@@ -15,7 +15,7 @@ export function isRefinedEditorResource(config: AdminResourceConfig) {
   return (
     config.module === "services" ||
     config.module === "quotation" ||
-    config.key === "settings/capability-profile"
+    config.key.startsWith("settings/capability-profile")
   );
 }
 

@@ -10,17 +10,16 @@ import { Input } from "@/lib/components/ui/input";
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
 
-const requiredMessage = "Vui lòng nhập thông tin.";
-
 export function ContactForm({
   showTopNotch = false,
-  title = "Liên hệ tư vấn",
+  title = "LIÊN HỆ TƯ VẤN",
   description,
   nameLabel = "Tên khách hàng",
   namePlaceholder = "Tên khách hàng...",
   phoneLabel = "Số điện thoại",
   phonePlaceholder = "Số điện thoại...",
   submitLabel = "Gửi ngay",
+  requiredMessage = "Vui lòng nhập thông tin.",
   successMessage = "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
   backgroundImage = "/images/contact/mobile/form-background.png",
 }: {
@@ -32,6 +31,7 @@ export function ContactForm({
   phoneLabel?: string;
   phonePlaceholder?: string;
   submitLabel?: string;
+  requiredMessage?: string;
   successMessage?: string;
   backgroundImage?: string;
 }) {
@@ -140,7 +140,9 @@ export function ContactForm({
           <div
             className={`transition-[opacity,translate] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:transition-none ${entered ? "translate-y-0 opacity-100" : "translate-y-5 opacity-0"}`}
           >
-            <h2 className="mb-2 text-3xl font-bold uppercase lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
+            {/* Không ép `uppercase` bằng CSS: tiêu đề lưu sẵn dạng in hoa nên
+                admin gõ sao thì site hiện y vậy. */}
+            <h2 className="mb-2 text-3xl font-bold lg:text-[32px] max-lg:text-[17px] max-lg:font-extrabold max-lg:leading-[1.15]">
               {title}
             </h2>
             {description && (

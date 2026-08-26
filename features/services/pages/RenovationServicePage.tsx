@@ -26,6 +26,11 @@ import {
 
 // Import Data
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
+  processHeading,
+  processLogo,
+  processLogoAlt,
   featuredProjects,
   solutionCards,
   processSteps,
@@ -306,7 +311,7 @@ export function RenovationServicePage() {
           <PillCtaButton
             className="h-full"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -371,10 +376,15 @@ export function RenovationServicePage() {
           </Reveal>
         </div> */}
 
-        <RenovationProcessSteps steps={processSteps} />
+        <RenovationProcessSteps
+          steps={processSteps}
+          heading={processHeading}
+          logo={processLogo}
+          logoAlt={processLogoAlt}
+        />
       </section>
 
-      <ContactForm showTopNotch />
+      <ContactForm showTopNotch {...contactFormContent} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

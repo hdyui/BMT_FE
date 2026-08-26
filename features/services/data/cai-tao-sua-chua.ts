@@ -1,3 +1,5 @@
+import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+
 // Khớp với type FeaturedProject.
 export const featuredProjects = [
   {
@@ -133,3 +135,28 @@ export const processSteps = [
       "Kiểm tra chất lượng công trình, hoàn thiện các hạng mục cuối cùng và bàn giao đúng cam kết.",
   },
 ];
+
+// Nội dung riêng của section "Liên hệ tư vấn" trên trang Cải tạo & sửa chữa.
+// Cố ý khai báo đầy đủ (không dùng chung với các trang khác) để admin sửa trang
+// này thì chỉ trang này đổi.
+export const contactFormContent: ContactFormContent = {
+  title: "LIÊN HỆ TƯ VẤN",
+  namePlaceholder: "Tên khách hàng...",
+  phonePlaceholder: "Số điện thoại...",
+  submitLabel: "Gửi ngay",
+  requiredMessage: "Vui lòng nhập thông tin.",
+  successMessage:
+    "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
+};
+
+// Chữ trên nút bấm dưới danh sách dự án tiêu biểu. Khai riêng từng trang để
+// admin sửa trang nào thì chỉ trang đó đổi.
+export const featuredProjectCtaLabel = "TƯ VẤN MIỄN PHÍ";
+
+// Tiêu đề đứng trên dải 5 bước quy trình. Khai riêng từng trang để admin sửa
+// trang nào thì chỉ trang đó đổi.
+export const processHeading = "QUY TRÌNH CẢI TẠO & SỬA CHỮA TẠI";
+
+// Logo BMT Decor đứng ngay sau tiêu đề quy trình.
+export const processLogo = "/images/cai-tao-sua-chua/logo.png";
+export const processLogoAlt = "BMT Decor";

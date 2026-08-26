@@ -1,10 +1,10 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Layers3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
+import { ContentGroupGrid } from "@/features/admin/components/ContentGroupGrid";
 import {
-  adminContentPages,
   getContentPage,
   getPageFieldCount,
   getResourceFieldCount,
@@ -14,15 +14,6 @@ import {
   adminResourceRegistry,
   getAdminResourceGroup,
 } from "@/lib/admin/mock-data/resource-registry";
-import {
-  SidebarMenu,
-  SidebarMenuBadge,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "@/components/ui/sidebar";
 
 export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string }) {
   const selected = getContentPage(selectedId) ?? getContentPage("home")!;
@@ -43,47 +34,18 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
       })
     : undefined;
   const useSingleColumnResourceList = [
-    "header",
     "home",
     "about",
     "projects",
     "news",
     "recruitment",
     "contact",
-    "footer",
   ].includes(selected.id);
 
   return (
-    <div className="grid min-h-[calc(100dvh-64px)] lg:grid-cols-[232px_minmax(0,1fr)]">
-      <div className="border-b border-sidebar-border bg-sidebar lg:border-b-0">
-        <aside
-          data-content-sidebar
-          className="bg-sidebar text-sidebar-foreground lg:fixed lg:top-16 lg:bottom-0 lg:w-[232px] lg:border-r lg:border-sidebar-border"
-        >
-          <div className="admin-scrollbar max-h-[48dvh] overflow-y-auto p-3 lg:h-full lg:max-h-none">
-            <nav aria-label="Các trang nội dung">
-              <SidebarMenu className="gap-1">
-                {adminContentPages.map((page) => (
-                  <SidebarMenuItem key={page.id}>
-                    <ContentPageLink page={page} active={selected.id === page.id} />
-                    {page.children && (
-                      <SidebarMenuSub className="mt-1.5 gap-1">
-                        {page.children.map((child) => (
-                          <SidebarMenuSubItem key={child.id}>
-                            <ContentPageLink page={child} active={selected.id === child.id} nested />
-                          </SidebarMenuSubItem>
-                        ))}
-                      </SidebarMenuSub>
-                    )}
-                  </SidebarMenuItem>
-                ))}
-              </SidebarMenu>
-            </nav>
-          </div>
-        </aside>
-      </div>
-
-      <main className="min-w-0 p-4 sm:p-6 lg:p-8">
+    // Danh sách trang giờ nằm ở sidebar chung của shell, nên ở đây chỉ còn nội dung.
+    <div className="min-h-[calc(100dvh-64px)]">
+      <div className="min-w-0 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-[1180px]">
           <header className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between">
             <div>
@@ -184,7 +146,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
           </section>
           )}
         </div>
-      </main>
+      </div>
     </div>
   );
 }
@@ -263,83 +225,4 @@ function getServicePageDescription(id: string) {
     renovation: "Quản lý phần mở đầu, dự án tiêu biểu, các giải pháp và nội dung dành cho dịch vụ cải tạo, sửa chữa.",
   };
   return descriptions[id] ?? "Quản lý các phần nội dung của trang dịch vụ.";
-}
-
-function ContentGroupGrid({
-  title,
-  description,
-  items,
-}: {
-  title?: string;
-  description?: string;
-  items: Array<{ title: string; description: string; count?: string; href: string }>;
-}) {
-  return (
-    <section className="mt-1">
-      {(title || description) && (
-        <div className="flex items-center gap-3 py-5">
-          <Layers3 className="size-4 text-brand" />
-          <div>
-            {title && <h2 className="text-sm font-semibold">{title}</h2>}
-            {description && <p className="text-xs text-muted-foreground">{description}</p>}
-          </div>
-        </div>
-      )}
-      <div>
-        {items.map((item, index) => (
-          <Link
-            className="flex items-start gap-4 border-b border-border/70 py-5 outline-none last:border-b-0 focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:gap-5"
-            href={item.href}
-            key={item.href}
-          >
-            <span className="mt-0.5 shrink-0 text-xs font-semibold tabular-nums text-brand">
-              {String(index + 1).padStart(2, "0")}
-            </span>
-            <div className="min-w-0 flex-1">
-              <div className="flex flex-wrap items-center gap-2">
-                <h3 className="font-semibold">{item.title}</h3>
-                {item.count && <span className="text-xs text-muted-foreground">{item.count}</span>}
-              </div>
-              <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{item.description}</p>
-              <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-                Quản lý <ArrowRight className="size-3.5" />
-              </span>
-            </div>
-          </Link>
-        ))}
-      </div>
-    </section>
-  );
-}
-
-function ContentPageLink({ page, active, nested = false }: { page: (typeof adminContentPages)[number]; active: boolean; nested?: boolean }) {
-  const href = `/admin/content/${page.id}`;
-
-  if (nested) {
-    return (
-      <SidebarMenuSubButton
-        render={<Link href={href} aria-current={active ? "page" : undefined} />}
-        isActive={active}
-        size="sm"
-        className="h-7 px-2.5 text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
-      >
-        <span className="min-w-0 flex-1 truncate">{page.label}</span>
-        <span className="shrink-0 text-[10px] font-normal tabular-nums text-sidebar-foreground/50">{getPageFieldCount(page)}</span>
-      </SidebarMenuSubButton>
-    );
-  }
-
-  return (
-    <SidebarMenuButton
-      render={<Link href={href} aria-current={active ? "page" : undefined} />}
-      isActive={active}
-      size="sm"
-      className="px-2.5 text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
-    >
-      <span className="truncate">{page.label}</span>
-      <SidebarMenuBadge className="text-[10px] font-normal text-sidebar-foreground/50 peer-data-active/menu-button:text-sidebar-accent-foreground/60">
-        {getPageFieldCount(page)}
-      </SidebarMenuBadge>
-    </SidebarMenuButton>
-  );
 }
