@@ -36,10 +36,12 @@ export function ResourceEditorPage({
   config,
   mode,
   recordId,
+  baseHref: baseHrefOverride,
 }: {
   config: AdminResourceConfig;
   mode: "create" | "edit" | "singleton";
   recordId?: string;
+  baseHref?: string;
 }) {
   const router = useRouter();
   const { getRecords, createRecord, updateRecord } = useAdminCrud();
@@ -50,7 +52,7 @@ export function ResourceEditorPage({
       : records.find((item) =>
           mode === "singleton" ? true : item.id === recordId,
         ) ?? null;
-  const baseHref = `/admin/${config.module}/${config.path}`;
+  const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
 
   const initialDraft = useMemo(
     () =>

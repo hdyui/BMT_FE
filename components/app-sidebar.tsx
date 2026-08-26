@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
@@ -28,18 +29,26 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
           <SidebarMenuItem>
             <SidebarMenuButton
               size="lg"
-              tooltip="BMT Admin"
-              render={<Link href="/admin/dashboard" />}
+              tooltip="BMT Decor Admin"
+              render={
+                <Link
+                  href="/admin/dashboard"
+                  aria-label="BMT Decor Admin - Tổng quan"
+                />
+              }
               onClick={() => isMobile && setOpenMobile(false)}
-              className="data-active:bg-sidebar-accent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-1!"
+              className="h-11 justify-start rounded-lg px-3 hover:bg-transparent data-active:bg-transparent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-1!"
             >
-              <span className="flex min-w-0 items-baseline gap-2 whitespace-nowrap group-data-[collapsible=icon]:gap-0">
-                <span className="text-[27px] font-bold leading-none tracking-[-0.045em] text-brand group-data-[collapsible=icon]:text-[9px] group-data-[collapsible=icon]:tracking-[-0.04em]">
-                  BMT
-                </span>
-                <span className="text-[25px] font-normal leading-none tracking-[-0.035em] text-sidebar-foreground group-data-[collapsible=icon]:hidden">
-                  Admin
-                </span>
+              <span className="flex h-8 w-[174px] shrink-0 items-center overflow-hidden group-data-[collapsible=icon]:w-[29px]">
+                <Image
+                  className="h-[29px] w-auto max-w-none shrink-0 object-contain object-left"
+                  src="/images/cai-tao-sua-chua/logo.png"
+                  alt="BMT Decor"
+                  width={1196}
+                  height={207}
+                  sizes="174px"
+                  priority
+                />
               </span>
             </SidebarMenuButton>
           </SidebarMenuItem>
@@ -53,7 +62,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
               {section.label}
             </SidebarGroupLabel>
             <SidebarGroupContent>
-              <SidebarMenu>
+              <SidebarMenu className="gap-1">
                 {section.items.map((item) => {
                   const active =
                     pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -66,7 +75,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                         tooltip={item.label}
                         render={<Link href={item.href} />}
                         onClick={() => isMobile && setOpenMobile(false)}
-                        className="text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand"
+                        className="h-9 px-3 text-[13px] hover:bg-brand/10 data-active:font-semibold data-active:text-brand data-active:hover:bg-sidebar-accent data-active:hover:text-brand group-data-[collapsible=icon]:px-2!"
                       >
                         <Icon strokeWidth={1.8} />
                         <span>{item.label}</span>

@@ -34,13 +34,19 @@ import type { AdminCrudRecord, AdminResourceConfig } from "@/lib/admin/types/cru
 export function ResourceListPage({
   config,
   companionConfig,
+  baseHref,
 }: {
   config: AdminResourceConfig;
   companionConfig?: AdminResourceConfig;
+  baseHref?: string;
 }) {
   return (
     <Suspense fallback={<ResourceListPageFallback />}>
-      <ResourceListPageContent config={config} companionConfig={companionConfig} />
+      <ResourceListPageContent
+        config={config}
+        companionConfig={companionConfig}
+        baseHref={baseHref}
+      />
     </Suspense>
   );
 }
@@ -48,9 +54,11 @@ export function ResourceListPage({
 function ResourceListPageContent({
   config,
   companionConfig,
+  baseHref: baseHrefOverride,
 }: {
   config: AdminResourceConfig;
   companionConfig?: AdminResourceConfig;
+  baseHref?: string;
 }) {
   const { getRecords, removeRecord, updateRecord } = useAdminCrud();
   const records = getRecords(config.key);
@@ -65,7 +73,7 @@ function ResourceListPageContent({
   const [deleteTarget, setDeleteTarget] = useState<AdminCrudRecord | null>(null);
   const [deleting, setDeleting] = useState(false);
   const imageManager = config.listMode === "image-manager";
-  const baseHref = `/admin/${config.module}/${config.path}`;
+  const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
 
   useEffect(() => {
     if (previousUrlQueryRef.current === urlQuery) return;
