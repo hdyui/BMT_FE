@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 
 import {
   getActiveContentPageHref,
+  getActiveSidebarHref,
   getAdminSidebar,
 } from "@/lib/admin/admin-sidebar";
 import type { AdminSidebarLink } from "@/lib/admin/admin-sidebar";
@@ -22,9 +23,10 @@ export function AdminSectionSidebar() {
   const sidebar = getAdminSidebar(pathname);
   // Ở màn hình chỉnh sửa sâu, tô sáng trang nội dung chứa nó thay vì để trống.
   const contentHref = getActiveContentPageHref(pathname);
+  const activeHref = getActiveSidebarHref(pathname);
 
   function isActive(href: string) {
-    return pathname === href || href === contentHref;
+    return pathname === href || href === contentHref || href === activeHref;
   }
 
   /** Cha được tô sáng khi chính nó hoặc một trang con đang mở. */
@@ -94,7 +96,7 @@ function SidebarLink({
       className={cn(
         "flex items-center gap-2 rounded-md px-2.5 outline-none transition-colors hover:bg-brand/10 focus-visible:ring-3 focus-visible:ring-ring/25",
         nested ? "h-7 text-[13px]" : "h-8 text-[13px]",
-        active && "bg-sidebar-accent font-semibold text-brand",
+        active && "bg-brand/15 font-semibold text-brand ring-1 ring-brand/20",
       )}
     >
       <span className="min-w-0 flex-1 truncate">{item.label}</span>

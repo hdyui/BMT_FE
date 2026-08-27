@@ -17,6 +17,7 @@ import {
 
 export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string }) {
   const selected = getContentPage(selectedId) ?? getContentPage("home")!;
+  const catalogShortcut = catalogShortcutByContentPage[selected.id];
   const serviceGroupKey = serviceGroupByContentPage[selected.id];
   const serviceGroup = serviceGroupKey
     ? getAdminResourceGroup(`services/${serviceGroupKey}`)
@@ -64,6 +65,23 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             </Link>
           </header>
 
+          {catalogShortcut && (
+            <section className="mb-6 flex flex-col gap-3 rounded-xl border border-dashed bg-muted/20 p-4 sm:flex-row sm:items-center sm:justify-between">
+              <div>
+                <p className="text-sm font-semibold">Danh sách được quản lý riêng trong Danh mục</p>
+                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                  Tại đây chỉ chỉnh nội dung trình bày của trang. Muốn thêm, xóa hoặc sửa từng {catalogShortcut.itemLabel}, hãy chuyển sang Danh mục.
+                </p>
+              </div>
+              <Link
+                href={catalogShortcut.href}
+                className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border bg-background px-3 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
+              >
+                Mở Danh mục <ArrowRight className="size-4" />
+              </Link>
+            </section>
+          )}
+
           {selected.id === "services" ? (
             <ContentGroupGrid
               title="Các trang Dịch vụ"
@@ -88,6 +106,30 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
             <ContentGroupGrid
               items={standaloneGroupItems}
             />
+          ) : selected.id === "about" ? (
+            <>
+              <ContentGroupGrid
+                items={getContentItems(["about/hero"])}
+              />
+              <ContentGroupGrid
+                title="Hành trình · Tầm nhìn & Sứ mệnh · Giá trị cốt lõi"
+                description="Ba nhóm nội dung liên tiếp trên trang Giới thiệu được gom chung để quản lý theo đúng mạch giao diện người dùng."
+                startIndex={1}
+                items={getContentItems([
+                  "about/journey",
+                  "about/vision-mission",
+                  "about/core-values",
+                ])}
+              />
+              <ContentGroupGrid
+                startIndex={4}
+                items={getContentItems(["about/capabilities"])}
+              />
+              <ContentGroupGrid
+                startIndex={5}
+                items={getContentItems(["about/contact-form"])}
+              />
+            </>
           ) : useSingleColumnResourceList ? (
             <ContentGroupGrid
               items={selected.resourceKeys.flatMap((resourceKey) => {
@@ -149,6 +191,19 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
       </div>
     </div>
   );
+}
+
+function getContentItems(resourceKeys: string[]) {
+  return resourceKeys.flatMap((resourceKey) => {
+    const resource = adminResourceRegistry[resourceKey];
+    if (!resource) return [];
+    return [{
+      title: resource.title,
+      description: resource.description,
+      count: `${getResourceFieldCount(resourceKey)} trường`,
+      href: getContentResourceHref(resourceKey),
+    }];
+  });
 }
 
 function getResourceFieldLabels(resourceKey: string): string[] {
@@ -214,6 +269,12 @@ const serviceGroupByContentPage: Record<string, string> = {
   design: "thiet-ke-kien-truc-noi-that",
   construction: "thi-cong-xay-dung",
   renovation: "cai-tao-sua-chua",
+};
+
+const catalogShortcutByContentPage: Record<string, { href: string; itemLabel: string }> = {
+  projects: { href: "/admin/projects", itemLabel: "dự án" },
+  news: { href: "/admin/news", itemLabel: "bài viết" },
+  recruitment: { href: "/admin/recruitment", itemLabel: "vị trí tuyển dụng" },
 };
 
 function getServicePageDescription(id: string) {

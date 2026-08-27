@@ -27,14 +27,34 @@ export default function AdminSettingsPage() {
           </p>
         </div>
         <ContentGroupGrid
-          items={adminSettingsGroups.map((group) => ({
-            title: group.title,
-            description: group.description,
-            count: `${getResourceFieldCount(group.resourceKey)} trường`,
-            href: group.href,
-          }))}
+          title="Đầu trang"
+          description="Các thành phần dùng chung ở header của toàn website."
+          items={getSettingsItems(["settings/branding", "settings/navigation"])}
+        />
+        <ContentGroupGrid
+          title="Đối tác"
+          description="Danh sách 6 đối tác dùng chung ở Trang chủ và Giới thiệu."
+          items={getSettingsItems(["settings/partners"])}
+        />
+        <ContentGroupGrid
+          title="Cuối trang"
+          description="Toàn bộ nội dung Footer được quản lý trong một màn hình duy nhất."
+          items={getSettingsItems(["settings/footer"])}
         />
       </div>
     </div>
   );
+}
+
+function getSettingsItems(resourceKeys: string[]) {
+  return resourceKeys.flatMap((resourceKey) => {
+    const group = adminSettingsGroups.find((item) => item.resourceKey === resourceKey);
+    if (!group) return [];
+    return [{
+      title: group.title,
+      description: group.description,
+      count: `${getResourceFieldCount(group.resourceKey)} trường`,
+      href: group.href,
+    }];
+  });
 }

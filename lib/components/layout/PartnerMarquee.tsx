@@ -13,8 +13,6 @@ const partners = [
     name: "Cafe Control",
     image: "/images/home/partner-cafe-control.png",
   },
-  { name: "Face Max", image: "/images/home/partner-face-max.png" },
-  { name: "Vincom", image: "/images/home/partner-vincom.png" },
 ] as const;
 
 function PartnerSequence({
@@ -30,7 +28,7 @@ function PartnerSequence({
     <div className="flex w-1/2 shrink-0" aria-hidden={hidden}>
       {partners.map((partner) => (
         <div
-          className="w-1/8 shrink-0 px-2.5 max-sm:px-1.5"
+          className="w-1/6 shrink-0 px-2.5 max-sm:px-1.5"
           key={partner.name}
           onPointerEnter={() => onHover(partner.name)}
           onPointerLeave={() => onHover(null)}
@@ -67,7 +65,7 @@ export function PartnerMarquee() {
       }}
     >
       <div
-        className="flex w-[400%] [animation:partner-marquee_22s_linear_infinite] motion-reduce:animate-none max-sm:w-[533.333%]"
+        className="flex w-[300%] [animation:partner-marquee_22s_linear_infinite] motion-reduce:animate-none max-sm:w-[400%]"
         style={{ animationPlayState: paused ? "paused" : "running" }}
       >
         <PartnerSequence hovered={hovered} onHover={setHovered} />
