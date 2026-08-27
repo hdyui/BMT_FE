@@ -1,5 +1,7 @@
 "use client";
 
+import { usePathname } from "next/navigation";
+
 import { AdminHeader } from "@/features/admin/components/AdminHeader";
 import { AdminSectionSidebar } from "@/features/admin/components/AdminSectionSidebar";
 
@@ -11,6 +13,12 @@ import { AdminSectionSidebar } from "@/features/admin/components/AdminSectionSid
  * chỉnh sửa bị ẩn hết điều hướng, vào sửa xong là mất đường quay lại.
  */
 export function AdminShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
   return (
     <div className="admin-shell min-h-dvh overflow-x-clip bg-background text-foreground">
       <AdminHeader />

@@ -8,6 +8,7 @@ import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
+import { DynamicCollectionEditorLayout } from "@/features/admin/components/editor/DynamicCollectionEditorLayout";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import {
   EditorTopActions,
@@ -26,6 +27,7 @@ import {
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
+import { getDynamicCollectionUiKind } from "@/lib/admin/dynamic-collection-ui";
 import {
   EDITOR_GRID_CLASS,
   editorImagePreviewSize,
@@ -104,6 +106,7 @@ export function ResourceEditorPage({
   const singleColumnContentEditor = isHomeStyleEditor(config);
   const requestedContentEditor = singleColumnContentEditor;
   const stackedFields = singleColumnContentEditor;
+  const dynamicUiKind = getDynamicCollectionUiKind(config.key);
 
   useUnsavedChangesGuard({ dirty, dirtyCount, save: saveDraft });
   const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
@@ -280,6 +283,15 @@ export function ResourceEditorPage({
         )}
       >
         {topActionEditor ? (
+          dynamicUiKind ? (
+            <DynamicCollectionEditorLayout
+              config={config}
+              draft={draft}
+              dirtyKeys={dirtyKeys}
+              errors={errors}
+              onChange={updateField}
+            />
+          ) : (
           <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
             {editableSections.map((editorSection, sectionIndex) => {
               const fields = editorSection.fields;
@@ -386,6 +398,7 @@ export function ResourceEditorPage({
               );
             })}
           </section>
+          )
         ) : (
           editableSections.map((editorSection) => (
             <EditorSection

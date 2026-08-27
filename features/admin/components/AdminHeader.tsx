@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTransition } from "react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -12,6 +13,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { logoutAdmin } from "@/features/admin/auth/actions";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
 import { getAdminSectionKey } from "@/lib/admin/admin-sidebar";
 import {
@@ -22,7 +24,16 @@ import { cn } from "@/lib/utils";
 
 export function AdminHeader() {
   const pathname = usePathname();
+  const [loggingOut, startLogout] = useTransition();
   const activeKey = getAdminSectionKey(pathname);
+
+  function handleLogout() {
+    const location = `${window.location.pathname}${window.location.search}`;
+
+    startLogout(async () => {
+      await logoutAdmin(location);
+    });
+  }
 
   return (
     <header className="fixed inset-x-0 top-0 z-40 flex h-16 shrink-0 items-center gap-3 border-b bg-background/95 px-4 shadow-sm backdrop-blur sm:px-5 lg:px-6">
@@ -79,8 +90,8 @@ export function AdminHeader() {
             <UserRound strokeWidth={1.8} />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={6} className="w-40">
-            <DropdownMenuItem disabled>
-              <LogOut /> Đăng xuất
+            <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
+              <LogOut /> {loggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

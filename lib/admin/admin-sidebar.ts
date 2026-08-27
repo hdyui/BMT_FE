@@ -40,8 +40,19 @@ const OVERVIEW_PREFIXES = ["/admin/dashboard"];
  */
 const CONTENT_OWNED_RESOURCE_KEYS = new Set([
   "projects/page-hero",
+  "projects/list-section-content",
   "news/page-hero",
+  "news/featured-section-content",
   "recruitment/hero",
+  "recruitment/jobs-section-content",
+]);
+
+/** Các nhóm đã được feedback bỏ khỏi giao diện quản trị. Giữ resource/data để
+ * không tác động trang public, nhưng không đưa chúng vào điều hướng Admin. */
+const HIDDEN_CATALOG_RESOURCE_KEYS = new Set([
+  "projects/details",
+  "projects/related",
+  "projects/related-section-content",
 ]);
 
 /** Ba module quản lý bản ghi, gom dưới mục Danh mục trên header. */
@@ -117,6 +128,7 @@ function getCatalogSidebar(): AdminSidebarModel {
           (resource) =>
             resource.module === item.module &&
             !companionKeys.has(resource.key) &&
+            !HIDDEN_CATALOG_RESOURCE_KEYS.has(resource.key) &&
             !CONTENT_OWNED_RESOURCE_KEYS.has(resource.key),
         )
         .map((resource) => ({
@@ -185,6 +197,7 @@ export function getAdminSidebar(pathname: string): AdminSidebarModel {
  * trong. Nhờ vậy sidebar vẫn tô sáng đúng trang thay vì mất dấu.
  */
 export function getActiveContentPageHref(pathname: string): string | undefined {
+  if (pathname === "/admin/content") return "/admin/content/home";
   if (pathname.startsWith("/admin/content/")) return pathname;
 
   const page = adminContentPages
@@ -197,4 +210,56 @@ export function getActiveContentPageHref(pathname: string): string | undefined {
       }),
     );
   return page ? `/admin/content/${page.id}` : undefined;
+}
+
+/**
+ * Chuẩn hóa route sâu về đúng mục đang đại diện ở sidebar. Nhờ vậy route mặc
+ * định và route chỉnh sửa một record vẫn giữ nền active ở sidebar.
+ */
+export function getActiveSidebarHref(pathname: string): string | undefined {
+  const section = getAdminSectionKey(pathname);
+
+  if (section === "content") {
+    return getActiveContentPageHref(pathname);
+  }
+
+  if (section === "settings") {
+    if (pathname === "/admin/settings") return adminSettingsGroups[0]?.href;
+    return adminSettingsGroups
+      .map((group) => group.href)
+      .sort((left, right) => right.length - left.length)
+      .find((href) => matchesPrefix(pathname, href));
+  }
+
+  if (section === "catalog") {
+    const resources = Object.values(adminResourceRegistry)
+      .filter(
+        (resource) =>
+          CATALOG_MODULES.some((item) => item.module === resource.module) &&
+          !HIDDEN_CATALOG_RESOURCE_KEYS.has(resource.key) &&
+          !CONTENT_OWNED_RESOURCE_KEYS.has(resource.key),
+      )
+      .map((resource) => ({
+        resource,
+        route: `/admin/${resource.module}/${resource.path}`,
+      }))
+      .sort((left, right) => right.route.length - left.route.length);
+
+    const matched = resources.find(({ route }) => matchesPrefix(pathname, route));
+    if (matched) {
+      return (
+        CATALOG_CANONICAL_HREF[matched.resource.key] ??
+        `/admin/${matched.resource.module}/${matched.resource.path}`
+      );
+    }
+
+    const catalogModule = CATALOG_MODULES.find((item) => matchesPrefix(pathname, item.href));
+    if (!catalogModule) return undefined;
+    const canonical = Object.entries(CATALOG_CANONICAL_HREF).find(([resourceKey]) =>
+      resourceKey.startsWith(`${catalogModule.module}/`),
+    );
+    return canonical?.[1] ?? catalogModule.href;
+  }
+
+  return pathname;
 }

@@ -101,7 +101,13 @@ export function UnifiedResourceEditorPage({
     const previous = record?.[fieldKey] ?? "";
     if (sameValue(previous, value)) return;
 
-    const next = replaceRecordField(drafts, resourceKey, recordId, fieldKey, value);
+    let next = replaceRecordField(drafts, resourceKey, recordId, fieldKey, value);
+    // Vì sao chọn BMT chỉ có một ảnh desktop: website dùng cùng ảnh cho trạng
+    // thái mặc định và hover. Giữ field hover trong dữ liệu để tương thích cấu
+    // trúc hiện tại, nhưng luôn đồng bộ nó theo ảnh mặc định và không mở editor.
+    if (resourceKey === "home/why-bmt" && fieldKey === "defaultImage") {
+      next = replaceRecordField(next, resourceKey, recordId, "hoverImage", value);
+    }
     setDrafts(next);
     setHistory((current) => [
       ...current,
@@ -119,13 +125,22 @@ export function UnifiedResourceEditorPage({
   function undoLast() {
     const action = history.at(-1);
     if (!action) return;
-    const next = replaceRecordField(
+    let next = replaceRecordField(
       drafts,
       action.resourceKey,
       action.recordId,
       action.fieldKey,
       cloneValue(action.previous),
     );
+    if (action.resourceKey === "home/why-bmt" && action.fieldKey === "defaultImage") {
+      next = replaceRecordField(
+        next,
+        action.resourceKey,
+        action.recordId,
+        "hoverImage",
+        cloneValue(action.previous),
+      );
+    }
     setDrafts(next);
     setHistory((current) => (sameDrafts(next, savedSnapshot) ? [] : current.slice(0, -1)));
   }
@@ -251,13 +266,23 @@ function ResourceEditorGroup({
     : [];
   // Văn bản thay thế là chữ chứ không phải ảnh, nên tách khỏi ô ảnh và xếp
   // cùng cột chữ — đúng chỗ admin mong đợi tìm thấy nó.
-  const altFields: AdminFieldConfig[] = mediaFields
-    .filter((field) => field.altKey)
-    .map((field) => ({
-      key: field.altKey!,
-      label: "Văn bản thay thế",
-      type: "text",
-    }));
+  // Desktop/mobile có thể cố ý dùng chung một `altKey` vì chúng mô tả cùng
+  // một nội dung. Chỉ tạo một ô alt cho mỗi key để React không nhận hai child
+  // trùng key (ví dụ `imageAlt` ở section Tin tức nổi bật).
+  const altFields: AdminFieldConfig[] = Array.from(
+    new Map<string, AdminFieldConfig>(
+      mediaFields
+        .filter((field) => field.altKey)
+        .map((field) => [
+          field.altKey!,
+          {
+            key: field.altKey!,
+            label: "Văn bản thay thế",
+            type: "text",
+          },
+        ]),
+    ).values(),
+  );
   const textFields = layout?.mediaSide
     ? [...recordFields.filter((field) => field.type !== "image"), ...altFields]
     : recordFields;

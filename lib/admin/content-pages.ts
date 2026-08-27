@@ -24,14 +24,14 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "home",
     label: "Trang chủ",
     publicRoute: "/",
-    resourceKeys: ["home/hero", "home/why-bmt", "home/statistics", "home/featured-projects", "home/featured-services", "home/partners", "home/profile-section-content", "home/featured-news"],
+    resourceKeys: ["home/hero", "home/why-bmt", "home/statistics", "home/featured-projects", "home/featured-services", "home/profile-section-content", "home/featured-news", "home/contact-form"],
     sourceFiles: ["features/home/data/home-content.ts", "features/home/pages/HomePage.tsx"],
   },
   {
     id: "about",
     label: "Giới thiệu",
     publicRoute: "/gioi-thieu",
-    resourceKeys: ["about/hero", "about/journey", "about/vision-mission", "about/core-values", "about/capabilities"],
+    resourceKeys: ["about/hero", "about/journey", "about/vision-mission", "about/core-values", "about/capabilities", "about/contact-form"],
     sourceFiles: ["features/about/data/about-content.ts", "features/about/pages/AboutPage.tsx"],
   },
   {
@@ -52,7 +52,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "projects",
     label: "Dự án",
     publicRoute: "/du-an",
-    resourceKeys: ["projects/page-hero", "projects/list", "projects/details", "projects/related"],
+    resourceKeys: ["projects/page-hero", "projects/list-section-content", "projects/contact-form"],
     sourceFiles: ["features/projects/data/projects-page.ts", "features/projects/data/related-projects.ts"],
   },
   {
@@ -73,14 +73,14 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "news",
     label: "Tin tức",
     publicRoute: "/tin-tuc",
-    resourceKeys: ["news/page-hero", "news/featured", "news/list"],
+    resourceKeys: ["news/page-hero", "news/featured-section-content", "news/contact-form"],
     sourceFiles: ["features/news/data/news-page.ts", "features/news/pages/NewsPage.tsx"],
   },
   {
     id: "recruitment",
     label: "Tuyển dụng",
     publicRoute: "/tuyen-dung",
-    resourceKeys: ["recruitment/hero", "recruitment/jobs"],
+    resourceKeys: ["recruitment/hero", "recruitment/jobs-section-content", "recruitment/contact-form"],
     sourceFiles: ["features/careers/components/CareersHero.tsx"],
   },
   // Trang Liên hệ không có trên thanh header nên xếp sau các mục của header.

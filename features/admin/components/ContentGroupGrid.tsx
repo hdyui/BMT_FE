@@ -17,10 +17,13 @@ export function ContentGroupGrid({
   title,
   description,
   items,
+  startIndex = 0,
 }: {
   title?: string;
   description?: string;
   items: ContentGroupItem[];
+  /** Cho phép nhiều nhóm trên cùng một trang tiếp tục số thứ tự thay vì reset về 01. */
+  startIndex?: number;
 }) {
   return (
     <section className="mt-1">
@@ -41,7 +44,7 @@ export function ContentGroupGrid({
             key={item.href}
           >
             <span className="mt-0.5 shrink-0 text-xs font-semibold tabular-nums text-brand">
-              {String(index + 1).padStart(2, "0")}
+              {String(startIndex + index + 1).padStart(2, "0")}
             </span>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">

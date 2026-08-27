@@ -26,21 +26,15 @@ export const adminSettingsGroups: AdminSettingsGroup[] = [
     href: "/admin/settings/navigation",
   },
   {
-    title: "Thông tin doanh nghiệp",
-    description: "Tên doanh nghiệp, hotline, email, MST và giờ làm việc.",
-    resourceKey: "settings/company",
-    href: "/admin/settings/company",
+    title: "Đối tác dùng chung",
+    description: "6 đối tác dùng chung: tên, logo và liên kết hiển thị tại Trang chủ và Giới thiệu.",
+    resourceKey: "settings/partners",
+    href: "/admin/settings/partners",
   },
   {
-    title: "Cuối trang và mạng xã hội",
-    description: "Thông tin liên hệ, chi nhánh, mạng xã hội và bản quyền.",
+    title: "Cấu hình Footer",
+    description: "Logo, 4 dịch vụ, liên hệ, chi nhánh & nhà xưởng, mạng xã hội và ảnh fanpage cuối trang.",
     resourceKey: "settings/footer",
     href: "/admin/settings/footer",
-  },
-  {
-    title: "Địa điểm",
-    description: "Tên chi nhánh, địa chỉ, liên kết Google Maps và trạng thái hiển thị.",
-    resourceKey: "settings/locations",
-    href: "/admin/settings/locations",
   },
 ];

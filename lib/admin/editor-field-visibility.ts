@@ -7,15 +7,27 @@ import type {
 export const LINE_BREAK_EDITOR_HINT =
   "Mẹo: những ô cao nhiều dòng nhận phím Enter để xuống dòng — website hiển thị đúng chỗ ngắt đó. Ô một dòng là nội dung website luôn in liền một hàng.";
 
+const REFINED_CONTENT_MODULES = new Set([
+  "home",
+  "about",
+  "projects",
+  "news",
+  "recruitment",
+  "contacts",
+]);
+
 /**
- * Nhóm trang đã được tinh chỉnh giao diện chỉnh sửa: 5 trang Dịch vụ, Báo giá
- * và Hồ sơ năng lực. Các module còn lại giữ nguyên cách hiển thị cũ.
+ * Nhóm trang đã được tinh chỉnh giao diện chỉnh sửa theo bố cục thật của site.
+ * Collection động (Dự án/Tin tức/Tuyển dụng trong Danh mục) cố ý không bật
+ * chế độ này vì chúng vẫn phải cho phép thêm/xóa bản ghi.
  */
 export function isRefinedEditorResource(config: AdminResourceConfig) {
   return (
     config.module === "services" ||
     config.module === "quotation" ||
-    config.key.startsWith("settings/capability-profile")
+    config.module === "settings" ||
+    config.key.startsWith("settings/capability-profile") ||
+    (REFINED_CONTENT_MODULES.has(config.module) && config.collectionMode !== "dynamic")
   );
 }
 
@@ -31,9 +43,8 @@ const HOME_STYLE_EDITOR_MODULES = [
 const HOME_STYLE_EDITOR_KEYS = [
   "settings/branding",
   "settings/navigation",
+  "settings/partners",
   "settings/footer",
-  "settings/locations",
-  "settings/company",
 ];
 
 /**
