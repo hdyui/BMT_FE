@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { useTransition } from "react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
@@ -13,10 +14,12 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { SidebarTrigger, useSidebar } from "@/components/ui/sidebar";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
+import { logoutAdmin } from "@/features/admin/auth/actions";
 import { adminPageMeta } from "@/lib/admin/constants/navigation";
 
 export function AdminHeader({ hideNavigation = false }: { hideNavigation?: boolean }) {
   const pathname = usePathname();
+  const [loggingOut, startLogout] = useTransition();
   const { isMobile, state } = useSidebar();
   const metaKey = Object.keys(adminPageMeta)
     .filter((key) => pathname === key || pathname.startsWith(`${key}/`))
@@ -28,6 +31,13 @@ export function AdminHeader({ hideNavigation = false }: { hideNavigation?: boole
       : state === "collapsed"
         ? "var(--sidebar-width-icon)"
         : "var(--sidebar-width)";
+
+  function handleLogout() {
+    const location = `${window.location.pathname}${window.location.search}`;
+    startLogout(async () => {
+      await logoutAdmin(location);
+    });
+  }
 
   return (
     <header
@@ -59,8 +69,8 @@ export function AdminHeader({ hideNavigation = false }: { hideNavigation?: boole
             <UserRound strokeWidth={1.8} />
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" sideOffset={6} className="w-40">
-            <DropdownMenuItem disabled>
-              <LogOut /> Đăng xuất
+            <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
+              <LogOut /> {loggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

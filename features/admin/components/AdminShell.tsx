@@ -8,6 +8,10 @@ import { AdminHeader } from "@/features/admin/components/AdminHeader";
 
 export function AdminShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
+  if (pathname === "/admin/login") {
+    return <>{children}</>;
+  }
+
   const routeDepth = pathname.split("/").filter(Boolean).length;
   const projectContentEditorWithoutSidebar = [
     "/admin/projects/page-hero",

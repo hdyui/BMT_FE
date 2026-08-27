@@ -37,7 +37,7 @@ export function AppSidebar(props: React.ComponentProps<typeof Sidebar>) {
                 />
               }
               onClick={() => isMobile && setOpenMobile(false)}
-              className="h-11 justify-start rounded-lg px-3 hover:bg-transparent data-active:bg-transparent group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-1!"
+              className="h-11 justify-start rounded-lg px-3 hover:bg-transparent hover:text-inherit active:bg-transparent active:text-inherit focus-visible:ring-0 data-open:hover:bg-transparent data-open:hover:text-inherit data-active:bg-transparent data-active:text-inherit group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:p-1!"
             >
               <span className="flex h-8 w-[174px] shrink-0 items-center overflow-hidden group-data-[collapsible=icon]:w-[29px]">
                 <Image
