@@ -9,21 +9,38 @@ import { toast } from "sonner";
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
-import { EditorTopActions } from "@/features/admin/components/editor/EditorTopActions";
+import {
+  EditorTopActions,
+  StickyEditorActions,
+  useEditorActionsVisibility,
+} from "@/features/admin/components/editor/EditorTopActions";
 import {
   EditorLayout,
   EditorSection,
 } from "@/features/admin/components/editor/EditorLayout";
+import { EditorSplitColumns } from "@/features/admin/components/editor/EditorSplitColumns";
 import { ResourcePreviewDialog } from "@/features/admin/components/editor/ResourcePreviewDialog";
+import {
+  confirmEditorSave,
+  useUnsavedChangesGuard,
+} from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
 import {
+  EDITOR_GRID_CLASS,
+  editorImagePreviewSize,
+  editorSpanClass,
+  packEditorFields,
+} from "@/lib/admin/editor-layout";
+import {
   LINE_BREAK_EDITOR_HINT,
   getEditableAdminSections,
+  isHomeStyleEditor,
   isRefinedEditorResource,
 } from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
+  AdminFieldConfig,
   AdminFieldValue,
   AdminResourceConfig,
   AdminValidationErrors,
@@ -84,10 +101,12 @@ export function ResourceEditorPage({
   const refinedEditor = isRefinedEditorResource(config);
   const topActionEditor = true;
   const allowPreview = !topActionEditor && config.module !== "services";
-  const singleColumnContentEditor = isSingleColumnContentEditor(config);
-  const requestedContentEditor = isRequestedContentEditor(config);
-  const stackedFields =
-    singleColumnContentEditor || config.key === "settings/capability-profile";
+  const singleColumnContentEditor = isHomeStyleEditor(config);
+  const requestedContentEditor = singleColumnContentEditor;
+  const stackedFields = singleColumnContentEditor;
+
+  useUnsavedChangesGuard({ dirty, dirtyCount, save: saveDraft });
+  const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
 
   if (mode !== "create" && !existing) {
     return (
@@ -149,7 +168,7 @@ export function ResourceEditorPage({
       toast.error("Vui lòng kiểm tra các nội dung chưa hợp lệ", {
         description: `${Object.keys(nextErrors).length} nội dung cần được cập nhật.`,
       });
-      return;
+      return false;
     }
 
     setSaving(true);
@@ -166,6 +185,7 @@ export function ResourceEditorPage({
         setHistory([]);
         toast.success("Đã cập nhật nội dung");
       }
+      return true;
     } finally {
       setSaving(false);
     }
@@ -200,16 +220,16 @@ export function ResourceEditorPage({
         )}
         <AdminPageHeader
           title={pageTitle}
-          description={config.description}
           actions={
             topActionEditor ? (
               <EditorTopActions
+                ref={topActionsRef}
                 dirty={dirty}
                 dirtyCount={dirtyCount}
                 saving={saving}
                 onUndo={undoLast}
                 onUndoAll={undoAll}
-                onSave={saveDraft}
+                onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
               />
             ) : (
             <div className="flex items-center gap-2">
@@ -265,6 +285,39 @@ export function ResourceEditorPage({
               const fields = editorSection.fields;
               const imageCount = fields.filter((field) => field.type === "image").length;
               const threeColumnText = imageCount === 0 && fields.length === 3;
+              // Nhóm trang đã tinh chỉnh xếp ô theo lưới 12 cột mô phỏng bố cục
+              // website; các trang còn lại giữ nguyên lưới cũ.
+              const packedFields = refinedEditor ? packEditorFields(fields) : null;
+              // Section được chỉ định chia hai cột theo đúng vị trí trên website.
+              const split = config.editorLayout?.splitColumns;
+              const splitFields = split
+                ? {
+                    left: fields.filter((field) => split.left.includes(field.key)),
+                    right: fields.filter((field) => split.right.includes(field.key)),
+                  }
+                : null;
+              const useSplit =
+                splitFields !== null &&
+                splitFields.left.length + splitFields.right.length === fields.length;
+
+              const renderField = (
+                field: AdminFieldConfig,
+                options: { imageSize?: "wide" } = {},
+              ) => (
+                <EditorField
+                  field={field}
+                  imageSize={options.imageSize}
+                  value={draft[field.key]}
+                  error={errors[field.key]}
+                  dirty={dirtyKeys.has(field.key)}
+                  altValue={field.altKey ? draft[field.altKey] : undefined}
+                  altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
+                  contentEditorStyle={requestedContentEditor}
+                  lockItemCount={refinedEditor}
+                  onChange={(value) => updateField(field.key, value)}
+                  onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
+                />
+              );
 
               return (
                 <div
@@ -290,38 +343,45 @@ export function ResourceEditorPage({
                       )}
                     </div>
                   )}
+                  {useSplit && splitFields ? (
+                    <EditorSplitColumns
+                      left={splitFields.left.map((field) => (
+                        <div key={field.key}>{renderField(field)}</div>
+                      ))}
+                      right={splitFields.right.map((field) => (
+                        <div key={field.key}>{renderField(field)}</div>
+                      ))}
+                    />
+                  ) : (
                   <div
                     className={cn(
-                      "grid items-start gap-4 lg:gap-5",
-                      !stackedFields && fields.length > 1 && "md:grid-cols-2",
-                      !stackedFields &&
+                      packedFields
+                        ? EDITOR_GRID_CLASS
+                        : "grid items-start gap-4 lg:gap-5",
+                      !packedFields && !stackedFields && fields.length > 1 && "md:grid-cols-2",
+                      !packedFields && !stackedFields &&
                         (threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4"),
                     )}
                   >
-                    {fields.map((field) => (
+                    {(packedFields ?? fields.map((field) => ({ field, span: 0 }))).map(({ field, span }) => (
                       <div
                         className={cn(
-                          !stackedFields && !threeColumnText && fields.length === 1 && "xl:col-span-4",
-                          !stackedFields && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
-                          !stackedFields && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                          packedFields && editorSpanClass(span),
+                          !packedFields && !stackedFields && !threeColumnText && fields.length === 1 && "xl:col-span-4",
+                          !packedFields && !stackedFields && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
+                          !packedFields && !stackedFields && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
                         )}
                         key={field.key}
                       >
-                        <EditorField
-                          field={field}
-                          value={draft[field.key]}
-                          error={errors[field.key]}
-                          dirty={dirtyKeys.has(field.key)}
-                          altValue={field.altKey ? draft[field.altKey] : undefined}
-                          altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
-                          contentEditorStyle={requestedContentEditor}
-                          multilineText={refinedEditor}
-                          onChange={(value) => updateField(field.key, value)}
-                          onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
-                        />
+                        {renderField(field, {
+                          imageSize: packedFields
+                            ? editorImagePreviewSize(field, span)
+                            : undefined,
+                        })}
                       </div>
                     ))}
                   </div>
+                  )}
                 </div>
               );
             })}
@@ -349,7 +409,7 @@ export function ResourceEditorPage({
                   altValue={field.altKey ? draft[field.altKey] : undefined}
                   altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
                   contentEditorStyle={requestedContentEditor}
-                  multilineText={refinedEditor}
+                  lockItemCount={refinedEditor}
                   onChange={(value) => updateField(field.key, value)}
                   onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
                   key={field.key}
@@ -359,6 +419,16 @@ export function ResourceEditorPage({
           ))
         )}
       </EditorLayout>
+
+      <StickyEditorActions
+        hidden={topActionsVisible}
+        dirty={dirty}
+        dirtyCount={dirtyCount}
+        saving={saving}
+        onUndo={undoLast}
+        onUndoAll={undoAll}
+        onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
+      />
 
       {!topActionEditor && <ResourcePreviewDialog
         open={previewOpen}
@@ -440,34 +510,3 @@ function isValidContentUrl(value: string) {
   return /^(\/(?!\/)|https?:\/\/|mailto:|tel:|#)/i.test(value.trim());
 }
 
-function isSingleColumnContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(
-      config.key,
-    )
-  );
-}
-
-function isRequestedContentEditor(config: AdminResourceConfig) {
-  return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(config.key)
-  );
-}

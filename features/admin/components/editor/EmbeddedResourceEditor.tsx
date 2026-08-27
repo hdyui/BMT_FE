@@ -5,9 +5,20 @@ import { RotateCcw, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { EditorField } from "@/features/admin/components/editor/EditorField";
+import {
+  StickyEditorActions,
+  useEditorActionsVisibility,
+} from "@/features/admin/components/editor/EditorTopActions";
 import { EditorSection } from "@/features/admin/components/editor/EditorLayout";
+import {
+  confirmEditorSave,
+  useUnsavedChangesGuard,
+} from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import {
+  getEditableAdminSections,
+  isHomeStyleEditor,
+} from "@/lib/admin/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
@@ -36,7 +47,7 @@ export function EmbeddedResourceEditor({
     [config.sections],
   );
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedDraft);
-  const requestedContentEditor = isRequestedContentEditor(config);
+  const requestedContentEditor = isHomeStyleEditor(config);
   const dirtyKeys = useMemo(() => {
     const keys = editableSections.flatMap((section) =>
       section.fields.map((field) => field.key),
@@ -73,87 +84,94 @@ export function EmbeddedResourceEditor({
       setSavedDraft(structuredClone(saved));
       setHistory([]);
       toast.success("Đã cập nhật nội dung phần mở đầu");
+      return true;
     } finally {
       setSaving(false);
     }
   }
 
-  return (
-    <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-      <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
-        <div>
-          <h2
-            className={cn(
-              "flex items-center gap-2",
-              requestedContentEditor ? "text-lg font-bold" : "font-semibold",
-            )}
-          >
-            {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
-            {config.title}
-          </h2>
-          <p className="mt-1 text-sm text-muted-foreground">{config.description}</p>
-          {dirty && <p className="mt-2 text-xs font-medium text-brand">{dirtyKeys.size} thay đổi chưa lưu</p>}
-        </div>
-        <div className="flex flex-wrap justify-end gap-2">
-          {dirty && (
-            <>
-              <Button type="button" variant="outline" onClick={undoLast}>
-                <RotateCcw /> Hoàn tác
-              </Button>
-              <Button type="button" variant="ghost" onClick={undoAll}>Hoàn tác tất cả</Button>
-            </>
-          )}
-          <Button type="button" disabled={!dirty || saving} onClick={save}>
-            <Save /> {saving ? "Đang lưu..." : "Lưu thay đổi"}
-          </Button>
-        </div>
-      </div>
-      <div
-        className={cn(
-          "grid gap-5 p-5 sm:p-6",
-          !requestedContentEditor && "xl:grid-cols-2",
-        )}
-      >
-        {editableSections.map((editorSection) => (
-          <EditorSection
-            title={editorSection.title}
-            description={editorSection.description}
-            prominent={requestedContentEditor}
-            singleColumn={requestedContentEditor}
-            dirtyCount={editorSection.fields.reduce(
-              (count, field) => count + (dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false) ? 1 : 0),
-              0,
-            )}
-            key={editorSection.id}
-          >
-            {editorSection.fields.map((field) => (
-              <EditorField
-                field={field}
-                value={draft[field.key]}
-                dirty={dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false)}
-                contentEditorStyle={requestedContentEditor}
-                onChange={(value) => updateField(field.key, value)}
-                key={field.key}
-              />
-            ))}
-          </EditorSection>
-        ))}
-      </div>
-    </section>
-  );
-}
+  useUnsavedChangesGuard({ dirty, dirtyCount: dirtyKeys.size, save });
+  const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
 
-function isRequestedContentEditor(config: AdminResourceConfig) {
   return (
-    ["home", "about", "projects", "news", "recruitment", "contacts"].includes(
-      config.module,
-    ) ||
-    [
-      "settings/branding",
-      "settings/navigation",
-      "settings/footer",
-      "settings/locations",
-      "settings/company",
-    ].includes(config.key)
+    <>
+      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
+        <div className="flex flex-col gap-3 border-b px-5 py-4 sm:flex-row sm:items-center sm:justify-between sm:px-6">
+          <div>
+            <h2
+              className={cn(
+                "flex items-center gap-2",
+                requestedContentEditor ? "text-lg font-bold" : "font-semibold",
+              )}
+            >
+              {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+              {config.title}
+            </h2>
+            <p className="mt-1 text-sm text-muted-foreground">{config.description}</p>
+            {dirty && <p className="mt-2 text-xs font-medium text-brand">{dirtyKeys.size} thay đổi chưa lưu</p>}
+          </div>
+          <div className="flex flex-wrap justify-end gap-2" ref={topActionsRef}>
+            {dirty && (
+              <>
+                <Button type="button" variant="outline" onClick={undoLast}>
+                  <RotateCcw /> Hoàn tác
+                </Button>
+                <Button type="button" variant="ghost" onClick={undoAll}>Hoàn tác tất cả</Button>
+              </>
+            )}
+            <Button
+              type="button"
+              disabled={!dirty || saving}
+              onClick={() => confirmEditorSave(dirtyKeys.size, save)}
+            >
+              <Save /> {saving ? "Đang lưu..." : "Lưu thay đổi"}
+            </Button>
+          </div>
+        </div>
+        <div
+          className={cn(
+            "grid gap-5 p-5 sm:p-6",
+            !requestedContentEditor && "xl:grid-cols-2",
+          )}
+        >
+          {editableSections.map((editorSection) => (
+            <EditorSection
+              title={editorSection.title}
+              description={editorSection.description}
+              prominent={requestedContentEditor}
+              singleColumn={requestedContentEditor}
+              dirtyCount={editorSection.fields.reduce(
+                (count, field) => count + (dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false) ? 1 : 0),
+                0,
+              )}
+              key={editorSection.id}
+            >
+              {editorSection.fields.map((field) => (
+                <EditorField
+                  field={field}
+                  value={draft[field.key]}
+                  dirty={dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false)}
+                  contentEditorStyle={requestedContentEditor}
+                  onChange={(value) => updateField(field.key, value)}
+                  key={field.key}
+                />
+              ))}
+            </EditorSection>
+          ))}
+        </div>
+      </section>
+
+      {/* Nằm ngoài `<section>` vì section có `overflow-hidden` — đặt bên trong
+          thì `position: sticky` mất tác dụng. */}
+      <StickyEditorActions
+        hidden={topActionsVisible}
+        dirty={dirty}
+        dirtyCount={dirtyKeys.size}
+        saving={saving}
+        onUndo={undoLast}
+        onUndoAll={undoAll}
+        onSave={() => confirmEditorSave(dirtyKeys.size, save)}
+      />
+    </>
   );
 }

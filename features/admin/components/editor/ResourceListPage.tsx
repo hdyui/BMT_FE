@@ -291,7 +291,6 @@ function ResourceListPageContent({
       <div className="mt-4">
         <AdminPageHeader
           title={config.title}
-          description={config.description}
           actions={
             <div className="flex flex-wrap items-center gap-2">
               {!imageManager ? (

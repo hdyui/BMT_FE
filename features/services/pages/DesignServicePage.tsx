@@ -21,6 +21,8 @@ import {
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
 } from "@/features/services/config/layout";
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
   featuredProjects,
   solutionCards,
 } from "@/features/services/data/thiet-ke-kien-truc-noi-that";
@@ -291,7 +293,7 @@ export function DesignServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -385,7 +387,7 @@ export function DesignServicePage() {
         <ProcessTimeline />
       </section>
 
-      <ContactForm showTopNotch />
+      <ContactForm showTopNotch {...contactFormContent} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

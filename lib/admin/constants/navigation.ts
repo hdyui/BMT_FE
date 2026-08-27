@@ -1,53 +1,51 @@
 import type { LucideIcon } from "lucide-react";
 import {
-  BriefcaseBusiness,
   FolderKanban,
   GalleryVerticalEnd,
   LayoutDashboard,
   LayoutTemplate,
-  Newspaper,
   Settings2,
 } from "lucide-react";
 
-export interface AdminNavigationItem {
+/**
+ * Điều hướng cấp một, nằm ngang trên thanh header của admin. Mỗi mục có một
+ * sidebar riêng bên dưới (xem `lib/admin/admin-sidebar.ts`).
+ */
+export type AdminSectionKey = "overview" | "catalog" | "content" | "settings";
+
+export interface AdminHeaderNavItem {
+  key: AdminSectionKey;
   label: string;
   href: string;
   icon: LucideIcon;
 }
 
-export interface AdminNavigationSection {
-  label: string;
-  items: AdminNavigationItem[];
-}
-
-export const adminNavigation: AdminNavigationSection[] = [
+export const adminHeaderNavigation: AdminHeaderNavItem[] = [
   {
+    key: "overview",
     label: "Tổng quan",
-    items: [
-      { label: "Tổng quan", href: "/admin/dashboard", icon: LayoutDashboard },
-    ],
+    href: "/admin/dashboard",
+    icon: LayoutDashboard,
   },
+  // Bấm vào là vào thẳng Dự án; ba module Dự án / Tin tức / Tuyển dụng nằm sẵn
+  // trong sidebar của mục này nên không cần menu xổ xuống nữa.
   {
+    key: "catalog",
     label: "Danh mục",
-    items: [
-      { label: "Dự án", href: "/admin/projects", icon: FolderKanban },
-      { label: "Tin tức", href: "/admin/news", icon: Newspaper },
-      {
-        label: "Tuyển dụng",
-        href: "/admin/recruitment",
-        icon: BriefcaseBusiness,
-      },
-    ],
+    href: "/admin/projects",
+    icon: FolderKanban,
   },
   {
+    key: "content",
     label: "Nội dung trang",
-    items: [
-      { label: "Nội dung trang", href: "/admin/content", icon: LayoutTemplate },
-    ],
+    href: "/admin/content",
+    icon: LayoutTemplate,
   },
   {
-    label: "Hệ thống",
-    items: [{ label: "Cấu hình", href: "/admin/settings", icon: Settings2 }],
+    key: "settings",
+    label: "Cấu hình",
+    href: "/admin/settings",
+    icon: Settings2,
   },
 ];
 

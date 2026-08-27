@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { CircleAlert } from "lucide-react";
 
 import { AdminModuleShell } from "@/features/admin/components/AdminModuleShell";
@@ -69,7 +70,12 @@ export function AdminCrudRoute({
   const resourceKey = `${module}/${segments.slice(0, -1).join("/")}`;
   const parentResource = getAdminResource(resourceKey);
 
+  // Bộ sưu tập cố định có số mục khớp layout website nên không mở đường tạo mới;
+  // gõ tay `/new` sẽ quay về trang chỉnh sửa của bộ sưu tập đó.
   if (parentResource?.kind === "collection" && tail === "new") {
+    if (parentResource.collectionMode !== "dynamic") {
+      redirect(`/admin/${parentResource.module}/${parentResource.path}`);
+    }
     return <ResourceEditorPage config={parentResource} mode="create" />;
   }
 

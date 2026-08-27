@@ -13,6 +13,14 @@ import {
 import { toast } from "sonner";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
+import {
+  StickyEditorActions,
+  useEditorActionsVisibility,
+} from "@/features/admin/components/editor/EditorTopActions";
+import {
+  confirmEditorSave,
+  useUnsavedChangesGuard,
+} from "@/features/admin/components/editor/unsaved-changes";
 import { ImageField } from "@/features/admin/components/ImageField";
 import { HomeHeroPreviewDialog } from "@/features/admin/home/HomeHeroPreviewDialog";
 import { homeContentService } from "@/lib/admin/services/home-content.service";
@@ -94,6 +102,13 @@ export function HomeContentManager({
   const [draft, setDraft] = useState<HomeHeroSlideContent>(initialSlides[0]);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [saving, setSaving] = useState(false);
+  // So bản nháp với ảnh đang lưu để biết còn thay đổi nào chưa ghi lại hay không.
+  const savedSlide = slides.find((slide) => slide.id === draft?.id);
+  const dirtyCount = savedSlide
+    ? (Object.keys(draft) as Array<keyof HomeHeroSlideContent>).filter(
+        (key) => JSON.stringify(draft[key]) !== JSON.stringify(savedSlide[key]),
+      ).length
+    : 0;
 
   function selectSlide(slide: HomeHeroSlideContent) {
     setSelectedId(slide.id);
@@ -138,10 +153,14 @@ export function HomeContentManager({
       toast.success("Đã lưu bản nháp", {
         description: "Nội dung đã được cập nhật.",
       });
+      return true;
     } finally {
       setSaving(false);
     }
   }
+
+  useUnsavedChangesGuard({ dirty: dirtyCount > 0, dirtyCount, save: saveDraft });
+  const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
@@ -320,7 +339,7 @@ export function HomeContentManager({
             </div>
 
             <div className="mt-6 flex flex-col-reverse gap-3 border-t pt-5 sm:flex-row sm:items-center sm:justify-end">
-              <div className="flex gap-2">
+              <div className="flex gap-2" ref={topActionsRef}>
                 <Button
                   variant="outline"
                   className="h-10 flex-1 px-4 sm:flex-none"
@@ -330,7 +349,7 @@ export function HomeContentManager({
                 </Button>
                 <Button
                   className="h-10 flex-1 px-4 sm:flex-none"
-                  onClick={saveDraft}
+                  onClick={() => confirmEditorSave(dirtyCount, saveDraft)}
                   disabled={saving}
                 >
                   <Save /> {saving ? "Đang lưu..." : "Lưu bản nháp"}
@@ -375,6 +394,15 @@ export function HomeContentManager({
           ))}
         </div>
       </section>
+
+      <StickyEditorActions
+        hidden={topActionsVisible}
+        dirty={dirtyCount > 0}
+        dirtyCount={dirtyCount}
+        saving={saving}
+        saveLabel="Lưu bản nháp"
+        onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
+      />
 
       <HomeHeroPreviewDialog
         open={previewOpen}

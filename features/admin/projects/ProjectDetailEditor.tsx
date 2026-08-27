@@ -5,6 +5,14 @@ import { useState } from "react";
 import { Eye, FileText, Save } from "lucide-react";
 import { toast } from "sonner";
 
+import {
+  StickyEditorActions,
+  useEditorActionsVisibility,
+} from "@/features/admin/components/editor/EditorTopActions";
+import {
+  confirmEditorSave,
+  useUnsavedChangesGuard,
+} from "@/features/admin/components/editor/unsaved-changes";
 import { ImageField } from "@/features/admin/components/ImageField";
 import { projectContentService } from "@/lib/admin/services/project-content.service";
 import type { AdminProjectDetailContent } from "@/lib/admin/types/content";
@@ -53,6 +61,14 @@ export function ProjectDetailEditor({
   const [draft, setDraft] = useState<AdminProjectDetailContent>(selected);
   const [saving, setSaving] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
+  // So bản nháp với hồ sơ đang lưu để biết còn thay đổi nào chưa ghi lại hay không.
+  const savedDetail = details.find((detail) => detail.id === draft?.id);
+  const dirtyCount =
+    savedDetail && draft
+      ? (Object.keys(draft) as Array<keyof AdminProjectDetailContent>).filter(
+          (key) => JSON.stringify(draft[key]) !== JSON.stringify(savedDetail[key]),
+        ).length
+      : 0;
 
   function update<Key extends keyof AdminProjectDetailContent>(
     key: Key,
@@ -74,10 +90,14 @@ export function ProjectDetailEditor({
         details.map((detail) => (detail.id === saved.id ? saved : detail)),
       );
       toast.success("Đã lưu nội dung chi tiết dự án");
+      return true;
     } finally {
       setSaving(false);
     }
   }
+
+  useUnsavedChangesGuard({ dirty: dirtyCount > 0, dirtyCount, save: saveDraft });
+  const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
 
   if (!draft) {
     return (
@@ -94,199 +114,215 @@ export function ProjectDetailEditor({
   }
 
   return (
-    <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_36px_rgb(36_33_34/.035)]">
-      <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
-        <div>
-          <div className="flex items-center gap-2">
-            <h2 className="font-semibold">Chi tiết dự án</h2>
-          </div>
-          <p className="mt-1 text-xs text-muted-foreground">
-            Thông tin, nội dung chi tiết và bộ ảnh của từng dự án
-          </p>
-        </div>
-        <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => setPreviewOpen(true)}>
-            <Eye /> Xem trước
-          </Button>
-          <Button onClick={saveDraft} disabled={saving}>
-            <Save /> {saving ? "Đang lưu..." : "Lưu bản nháp"}
-          </Button>
-        </div>
-      </div>
-
-      <div className="grid xl:grid-cols-[260px_minmax(0,1fr)]">
-        <aside className="border-b bg-muted/30 p-3 xl:border-r xl:border-b-0">
-          <p className="px-2 pb-2 text-[10px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
-            Hồ sơ chi tiết
-          </p>
-          <div className="space-y-1.5">
-            {details.map((detail) => (
-              <Button
-                key={detail.id}
-                type="button"
-                variant="ghost"
-                onClick={() => selectDetail(detail)}
-                className={`h-auto w-full justify-start whitespace-normal rounded-xl border p-3 text-left ${
-                  detail.id === selectedId
-                    ? "border-brand/25 bg-card"
-                    : "border-transparent hover:bg-card/70"
-                }`}
-              >
-                <p className="text-xs font-semibold">{detail.title}</p>
-              </Button>
-            ))}
-          </div>
-        </aside>
-
-        <div className="min-w-0 space-y-5 p-4 sm:p-6">
-          <section className="rounded-2xl border p-4 sm:p-5">
-            <h3 className="font-semibold">Thông tin dự án</h3>
+    <>
+      <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_36px_rgb(36_33_34/.035)]">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b px-5 py-4 sm:px-6">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="font-semibold">Chi tiết dự án</h2>
+            </div>
             <p className="mt-1 text-xs text-muted-foreground">
-              Các thông tin giới thiệu chính của dự án
+              Thông tin, nội dung chi tiết và bộ ảnh của từng dự án
             </p>
-            <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-              {[
-                ["Tiêu đề", "title"],
-                ["Đường dẫn", "slug"],
-                ["Danh mục", "category"],
-                ["Địa điểm", "location"],
-                ["Khách hàng", "client"],
-                ["Diện tích", "area"],
-                ["Quy mô", "scale"],
-                ["Phong cách (nội dung)", "styleText"],
-                ["Phạm vi", "scope"],
-              ].map(([label, key]) => (
-                <label key={key} className="grid gap-1.5 text-xs font-semibold">
-                  {label}
+          </div>
+          <div className="flex items-center gap-2" ref={topActionsRef}>
+            <Button variant="outline" onClick={() => setPreviewOpen(true)}>
+              <Eye /> Xem trước
+            </Button>
+            <Button
+              onClick={() => confirmEditorSave(dirtyCount, saveDraft)}
+              disabled={saving}
+            >
+              <Save /> {saving ? "Đang lưu..." : "Lưu bản nháp"}
+            </Button>
+          </div>
+        </div>
+
+        <div className="grid xl:grid-cols-[260px_minmax(0,1fr)]">
+          <aside className="border-b bg-muted/30 p-3 xl:border-r xl:border-b-0">
+            <p className="px-2 pb-2 text-[10px] font-bold tracking-[0.12em] text-muted-foreground uppercase">
+              Hồ sơ chi tiết
+            </p>
+            <div className="space-y-1.5">
+              {details.map((detail) => (
+                <Button
+                  key={detail.id}
+                  type="button"
+                  variant="ghost"
+                  onClick={() => selectDetail(detail)}
+                  className={`h-auto w-full justify-start whitespace-normal rounded-xl border p-3 text-left ${
+                    detail.id === selectedId
+                      ? "border-brand/25 bg-card"
+                      : "border-transparent hover:bg-card/70"
+                  }`}
+                >
+                  <p className="text-xs font-semibold">{detail.title}</p>
+                </Button>
+              ))}
+            </div>
+          </aside>
+
+          <div className="min-w-0 space-y-5 p-4 sm:p-6">
+            <section className="rounded-2xl border p-4 sm:p-5">
+              <h3 className="font-semibold">Thông tin dự án</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Các thông tin giới thiệu chính của dự án
+              </p>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+                {[
+                  ["Tiêu đề", "title"],
+                  ["Đường dẫn", "slug"],
+                  ["Danh mục", "category"],
+                  ["Địa điểm", "location"],
+                  ["Khách hàng", "client"],
+                  ["Diện tích", "area"],
+                  ["Quy mô", "scale"],
+                  ["Phong cách (nội dung)", "styleText"],
+                  ["Phạm vi", "scope"],
+                ].map(([label, key]) => (
+                  <label key={key} className="grid gap-1.5 text-xs font-semibold">
+                    {label}
+                    <Input
+                      value={String(draft[key as keyof AdminProjectDetailContent])}
+                      onChange={(event) =>
+                        update(
+                          key as keyof AdminProjectDetailContent,
+                          event.target.value as never,
+                        )
+                      }
+                      className="h-10"
+                    />
+                  </label>
+                ))}
+                <label className="grid gap-1.5 text-xs font-semibold">
+                  Năm
                   <Input
-                    value={String(draft[key as keyof AdminProjectDetailContent])}
+                    type="number"
+                    value={draft.year}
+                    onChange={(event) => update("year", Number(event.target.value))}
+                    className="h-10"
+                  />
+                </label>
+              </div>
+            </section>
+
+            <section className="rounded-2xl border p-4 sm:p-5">
+              <h3 className="font-semibold">Nội dung chi tiết</h3>
+              <p className="mt-1 text-xs text-muted-foreground">
+                Nội dung giới thiệu cho từng phần của dự án
+              </p>
+              <div className="mt-5 grid gap-4 lg:grid-cols-2">
+                <ContentField
+                  label="Tổng quan"
+                  value={draft.overview}
+                  onChange={(value) => update("overview", value)}
+                />
+                <ContentField
+                  label="Khảo sát hiện trạng"
+                  value={draft.surveyText}
+                  onChange={(value) => update("surveyText", value)}
+                />
+                <ContentField
+                  label="Giải pháp"
+                  value={draft.solution}
+                  onChange={(value) => update("solution", value)}
+                />
+                <ContentField
+                  label="Mô tả quy trình"
+                  value={draft.processDescription}
+                  onChange={(value) => update("processDescription", value)}
+                />
+                <label className="grid gap-1.5 text-xs font-semibold lg:col-span-2">
+                  Chú thích bản vẽ
+                  <Input
+                    value={draft.drawingCaption}
                     onChange={(event) =>
-                      update(
-                        key as keyof AdminProjectDetailContent,
-                        event.target.value as never,
-                      )
+                      update("drawingCaption", event.target.value)
                     }
                     className="h-10"
                   />
                 </label>
-              ))}
-              <label className="grid gap-1.5 text-xs font-semibold">
-                Năm
-                <Input
-                  type="number"
-                  value={draft.year}
-                  onChange={(event) => update("year", Number(event.target.value))}
-                  className="h-10"
-                />
-              </label>
-            </div>
-          </section>
-
-          <section className="rounded-2xl border p-4 sm:p-5">
-            <h3 className="font-semibold">Nội dung chi tiết</h3>
-            <p className="mt-1 text-xs text-muted-foreground">
-              Nội dung giới thiệu cho từng phần của dự án
-            </p>
-            <div className="mt-5 grid gap-4 lg:grid-cols-2">
-              <ContentField
-                label="Tổng quan"
-                value={draft.overview}
-                onChange={(value) => update("overview", value)}
-              />
-              <ContentField
-                label="Khảo sát hiện trạng"
-                value={draft.surveyText}
-                onChange={(value) => update("surveyText", value)}
-              />
-              <ContentField
-                label="Giải pháp"
-                value={draft.solution}
-                onChange={(value) => update("solution", value)}
-              />
-              <ContentField
-                label="Mô tả quy trình"
-                value={draft.processDescription}
-                onChange={(value) => update("processDescription", value)}
-              />
-              <label className="grid gap-1.5 text-xs font-semibold lg:col-span-2">
-                Chú thích bản vẽ
-                <Input
-                  value={draft.drawingCaption}
-                  onChange={(event) =>
-                    update("drawingCaption", event.target.value)
-                  }
-                  className="h-10"
-                />
-              </label>
-            </div>
-          </section>
-
-          <ImageField
-            label="Ảnh mở đầu trang chi tiết dự án"
-            value={draft.heroImage}
-            alt={draft.heroAlt}
-            ratio="1.02:1"
-            recommendedSize="2560 × 2500px"
-            onChange={(value) => update("heroImage", value)}
-          />
-
-        </div>
-      </div>
-
-      <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
-        <DialogContent className="admin-theme-surface w-[min(68rem,calc(100%-2rem))] max-w-none">
-          <DialogHeader>
-            <div className="flex items-center gap-2">
-              <DialogTitle>Xem trước chi tiết dự án</DialogTitle>
-            </div>
-            <DialogDescription>
-              Bản xem trước sử dụng nội dung bạn đang chỉnh sửa.
-            </DialogDescription>
-          </DialogHeader>
-          <div className="mt-5 overflow-hidden rounded-2xl border bg-background">
-            <div className="relative aspect-[16/8] bg-muted">
-              <Image
-                src={draft.heroImage}
-                alt={draft.heroAlt || draft.title}
-                fill
-                unoptimized={draft.heroImage.startsWith("blob:")}
-                className="object-cover"
-                sizes="1050px"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-transparent to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9">
-                <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
-                  {draft.category}
-                </p>
-                <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] sm:text-5xl">
-                  {draft.title}
-                </h2>
               </div>
-            </div>
-            <div className="grid gap-5 p-5 sm:grid-cols-[1fr_1.5fr] sm:p-8">
-              <dl className="grid content-start gap-3 text-sm">
-                {[
-                  ["Địa điểm", draft.location],
-                  ["Diện tích", draft.area],
-                  ["Phong cách", draft.styleText],
-                  ["Năm", String(draft.year)],
-                ].map(([label, value]) => (
-                  <div key={label} className="grid grid-cols-[90px_1fr] gap-3">
-                    <dt className="text-muted-foreground">{label}</dt>
-                    <dd className="font-medium">{value}</dd>
-                  </div>
-                ))}
-              </dl>
-              <div>
-                <h3 className="font-semibold">Tổng quan</h3>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {draft.overview}
-                </p>
-              </div>
-            </div>
+            </section>
+
+            <ImageField
+              label="Ảnh mở đầu trang chi tiết dự án"
+              value={draft.heroImage}
+              alt={draft.heroAlt}
+              ratio="1.02:1"
+              recommendedSize="2560 × 2500px"
+              onChange={(value) => update("heroImage", value)}
+            />
+
           </div>
-        </DialogContent>
-      </Dialog>
-    </section>
+        </div>
+
+        <Dialog open={previewOpen} onOpenChange={setPreviewOpen}>
+          <DialogContent className="admin-theme-surface w-[min(68rem,calc(100%-2rem))] max-w-none">
+            <DialogHeader>
+              <div className="flex items-center gap-2">
+                <DialogTitle>Xem trước chi tiết dự án</DialogTitle>
+              </div>
+              <DialogDescription>
+                Bản xem trước sử dụng nội dung bạn đang chỉnh sửa.
+              </DialogDescription>
+            </DialogHeader>
+            <div className="mt-5 overflow-hidden rounded-2xl border bg-background">
+              <div className="relative aspect-[16/8] bg-muted">
+                <Image
+                  src={draft.heroImage}
+                  alt={draft.heroAlt || draft.title}
+                  fill
+                  unoptimized={draft.heroImage.startsWith("blob:")}
+                  className="object-cover"
+                  sizes="1050px"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-charcoal/85 via-transparent to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-6 text-white sm:p-9">
+                  <p className="text-xs font-bold tracking-[0.12em] text-brand uppercase">
+                    {draft.category}
+                  </p>
+                  <h2 className="mt-2 text-3xl font-extrabold tracking-[-0.04em] sm:text-5xl">
+                    {draft.title}
+                  </h2>
+                </div>
+              </div>
+              <div className="grid gap-5 p-5 sm:grid-cols-[1fr_1.5fr] sm:p-8">
+                <dl className="grid content-start gap-3 text-sm">
+                  {[
+                    ["Địa điểm", draft.location],
+                    ["Diện tích", draft.area],
+                    ["Phong cách", draft.styleText],
+                    ["Năm", String(draft.year)],
+                  ].map(([label, value]) => (
+                    <div key={label} className="grid grid-cols-[90px_1fr] gap-3">
+                      <dt className="text-muted-foreground">{label}</dt>
+                      <dd className="font-medium">{value}</dd>
+                    </div>
+                  ))}
+                </dl>
+                <div>
+                  <h3 className="font-semibold">Tổng quan</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {draft.overview}
+                  </p>
+                </div>
+              </div>
+            </div>
+          </DialogContent>
+        </Dialog>
+      </section>
+
+      {/* Nằm ngoài `<section>` vì section có `overflow-hidden` — đặt bên trong
+          thì `position: sticky` mất tác dụng. */}
+      <StickyEditorActions
+        hidden={topActionsVisible}
+        dirty={dirtyCount > 0}
+        dirtyCount={dirtyCount}
+        saving={saving}
+        saveLabel="Lưu bản nháp"
+        onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
+      />
+    </>
   );
 }

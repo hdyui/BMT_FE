@@ -13,9 +13,22 @@ export type RenovationProcessStep = {
 
 type RenovationProcessStepsProps = {
   steps: readonly RenovationProcessStep[];
+  /**
+   * Tiêu đề đứng trước logo BMT. Hiện đúng như truyền vào — không ép
+   * `uppercase` bằng CSS để admin gõ sao thì site hiện y vậy.
+   */
+  heading: string;
+  /** Logo đứng ngay sau tiêu đề. */
+  logo: string;
+  logoAlt: string;
 };
 
-export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
+export function RenovationProcessSteps({
+  steps,
+  heading,
+  logo,
+  logoAlt,
+}: RenovationProcessStepsProps) {
   return (
     // Đã thu hẹp max-width xuống còn khoảng 1024px để lọt lòng vừa đường viền đỏ
     <section className="mx-auto w-[min(64rem,calc(100%-2rem))] py-12">
@@ -31,14 +44,14 @@ export function RenovationProcessSteps({ steps }: RenovationProcessStepsProps) {
         {/* Tiêu đề: đã giảm cỡ chữ (42/46px -> 32/36px) để vừa với độ rộng
             dải 5 quy trình bên dưới, không còn to lấn át lưới thẻ. Màn nhỏ tự
             xuống dòng thay vì whitespace-nowrap (trước đây gây tràn ngang). */}
-        <h2 className="font-heading text-xl font-black uppercase tracking-tight text-charcoal text-center sm:text-2xl lg:text-[2rem] lg:text-left lg:whitespace-nowrap xl:text-[2.25rem]">
-          Quy trình cải tạo & sửa chữa tại
+        <h2 className="font-heading text-xl font-black tracking-tight text-charcoal text-center sm:text-2xl lg:text-[2rem] lg:text-left lg:whitespace-nowrap xl:text-[2.25rem]">
+          {heading}
         </h2>
 
         {/* Logo: To ra khoảng 310px để nối tiếp ngay sau chữ và chạm mép phải */}
         <Image
-          src="/images/cai-tao-sua-chua/logo.png" // BẠN ĐỔI URL ẢNH LOGO VÀO ĐÂY
-          alt="BMT Decor Logo"
+          src={logo}
+          alt={logoAlt}
           width={310}
           height={85}
           className="h-auto w-32 max-w-full -translate-y-1 shrink-0 object-contain sm:w-48 lg:w-56 xl:w-60"

@@ -7,7 +7,8 @@ export function AdminPageHeader({
   actions,
 }: {
   title: string;
-  description: string;
+  /** Trang chỉnh sửa bỏ trống mục này — chỉ còn tiêu đề và nút thao tác. */
+  description?: string;
   eyebrow?: string;
   actions?: ReactNode;
 }) {
