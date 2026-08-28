@@ -1,5 +1,65 @@
 const imageRoot = "/images/about/source";
 
+export interface AboutCapability {
+  number: string;
+  title: string;
+  mobileTitle?: string;
+  description: string;
+  normalImage: string;
+  hoverImage: string;
+  symbolClass?: string;
+  hoverSymbolClass?: string;
+  mobileSymbolClass?: string;
+  extractWhiteArtwork?: boolean;
+  hoverComposite?: boolean;
+}
+
+export const aboutCapabilities: readonly AboutCapability[] = [
+  {
+    number: "01",
+    title: "Tổng Thầu Trọn Gói",
+    description: "Triển khai đồng bộ từ tư vấn, thiết kế, xin phép xây dựng đến thi công và hoàn thiện, đảm bảo sự thống nhất giữa thiết kế và thi công trong toàn bộ dự án.",
+    normalImage: `${imageRoot}/capability-turnkey.png`,
+    hoverImage: `${imageRoot}/capability-turnkey.png`,
+    symbolClass: "[clip-path:circle(36%_at_center)]",
+    hoverSymbolClass: "scale-100",
+    extractWhiteArtwork: true,
+    hoverComposite: true,
+  },
+  {
+    number: "02",
+    title: "Kiểm Soát Chất Lượng",
+    description: "Kiểm soát chặt chẽ từ hồ sơ thiết kế, vật liệu, kỹ thuật thi công đến nghiệm thu, đảm bảo mỗi công trình được hoàn thiện đúng tiêu chuẩn và cam kết chất lượng.",
+    normalImage: `${imageRoot}/capability-quality-symbol.png`,
+    hoverImage: `${imageRoot}/capability-quality-symbol-white.png`,
+    symbolClass: "scale-[.5]",
+    mobileSymbolClass: "scale-[.52]",
+  },
+  {
+    number: "03",
+    title: "Triển Khai Đa Loại Hình",
+    mobileTitle: "Triển Khai Đa Loại Hình",
+    description: "Kinh nghiệm thực hiện nhà ở, văn phòng, showroom, nhà hàng, khách sạn và các công trình thương mại với giải pháp phù hợp cho từng quy mô dự án.",
+    normalImage: `${imageRoot}/capability-target-symbol.png`,
+    hoverImage: `${imageRoot}/capability-target-symbol-white.png`,
+    symbolClass: "scale-[.64]",
+    mobileSymbolClass: "-translate-x-1 scale-[.6]",
+  },
+  {
+    number: "04",
+    title: "Đồng Hành Dài Hạn",
+    description: "Cam kết bảo hành, bảo trì và hỗ trợ kỹ thuật sau bàn giao, mang đến giá trị sử dụng lâu dài và sự an tâm cho khách hàng.",
+    normalImage: `${imageRoot}/capability-growth-symbol.png`,
+    hoverImage: `${imageRoot}/capability-growth-symbol-white.png`,
+    symbolClass: "scale-[.48]",
+    mobileSymbolClass: "-translate-x-1 -translate-y-2 scale-[.52]",
+  },
+] as const;
+
+export const aboutJourneySection = {
+  title: "Hành trình của BMT Decor",
+} as const;
+
 export const aboutJourneyMilestones = [
   {
     year: "2011",

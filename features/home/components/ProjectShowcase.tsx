@@ -3,14 +3,11 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
-import { BmtCta } from "@/lib/components/shared/BmtCta";
-import { CardMoreLink } from "@/lib/components/shared/CardMoreLink";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import {
-  homeProjectCategories as categories,
-  type HomeProject as Project,
-} from "@/features/home/data/home-content";
+import { BmtCta } from "@/shared/components/BmtCta";
+import { CardMoreLink } from "@/shared/components/CardMoreLink";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { homeProjectCategories as categories } from "@/features/home/data/home-content";
 
 const cardContainerVariants: Variants = {
   hidden: {},
@@ -273,7 +270,7 @@ export function ProjectShowcase() {
                   </div>
                   <CardMoreLink
                     className="mt-3 text-white hover:text-white focus-visible:text-white sm:mt-4 sm:text-[17px]"
-                    href="/du-an"
+                    href="/projects"
                   />
                 </div>
               </div>
@@ -286,7 +283,7 @@ export function ProjectShowcase() {
                     <Image src="/images/home/project-next.png" alt="" fill sizes="(max-width: 639px) 36px, 56px" />
                   </button>
                 </div>
-                <BmtCta href="/du-an" variant="compact">TÌM HIỂU THÊM</BmtCta>
+                <BmtCta href="/projects" variant="compact">TÌM HIỂU THÊM</BmtCta>
               </div>
             </div>
           )}
@@ -366,7 +363,7 @@ export function ProjectShowcase() {
                       <br />
                       <strong>Năm thực hiện:</strong> {project.year}
                     </p>
-                    <CardMoreLink className="mt-5" href="/du-an" />
+                    <CardMoreLink className="mt-5" href="/projects" />
                   </div>
                 </motion.article>
               );

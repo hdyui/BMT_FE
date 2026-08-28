@@ -1,10 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 import { HomeHero } from "@/features/home/components/HomeHero";
 import { ProjectShowcase } from "@/features/home/components/ProjectShowcase";
 import { FeaturedServicesSection } from "@/features/home/components/FeaturedServicesSection";
@@ -15,6 +15,7 @@ import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
 import {
   homeNews as news,
+  homeSectionContent,
   homeTrustReasons as trustReasons,
 } from "@/features/home/data/home-content";
 
@@ -39,13 +40,12 @@ function ProjectSectionHeading() {
     <div className="text-center">
       <Reveal>
         <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
-          Dự án tiêu biểu
+          {homeSectionContent.featuredProjects.title}
         </h2>
       </Reveal>
       <Reveal delay={140}>
         <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
-          Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công,
-          khẳng định năng lực và chất lượng trong từng hạng mục.
+          {homeSectionContent.featuredProjects.description}
         </p>
       </Reveal>
     </div>
@@ -245,10 +245,10 @@ export function HomePage() {
           aria-hidden="true"
         />
         <div className="relative mx-auto w-[min(1100px,calc(100%-2.25rem))]">
-          <SectionHeading title="Tin nổi bật" />
+          <SectionHeading title={homeSectionContent.featuredNews.title} />
           <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
             <Reveal className="self-start">
-              <Link className="group block" href="/tin-tuc">
+              <Link className="group block" href="/news">
                 <div
                   className="relative overflow-hidden rounded-3xl"
                   style={{ aspectRatio: "1.65 / 1" }}
@@ -275,7 +275,7 @@ export function HomePage() {
                 <Reveal delay={index * 100} key={item.title}>
                   <Link
                     className="group grid grid-cols-[132px_1fr] items-center gap-5 max-sm:grid-cols-[46%_1fr] max-sm:gap-4"
-                    href="/tin-tuc"
+                    href="/news"
                   >
                     <div className="relative aspect-square overflow-hidden rounded-2xl max-sm:aspect-[1.75/1]">
                       <Image
@@ -300,7 +300,7 @@ export function HomePage() {
               <Reveal className="ml-auto w-fit" delay={320}>
                 <Link
                   className="group inline-flex origin-center items-center gap-2 text-base font-bold text-brand underline decoration-2 underline-offset-4 transition-[color,transform] duration-300 ease-out hover:scale-105 hover:text-brand-dark focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
-                  href="/tin-tuc"
+                  href="/news"
                 >
                   XEM TẤT CẢ TIN
                   <Image

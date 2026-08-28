@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import portfolioBook from "@/features/home/assets/portfolio-book.png";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 
 const portfolioBooks = [
   {
@@ -87,7 +87,7 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8 max-sm:mt-6" delay={360}>
-            <Link className="home-contact-cta" href="/ho-so-nang-luc">
+            <Link className="home-contact-cta" href="/capability-profile">
               <span className="inline-flex h-full w-4/5 items-center justify-center">
                 XEM THÊM
               </span>

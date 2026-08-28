@@ -3,17 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import type { CarouselApi } from "@/lib/components/ui/carousel";
+import type { CarouselApi } from "@/shared/components/ui/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/lib/components/ui/carousel";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+} from "@/shared/components/ui/carousel";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 import {
   relatedProjects,
-  relatedProjectsDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
+  relatedProjectsSection,
   type RelatedProjectData as RelatedProject,
 } from "@/features/projects/data/related-projects";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
@@ -40,7 +40,7 @@ function getVisibleProjectCount() {
 function RelatedProjectCard({ project }: { project: RelatedProject }) {
   return (
     <Link
-      href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
+      href={project.href}
       className="group block rounded-[2rem] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand"
       aria-label={`Xem chi tiết dự án ${project.title}`}
     >
@@ -104,7 +104,7 @@ export function RelatedProjects() {
     >
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
         <ProjectSectionHeading centered delay={80} duration={950}>
-          <span id="related-title">Tham khảo dự án liên quan</span>
+          <span id="related-title">{relatedProjectsSection.title}</span>
         </ProjectSectionHeading>
 
         <BuildingRule

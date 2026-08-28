@@ -1,5 +1,7 @@
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
+import { mobileHeroArtwork as designMobileHeroArtwork } from "@/features/services/data/design";
+import { mobileHeroArtwork as turnkeyMobileHeroArtwork } from "@/features/services/data/turnkey";
 
 type MobileHeroArtworkProps = {
   variant: "design" | "full-construction";
@@ -7,7 +9,7 @@ type MobileHeroArtworkProps = {
 
 const artwork = {
   design: {
-    src: "/images/thiet-ke-kien-truc-noi-that/mobile/hero-artwork.png",
+    src: designMobileHeroArtwork,
     clips: [
       {
         path: "polygon(20% 27%, 52% 27%, 30% 100%, 0 100%, 0 58%)",
@@ -27,7 +29,7 @@ const artwork = {
     ],
   },
   "full-construction": {
-    src: "/images/xay-dung-tron-goi/mobile/hero-artwork.png",
+    src: turnkeyMobileHeroArtwork,
     clips: [
       {
         path: "polygon(36% 24%, 78% 24%, 78% 60%, 36% 60%)",

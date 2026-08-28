@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 
 const CLUSTER = "/images/xay-dung-tron-goi/hero-cluster.png";
 

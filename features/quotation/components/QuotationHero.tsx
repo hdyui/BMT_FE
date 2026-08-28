@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import styles from "@/features/quotation/quotation.module.css";
+import { quotationMobileHeroImage } from "@/features/quotation/data/quotation-estimator";
 
 /**
  * Banner trang báo giá.
@@ -119,7 +120,7 @@ export function QuotationHero() {
       {/* Artwork mobile tổng hợp từ đúng bộ asset của mockup. */}
       <Image
         className={`absolute inset-x-0 top-[calc(5.3125rem+0.25rem)] bottom-auto !h-[154vw] object-fill md:hidden ${styles.animMobileArtwork}`}
-        src="/images/bao-gia/mobile/quotation-hero.png"
+        src={quotationMobileHeroImage}
         alt="Kiến trúc sư BMT Decor đang tính toán phương án thiết kế"
         fill
         sizes="100vw"
@@ -165,7 +166,7 @@ export function QuotationHero() {
         </p>
         <Link
           className={`relative mt-3 hidden h-10 w-[11.25rem] place-items-center overflow-hidden rounded-full text-white transition-[transform,translate,scale,filter] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:brightness-[1.08] hover:drop-shadow-[0_12px_15px_rgb(159_77_24/.24)] active:translate-y-[2px] active:scale-[0.99] md:mt-5 md:grid md:h-13 md:w-59 ${styles.animCtaFade}`}
-          href="/lien-he"
+          href="/contact"
         >
           <Image
             className="z-[-1] object-cover"

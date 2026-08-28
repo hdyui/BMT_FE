@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { processSteps } from "@/features/services/data/xay-dung-tron-goi";
+import { Reveal } from "@/shared/components/Reveal";
+import { processSteps } from "@/features/services/data/turnkey";
 
 const CARD_ASPECT = "1486/1048";
 

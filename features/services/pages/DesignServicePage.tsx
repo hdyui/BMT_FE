@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 import { DesignHeroGallery } from "@/features/services/components/DesignHeroGallery";
 import { MobileHeroArtwork } from "@/features/services/components/MobileHeroArtwork";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
@@ -21,9 +21,11 @@ import {
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
 } from "@/features/services/config/layout";
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
   featuredProjects,
   solutionCards,
-} from "@/features/services/data/thiet-ke-kien-truc-noi-that";
+} from "@/features/services/data/design";
 
 export function DesignServicePage() {
   return (
@@ -291,7 +293,7 @@ export function DesignServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -385,7 +387,7 @@ export function DesignServicePage() {
         <ProcessTimeline />
       </section>
 
-      <ContactForm showTopNotch />
+      <ContactForm showTopNotch {...contactFormContent} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

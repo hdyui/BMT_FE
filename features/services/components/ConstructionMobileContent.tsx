@@ -1,16 +1,19 @@
 import Image from "next/image";
 
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
-import { processSteps } from "@/features/services/data/thi-cong-xay-dung";
+import {
+  mobileHeroBlueprint,
+  processSteps,
+} from "@/features/services/data/construction";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";
 
 const mobileHeroDiamonds = [
   {
     key: "top",
-    src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-top.webp",
     alt: "Thi công nhà hàng",
     left: "41.5%",
     top: "53.9%",
@@ -19,7 +22,7 @@ const mobileHeroDiamonds = [
   },
   {
     key: "right",
-    src: "/images/thi-cong-xay-dung/hero-diamond-right.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-right.webp",
     alt: "Thi công thẩm mỹ viện",
     left: "86.5%",
     top: "66%",
@@ -28,7 +31,7 @@ const mobileHeroDiamonds = [
   },
   {
     key: "bottom",
-    src: "/images/thi-cong-xay-dung/hero-diamond-bottom.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-bottom.webp",
     alt: "Thi công nhà ở",
     left: "60.9%",
     top: "88%",
@@ -37,7 +40,7 @@ const mobileHeroDiamonds = [
   },
   {
     key: "left",
-    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-left.webp",
     alt: "Thi công văn phòng",
     left: "16.7%",
     top: "79.4%",
@@ -56,7 +59,7 @@ export function ConstructionMobileHero() {
       >
         <Image
           className="object-cover object-right-bottom opacity-75 mix-blend-multiply"
-          src={`${MOBILE_ROOT}/hero-blueprint.png`}
+          src={mobileHeroBlueprint}
           alt=""
           fill
           sizes="100vw"

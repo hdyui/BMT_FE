@@ -11,16 +11,15 @@ import {
   type Variants,
 } from "motion/react";
 import { useMemo, useRef, useState } from "react";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { Reveal } from "@/shared/components/Reveal";
 import { ProjectsHero } from "@/features/projects/components/ProjectsHero";
 import {
   projectCards,
   projectCategories as categories,
   projectPageImages as projectImages,
-  tempProjectDetailSlug as TEMP_PROJECT_DETAIL_SLUG,
   type ProjectCategory as Category,
   type ProjectCardData,
 } from "@/features/projects/data/projects-page";
@@ -135,7 +134,7 @@ function ProjectCard({
   const wrapperClassName = `group relative aspect-[1.04/1] rounded-[28px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-sm:aspect-[1.28/1] max-sm:rounded-[24px] ${hiddenOnMobile ? "max-sm:hidden" : ""}`;
   return (
     <Link
-      href={`/du-an/${TEMP_PROJECT_DETAIL_SLUG}`}
+      href={project.href}
       className={wrapperClassName}
       aria-label={`Xem chi tiết dự án ${project.title}`}
     >
@@ -183,7 +182,7 @@ export function ProjectsPage() {
 
         <section
           className="relative bg-white pt-[62px] pb-[108px] max-sm:pt-[24px] max-sm:pb-[60px]"
-          id="du-an"
+          id="projects"
         >
           <div className="mx-auto w-[min(1202px,calc(100%-2.25rem))] max-sm:w-[calc(100%-1.25rem)] max-sm:max-w-[500px]">
             <header className="mx-auto text-center">

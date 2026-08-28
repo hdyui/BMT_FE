@@ -1,13 +1,13 @@
 import Image from "next/image";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import {
   featuredProjects,
   processSteps,
   solutionCards,
-} from "@/features/services/data/cai-tao-sua-chua";
+} from "@/features/services/data/renovation";
 
 const mobileProjects = [
   featuredProjects[1],
@@ -341,7 +341,7 @@ function RenovationMobileSolutions() {
               </ul>
               <PillCtaButton
                 className="mt-4 h-[clamp(1.6rem,6.5vw,2.05rem)] max-w-full"
-                href="/du-an"
+                href="/projects"
                 label={card.cta}
                 image={mobileSolutionCtas[index].image}
                 imageWidth={mobileSolutionCtas[index].width}

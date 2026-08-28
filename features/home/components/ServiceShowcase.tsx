@@ -2,8 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { services } from "@/config/site";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { services } from "@/shared/constants/site";
+import { Reveal } from "@/shared/components/Reveal";
 import {
   homeMobileServiceLabels as mobileServiceLabels,
   homeServiceDetails as serviceDetails,

@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 
 // Tái sử dụng components dùng chung
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
@@ -26,10 +26,15 @@ import {
 
 // Import Data
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
+  processHeading,
+  processLogo,
+  processLogoAlt,
   featuredProjects,
   solutionCards,
   processSteps,
-} from "@/features/services/data/cai-tao-sua-chua";
+} from "@/features/services/data/renovation";
 
 /**
  * Hai vệt bóng ở mép phải banner. Ảnh nền `hero-background.png` (file -06) không
@@ -306,7 +311,7 @@ export function RenovationServicePage() {
           <PillCtaButton
             className="h-full"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -371,10 +376,15 @@ export function RenovationServicePage() {
           </Reveal>
         </div> */}
 
-        <RenovationProcessSteps steps={processSteps} />
+        <RenovationProcessSteps
+          steps={processSteps}
+          heading={processHeading}
+          logo={processLogo}
+          logoAlt={processLogoAlt}
+        />
       </section>
 
-      <ContactForm showTopNotch />
+      <ContactForm showTopNotch {...contactFormContent} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

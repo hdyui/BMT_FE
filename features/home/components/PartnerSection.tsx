@@ -1,6 +1,7 @@
-import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { PartnerMarquee } from "@/shared/components/layout/PartnerMarquee";
+import { homeSectionContent } from "@/features/home/data/home-content";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 
 export function PartnerSection({ className = "" }: { className?: string }) {
   return (
@@ -8,7 +9,7 @@ export function PartnerSection({ className = "" }: { className?: string }) {
       <div className="mx-auto w-[min(1200px,calc(100%-2.25rem))]">
         <Reveal className="text-center">
           <h2 className="text-4xl font-extrabold uppercase tracking-[-0.035em] sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
-            Đối tác của BMT Decor
+            {homeSectionContent.partners.title}
           </h2>
           <BuildingRule className="mx-auto mt-4 max-w-72 text-brand max-sm:mt-2 max-sm:max-w-[200px]" />
         </Reveal>

@@ -1,6 +1,6 @@
 import Image from "next/image";
-import { BmtCta } from "@/lib/components/shared/BmtCta";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BmtCta } from "@/shared/components/BmtCta";
+import { Reveal } from "@/shared/components/Reveal";
 import styles from "./CareersHero.module.css";
 
 const heroParts = [
@@ -181,7 +181,7 @@ export function CareersHero() {
             </p>
           </Reveal>
           <div>
-            <BmtCta href="/lien-he">LIÊN HỆ NGAY</BmtCta>
+            <BmtCta href="/contact">LIÊN HỆ NGAY</BmtCta>
           </div>
         </div>
       </div>

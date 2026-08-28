@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
@@ -26,9 +26,11 @@ import {
 } from "@/features/services/config/layout";
 
 import {
+  contactFormContent,
+  featuredProjectCtaLabel,
   featuredProjects,
   solutionCards,
-} from "@/features/services/data/thi-cong-xay-dung";
+} from "@/features/services/data/construction";
 
 // TOẠ ĐỘ ĐO TRỰC TIẾP TỪ MOCKUP `pic_thicong/banner-chuan.png` (1254 x 530).
 //
@@ -69,7 +71,7 @@ import {
 const HERO_DIAMONDS = [
   {
     key: "top",
-    src: "/images/thi-cong-xay-dung/hero-diamond-top.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-top.webp",
     alt: "Thi công nhà hàng",
     // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` đã hạ 9,2% -> 15,8%
     // (xuống 40px) để hình hiện ra nhiều hơn: phần thấy được dưới header đi từ
@@ -82,7 +84,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "right",
-    src: "/images/thi-cong-xay-dung/hero-diamond-right.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-right.webp",
     alt: "Thi công thẩm mỹ viện",
     // Mép phải hình này là mép phải của cả cụm: 48,9% + 0.7071 x 37,9% x 0.423
     // = 60,2% bề rộng banner, dừng đúng ở thanh cam của khối chữ bên phải.
@@ -93,7 +95,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "bottom",
-    src: "/images/thi-cong-xay-dung/hero-diamond-bottom.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-bottom.webp",
     alt: "Thi công nhà ở",
     // To hơn mockup (38,4% -> 44,6%) để chìm 6,5% dưới cạnh đáy banner:
     // đỉnh dưới ở 72,6% + 0.7071 x 44,6% = 104,1% chiều cao banner.
@@ -104,7 +106,7 @@ const HERO_DIAMONDS = [
   },
   {
     key: "left",
-    src: "/images/thi-cong-xay-dung/hero-diamond-left.webp",
+    src: "/images/thi-cong-xay-dung/hero-frame-left.webp",
     alt: "Thi công văn phòng",
     // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
     // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
@@ -628,7 +630,7 @@ export function ConstructionServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featuredProjectCtaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -761,7 +763,7 @@ export function ConstructionServicePage() {
         </div>
       </section>
 
-      <ContactForm />
+      <ContactForm {...contactFormContent} />
       <SiteFooter />
     </div>
   );

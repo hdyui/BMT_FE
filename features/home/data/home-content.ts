@@ -1,31 +1,50 @@
+export const homeSectionContent = {
+  featuredProjects: {
+    title: "Dự án tiêu biểu",
+    description:
+      "Khám phá những công trình do BMT Decor trực tiếp thiết kế và thi công, khẳng định năng lực và chất lượng trong từng hạng mục.",
+  },
+  featuredServices: {
+    title: "Dịch vụ nổi bật",
+    description:
+      "BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa dạng nhu cầu từ nhà ở đến không gian kinh doanh.",
+  },
+  featuredNews: {
+    title: "Tin nổi bật",
+  },
+  partners: {
+    title: "Đối tác của BMT Decor",
+  },
+} as const;
+
 export const homeHeroSlides = [
   {
     image: "/images/home/hero-background-01.webp",
     alt: "Mẫu nhà phố do BMT Decor thiết kế",
     title: "BMT Decor - Đơn vị thiết kế và thi công trọn gói",
     copy: "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững, tối ưu công năng và giá trị sử dụng cho nhà ở, văn phòng và công trình thương mại.",
-    href: "/gioi-thieu",
+    href: "/about",
   },
   {
     image: "/images/home/hero-background-02.webp",
     alt: "Không gian nội thất do BMT Decor thực hiện",
     title: "Đáp ứng đa dạng nhu cầu xây dựng & cải tạo",
     copy: "Dù là xây mới, cải tạo hay hoàn thiện nội thất, BMT Decor đều xây dựng giải pháp phù hợp với từng loại hình công trình, quy mô đầu tư và mục tiêu sử dụng.",
-    href: "/dich-vu/xay-dung-tron-goi",
+    href: "/services/turnkey",
   },
   {
     image: "/images/home/hero-background-03.webp",
     alt: "Công trình thương mại đã hoàn thiện",
     title: "Những công trình đã hoàn thiện",
     copy: "Từ nhà ở, văn phòng, showroom đến các công trình thương mại, mỗi dự án đều là minh chứng cho năng lực thiết kế, thi công và cam kết chất lượng.",
-    href: "/du-an",
+    href: "/projects",
   },
   {
     image: "/images/home/hero-background-04.webp",
     alt: "Hồ sơ năng lực BMT Decor",
     title: "Hồ sơ năng lực BMT Decor",
     copy: "Khám phá năng lực của BMT Decor thông qua đội ngũ chuyên môn, quy trình triển khai, lĩnh vực hoạt động và các dự án tiêu biểu.",
-    href: "/ho-so-nang-luc",
+    href: "/capability-profile",
   },
 ] as const;
 
