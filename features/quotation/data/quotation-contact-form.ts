@@ -1,4 +1,4 @@
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 // Nội dung riêng của section "Liên hệ tư vấn" trên trang Báo giá. Trang này là
 // trang duy nhất có thêm dòng mô tả dưới tiêu đề. Cố ý khai báo đầy đủ (không

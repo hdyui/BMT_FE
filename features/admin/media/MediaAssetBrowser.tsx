@@ -5,15 +5,15 @@ import { useMemo, useState } from "react";
 import { Eye, ImageIcon, Search } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/features/admin/components/ui/dialog";
+import { Input } from "@/features/admin/components/ui/input";
 
 const assets = [
   "/images/home/hero-background-01.webp",

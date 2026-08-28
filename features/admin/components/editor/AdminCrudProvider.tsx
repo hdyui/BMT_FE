@@ -8,9 +8,9 @@ import {
   useState,
 } from "react";
 
-import { adminResourceRegistry } from "@/lib/admin/mock-data/resource-registry";
-import { adminCrudMockService } from "@/lib/admin/services/crud-mock.service";
-import type { AdminCrudRecord } from "@/lib/admin/types/crud";
+import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
+import { adminCrudMockService } from "@/features/admin/services/crud-mock.service";
+import type { AdminCrudRecord } from "@/features/admin/lib/types/crud";
 
 interface AdminCrudContextValue {
   getRecords: (resourceKey: string) => AdminCrudRecord[];

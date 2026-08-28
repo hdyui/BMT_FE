@@ -29,7 +29,7 @@ export const featuredNews: NewsArticle[] = featuredCopy.map(([title, excerpt], i
   desktopImage,
   mobileImage: "/images/news/mobile/featured-photo.png",
   imageAlt: `Minh họa bài viết ${title}`,
-  href: `/tin-tuc#tin-noi-bat-${index + 1}`,
+  href: `/news#tin-noi-bat-${index + 1}`,
   body: `<p>${excerpt}</p>`,
 }));
 
@@ -61,6 +61,6 @@ export const articles: NewsArticle[] = articleTitles.map((title, index) => ({
   desktopImage,
   mobileImage,
   imageAlt: `Mô hình kiến trúc minh họa cho bài viết ${title}`,
-  href: `/tin-tuc#bai-viet-${index + 1}`,
+  href: `/news#bai-viet-${index + 1}`,
   body: `<p>${defaultExcerpt}</p>`,
 }));

@@ -1,9 +1,9 @@
-import { mockProjectContent } from "@/lib/admin/mock-data/projects";
+import { mockProjectContent } from "@/features/admin/lib/mock-data/projects";
 import type {
   AdminProjectCard,
   AdminProjectDetailContent,
   ProjectContentBundle,
-} from "@/lib/admin/types/content";
+} from "@/features/admin/lib/types/content";
 
 export const projectContentService = {
   async getAll(): Promise<ProjectContentBundle> {

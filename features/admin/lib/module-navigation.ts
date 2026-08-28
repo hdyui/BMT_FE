@@ -1,12 +1,12 @@
 import {
   adminResourceGroups,
   adminResourceRegistry,
-} from "@/lib/admin/mock-data/resource-registry";
+} from "@/features/admin/lib/mock-data/resource-registry";
 import type {
   AdminModuleKey,
   AdminModuleNavigationItem,
   AdminNavigationContext,
-} from "@/lib/admin/types/crud";
+} from "@/features/admin/lib/types/crud";
 
 const moduleLabels: Record<AdminModuleKey, string> = {
   home: "Trang chủ",

@@ -1,8 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { processSteps } from "../data/thi-cong-xay-dung";
+import { Reveal } from "@/shared/components/Reveal";
+import { processSteps } from "../data/construction";
 
 /**
  * Khối nội dung màu cam trong mockup là một hình chữ nhật bo góc có "tai" lồi

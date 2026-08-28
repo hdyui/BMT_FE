@@ -4,8 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
-import { BrandLogo } from "@/lib/components/shared/BrandLogo";
-import { buttonVariants } from "@/lib/components/ui/button";
+import { BrandLogo } from "@/shared/components/BrandLogo";
+import { buttonVariants } from "@/shared/components/ui/button";
 import {
   Sheet,
   SheetClose,
@@ -14,13 +14,13 @@ import {
   SheetHeader,
   SheetTitle,
   SheetTrigger,
-} from "@/lib/components/ui/sheet";
-import { navigation } from "@/config/site";
-import { cn } from "@/lib/utils";
+} from "@/shared/components/ui/sheet";
+import { navigation } from "@/shared/constants/site";
+import { cn } from "@/shared/lib/utils";
 
 const mobileNavigation = [
   ...navigation,
-  { label: "LIÊN HỆ", href: "/lien-he" },
+  { label: "LIÊN HỆ", href: "/contact" },
 ] as const;
 
 export function SiteHeader({
@@ -31,7 +31,7 @@ export function SiteHeader({
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const isRouteActive = (href: string, isServiceGroup = false) =>
-    isServiceGroup && pathname.startsWith("/dich-vu")
+    isServiceGroup && pathname.startsWith("/services")
       ? true
       : href === "/"
         ? pathname === "/"
@@ -126,7 +126,7 @@ export function SiteHeader({
               buttonVariants({ size: "sm" }),
               "inline-flex h-[42px] min-w-[164px] rounded-full bg-brand px-7 text-[14px] font-bold text-white shadow-none transition-[color,background-color,box-shadow,transform] duration-300 hover:scale-[1.02] hover:bg-brand hover:text-charcoal hover:shadow-[0_2px_6px_rgb(0_0_0/.2)] active:translate-y-0 active:scale-[1.02] active:bg-brand active:text-charcoal active:shadow-[0_1px_4px_rgb(0_0_0/.18)]",
             )}
-            href="/lien-he"
+            href="/contact"
           >
             LIÊN HỆ
           </Link>

@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { BmtCta } from "@/lib/components/shared/BmtCta";
+import { BmtCta } from "@/shared/components/BmtCta";
 import styles from "./ContactHero.module.css";
 
 const heroDecorations = [

@@ -14,9 +14,9 @@ import { ProjectDetailEditor } from "@/features/admin/projects/ProjectDetailEdit
 import { ProjectListPanel } from "@/features/admin/projects/ProjectListPanel";
 import { ProjectTaxonomyPanel } from "@/features/admin/projects/ProjectTaxonomyPanel";
 import { RelatedProjectsPanel } from "@/features/admin/projects/RelatedProjectsPanel";
-import type { ProjectContentBundle } from "@/lib/admin/types/content";
-import { Button } from "@/components/ui/button";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import type { ProjectContentBundle } from "@/features/admin/lib/types/content";
+import { Button } from "@/features/admin/components/ui/button";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/features/admin/components/ui/tabs";
 
 type ProjectTab = "list" | "categories" | "details" | "related";
 

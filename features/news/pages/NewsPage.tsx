@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { BmtCta } from "@/lib/components/shared/BmtCta";
+import { BmtCta } from "@/shared/components/BmtCta";
 import { ArrowUpRight } from "lucide-react";
 import {
   useCallback,
@@ -12,16 +12,16 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type { CarouselApi } from "@/lib/components/ui/carousel";
+import type { CarouselApi } from "@/shared/components/ui/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/lib/components/ui/carousel";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
-import { ListDivider } from "@/lib/components/shared/ListDivider";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
+} from "@/shared/components/ui/carousel";
+import { ContactForm } from "@/shared/components/ContactForm";
+import { ListDivider } from "@/shared/components/ListDivider";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { articles, featuredNews, type NewsArticle } from "@/features/news/data/news-page";
 import styles from "./NewsPage.module.css";
 
@@ -366,7 +366,7 @@ export function NewsPage() {
               BMT Decor.
             </p>
             <div className={styles.newsHeroCtaSlot}>
-              <BmtCta href="/lien-he">
+              <BmtCta href="/contact">
                 LIÊN HỆ NGAY
               </BmtCta>
             </div>

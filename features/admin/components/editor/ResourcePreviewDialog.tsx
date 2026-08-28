@@ -5,14 +5,14 @@ import Image from "next/image";
 import type {
   AdminCrudRecord,
   AdminResourceConfig,
-} from "@/lib/admin/types/crud";
+} from "@/features/admin/lib/types/crud";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/features/admin/components/ui/dialog";
 
 export function ResourcePreviewDialog({
   open,

@@ -1,4 +1,4 @@
-import type { AdminFieldConfig, AdminFieldType } from "@/lib/admin/types/crud";
+import type { AdminFieldConfig, AdminFieldType } from "@/features/admin/lib/types/crud";
 
 /**
  * Bố cục ô nhập của trình biên tập theo lưới 12 cột (chỉ bật từ `lg` trở lên,

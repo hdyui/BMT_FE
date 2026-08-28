@@ -1,4 +1,4 @@
-import type { Priority, ViewState } from "@/lib/admin/types/content";
+import type { Priority, ViewState } from "@/features/admin/lib/types/content";
 
 export type AdminModuleKey =
   | "home"
@@ -43,7 +43,7 @@ export interface AdminFieldConfig {
   /**
    * Bề ngang của ô trong lưới 12 cột của trình biên tập, chỉ định khi muốn ô
    * nằm đúng chỗ như trên website. Bỏ trống thì tự tính theo loại ô
-   * (`lib/admin/editor-layout.ts`).
+   * (`features/admin/lib/editor-layout.ts`).
    */
   span?: number;
   editable?: boolean;

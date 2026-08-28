@@ -10,9 +10,9 @@ import {
   WalletCards,
 } from "lucide-react";
 import { careerJobs, type CareerJob } from "@/features/careers/data/jobs";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { ListDivider } from "@/lib/components/shared/ListDivider";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { ListDivider } from "@/shared/components/ListDivider";
+import { Reveal } from "@/shared/components/Reveal";
 import styles from "./CareerOpenings.module.css";
 
 const pageSize = 3;

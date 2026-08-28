@@ -1,4 +1,4 @@
-import { contactInformation, navigation, services } from "@/config/site";
+import { contactInformation, navigation, services } from "@/shared/constants/site";
 import {
   aboutCapabilities,
   aboutCoreValues,
@@ -39,7 +39,7 @@ import {
   mobileHeroArtwork as turnkeyMobileHeroArtwork,
   processSteps as turnkeyProcess,
   solutionCards as turnkeySolutions,
-} from "@/features/services/data/xay-dung-tron-goi";
+} from "@/features/services/data/turnkey";
 import {
   contactFormContent as designContactForm,
   featuredProjectCtaLabel as designFeaturedCta,
@@ -47,7 +47,7 @@ import {
   mobileHeroArtwork as designMobileHeroArtwork,
   processSteps as designProcess,
   solutionCards as designSolutions,
-} from "@/features/services/data/thiet-ke-kien-truc-noi-that";
+} from "@/features/services/data/design";
 import {
   contactFormContent as constructionContactForm,
   featuredProjectCtaLabel as constructionFeaturedCta,
@@ -55,7 +55,7 @@ import {
   mobileHeroBlueprint as constructionMobileHeroBlueprint,
   processSteps as constructionProcess,
   solutionCards as constructionSolutions,
-} from "@/features/services/data/thi-cong-xay-dung";
+} from "@/features/services/data/construction";
 import {
   contactFormContent as renovationContactForm,
   featuredProjectCtaLabel as renovationFeaturedCta,
@@ -64,15 +64,15 @@ import {
   featuredProjects as renovationProjects,
   processSteps as renovationProcess,
   solutionCards as renovationSolutions,
-} from "@/features/services/data/cai-tao-sua-chua";
+} from "@/features/services/data/renovation";
 import { contactFormContent as quotationContactForm } from "@/features/quotation/data/quotation-contact-form";
 import { contactFormContent as capabilityProfileContactForm } from "@/features/capability-profile/data/contact-form";
-import { mockHomeHeroSlides } from "@/lib/admin/mock-data/home";
-import { mockProjectContent } from "@/lib/admin/mock-data/projects";
+import { mockHomeHeroSlides } from "@/features/admin/lib/mock-data/home";
+import { mockProjectContent } from "@/features/admin/lib/mock-data/projects";
 import { projects as publicProjectDetails } from "@/features/projects/data/project-details";
 import { projectCategories } from "@/features/projects/data/projects-page";
-import { siteLinkOptions } from "@/lib/admin/site-links";
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import { siteLinkOptions } from "@/features/admin/lib/site-links";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 import type {
   AdminCrudRecord,
   AdminEditorRecordLayout,
@@ -81,7 +81,7 @@ import type {
   AdminModuleKey,
   AdminResourceConfig,
   AdminResourceGroupConfig,
-} from "@/lib/admin/types/crud";
+} from "@/features/admin/lib/types/crud";
 
 const text = (
   key: string,
@@ -110,7 +110,7 @@ const url = (
 
 /**
  * Liên kết tới một trang của chính website. Cho chọn từ danh sách địa chỉ có
- * thật (`lib/admin/site-links.ts`) thay vì gõ tay, để admin không thể lưu một
+ * thật (`features/admin/lib/site-links.ts`) thay vì gõ tay, để admin không thể lưu một
  * đường dẫn sai rồi dẫn người xem vào trang 404.
  */
 const siteLink = (
@@ -378,10 +378,10 @@ const homeResources: AdminResourceConfig[] = [
         mobileAlt: homeMobileServiceLabels[index].join(" "),
         ctaLabel: "Xem dịch vụ",
         ctaHref: [
-          "/dich-vu/xay-dung-tron-goi",
-          "/dich-vu/thiet-ke-kien-truc-noi-that",
-          "/dich-vu/thi-cong-xay-dung",
-          "/dich-vu/cai-tao-sua-chua",
+          "/services/turnkey",
+          "/services/design",
+          "/services/construction",
+          "/services/renovation",
         ][index],
         order: index + 1,
       }),
@@ -480,7 +480,7 @@ const homeResources: AdminResourceConfig[] = [
         description: item.copy,
         image: item.image,
         imageAlt: item.title,
-        href: "/tin-tuc",
+        href: "/news",
         order: index + 1,
       }),
     ),
@@ -605,7 +605,7 @@ const homeResources: AdminResourceConfig[] = [
       subtitle: "Khẳng định năng lực",
       description: "Khám phá năng lực, quy trình và các dự án tiêu biểu của BMT Decor.",
       ctaLabel: "Xem hồ sơ năng lực",
-      ctaHref: "/ho-so-nang-luc",
+      ctaHref: "/capability-profile",
       image: "/images/home/portfolio-set.png",
       imageAlt: "Hồ sơ năng lực BMT Decor",
     })],
@@ -627,9 +627,9 @@ const homeResources: AdminResourceConfig[] = [
       featuredExcerpt: "Cập nhật xu hướng thiết kế, kinh nghiệm thi công và các giải pháp hữu ích từ đội ngũ BMT Decor.",
       featuredImage: "/images/home/news-featured.png",
       featuredImageAlt: "Không gian nội thất do BMT Decor thực hiện",
-      featuredHref: "/tin-tuc",
+      featuredHref: "/news",
       ctaLabel: "XEM TẤT CẢ TIN",
-      ctaHref: "/tin-tuc",
+      ctaHref: "/news",
     })],
   }),
   scopedContactFormResource("home", "contact-form", "Trang chủ"),
@@ -1610,7 +1610,7 @@ function addServicePageResources(
       `${base}/solutions`,
       `Giải pháp ${label}`,
       "Giải pháp",
-      solutions.map((item, index) => record(`${base}-solution-${index + 1}`, { titlePrefix: item.titlePrefix, titleCategory: item.titleCategory, tagline: item.tagline, description: item.description, checklistLabel: SOLUTION_CHECKLIST_LABEL, checklist: [...item.checklist], ctaLabel: item.cta, ctaHref: "/du-an", image: item.image, imageAlt: `${item.titlePrefix.trim()} ${item.titleCategory}`, order: index + 1 })),
+      solutions.map((item, index) => record(`${base}-solution-${index + 1}`, { titlePrefix: item.titlePrefix, titleCategory: item.titleCategory, tagline: item.tagline, description: item.description, checklistLabel: SOLUTION_CHECKLIST_LABEL, checklist: [...item.checklist], ctaLabel: item.cta, ctaHref: "/projects", image: item.image, imageAlt: `${item.titlePrefix.trim()} ${item.titleCategory}`, order: index + 1 })),
       solutionFields,
       "image",
       {
@@ -1662,7 +1662,7 @@ const remainingResources: AdminResourceConfig[] = [
       section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
     ],
-    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/lien-he", desktopImage: "/images/projects/hero-composition.png", desktopAlt: "Các dự án tiêu biểu của BMT Decor", mobileImage: "/images/projects/mobile/hero-composition.png", mobileAlt: "Các dự án tiêu biểu của BMT Decor" })],
+    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/contact", desktopImage: "/images/projects/hero-composition.png", desktopAlt: "Các dự án tiêu biểu của BMT Decor", mobileImage: "/images/projects/mobile/hero-composition.png", mobileAlt: "Các dự án tiêu biểu của BMT Decor" })],
   }),
   resource({
     module: "news",
@@ -1679,7 +1679,7 @@ const remainingResources: AdminResourceConfig[] = [
       section("content", "Nội dung", [text("eyebrow", "Dòng giới thiệu"), textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
       section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
     ],
-    initialRecords: [record("news-page-hero", { eyebrow: "KIẾN THỨC", title: "THIẾT KẾ & THI CÔNG", description: "Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ BMT Decor.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "/lien-he", desktopImage: "/images/news/hero-house.jpg", desktopAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế", mobileImage: "/images/news/mobile/hero-photo.png", mobileAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế" })],
+    initialRecords: [record("news-page-hero", { eyebrow: "KIẾN THỨC", title: "THIẾT KẾ & THI CÔNG", description: "Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ BMT Decor.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "/contact", desktopImage: "/images/news/hero-house.jpg", desktopAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế", mobileImage: "/images/news/mobile/hero-photo.png", mobileAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế" })],
   }),
   resource({
     module: "quotation",
@@ -1733,7 +1733,7 @@ const remainingResources: AdminResourceConfig[] = [
       title: "MINH BẠCH VÀ\nTỐI ƯU CHI PHÍ",
       description: "Tham khảo báo giá các dịch vụ thiết kế kiến trúc & nội thất, thiết kế thi công, xây nhà trọn gói, thi công nội & ngoại thất, cải tạo và sửa chữa nhà. Mỗi phương án được tư vấn và báo giá chi tiết theo nhu cầu thực tế, giúp khách hàng tối ưu ngân sách.",
       ctaLabel: "LIÊN HỆ NGAY",
-      ctaHref: "/lien-he",
+      ctaHref: "/contact",
       desktopBackground: "/images/bao-gia/decor-06.jpg",
       tabletBackground: "/images/bao-gia/decor-14.jpg",
       mobileImage: quotationMobileHeroImage,

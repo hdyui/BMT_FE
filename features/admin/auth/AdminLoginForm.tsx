@@ -5,10 +5,10 @@ import Link from "next/link";
 import { useActionState, useState } from "react";
 import { ArrowLeft, Eye, EyeOff, LoaderCircle } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+import { Button } from "@/features/admin/components/ui/button";
+import { Input } from "@/features/admin/components/ui/input";
 import { loginAdmin, type AdminLoginState } from "@/features/admin/auth/actions";
-import { MOCK_ADMIN_ACCOUNT } from "@/lib/admin/auth-config";
+import { MOCK_ADMIN_ACCOUNT } from "@/features/admin/lib/auth-config";
 
 const initialState: AdminLoginState = { error: null };
 

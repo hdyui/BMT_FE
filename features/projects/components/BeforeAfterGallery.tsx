@@ -1,5 +1,5 @@
 import type { ProjectDetail } from "../data/project-details";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";
 import styles from "./ProjectDetail.module.css";

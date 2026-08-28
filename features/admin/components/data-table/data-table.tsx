@@ -7,8 +7,8 @@ import {
   type Table as TanstackTable,
 } from "@tanstack/react-table";
 
-import { DataTablePagination } from "@/components/data-table/data-table-pagination";
-import { Skeleton } from "@/components/ui/skeleton";
+import { DataTablePagination } from "@/features/admin/components/data-table/data-table-pagination";
+import { Skeleton } from "@/features/admin/components/ui/skeleton";
 import {
   Table,
   TableBody,
@@ -16,8 +16,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/table";
+import { cn } from "@/shared/lib/utils";
 
 interface DataTableProps<TData> extends React.ComponentProps<"div"> {
   table: TanstackTable<TData>;

@@ -1,5 +1,5 @@
-import { adminResourceRegistry } from "@/lib/admin/mock-data/resource-registry";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
+import { getEditableAdminSections } from "@/features/admin/lib/editor-field-visibility";
 
 export interface AdminContentPageDefinition {
   id: string;
@@ -12,7 +12,7 @@ export interface AdminContentPageDefinition {
 
 /**
  * Thứ tự các trang khớp đúng thứ tự mục trên thanh header của website
- * (`navigation` trong config/site.ts): Trang chủ → Giới thiệu → Dịch vụ →
+ * (`navigation` trong shared/constants/site.ts): Trang chủ → Giới thiệu → Dịch vụ →
  * Dự án → Hồ sơ năng lực → Báo giá → Tin tức → Tuyển dụng. Trang Liên hệ
  * không nằm trên header nên xếp cuối.
  *
@@ -30,56 +30,56 @@ export const adminContentPages: AdminContentPageDefinition[] = [
   {
     id: "about",
     label: "Giới thiệu",
-    publicRoute: "/gioi-thieu",
+    publicRoute: "/about",
     resourceKeys: ["about/hero", "about/journey", "about/vision-mission", "about/core-values", "about/capabilities", "about/contact-form"],
     sourceFiles: ["features/about/data/about-content.ts", "features/about/pages/AboutPage.tsx"],
   },
   {
     id: "services",
     label: "Dịch vụ",
-    publicRoute: "/dich-vu",
+    publicRoute: "/services",
     resourceKeys: [],
     sourceFiles: ["features/services/pages/ServicesOverviewPage.tsx"],
     children: [
-      servicePage("services-overview", "Trang tổng quan", "/dich-vu", "overview"),
-      servicePage("turnkey", "Xây dựng trọn gói", "/dich-vu/xay-dung-tron-goi", "xay-dung-tron-goi"),
-      servicePage("design", "Thiết kế Kiến trúc và Nội thất", "/dich-vu/thiet-ke-kien-truc-noi-that", "thiet-ke-kien-truc-noi-that"),
-      servicePage("construction", "Thi công xây dựng", "/dich-vu/thi-cong-xay-dung", "thi-cong-xay-dung"),
-      servicePage("renovation", "Cải tạo & sửa chữa", "/dich-vu/cai-tao-sua-chua", "cai-tao-sua-chua"),
+      servicePage("services-overview", "Trang tổng quan", "/services", "overview"),
+      servicePage("turnkey", "Xây dựng trọn gói", "/services/turnkey", "xay-dung-tron-goi"),
+      servicePage("design", "Thiết kế Kiến trúc và Nội thất", "/services/design", "thiet-ke-kien-truc-noi-that"),
+      servicePage("construction", "Thi công xây dựng", "/services/construction", "thi-cong-xay-dung"),
+      servicePage("renovation", "Cải tạo & sửa chữa", "/services/renovation", "cai-tao-sua-chua"),
     ],
   },
   {
     id: "projects",
     label: "Dự án",
-    publicRoute: "/du-an",
+    publicRoute: "/projects",
     resourceKeys: ["projects/page-hero", "projects/list-section-content", "projects/contact-form"],
     sourceFiles: ["features/projects/data/projects-page.ts", "features/projects/data/related-projects.ts"],
   },
   {
     id: "capability-profile",
     label: "Hồ sơ năng lực",
-    publicRoute: "/ho-so-nang-luc",
+    publicRoute: "/capability-profile",
     resourceKeys: ["settings/capability-profile", "settings/capability-profile/contact-form"],
     sourceFiles: ["features/capability-profile/components/CapabilityHero.tsx", "features/capability-profile/components/ProfileDocumentSection.tsx"],
   },
   {
     id: "quotation",
     label: "Báo giá",
-    publicRoute: "/bao-gia",
+    publicRoute: "/quotation",
     resourceKeys: ["quotation/hero", "quotation/estimator", "quotation/contact-form"],
     sourceFiles: ["features/quotation/data/quotation-estimator.ts", "features/quotation/pages/QuotationPage.tsx"],
   },
   {
     id: "news",
     label: "Tin tức",
-    publicRoute: "/tin-tuc",
+    publicRoute: "/news",
     resourceKeys: ["news/page-hero", "news/featured-section-content", "news/contact-form"],
     sourceFiles: ["features/news/data/news-page.ts", "features/news/pages/NewsPage.tsx"],
   },
   {
     id: "recruitment",
     label: "Tuyển dụng",
-    publicRoute: "/tuyen-dung",
+    publicRoute: "/careers",
     resourceKeys: ["recruitment/hero", "recruitment/jobs-section-content", "recruitment/contact-form"],
     sourceFiles: ["features/careers/components/CareersHero.tsx"],
   },
@@ -87,14 +87,16 @@ export const adminContentPages: AdminContentPageDefinition[] = [
   {
     id: "contact",
     label: "Liên hệ",
-    publicRoute: "/lien-he",
+    publicRoute: "/contact",
     resourceKeys: ["contacts/hero", "contacts/form", "contacts/map"],
-    sourceFiles: ["features/contact/pages/ContactPage.tsx", "lib/components/shared/ContactForm.tsx"],
+    sourceFiles: ["features/contact/pages/ContactPage.tsx", "shared/components/ContactForm.tsx"],
   },
 ];
 
 function servicePage(id: string, label: string, publicRoute: string, path: string): AdminContentPageDefinition {
   const prefix = `services/${path}/`;
+  // `path` is the internal resource-registry key segment; `pageFiles`/`dataFiles`
+  // map it to the English component and data-file names on disk.
   const pageFiles: Record<string, string> = {
     overview: "ServicesOverviewPage",
     "xay-dung-tron-goi": "FullConstructionServicePage",
@@ -102,7 +104,15 @@ function servicePage(id: string, label: string, publicRoute: string, path: strin
     "thi-cong-xay-dung": "ConstructionServicePage",
     "cai-tao-sua-chua": "RenovationServicePage",
   };
+  const dataFiles: Record<string, string> = {
+    overview: "overview",
+    "xay-dung-tron-goi": "turnkey",
+    "thiet-ke-kien-truc-noi-that": "design",
+    "thi-cong-xay-dung": "construction",
+    "cai-tao-sua-chua": "renovation",
+  };
   const pageFile = pageFiles[path];
+  const dataFile = dataFiles[path] ?? path;
   const pageResourceKeys = Object.keys(adminResourceRegistry).filter((key) =>
     key.startsWith(prefix),
   );
@@ -116,7 +126,7 @@ function servicePage(id: string, label: string, publicRoute: string, path: strin
     label,
     publicRoute,
     resourceKeys: pageResourceKeys.filter((key) => !companionKeys.has(key)),
-    sourceFiles: [`features/services/data/${path}.ts`, `features/services/pages/${pageFile}.tsx`],
+    sourceFiles: [`features/services/data/${dataFile}.ts`, `features/services/pages/${pageFile}.tsx`],
   };
 }
 

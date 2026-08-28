@@ -12,8 +12,8 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Button } from "@/components/ui/button";
+} from "@/features/admin/components/ui/dropdown-menu";
+import { Button } from "@/features/admin/components/ui/button";
 
 const themeOptions = [
   { value: "light", label: "Sáng", icon: Sun },

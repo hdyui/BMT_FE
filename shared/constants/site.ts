@@ -1,35 +1,35 @@
 export const services = [
   {
     label: "Xây dựng trọn gói",
-    href: "/dich-vu/xay-dung-tron-goi",
+    href: "/services/turnkey",
     icon: "/images/site/nav-xay-dung-tron-goi.png",
   },
   {
     label: "Thiết kế kiến trúc & nội thất",
-    href: "/dich-vu/thiet-ke-kien-truc-noi-that",
+    href: "/services/design",
     icon: "/images/site/nav-thiet-ke-kien-truc-noi-that.png",
   },
   {
     label: "Thi công xây dựng",
-    href: "/dich-vu/thi-cong-xay-dung",
+    href: "/services/construction",
     icon: "/images/site/nav-thi-cong-xay-dung.png",
   },
   {
     label: "Cải tạo & sửa chữa",
-    href: "/dich-vu/cai-tao-sua-chua",
+    href: "/services/renovation",
     icon: "/images/site/nav-cai-tao-sua-chua.png",
   },
 ] as const;
 
 export const navigation = [
   { label: "TRANG CHỦ", href: "/" },
-  { label: "GIỚI THIỆU", href: "/gioi-thieu" },
-  { label: "DỊCH VỤ", href: "/dich-vu", children: services },
-  { label: "DỰ ÁN", href: "/du-an" },
-  { label: "HỒ SƠ NĂNG LỰC", href: "/ho-so-nang-luc" },
-  { label: "BÁO GIÁ", href: "/bao-gia" },
-  { label: "TIN TỨC", href: "/tin-tuc" },
-  { label: "TUYỂN DỤNG", href: "/tuyen-dung" },
+  { label: "GIỚI THIỆU", href: "/about" },
+  { label: "DỊCH VỤ", href: "/services", children: services },
+  { label: "DỰ ÁN", href: "/projects" },
+  { label: "HỒ SƠ NĂNG LỰC", href: "/capability-profile" },
+  { label: "BÁO GIÁ", href: "/quotation" },
+  { label: "TIN TỨC", href: "/news" },
+  { label: "TUYỂN DỤNG", href: "/careers" },
 ] as const;
 
 export const contactInformation = {

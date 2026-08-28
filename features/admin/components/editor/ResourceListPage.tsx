@@ -15,21 +15,21 @@ import {
 import { FilePenLine, FolderOpen, Images, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/data-table/data-table";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Input } from "@/components/ui/input";
+import { DataTable } from "@/features/admin/components/data-table/data-table";
+import { DataTableColumnHeader } from "@/features/admin/components/data-table/data-table-column-header";
+import { DataTableViewOptions } from "@/features/admin/components/data-table/data-table-view-options";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
+import { Checkbox } from "@/features/admin/components/ui/checkbox";
+import { Input } from "@/features/admin/components/ui/input";
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
 import { DeleteContentDialog } from "@/features/admin/components/editor/DeleteContentDialog";
 import { EmbeddedResourceEditor } from "@/features/admin/components/editor/EmbeddedResourceEditor";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import { useDebounce } from "@/hooks/use-debounce";
-import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import type { AdminCrudRecord, AdminResourceConfig } from "@/lib/admin/types/crud";
+import { useDebounce } from "@/shared/hooks/use-debounce";
+import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
+import type { AdminCrudRecord, AdminResourceConfig } from "@/features/admin/lib/types/crud";
 
 export function ResourceListPage({
   config,

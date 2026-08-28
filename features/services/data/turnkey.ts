@@ -1,4 +1,4 @@
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 export const featuredProjects = [
   {

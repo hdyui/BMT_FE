@@ -2,10 +2,10 @@ import {
   adminContentPages,
   getPageFieldCount,
   getResourceFieldCount,
-} from "@/lib/admin/content-pages";
-import type { AdminSectionKey } from "@/lib/admin/constants/navigation";
-import { adminResourceRegistry } from "@/lib/admin/mock-data/resource-registry";
-import { adminSettingsGroups } from "@/lib/admin/settings-groups";
+} from "@/features/admin/lib/content-pages";
+import type { AdminSectionKey } from "@/features/admin/lib/constants/navigation";
+import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
+import { adminSettingsGroups } from "@/features/admin/lib/settings-groups";
 
 /**
  * Sidebar riêng của từng mục trên header. Sidebar bám theo mục đang mở, kể cả

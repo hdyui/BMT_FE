@@ -4,8 +4,8 @@ import type { FormEvent, ReactNode } from "react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Button } from "@/lib/components/ui/button";
-import { Input } from "@/lib/components/ui/input";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
 
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;

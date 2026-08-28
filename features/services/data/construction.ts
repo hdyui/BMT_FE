@@ -1,4 +1,4 @@
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 // Khớp với type FeaturedProject.
 // Thứ tự đặt theo mockup: carousel lấy index 0 làm thẻ giữa, index 2 nằm bên

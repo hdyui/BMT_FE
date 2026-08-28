@@ -3,15 +3,15 @@
 import type { ReactNode } from "react";
 
 import { EditorField } from "@/features/admin/components/editor/EditorField";
-import { getDynamicCollectionUiKind } from "@/lib/admin/dynamic-collection-ui";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+import { getDynamicCollectionUiKind } from "@/features/admin/lib/dynamic-collection-ui";
+import { getEditableAdminSections } from "@/features/admin/lib/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldConfig,
   AdminFieldValue,
   AdminResourceConfig,
   AdminValidationErrors,
-} from "@/lib/admin/types/crud";
+} from "@/features/admin/lib/types/crud";
 
 export function DynamicCollectionEditorLayout({
   config,

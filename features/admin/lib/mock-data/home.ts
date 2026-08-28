@@ -1,4 +1,4 @@
-import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
+import type { HomeHeroSlideContent } from "@/features/admin/lib/types/content";
 
 export const mockHomeHeroSlides: HomeHeroSlideContent[] = [
   {
@@ -7,7 +7,7 @@ export const mockHomeHeroSlides: HomeHeroSlideContent[] = [
     description:
       "Đồng hành cùng khách hàng từ tư vấn, thiết kế đến thi công hoàn thiện, mang đến những không gian bền vững và tối ưu công năng.",
     ctaLabel: "Khám phá BMT Decor",
-    ctaHref: "/gioi-thieu",
+    ctaHref: "/about",
     desktopImage: "/images/home/hero-background-01.webp",
     desktopAlt: "Mẫu nhà phố do BMT Decor thiết kế",
     mobileImage: "/images/home/hero-background-01.webp",
@@ -21,7 +21,7 @@ export const mockHomeHeroSlides: HomeHeroSlideContent[] = [
     description:
       "Từ xây mới, cải tạo đến hoàn thiện nội thất, BMT Decor xây dựng giải pháp phù hợp với từng loại hình công trình.",
     ctaLabel: "Xem giải pháp",
-    ctaHref: "/dich-vu/xay-dung-tron-goi",
+    ctaHref: "/services/turnkey",
     desktopImage: "/images/home/hero-background-02.webp",
     desktopAlt: "Không gian nội thất do BMT Decor thực hiện",
     mobileImage: "/images/home/hero-background-02.webp",
@@ -35,7 +35,7 @@ export const mockHomeHeroSlides: HomeHeroSlideContent[] = [
     description:
       "Mỗi dự án là minh chứng cho năng lực thiết kế, thi công và cam kết chất lượng của đội ngũ BMT Decor.",
     ctaLabel: "Xem dự án",
-    ctaHref: "/du-an",
+    ctaHref: "/projects",
     desktopImage: "/images/home/hero-background-03.webp",
     desktopAlt: "Công trình thương mại đã hoàn thiện",
     mobileImage: "/images/home/hero-background-03.webp",
@@ -49,7 +49,7 @@ export const mockHomeHeroSlides: HomeHeroSlideContent[] = [
     description:
       "Khám phá đội ngũ chuyên môn, quy trình triển khai, lĩnh vực hoạt động và các dự án tiêu biểu của BMT Decor.",
     ctaLabel: "Xem hồ sơ năng lực",
-    ctaHref: "/ho-so-nang-luc",
+    ctaHref: "/capability-profile",
     desktopImage: "/images/home/hero-background-04.webp",
     desktopAlt: "Hồ sơ năng lực BMT Decor",
     mobileImage: "/images/home/hero-background-04.webp",

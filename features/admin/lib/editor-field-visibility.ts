@@ -2,7 +2,7 @@ import type {
   AdminEditorSectionConfig,
   AdminFieldConfig,
   AdminResourceConfig,
-} from "@/lib/admin/types/crud";
+} from "@/features/admin/lib/types/crud";
 
 export const LINE_BREAK_EDITOR_HINT =
   "Mẹo: những ô cao nhiều dòng nhận phím Enter để xuống dòng — website hiển thị đúng chỗ ngắt đó. Ô một dòng là nội dung website luôn in liền một hàng.";

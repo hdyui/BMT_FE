@@ -1,8 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
-import { contactInformation, services } from "@/config/site";
-import { BrandLogo } from "@/lib/components/shared/BrandLogo";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { contactInformation, services } from "@/shared/constants/site";
+import { BrandLogo } from "@/shared/components/BrandLogo";
+import { Reveal } from "@/shared/components/Reveal";
 
 const socialLinks = [
   ["Facebook", "/images/home/facebook.png"],

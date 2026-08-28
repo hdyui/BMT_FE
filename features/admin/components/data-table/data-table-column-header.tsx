@@ -9,8 +9,8 @@ import {
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/dropdown-menu";
+import { cn } from "@/shared/lib/utils";
 
 export function DataTableColumnHeader<TData, TValue>({
   column,

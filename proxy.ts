@@ -6,7 +6,7 @@ import {
   ADMIN_LOCATION_COOKIE,
   ADMIN_MOCK_SESSION,
   sanitizeAdminLocation,
-} from "@/lib/admin/auth-config";
+} from "@/features/admin/lib/auth-config";
 
 export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;

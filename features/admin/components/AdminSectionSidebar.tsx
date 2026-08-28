@@ -7,9 +7,9 @@ import {
   getActiveContentPageHref,
   getActiveSidebarHref,
   getAdminSidebar,
-} from "@/lib/admin/admin-sidebar";
-import type { AdminSidebarLink } from "@/lib/admin/admin-sidebar";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/admin-sidebar";
+import type { AdminSidebarLink } from "@/features/admin/lib/admin-sidebar";
+import { cn } from "@/shared/lib/utils";
 
 /**
  * Sidebar của mục đang mở trên header. Luôn hiện — kể cả ở màn hình chỉnh sửa

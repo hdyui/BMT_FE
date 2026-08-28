@@ -1,5 +1,5 @@
-import { mockHomeHeroSlides } from "@/lib/admin/mock-data/home";
-import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
+import { mockHomeHeroSlides } from "@/features/admin/lib/mock-data/home";
+import type { HomeHeroSlideContent } from "@/features/admin/lib/types/content";
 
 export const homeContentService = {
   async getHeroSlides(): Promise<HomeHeroSlideContent[]> {

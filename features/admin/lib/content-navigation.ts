@@ -1,4 +1,4 @@
-import type { AdminResourceConfig } from "@/lib/admin/types/crud";
+import type { AdminResourceConfig } from "@/features/admin/lib/types/crud";
 
 const servicePageBySlug: Record<string, { label: string; href: string }> = {
   overview: { label: "Tổng quan", href: "/admin/content/services-overview" },

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { DashboardView } from "@/features/admin/dashboard/DashboardView";
-import { projectContentService } from "@/lib/admin/services/project-content.service";
+import { projectContentService } from "@/features/admin/services/project-content.service";
 
 export const metadata: Metadata = {
   title: "Tổng quan",

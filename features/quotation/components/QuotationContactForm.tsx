@@ -4,13 +4,13 @@ import type { FormEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { toast } from "sonner";
-import { Button } from "@/lib/components/ui/button";
-import { Input } from "@/lib/components/ui/input";
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import { Button } from "@/shared/components/ui/button";
+import { Input } from "@/shared/components/ui/input";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 /**
  * Contact form riêng cho trang báo giá — cùng style/font/size/bold với
- * ContactForm dùng chung (lib/components/shared/ContactForm.tsx), chỉ khác
+ * ContactForm dùng chung (shared/components/ContactForm.tsx), chỉ khác
  * tiêu đề + có thêm dòng mô tả dưới tiêu đề, vì nội dung trang báo giá khác
  * các trang dịch vụ khác.
  */

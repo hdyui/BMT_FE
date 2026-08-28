@@ -12,9 +12,9 @@ import {
 } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import type { ProjectContentBundle } from "@/lib/admin/types/content";
-import { Badge } from "@/components/ui/badge";
-import { buttonVariants } from "@/components/ui/button";
+import type { ProjectContentBundle } from "@/features/admin/lib/types/content";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { buttonVariants } from "@/features/admin/components/ui/button";
 import {
   Table,
   TableBody,
@@ -22,8 +22,8 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/table";
+import { cn } from "@/shared/lib/utils";
 
 const completion = [
   { label: "Trang chủ", value: 82, href: "/admin/content/home" },

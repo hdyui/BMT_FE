@@ -1,13 +1,13 @@
-import { navigation, services } from "@/config/site";
+import { navigation, services } from "@/shared/constants/site";
 import { projects } from "@/features/projects/data/project-details";
-import type { AdminFieldOption } from "@/lib/admin/types/crud";
+import type { AdminFieldOption } from "@/features/admin/lib/types/crud";
 
 /**
  * Danh sách địa chỉ có thật trên website, dùng làm lựa chọn cho mọi ô liên kết
  * trong admin. Admin chọn từ đây thay vì gõ tay để không bao giờ trỏ nhầm vào
  * một trang 404.
  *
- * Sinh thẳng từ `config/site.ts` và dữ liệu dự án, nên thêm trang mới là danh
+ * Sinh thẳng từ `shared/constants/site.ts` và dữ liệu dự án, nên thêm trang mới là danh
  * sách tự có thêm — không phải khai lại ở đây. Riêng liên kết ra ngoài
  * (Facebook, Google Maps...) vẫn để admin tự nhập vì không thể liệt kê trước.
  */
@@ -24,7 +24,7 @@ function option(href: string, name: string): AdminFieldOption {
 
 const pageLinks: AdminFieldOption[] = navigation.flatMap((item) => {
   const parent = option(item.href, toSentenceCase(item.label));
-  if (!item.href.startsWith("/dich-vu")) return [parent];
+  if (!item.href.startsWith("/services")) return [parent];
   return [
     parent,
     ...services.map((service) =>
@@ -34,7 +34,7 @@ const pageLinks: AdminFieldOption[] = navigation.flatMap((item) => {
 });
 
 const projectLinks: AdminFieldOption[] = Object.values(projects).map((project) =>
-  option(`/du-an/${project.slug}`, `Dự án · ${project.displayName}`),
+  option(`/projects/${project.slug}`, `Dự án · ${project.displayName}`),
 );
 
 /**
@@ -50,7 +50,7 @@ const anchorLinks: AdminFieldOption[] = [
 export const siteLinkOptions: AdminFieldOption[] = [
   ...pageLinks,
   // Trang Liên hệ không nằm trên thanh header nên phải thêm tay.
-  option("/lien-he", "Liên hệ"),
+  option("/contact", "Liên hệ"),
   ...projectLinks,
   ...anchorLinks,
 ].filter(

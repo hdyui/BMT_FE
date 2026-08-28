@@ -3,7 +3,7 @@
 import type { Table } from "@tanstack/react-table";
 import { Settings2 } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuCheckboxItem,
@@ -12,7 +12,7 @@ import {
   DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/features/admin/components/ui/dropdown-menu";
 
 export function DataTableViewOptions<TData>({ table }: { table: Table<TData> }) {
   const columns = table.getAllLeafColumns().filter((column) => column.getCanHide());

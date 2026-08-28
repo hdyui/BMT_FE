@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 
 export type SolutionCard = {
@@ -130,7 +130,7 @@ export function SolutionCards({
                 <div className="mt-4 h-[clamp(1.6rem,6.5vw,2.05rem)] md:hidden">
                   <PillCtaButton
                     className="h-full max-w-full"
-                    href="/du-an"
+                    href="/projects"
                     label={card.cta}
                     image={card.ctaImageMobile ?? card.ctaImage}
                     imageWidth={card.ctaImageMobileWidth ?? card.ctaImageWidth}
@@ -142,7 +142,7 @@ export function SolutionCards({
                 <div className="mt-6 hidden md:block">
                   <PillCtaButton
                     className="max-w-full lg:h-12"
-                    href="/du-an"
+                    href="/projects"
                     label={card.cta}
                     image={card.ctaImage}
                     imageWidth={card.ctaImageWidth}

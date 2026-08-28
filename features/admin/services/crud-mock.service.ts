@@ -1,4 +1,4 @@
-import type { AdminCrudRecord } from "@/lib/admin/types/crud";
+import type { AdminCrudRecord } from "@/features/admin/lib/types/crud";
 
 const wait = (duration = 320) =>
   new Promise<void>((resolve) => window.setTimeout(resolve, duration));

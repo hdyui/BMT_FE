@@ -9,7 +9,7 @@ import {
 
 /**
  * Điều hướng cấp một, nằm ngang trên thanh header của admin. Mỗi mục có một
- * sidebar riêng bên dưới (xem `lib/admin/admin-sidebar.ts`).
+ * sidebar riêng bên dưới (xem `features/admin/lib/admin-sidebar.ts`).
  */
 export type AdminSectionKey = "overview" | "catalog" | "content" | "settings";
 
