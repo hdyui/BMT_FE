@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
+import { BuildingRule } from "@/shared/components/BuildingRule";
 
 const imageRoot = "/images/about/source";
 

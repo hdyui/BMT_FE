@@ -2,9 +2,9 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 import { serviceTabs } from "@/features/services/data/overview";
-import { cn } from "@/lib/utils";
+import { cn } from "@/shared/lib/utils";
 
 const FADE_DURATION = 240;
 

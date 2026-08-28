@@ -1,6 +1,6 @@
 import Image from "next/image";
 import type { ProjectDetail } from "../data/project-details";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { ProjectRichText } from "./ProjectRichText";
 import styles from "./ProjectDetail.module.css";

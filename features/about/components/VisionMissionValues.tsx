@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
+import { BuildingRule } from "@/shared/components/BuildingRule";
 import { aboutCoreValues as coreValues } from "@/features/about/data/about-content";
 import styles from "./VisionMissionValues.module.css";
 

@@ -4,16 +4,16 @@ import Image from "next/image";
 import { useState } from "react";
 import { Monitor, Smartphone } from "lucide-react";
 
-import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
+import type { HomeHeroSlideContent } from "@/features/admin/lib/types/content";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/dialog";
+import { Button } from "@/features/admin/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 export function HomeHeroPreviewDialog({
   open,

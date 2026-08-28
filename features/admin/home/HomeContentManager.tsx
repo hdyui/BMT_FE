@@ -23,13 +23,13 @@ import {
 } from "@/features/admin/components/editor/unsaved-changes";
 import { ImageField } from "@/features/admin/components/ImageField";
 import { HomeHeroPreviewDialog } from "@/features/admin/home/HomeHeroPreviewDialog";
-import { homeContentService } from "@/lib/admin/services/home-content.service";
-import type { HomeHeroSlideContent } from "@/lib/admin/types/content";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
-import { cn } from "@/lib/utils";
+import { homeContentService } from "@/features/admin/services/home-content.service";
+import type { HomeHeroSlideContent } from "@/features/admin/lib/types/content";
+import { Button } from "@/features/admin/components/ui/button";
+import { Input } from "@/features/admin/components/ui/input";
+import { Textarea } from "@/features/admin/components/ui/textarea";
+import { Switch } from "@/features/admin/components/ui/switch";
+import { cn } from "@/shared/lib/utils";
 
 const homeSections = [
   {

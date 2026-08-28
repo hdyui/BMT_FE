@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/features/admin/components/ui/button";
 
 /**
  * Hai lớp bảo vệ cho thao tác lưu của admin, dùng chung cho mọi trình biên tập:

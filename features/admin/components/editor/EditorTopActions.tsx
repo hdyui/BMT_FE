@@ -4,9 +4,9 @@ import type { Ref } from "react";
 import { useEffect, useRef, useState } from "react";
 import { LoaderCircle, RotateCcw, Save } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
+import { Separator } from "@/features/admin/components/ui/separator";
 
 /** Chiều cao của `AdminHeader` (`fixed top-0 h-16`), tính bằng px. */
 const ADMIN_HEADER_HEIGHT = 64;

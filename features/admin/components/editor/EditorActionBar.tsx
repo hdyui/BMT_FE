@@ -2,8 +2,8 @@
 
 import { Eye, LoaderCircle, RotateCcw, Save } from "lucide-react";
 
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
 
 export function EditorActionBar({
   dirty,

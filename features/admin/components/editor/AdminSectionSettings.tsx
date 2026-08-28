@@ -11,16 +11,16 @@ import type {
   AdminFieldValue,
   AdminSectionSettingsConfig,
   AdminValidationErrors,
-} from "@/lib/admin/types/crud";
-import { Badge } from "@/lib/components/ui/badge";
-import { Button } from "@/lib/components/ui/button";
+} from "@/features/admin/lib/types/crud";
+import { Badge } from "@/shared/components/ui/badge";
+import { Button } from "@/shared/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/lib/components/ui/dialog";
+} from "@/shared/components/ui/dialog";
 
 export function AdminSectionSettings({
   settings,

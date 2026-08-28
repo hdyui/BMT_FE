@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight, FilePenLine } from "lucide-react";
 
-import type { AdminModuleScopeItem } from "@/lib/admin/types/content";
+import type { AdminModuleScopeItem } from "@/features/admin/lib/types/content";
 
 export function AdminSectionHub({ items }: { items: AdminModuleScopeItem[] }) {
   return (

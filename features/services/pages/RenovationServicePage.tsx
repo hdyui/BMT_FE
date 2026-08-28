@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 
 // Tái sử dụng components dùng chung
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
@@ -34,7 +34,7 @@ import {
   featuredProjects,
   solutionCards,
   processSteps,
-} from "@/features/services/data/cai-tao-sua-chua";
+} from "@/features/services/data/renovation";
 
 /**
  * Hai vệt bóng ở mép phải banner. Ảnh nền `hero-background.png` (file -06) không

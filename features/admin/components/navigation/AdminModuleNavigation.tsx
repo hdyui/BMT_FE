@@ -7,8 +7,8 @@ import { useEffect, useMemo, useRef } from "react";
 import type {
   AdminModuleNavigationGroup,
   AdminNavigationContext,
-} from "@/lib/admin/types/crud";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/types/crud";
+import { cn } from "@/shared/lib/utils";
 
 export function AdminModuleNavigation({
   navigation,

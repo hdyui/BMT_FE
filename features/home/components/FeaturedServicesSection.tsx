@@ -1,7 +1,7 @@
 import { ServiceShowcase } from "@/features/home/components/ServiceShowcase";
 import { homeSectionContent } from "@/features/home/data/home-content";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 
 function ServiceSectionHeading() {
   return (

@@ -1,6 +1,6 @@
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { ContactForm } from "@/shared/components/ContactForm";
 import { contactFormContent } from "../data/contact-form";
 import { CapabilityHero } from "../components/CapabilityHero";
 import { ProfileDocumentSection } from "../components/ProfileDocumentSection";

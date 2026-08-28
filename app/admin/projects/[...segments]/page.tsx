@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 
 import { ResourceEditorPage } from "@/features/admin/components/editor/ResourceEditorPage";
 import { AdminCrudRoute } from "@/features/admin/routing/AdminCrudRoute";
-import { getAdminResource } from "@/lib/admin/mock-data/resource-registry";
+import { getAdminResource } from "@/features/admin/lib/mock-data/resource-registry";
 
 export default async function AdminProjectsCrudPage({
   params,

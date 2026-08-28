@@ -4,12 +4,12 @@ import { CapabilitiesSection } from "@/features/about/components/CapabilitiesSec
 import { JourneyTimeline } from "@/features/about/components/JourneyTimeline";
 import { VisionMissionValues } from "@/features/about/components/VisionMissionValues";
 import { PartnerSection } from "@/features/home/components/PartnerSection";
-import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { PartnerMarquee } from "@/shared/components/layout/PartnerMarquee";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { ContactForm } from "@/shared/components/ContactForm";
+import { Reveal } from "@/shared/components/Reveal";
 
 const imageRoot = "/images/about/source";
 

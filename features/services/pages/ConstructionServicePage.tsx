@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
+import { ContactForm } from "@/shared/components/ContactForm";
 
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
@@ -30,7 +30,7 @@ import {
   featuredProjectCtaLabel,
   featuredProjects,
   solutionCards,
-} from "@/features/services/data/thi-cong-xay-dung";
+} from "@/features/services/data/construction";
 
 // TOẠ ĐỘ ĐO TRỰC TIẾP TỪ MOCKUP `pic_thicong/banner-chuan.png` (1254 x 530).
 //

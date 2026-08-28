@@ -18,14 +18,14 @@ import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvid
 import {
   getEditableAdminSections,
   isHomeStyleEditor,
-} from "@/lib/admin/editor-field-visibility";
+} from "@/features/admin/lib/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldValue,
   AdminResourceConfig,
-} from "@/lib/admin/types/crud";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/types/crud";
+import { Button } from "@/features/admin/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 export function EmbeddedResourceEditor({
   config,

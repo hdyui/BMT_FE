@@ -9,19 +9,19 @@ import type {
   AdminFieldConfig,
   AdminFieldOption,
   AdminFieldValue,
-} from "@/lib/admin/types/crud";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
-import { Switch } from "@/components/ui/switch";
+} from "@/features/admin/lib/types/crud";
+import { Button } from "@/features/admin/components/ui/button";
+import { Input } from "@/features/admin/components/ui/input";
+import { Textarea } from "@/features/admin/components/ui/textarea";
+import { Switch } from "@/features/admin/components/ui/switch";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/select";
+import { cn } from "@/shared/lib/utils";
 
 export function EditorField({
   field,

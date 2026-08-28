@@ -1,12 +1,12 @@
 import Image from "next/image";
 
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
 import {
   mobileHeroBlueprint,
   processSteps,
-} from "@/features/services/data/thi-cong-xay-dung";
+} from "@/features/services/data/construction";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";
 

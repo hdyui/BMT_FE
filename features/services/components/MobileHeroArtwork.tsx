@@ -1,7 +1,7 @@
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { mobileHeroArtwork as designMobileHeroArtwork } from "@/features/services/data/thiet-ke-kien-truc-noi-that";
-import { mobileHeroArtwork as turnkeyMobileHeroArtwork } from "@/features/services/data/xay-dung-tron-goi";
+import { Reveal } from "@/shared/components/Reveal";
+import { mobileHeroArtwork as designMobileHeroArtwork } from "@/features/services/data/design";
+import { mobileHeroArtwork as turnkeyMobileHeroArtwork } from "@/features/services/data/turnkey";
 
 type MobileHeroArtworkProps = {
   variant: "design" | "full-construction";

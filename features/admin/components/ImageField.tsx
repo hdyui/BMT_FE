@@ -4,15 +4,15 @@ import Image from "next/image";
 import { ChangeEvent, useEffect, useRef, useState } from "react";
 import { Expand, ImageIcon, Upload } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/components/ui/dialog";
+import { cn } from "@/shared/lib/utils";
 
 interface ImageFieldProps {
   label: string;

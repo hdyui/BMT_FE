@@ -6,8 +6,8 @@ import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ImageField } from "@/features/admin/components/ImageField";
-import type { AdminRelatedProject } from "@/lib/admin/types/content";
-import { Button } from "@/components/ui/button";
+import type { AdminRelatedProject } from "@/features/admin/lib/types/content";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -16,8 +16,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/features/admin/components/ui/dialog";
+import { Input } from "@/features/admin/components/ui/input";
 
 export function RelatedProjectsPanel({
   projects,
@@ -34,7 +34,7 @@ export function RelatedProjectsPanel({
       title: "Dự án liên quan mới",
       image: "/images/projects/project-01.png",
       imageAlt: "",
-      href: "/du-an/nha-pho-2-tang-quan-9",
+      href: "/projects/nha-pho-2-tang-quan-9",
       order: projects.length + 1,
     });
   }

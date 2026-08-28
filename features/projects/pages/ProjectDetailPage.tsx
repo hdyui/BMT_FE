@@ -1,7 +1,7 @@
 import type { ProjectDetail } from "../data/project-details";
-import { SiteHeader } from "@/lib/components/layout/SiteHeader";
-import { SiteFooter } from "@/lib/components/layout/SiteFooter";
-import { ContactForm } from "@/lib/components/shared/ContactForm";
+import { SiteHeader } from "@/shared/components/layout/SiteHeader";
+import { SiteFooter } from "@/shared/components/layout/SiteFooter";
+import { ContactForm } from "@/shared/components/ContactForm";
 import { ProjectsHero } from "../components/ProjectsHero";
 import { ProjectOverview } from "../components/ProjectOverview";
 import { ProjectEditorialGallery } from "../components/ProjectEditorialGallery";

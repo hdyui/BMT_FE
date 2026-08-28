@@ -8,12 +8,12 @@ import {
   getContentPage,
   getPageFieldCount,
   getResourceFieldCount,
-} from "@/lib/admin/content-pages";
-import { getEditableAdminSections } from "@/lib/admin/editor-field-visibility";
+} from "@/features/admin/lib/content-pages";
+import { getEditableAdminSections } from "@/features/admin/lib/editor-field-visibility";
 import {
   adminResourceRegistry,
   getAdminResourceGroup,
-} from "@/lib/admin/mock-data/resource-registry";
+} from "@/features/admin/lib/mock-data/resource-registry";
 
 export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string }) {
   const selected = getContentPage(selectedId) ?? getContentPage("home")!;

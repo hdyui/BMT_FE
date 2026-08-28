@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 
 import { ResourceListPage } from "@/features/admin/components/editor/ResourceListPage";
-import { getAdminResource } from "@/lib/admin/mock-data/resource-registry";
+import { getAdminResource } from "@/features/admin/lib/mock-data/resource-registry";
 
 export const metadata: Metadata = { title: "Nội dung Tuyển dụng" };
 

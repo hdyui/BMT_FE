@@ -4,8 +4,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/lib/components/ui/accordion";
-import { Reveal } from "@/lib/components/shared/Reveal";
+} from "@/shared/components/ui/accordion";
+import { Reveal } from "@/shared/components/Reveal";
 import { processSteps } from "@/features/services/data/overview";
 
 const arrowMask = {

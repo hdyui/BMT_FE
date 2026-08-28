@@ -18,26 +18,26 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
+import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import {
   EDITOR_GRID_CLASS,
   editorImagePreviewSize,
   editorSpanClass,
   packEditorFields,
-} from "@/lib/admin/editor-layout";
+} from "@/features/admin/lib/editor-layout";
 import {
   getEditableAdminSections,
   isHomeStyleEditor,
   isRefinedEditorResource,
-} from "@/lib/admin/editor-field-visibility";
+} from "@/features/admin/lib/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldConfig,
   AdminFieldValue,
   AdminResourceConfig,
-} from "@/lib/admin/types/crud";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/types/crud";
+import { Button } from "@/features/admin/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 type DraftMap = Record<string, AdminCrudRecord[]>;
 

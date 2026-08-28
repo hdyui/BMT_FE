@@ -2,7 +2,7 @@ import Link from "next/link";
 import { ArrowRight, Layers3 } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
-import type { AdminModuleScopeItem } from "@/lib/admin/types/content";
+import type { AdminModuleScopeItem } from "@/features/admin/lib/types/content";
 
 export function AdminModuleShell({
   title,

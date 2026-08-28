@@ -1,4 +1,4 @@
-import type { ContactFormContent } from "@/lib/components/shared/contact-form-content";
+import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 // Nội dung riêng của section "Liên hệ tư vấn" trên trang Hồ sơ năng lực.
 // Cố ý khai báo đầy đủ (không dùng chung với các trang khác) để admin sửa trang

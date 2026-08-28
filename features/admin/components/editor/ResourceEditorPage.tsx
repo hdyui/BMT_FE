@@ -26,30 +26,30 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
-import { getResourceBreadcrumb } from "@/lib/admin/content-navigation";
-import { getDynamicCollectionUiKind } from "@/lib/admin/dynamic-collection-ui";
+import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
+import { getDynamicCollectionUiKind } from "@/features/admin/lib/dynamic-collection-ui";
 import {
   EDITOR_GRID_CLASS,
   editorImagePreviewSize,
   editorSpanClass,
   packEditorFields,
-} from "@/lib/admin/editor-layout";
+} from "@/features/admin/lib/editor-layout";
 import {
   LINE_BREAK_EDITOR_HINT,
   getEditableAdminSections,
   isHomeStyleEditor,
   isRefinedEditorResource,
-} from "@/lib/admin/editor-field-visibility";
+} from "@/features/admin/lib/editor-field-visibility";
 import type {
   AdminCrudRecord,
   AdminFieldConfig,
   AdminFieldValue,
   AdminResourceConfig,
   AdminValidationErrors,
-} from "@/lib/admin/types/crud";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/types/crud";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
+import { cn } from "@/shared/lib/utils";
 
 export function ResourceEditorPage({
   config,
@@ -68,9 +68,9 @@ export function ResourceEditorPage({
   const existing =
     mode === "create"
       ? null
-      : records.find((item) =>
+      : (records.find((item) =>
           mode === "singleton" ? true : item.id === recordId,
-        ) ?? null;
+        ) ?? null);
   const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
 
   const initialDraft = useMemo(
@@ -95,9 +95,13 @@ export function ResourceEditorPage({
   const dirty = JSON.stringify(draft) !== JSON.stringify(savedSnapshot);
   const dirtyKeys = useMemo(() => {
     const keys = editableSections.flatMap((section) =>
-      section.fields.flatMap((field) => field.altKey ? [field.key, field.altKey] : [field.key]),
+      section.fields.flatMap((field) =>
+        field.altKey ? [field.key, field.altKey] : [field.key],
+      ),
     );
-    return new Set(keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])));
+    return new Set(
+      keys.filter((key) => !sameValue(draft[key], savedSnapshot[key])),
+    );
   }, [draft, editableSections, savedSnapshot]);
   const dirtyCount = dirtyKeys.size;
   const refinedEditor = isRefinedEditorResource(config);
@@ -122,7 +126,11 @@ export function ResourceEditorPage({
           <p className="mt-2 text-sm text-muted-foreground">
             Nội dung này có thể đã bị xóa hoặc đường dẫn không đúng.
           </p>
-          <Button className="mt-5" nativeButton={false} render={<Link href={baseHref} />}>
+          <Button
+            className="mt-5"
+            nativeButton={false}
+            render={<Link href={baseHref} />}
+          >
             Quay lại danh sách
           </Button>
         </div>
@@ -154,7 +162,9 @@ export function ResourceEditorPage({
     const next = { ...draft, [action.key]: cloneValue(action.previous) };
     setDraft(next);
     setHistory((current) =>
-      JSON.stringify(next) === JSON.stringify(savedSnapshot) ? [] : current.slice(0, -1),
+      JSON.stringify(next) === JSON.stringify(savedSnapshot)
+        ? []
+        : current.slice(0, -1),
     );
   }
 
@@ -165,7 +175,10 @@ export function ResourceEditorPage({
   }
 
   async function saveDraft() {
-    const nextErrors = validateRecord({ ...config, sections: editableSections }, draft);
+    const nextErrors = validateRecord(
+      { ...config, sections: editableSections },
+      draft,
+    );
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) {
       toast.error("Vui lòng kiểm tra các nội dung chưa hợp lệ", {
@@ -208,7 +221,16 @@ export function ResourceEditorPage({
             label: config.title,
             href: config.kind === "collection" ? baseHref : undefined,
           },
-          ...(config.kind === "collection" ? [{ label: mode === "create" ? "Tạo mới" : String(draft[config.titleField] ?? "Chỉnh sửa") }] : []),
+          ...(config.kind === "collection"
+            ? [
+                {
+                  label:
+                    mode === "create"
+                      ? "Tạo mới"
+                      : String(draft[config.titleField] ?? "Chỉnh sửa"),
+                },
+              ]
+            : []),
         ]}
       />
 
@@ -235,19 +257,22 @@ export function ResourceEditorPage({
                 onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
               />
             ) : (
-            <div className="flex items-center gap-2">
-              {dirty && (
-                <Badge variant="warning" className="gap-2">
-                  <span className="size-2 rounded-full bg-brand" />
-                  {dirtyCount} thay đổi chưa lưu
-                </Badge>
-              )}
-              {allowPreview && (
-                <Button variant="outline" onClick={() => setPreviewOpen(true)}>
-                  Xem trước
-                </Button>
-              )}
-            </div>
+              <div className="flex items-center gap-2">
+                {dirty && (
+                  <Badge variant="warning" className="gap-2">
+                    <span className="size-2 rounded-full bg-brand" />
+                    {dirtyCount} thay đổi chưa lưu
+                  </Badge>
+                )}
+                {allowPreview && (
+                  <Button
+                    variant="outline"
+                    onClick={() => setPreviewOpen(true)}
+                  >
+                    Xem trước
+                  </Button>
+                )}
+              </div>
             )
           }
         />
@@ -260,27 +285,29 @@ export function ResourceEditorPage({
       )}
 
       <EditorLayout
-        aside={topActionEditor ? undefined : (
-          <>
-            <div className="rounded-2xl border bg-card p-4">
-              <h2 className="text-sm font-semibold">Trạng thái nội dung</h2>
-              <div className="mt-4 space-y-3 text-xs text-muted-foreground">
-                <p className="flex items-start gap-2">
-                  <Hash className="mt-0.5 size-3.5 shrink-0" />
-                  <span>Nội dung đang chỉnh sửa</span>
-                </p>
-                <p className="flex items-start gap-2">
-                  <FileText className="mt-0.5 size-3.5 shrink-0" />
-                  <span>
-                    {config.kind === "singleton"
-                      ? "Nội dung dùng chung"
-                      : "Một mục trong danh sách"}
-                  </span>
-                </p>
+        aside={
+          topActionEditor ? undefined : (
+            <>
+              <div className="rounded-2xl border bg-card p-4">
+                <h2 className="text-sm font-semibold">Trạng thái nội dung</h2>
+                <div className="mt-4 space-y-3 text-xs text-muted-foreground">
+                  <p className="flex items-start gap-2">
+                    <Hash className="mt-0.5 size-3.5 shrink-0" />
+                    <span>Nội dung đang chỉnh sửa</span>
+                  </p>
+                  <p className="flex items-start gap-2">
+                    <FileText className="mt-0.5 size-3.5 shrink-0" />
+                    <span>
+                      {config.kind === "singleton"
+                        ? "Nội dung dùng chung"
+                        : "Một mục trong danh sách"}
+                    </span>
+                  </p>
+                </div>
               </div>
-            </div>
-          </>
-        )}
+            </>
+          )
+        }
       >
         {topActionEditor ? (
           dynamicUiKind ? (
@@ -292,112 +319,150 @@ export function ResourceEditorPage({
               onChange={updateField}
             />
           ) : (
-          <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
-            {editableSections.map((editorSection, sectionIndex) => {
-              const fields = editorSection.fields;
-              const imageCount = fields.filter((field) => field.type === "image").length;
-              const threeColumnText = imageCount === 0 && fields.length === 3;
-              // Nhóm trang đã tinh chỉnh xếp ô theo lưới 12 cột mô phỏng bố cục
-              // website; các trang còn lại giữ nguyên lưới cũ.
-              const packedFields = refinedEditor ? packEditorFields(fields) : null;
-              // Section được chỉ định chia hai cột theo đúng vị trí trên website.
-              const split = config.editorLayout?.splitColumns;
-              const splitFields = split
-                ? {
-                    left: fields.filter((field) => split.left.includes(field.key)),
-                    right: fields.filter((field) => split.right.includes(field.key)),
-                  }
-                : null;
-              const useSplit =
-                splitFields !== null &&
-                splitFields.left.length + splitFields.right.length === fields.length;
+            <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
+              {editableSections.map((editorSection, sectionIndex) => {
+                const fields = editorSection.fields;
+                const imageCount = fields.filter(
+                  (field) => field.type === "image",
+                ).length;
+                const threeColumnText = imageCount === 0 && fields.length === 3;
+                // Nhóm trang đã tinh chỉnh xếp ô theo lưới 12 cột mô phỏng bố cục
+                // website; các trang còn lại giữ nguyên lưới cũ.
+                const packedFields = refinedEditor
+                  ? packEditorFields(fields)
+                  : null;
+                // Section được chỉ định chia hai cột theo đúng vị trí trên website.
+                const split = config.editorLayout?.splitColumns;
+                const splitFields = split
+                  ? {
+                      left: fields.filter((field) =>
+                        split.left.includes(field.key),
+                      ),
+                      right: fields.filter((field) =>
+                        split.right.includes(field.key),
+                      ),
+                    }
+                  : null;
+                const useSplit =
+                  splitFields !== null &&
+                  splitFields.left.length + splitFields.right.length ===
+                    fields.length;
 
-              const renderField = (
-                field: AdminFieldConfig,
-                options: { imageSize?: "wide" } = {},
-              ) => (
-                <EditorField
-                  field={field}
-                  imageSize={options.imageSize}
-                  value={draft[field.key]}
-                  error={errors[field.key]}
-                  dirty={dirtyKeys.has(field.key)}
-                  altValue={field.altKey ? draft[field.altKey] : undefined}
-                  altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
-                  contentEditorStyle={requestedContentEditor}
-                  lockItemCount={refinedEditor}
-                  onChange={(value) => updateField(field.key, value)}
-                  onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
-                />
-              );
-
-              return (
-                <div
-                  className={cn(
-                    "p-4 sm:p-5",
-                    sectionIndex > 0 && "border-t",
-                  )}
-                  key={editorSection.id}
-                >
-                  {editableSections.length > 1 && (
-                    <div className="mb-4">
-                      <h2
-                        className={cn(
-                          requestedContentEditor ? "text-lg font-bold" : "text-sm font-semibold",
-                        )}
-                      >
-                        {editorSection.title}
-                      </h2>
-                      {editorSection.description && (
-                        <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
-                          {editorSection.description}
-                        </p>
-                      )}
-                    </div>
-                  )}
-                  {useSplit && splitFields ? (
-                    <EditorSplitColumns
-                      left={splitFields.left.map((field) => (
-                        <div key={field.key}>{renderField(field)}</div>
-                      ))}
-                      right={splitFields.right.map((field) => (
-                        <div key={field.key}>{renderField(field)}</div>
-                      ))}
-                    />
-                  ) : (
-                  <div
-                    className={cn(
-                      packedFields
-                        ? EDITOR_GRID_CLASS
-                        : "grid items-start gap-4 lg:gap-5",
-                      !packedFields && !stackedFields && fields.length > 1 && "md:grid-cols-2",
-                      !packedFields && !stackedFields &&
-                        (threeColumnText ? "xl:grid-cols-3" : fields.length > 1 && "xl:grid-cols-4"),
+                const renderField = (
+                  field: AdminFieldConfig,
+                  options: { imageSize?: "wide" } = {},
+                ) => (
+                  <EditorField
+                    field={field}
+                    imageSize={options.imageSize}
+                    value={draft[field.key]}
+                    error={errors[field.key]}
+                    dirty={dirtyKeys.has(field.key)}
+                    altValue={field.altKey ? draft[field.altKey] : undefined}
+                    altDirty={Boolean(
+                      field.altKey && dirtyKeys.has(field.altKey),
                     )}
+                    contentEditorStyle={requestedContentEditor}
+                    lockItemCount={refinedEditor}
+                    onChange={(value) => updateField(field.key, value)}
+                    onAltChange={
+                      field.altKey
+                        ? (value) => updateField(field.altKey!, value)
+                        : undefined
+                    }
+                  />
+                );
+
+                return (
+                  <div
+                    className={cn("p-4 sm:p-5", sectionIndex > 0 && "border-t")}
+                    key={editorSection.id}
                   >
-                    {(packedFields ?? fields.map((field) => ({ field, span: 0 }))).map(({ field, span }) => (
+                    {editableSections.length > 1 && (
+                      <div className="mb-4">
+                        <h2
+                          className={cn(
+                            requestedContentEditor
+                              ? "text-lg font-bold"
+                              : "text-sm font-semibold",
+                          )}
+                        >
+                          {editorSection.title}
+                        </h2>
+                        {editorSection.description && (
+                          <p className="mt-1 text-xs leading-relaxed text-muted-foreground">
+                            {editorSection.description}
+                          </p>
+                        )}
+                      </div>
+                    )}
+                    {useSplit && splitFields ? (
+                      <EditorSplitColumns
+                        left={splitFields.left.map((field) => (
+                          <div key={field.key}>{renderField(field)}</div>
+                        ))}
+                        right={splitFields.right.map((field) => (
+                          <div key={field.key}>{renderField(field)}</div>
+                        ))}
+                      />
+                    ) : (
                       <div
                         className={cn(
-                          packedFields && editorSpanClass(span),
-                          !packedFields && !stackedFields && !threeColumnText && fields.length === 1 && "xl:col-span-4",
-                          !packedFields && !stackedFields && !threeColumnText && fields.length > 1 && field.type !== "image" && "xl:col-span-2",
-                          !packedFields && !stackedFields && !threeColumnText && fields.length > 1 && field.type === "image" && imageCount <= 2 && "xl:col-span-2",
+                          packedFields
+                            ? EDITOR_GRID_CLASS
+                            : "grid items-start gap-4 lg:gap-5",
+                          !packedFields &&
+                            !stackedFields &&
+                            fields.length > 1 &&
+                            "md:grid-cols-2",
+                          !packedFields &&
+                            !stackedFields &&
+                            (threeColumnText
+                              ? "xl:grid-cols-3"
+                              : fields.length > 1 && "xl:grid-cols-4"),
                         )}
-                        key={field.key}
                       >
-                        {renderField(field, {
-                          imageSize: packedFields
-                            ? editorImagePreviewSize(field, span)
-                            : undefined,
-                        })}
+                        {(
+                          packedFields ??
+                          fields.map((field) => ({ field, span: 0 }))
+                        ).map(({ field, span }) => (
+                          <div
+                            className={cn(
+                              packedFields && editorSpanClass(span),
+                              !packedFields &&
+                                !stackedFields &&
+                                !threeColumnText &&
+                                fields.length === 1 &&
+                                "xl:col-span-4",
+                              !packedFields &&
+                                !stackedFields &&
+                                !threeColumnText &&
+                                fields.length > 1 &&
+                                field.type !== "image" &&
+                                "xl:col-span-2",
+                              !packedFields &&
+                                !stackedFields &&
+                                !threeColumnText &&
+                                fields.length > 1 &&
+                                field.type === "image" &&
+                                imageCount <= 2 &&
+                                "xl:col-span-2",
+                            )}
+                            key={field.key}
+                          >
+                            {renderField(field, {
+                              imageSize: packedFields
+                                ? editorImagePreviewSize(field, span)
+                                : undefined,
+                            })}
+                          </div>
+                        ))}
                       </div>
-                    ))}
+                    )}
                   </div>
-                  )}
-                </div>
-              );
-            })}
-          </section>
+                );
+              })}
+            </section>
           )
         ) : (
           editableSections.map((editorSection) => (
@@ -407,8 +472,7 @@ export function ResourceEditorPage({
               prominent={requestedContentEditor}
               singleColumn={singleColumnContentEditor}
               dirtyCount={editorSection.fields.reduce(
-                (count, field) =>
-                  count + (dirtyKeys.has(field.key) ? 1 : 0),
+                (count, field) => count + (dirtyKeys.has(field.key) ? 1 : 0),
                 0,
               )}
               key={editorSection.id}
@@ -420,11 +484,17 @@ export function ResourceEditorPage({
                   error={errors[field.key]}
                   dirty={dirtyKeys.has(field.key)}
                   altValue={field.altKey ? draft[field.altKey] : undefined}
-                  altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
+                  altDirty={Boolean(
+                    field.altKey && dirtyKeys.has(field.altKey),
+                  )}
                   contentEditorStyle={requestedContentEditor}
                   lockItemCount={refinedEditor}
                   onChange={(value) => updateField(field.key, value)}
-                  onAltChange={field.altKey ? (value) => updateField(field.altKey!, value) : undefined}
+                  onAltChange={
+                    field.altKey
+                      ? (value) => updateField(field.altKey!, value)
+                      : undefined
+                  }
                   key={field.key}
                 />
               ))}
@@ -443,12 +513,14 @@ export function ResourceEditorPage({
         onSave={() => confirmEditorSave(dirtyCount, saveDraft)}
       />
 
-      {!topActionEditor && <ResourcePreviewDialog
-        open={previewOpen}
-        config={config}
-        record={draft}
-        onOpenChange={setPreviewOpen}
-      />}
+      {!topActionEditor && (
+        <ResourcePreviewDialog
+          open={previewOpen}
+          config={config}
+          record={draft}
+          onOpenChange={setPreviewOpen}
+        />
+      )}
     </div>
   );
 }
@@ -462,7 +534,10 @@ function cloneValue(value: AdminFieldValue) {
   return Array.isArray(value) ? [...value] : value;
 }
 
-function sameValue(left: AdminFieldValue | undefined, right: AdminFieldValue | undefined) {
+function sameValue(
+  left: AdminFieldValue | undefined,
+  right: AdminFieldValue | undefined,
+) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
@@ -474,7 +549,8 @@ function createEmptyRecord(config: AdminResourceConfig, order: number) {
   for (const field of config.sections.flatMap((item) => item.fields)) {
     if (field.type === "boolean") draft[field.key] = true;
     else if (field.type === "number")
-      draft[field.key] = field.key === config.orderField ? order : field.min ?? 0;
+      draft[field.key] =
+        field.key === config.orderField ? order : (field.min ?? 0);
     else if (field.type === "list") draft[field.key] = [];
     else draft[field.key] = "";
 
@@ -522,4 +598,3 @@ function validateRecord(
 function isValidContentUrl(value: string) {
   return /^(\/(?!\/)|https?:\/\/|mailto:|tel:|#)/i.test(value.trim());
 }
-

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 
 import { ResourceEditorPage } from "@/features/admin/components/editor/ResourceEditorPage";
-import { getAdminResource } from "@/lib/admin/mock-data/resource-registry";
+import { getAdminResource } from "@/features/admin/lib/mock-data/resource-registry";
 
 export const metadata: Metadata = { title: "Nội dung Hồ sơ năng lực" };
 

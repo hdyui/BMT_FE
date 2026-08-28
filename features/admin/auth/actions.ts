@@ -9,7 +9,7 @@ import {
   ADMIN_MOCK_SESSION,
   MOCK_ADMIN_ACCOUNT,
   sanitizeAdminLocation,
-} from "@/lib/admin/auth-config";
+} from "@/features/admin/lib/auth-config";
 
 export type AdminLoginState = {
   error: string | null;

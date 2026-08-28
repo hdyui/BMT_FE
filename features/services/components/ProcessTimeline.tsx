@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import type { CSSProperties } from "react";
-import { Reveal } from "@/lib/components/shared/Reveal";
-import { processSteps } from "@/features/services/data/thiet-ke-kien-truc-noi-that";
+import { Reveal } from "@/shared/components/Reveal";
+import { processSteps } from "@/features/services/data/design";
 
 const STEP_DELAY = 150;
 const SECOND_GROUP_DELAY = 560;

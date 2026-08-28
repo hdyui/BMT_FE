@@ -1,7 +1,7 @@
-import { PartnerMarquee } from "@/lib/components/layout/PartnerMarquee";
+import { PartnerMarquee } from "@/shared/components/layout/PartnerMarquee";
 import { homeSectionContent } from "@/features/home/data/home-content";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 
 export function PartnerSection({ className = "" }: { className?: string }) {
   return (

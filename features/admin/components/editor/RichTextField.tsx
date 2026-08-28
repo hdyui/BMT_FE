@@ -3,7 +3,7 @@
 import { useLayoutEffect, useRef } from "react";
 import { Bold, Italic, Link2, List, Pilcrow } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/features/admin/components/ui/button";
 
 const ALLOWED_TAGS = new Set(["P", "BR", "STRONG", "B", "EM", "I", "A", "UL", "LI"]);
 

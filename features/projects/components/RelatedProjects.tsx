@@ -3,14 +3,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useCallback, useEffect, useState, useSyncExternalStore } from "react";
-import type { CarouselApi } from "@/lib/components/ui/carousel";
+import type { CarouselApi } from "@/shared/components/ui/carousel";
 import {
   Carousel,
   CarouselContent,
   CarouselItem,
-} from "@/lib/components/ui/carousel";
-import { BuildingRule } from "@/lib/components/shared/BuildingRule";
-import { Reveal } from "@/lib/components/shared/Reveal";
+} from "@/shared/components/ui/carousel";
+import { BuildingRule } from "@/shared/components/BuildingRule";
+import { Reveal } from "@/shared/components/Reveal";
 import {
   relatedProjects,
   relatedProjectsSection,

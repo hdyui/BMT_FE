@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { ContentGroupGrid } from "@/features/admin/components/ContentGroupGrid";
-import { getResourceFieldCount } from "@/lib/admin/content-pages";
-import { adminSettingsGroups } from "@/lib/admin/settings-groups";
+import { getResourceFieldCount } from "@/features/admin/lib/content-pages";
+import { adminSettingsGroups } from "@/features/admin/lib/settings-groups";
 
 export const metadata: Metadata = { title: "Cấu hình website" };
 

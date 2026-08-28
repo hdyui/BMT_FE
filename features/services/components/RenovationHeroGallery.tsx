@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 
 type HeroPhoto = { image: string; alt: string };
 

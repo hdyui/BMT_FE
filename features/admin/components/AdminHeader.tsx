@@ -6,21 +6,21 @@ import { usePathname } from "next/navigation";
 import { useTransition } from "react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+} from "@/features/admin/components/ui/dropdown-menu";
 import { logoutAdmin } from "@/features/admin/auth/actions";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
-import { getAdminSectionKey } from "@/lib/admin/admin-sidebar";
+import { getAdminSectionKey } from "@/features/admin/lib/admin-sidebar";
 import {
   adminHeaderNavigation,
   type AdminHeaderNavItem,
-} from "@/lib/admin/constants/navigation";
-import { cn } from "@/lib/utils";
+} from "@/features/admin/lib/constants/navigation";
+import { cn } from "@/shared/lib/utils";
 
 export function AdminHeader() {
   const pathname = usePathname();

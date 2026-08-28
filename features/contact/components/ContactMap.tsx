@@ -1,4 +1,4 @@
-import { Reveal } from "@/lib/components/shared/Reveal";
+import { Reveal } from "@/shared/components/Reveal";
 import styles from "./ContactMap.module.css";
 
 export const defaultContactMapContent = {

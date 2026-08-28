@@ -6,8 +6,8 @@ import { FilePenLine, Plus, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
 import { ImageField } from "@/features/admin/components/ImageField";
-import type { AdminProjectCategory } from "@/lib/admin/types/content";
-import { Button } from "@/components/ui/button";
+import type { AdminProjectCategory } from "@/features/admin/lib/types/content";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
   DialogClose,
@@ -16,8 +16,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
+} from "@/features/admin/components/ui/dialog";
+import { Input } from "@/features/admin/components/ui/input";
 
 export function ProjectTaxonomyPanel({
   categories,

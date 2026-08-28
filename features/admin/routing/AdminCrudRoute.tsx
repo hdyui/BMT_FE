@@ -9,9 +9,9 @@ import { UnifiedResourceEditorPage } from "@/features/admin/components/editor/Un
 import {
   getAdminResource,
   getAdminResourceGroup,
-} from "@/lib/admin/mock-data/resource-registry";
-import type { AdminModuleKey } from "@/lib/admin/types/crud";
-import { Button } from "@/components/ui/button";
+} from "@/features/admin/lib/mock-data/resource-registry";
+import type { AdminModuleKey } from "@/features/admin/lib/types/crud";
+import { Button } from "@/features/admin/components/ui/button";
 
 export function AdminCrudRoute({
   module,

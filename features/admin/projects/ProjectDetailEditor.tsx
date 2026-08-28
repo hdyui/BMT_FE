@@ -14,18 +14,18 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { ImageField } from "@/features/admin/components/ImageField";
-import { projectContentService } from "@/lib/admin/services/project-content.service";
-import type { AdminProjectDetailContent } from "@/lib/admin/types/content";
-import { Button } from "@/components/ui/button";
+import { projectContentService } from "@/features/admin/services/project-content.service";
+import type { AdminProjectDetailContent } from "@/features/admin/lib/types/content";
+import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
+} from "@/features/admin/components/ui/dialog";
+import { Input } from "@/features/admin/components/ui/input";
+import { Textarea } from "@/features/admin/components/ui/textarea";
 
 function ContentField({
   label,

@@ -6,8 +6,8 @@ import {
   AccordionContent,
   AccordionItem,
   AccordionTrigger,
-} from "@/lib/components/ui/accordion";
-import { Reveal } from "@/lib/components/shared/Reveal";
+} from "@/shared/components/ui/accordion";
+import { Reveal } from "@/shared/components/Reveal";
 import { frequentlyAskedQuestions } from "@/features/services/data/overview";
 
 // Bản thiết kế chỉ hiển thị 4 câu đầu; dữ liệu vẫn giữ đủ 10 câu trong

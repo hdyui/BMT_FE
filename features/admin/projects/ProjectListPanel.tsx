@@ -16,12 +16,12 @@ import {
 import { Eye, FilePenLine, FolderOpen, MoreHorizontal, Plus, Search, Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
-import { DataTable } from "@/components/data-table/data-table";
-import { DataTableColumnHeader } from "@/components/data-table/data-table-column-header";
-import { DataTableViewOptions } from "@/components/data-table/data-table-view-options";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
+import { DataTable } from "@/features/admin/components/data-table/data-table";
+import { DataTableColumnHeader } from "@/features/admin/components/data-table/data-table-column-header";
+import { DataTableViewOptions } from "@/features/admin/components/data-table/data-table-view-options";
+import { Badge } from "@/features/admin/components/ui/badge";
+import { Button } from "@/features/admin/components/ui/button";
+import { Checkbox } from "@/features/admin/components/ui/checkbox";
 import {
   Dialog,
   DialogClose,
@@ -30,26 +30,26 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
+} from "@/features/admin/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+} from "@/features/admin/components/ui/dropdown-menu";
+import { Input } from "@/features/admin/components/ui/input";
+import { Label } from "@/features/admin/components/ui/label";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select";
+} from "@/features/admin/components/ui/select";
 import { ImageField } from "@/features/admin/components/ImageField";
-import { projectContentService } from "@/lib/admin/services/project-content.service";
-import type { AdminProjectCard, ContentStatus } from "@/lib/admin/types/content";
+import { projectContentService } from "@/features/admin/services/project-content.service";
+import type { AdminProjectCard, ContentStatus } from "@/features/admin/lib/types/content";
 
 function createEmptyCard(order: number): AdminProjectCard {
   return {
@@ -59,7 +59,7 @@ function createEmptyCard(order: number): AdminProjectCard {
     thumbnail: "/images/projects/project-01.png",
     imageAlt: "",
     category: "Nhà ở",
-    href: "/du-an/nha-pho-2-tang-quan-9",
+    href: "/projects/nha-pho-2-tang-quan-9",
     status: "draft",
     order,
     createdAt: new Intl.DateTimeFormat("vi-VN").format(new Date()),
