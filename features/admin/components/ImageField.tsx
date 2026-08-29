@@ -29,6 +29,8 @@ interface ImageFieldProps {
    * để tem nhỏ là cả cột toàn khoảng trắng.
    */
   size?: "thumb" | "large" | "wide" | "fill";
+  /** Chỉ Partners cần hai nút xếp dọc; các editor khác giữ hàng ngang. */
+  actionsLayout?: "row" | "column";
   onChange: (value: string) => void;
 }
 
@@ -41,6 +43,7 @@ export function ImageField({
   dirty = false,
   streamlined = false,
   size = "thumb",
+  actionsLayout = "row",
   onChange,
 }: ImageFieldProps) {
   const fill = size === "fill";
@@ -137,7 +140,12 @@ export function ImageField({
         </button>
         {/* Ảnh là một slot cố định của layout nên không có nút xóa — bỏ trống ô
             ảnh sẽ để lại lỗ hổng trên website, chỉ cho đổi ảnh khác. */}
-        <div className="flex flex-col items-start gap-2">
+        <div
+          className={cn(
+            "flex items-start gap-2",
+            actionsLayout === "column" ? "flex-col" : "flex-row flex-wrap",
+          )}
+        >
           {value && (
             <Button type="button" variant="outline" size="sm" onClick={() => setViewerOpen(true)}>
               <Expand /> Xem ảnh

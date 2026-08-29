@@ -177,6 +177,9 @@ export function UnifiedResourceEditorPage({
 
   useUnsavedChangesGuard({ dirty, dirtyCount: dirtyKeys.size, save: saveAll });
   const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
+  const homeFeaturedNewsEditor =
+    config.key === "home/featured-news" &&
+    companionConfig?.key === "home/news-section-content";
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 pb-8 sm:p-6 lg:p-8">
@@ -200,20 +203,32 @@ export function UnifiedResourceEditorPage({
         />
       </div>
 
-      <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
-        <div className="divide-y">
-          {editableConfigs.map((itemConfig) => (
-            <ResourceEditorGroup
-              config={itemConfig}
-              records={drafts[itemConfig.key] ?? []}
-              dirtyKeys={dirtyKeys}
-              errors={errors}
-              onChange={updateField}
-              key={itemConfig.key}
-            />
-          ))}
-        </div>
-      </section>
+      {homeFeaturedNewsEditor && companionConfig ? (
+        <HomeFeaturedNewsEditor
+          config={config}
+          companionConfig={companionConfig}
+          records={drafts[config.key] ?? []}
+          companionRecords={drafts[companionConfig.key] ?? []}
+          dirtyKeys={dirtyKeys}
+          errors={errors}
+          onChange={updateField}
+        />
+      ) : (
+        <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
+          <div className="divide-y">
+            {editableConfigs.map((itemConfig) => (
+              <ResourceEditorGroup
+                config={itemConfig}
+                records={drafts[itemConfig.key] ?? []}
+                dirtyKeys={dirtyKeys}
+                errors={errors}
+                onChange={updateField}
+                key={itemConfig.key}
+              />
+            ))}
+          </div>
+        </section>
+      )}
 
       <StickyEditorActions
         hidden={topActionsVisible}
@@ -224,6 +239,200 @@ export function UnifiedResourceEditorPage({
         onUndoAll={undoAll}
         onSave={() => confirmEditorSave(dirtyKeys.size, saveAll)}
       />
+    </div>
+  );
+}
+
+function HomeFeaturedNewsEditor({
+  config,
+  companionConfig,
+  records,
+  companionRecords,
+  dirtyKeys,
+  errors,
+  onChange,
+}: {
+  config: AdminResourceConfig;
+  companionConfig: AdminResourceConfig;
+  records: AdminCrudRecord[];
+  companionRecords: AdminCrudRecord[];
+  dirtyKeys: Set<string>;
+  errors: Record<string, string>;
+  onChange: (resourceKey: string, recordId: string, fieldKey: string, value: AdminFieldValue) => void;
+}) {
+  const companionRecord = companionRecords[0];
+  const companionFields = getEditableAdminSections(companionConfig.sections).flatMap(
+    (section) => section.fields,
+  );
+  const newsFields = getEditableAdminSections(config.sections).flatMap(
+    (section) => section.fields,
+  );
+
+  function fieldByKey(fields: AdminFieldConfig[], key: string) {
+    return fields.find((field) => field.key === key);
+  }
+
+  const featuredImageField = fieldByKey(companionFields, "featuredImage");
+  const featuredImageAltField: AdminFieldConfig | undefined = featuredImageField?.altKey
+    ? {
+        key: featuredImageField.altKey,
+        label: "Văn bản thay thế",
+        type: "text",
+      }
+    : undefined;
+
+  function renderField(
+    resourceConfig: AdminResourceConfig,
+    record: AdminCrudRecord,
+    field: AdminFieldConfig | undefined,
+    options: {
+      imageSize?: "large" | "wide" | "fill";
+      labelOverride?: string;
+      hideAlt?: boolean;
+    } = {},
+  ) {
+    if (!field) return null;
+    const identity = fieldIdentity(resourceConfig.key, record.id, field.key);
+    return (
+      <EditorField
+        field={field}
+        value={record[field.key]}
+        imageSize={options.imageSize}
+        labelOverride={options.labelOverride}
+        error={errors[identity]}
+        dirty={isFieldDirty(resourceConfig, record, field.key, dirtyKeys)}
+        altValue={field.altKey ? record[field.altKey] : undefined}
+        altDirty={Boolean(
+          field.altKey && isFieldDirty(resourceConfig, record, field.altKey, dirtyKeys),
+        )}
+        contentEditorStyle
+        lockItemCount
+        hideAlt={options.hideAlt}
+        onChange={(value) => onChange(resourceConfig.key, record.id, field.key, value)}
+        onAltChange={
+          field.altKey
+            ? (value) => onChange(resourceConfig.key, record.id, field.altKey!, value)
+            : undefined
+        }
+      />
+    );
+  }
+
+  if (!companionRecord) {
+    return (
+      <section className="mt-6 rounded-2xl border bg-card p-6 text-sm text-muted-foreground">
+        Chưa có nội dung Tin nổi bật để chỉnh sửa.
+      </section>
+    );
+  }
+
+  return (
+    <div className="mt-6 grid gap-6">
+      <section className="rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6">
+        <div className="grid gap-4 lg:grid-cols-12">
+          <div className="lg:col-span-5">
+            {renderField(
+              companionConfig,
+              companionRecord,
+              fieldByKey(companionFields, "title"),
+            )}
+          </div>
+          <div className="lg:col-span-3">
+            {renderField(
+              companionConfig,
+              companionRecord,
+              fieldByKey(companionFields, "ctaLabel"),
+            )}
+          </div>
+          <div className="min-w-0 lg:col-span-4">
+            {renderField(
+              companionConfig,
+              companionRecord,
+              fieldByKey(companionFields, "ctaHref"),
+            )}
+          </div>
+        </div>
+      </section>
+
+      <section className="grid min-w-0 items-start gap-6 rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6 lg:grid-cols-[minmax(300px,.78fr)_minmax(0,1.22fr)] lg:gap-8">
+        <div className="min-w-0">
+          {renderField(
+            companionConfig,
+            companionRecord,
+            featuredImageField,
+            { imageSize: "wide", labelOverride: "Ảnh tin chính", hideAlt: true },
+          )}
+        </div>
+        <div className="grid min-w-0 content-start gap-5">
+          {renderField(
+            companionConfig,
+            companionRecord,
+            fieldByKey(companionFields, "featuredTitle"),
+            { labelOverride: "Tiêu đề tin chính" },
+          )}
+          {renderField(
+            companionConfig,
+            companionRecord,
+            fieldByKey(companionFields, "featuredExcerpt"),
+            { labelOverride: "Mô tả ngắn" },
+          )}
+          {renderField(
+            companionConfig,
+            companionRecord,
+            fieldByKey(companionFields, "featuredHref"),
+            { labelOverride: "Liên kết bài viết" },
+          )}
+          {renderField(
+            companionConfig,
+            companionRecord,
+            featuredImageAltField,
+          )}
+        </div>
+      </section>
+
+      {records.length === 0 ? (
+        <section className="rounded-2xl border bg-card p-6 text-sm text-muted-foreground">
+          Chưa có tin phụ để chỉnh sửa.
+        </section>
+      ) : (
+        <div className="grid gap-6">
+          {records.map((record) => (
+            <article
+              className="grid min-w-0 items-start gap-6 rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6 lg:grid-cols-[minmax(300px,.78fr)_minmax(0,1.22fr)] lg:gap-8"
+              key={record.id}
+            >
+              <div className="min-w-0">
+                {renderField(
+                  config,
+                  record,
+                  fieldByKey(newsFields, "image"),
+                  { imageSize: "wide", labelOverride: "Ảnh bài viết" },
+                )}
+              </div>
+              <div className="grid min-w-0 content-start gap-5">
+                {renderField(
+                  config,
+                  record,
+                  fieldByKey(newsFields, "title"),
+                  { labelOverride: "Tiêu đề bài viết" },
+                )}
+                {renderField(
+                  config,
+                  record,
+                  fieldByKey(newsFields, "description"),
+                  { labelOverride: "Mô tả ngắn" },
+                )}
+                {renderField(
+                  config,
+                  record,
+                  fieldByKey(newsFields, "href"),
+                  { labelOverride: "Liên kết bài viết" },
+                )}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
@@ -367,6 +576,7 @@ function ResourceEditorGroup({
       <EditorField
         field={field}
         imageSize={options.imageSize}
+        imageActionsLayout={config.key === "settings/partners" ? "column" : "row"}
         value={record[field.key]}
         error={errors[identity]}
         dirty={isFieldDirty(config, record, field.key, dirtyKeys)}
