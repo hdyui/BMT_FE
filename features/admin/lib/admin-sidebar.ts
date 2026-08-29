@@ -34,18 +34,15 @@ export interface AdminSidebarModel {
 const OVERVIEW_PREFIXES = ["/admin/dashboard"];
 
 /**
- * Nội dung mở đầu của trang Dự án / Tin tức / Tuyển dụng là nội dung trang, do
- * mục "Nội dung trang" quản lý. Mục "Danh mục" chỉ lo các bản ghi, nên không
- * liệt kê chúng ở sidebar Danh mục.
+ * Tất cả resource được khai báo trong `adminContentPages` đều thuộc mục
+ * "Nội dung trang". Tạo set từ nguồn dữ liệu thật thay vì duy trì thủ công để
+ * không bỏ sót các section như form liên hệ của Dự án / Tin tức / Tuyển dụng.
  */
-const CONTENT_OWNED_RESOURCE_KEYS = new Set([
-  "projects/page-hero",
-  "projects/list-section-content",
-  "news/page-hero",
-  "news/featured-section-content",
-  "recruitment/hero",
-  "recruitment/jobs-section-content",
-]);
+const CONTENT_OWNED_RESOURCE_KEYS = new Set(
+  adminContentPages.flatMap((page) =>
+    [page, ...(page.children ?? [])].flatMap((item) => item.resourceKeys),
+  ),
+);
 
 /** Các nhóm đã được feedback bỏ khỏi giao diện quản trị. Giữ resource/data để
  * không tác động trang public, nhưng không đưa chúng vào điều hướng Admin. */
@@ -66,9 +63,24 @@ function matchesPrefix(pathname: string, prefix: string) {
   return pathname === prefix || pathname.startsWith(`${prefix}/`);
 }
 
+function isContentOwnedResourcePath(pathname: string) {
+  return [...CONTENT_OWNED_RESOURCE_KEYS].some((resourceKey) => {
+    const resource = adminResourceRegistry[resourceKey];
+    if (!resource) return false;
+    return matchesPrefix(pathname, `/admin/${resource.module}/${resource.path}`);
+  });
+}
+
 export function getAdminSectionKey(pathname: string): AdminSectionKey {
   if (OVERVIEW_PREFIXES.some((prefix) => matchesPrefix(pathname, prefix))) {
     return "overview";
+  }
+  // Một số resource nội dung dùng chung prefix với module Danh mục, ví dụ
+  // `/admin/projects/page-hero`. Phải nhận diện resource nội dung trước khi xét
+  // prefix `/admin/projects`, `/admin/news`, `/admin/recruitment`; nếu không mọi
+  // section con của ba trang này đều bị header/sidebar hiểu nhầm là Danh mục.
+  if (isContentOwnedResourcePath(pathname)) {
+    return "content";
   }
   if (CATALOG_MODULES.some((item) => matchesPrefix(pathname, item.href))) {
     return "catalog";

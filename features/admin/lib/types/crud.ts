@@ -52,6 +52,13 @@ export interface AdminFieldConfig {
   required?: boolean;
   min?: number;
   maxLength?: number;
+  /** Số dòng textarea hiển thị sẵn trong editor. */
+  rows?: number;
+  /**
+   * Giới hạn số dòng thật sự được lưu trong textarea. Khi đạt giới hạn, Enter
+   * thêm hoặc paste nội dung nhiều dòng sẽ bị cắt ở dòng cuối cho phép.
+   */
+  maxLines?: number;
   options?: Array<string | AdminFieldOption>;
   altKey?: string;
   ratio?: string;
@@ -115,8 +122,12 @@ export interface AdminEditorRecordLayout {
    * cho những section đảo bên qua từng thẻ (thẻ lẻ ảnh trái, thẻ chẵn ảnh phải).
    */
   mediaSide?: "left" | "right" | "alternate";
-  /** Bề ngang cột ảnh so với cột chữ, theo đúng tỉ lệ ngoài site. */
-  mediaWidth?: "half" | "third";
+  /**
+   * Bề ngang cột ảnh so với cột chữ, theo đúng tỉ lệ ngoài site.
+   * `twoFifths` dành cho hero cần media 40% và nội dung 60%; `fortyFive` dành
+   * cho hero cần media 45% và nội dung 55%.
+   */
+  mediaWidth?: "half" | "third" | "twoFifths" | "fortyFive";
   /**
    * Cỡ ảnh xem trước của cột ảnh. Bỏ trống là tem nhỏ như mọi ô ảnh khác.
    * - `large`: tem to gấp đôi, vẫn cao cố định.
@@ -126,10 +137,24 @@ export interface AdminEditorRecordLayout {
    */
   mediaPreview?: "large" | "wide" | "fill";
   /**
+   * Vị trí ô văn bản thay thế của ảnh khi dùng bố cục ảnh–chữ.
+   * Mặc định nằm cùng cột chữ; `media` giữ alt text ngay dưới ảnh để các editor
+   * kiểu danh sách dự án nhìn thành một cụm media hoàn chỉnh.
+   */
+  mediaAltPlacement?: "media" | "text";
+  /**
    * Số thẻ xếp trên một hàng — dùng cho section mà website bày các mục cạnh
    * nhau thay vì chồng dọc (quy trình 2 cột, 5 cột…).
    */
   recordsPerRow?: number;
+  /**
+   * Cách trình bày từng bản ghi khi đã chia nhiều cột.
+   * - `card`: có viền/bo góc như một thẻ độc lập (mặc định).
+   * - `flat`: giữ cảm giác danh sách, chỉ thu nhỏ thành nhiều cột, tránh box lồng box.
+   */
+  recordStyle?: "card" | "flat";
+  /** Ẩn dòng giải thích số mục cố định khi chính header/card đã đủ rõ. */
+  hideFixedItemHint?: boolean;
   /**
    * Chia ô của một section thành hai cột theo đúng vị trí trên website, liệt kê
    * tên ô cho từng bên.

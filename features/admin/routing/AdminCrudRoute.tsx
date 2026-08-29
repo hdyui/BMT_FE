@@ -38,8 +38,10 @@ export function AdminCrudRoute({
     const directCollectionEditor =
       exactResource.kind === "collection" &&
       exactResource.collectionMode !== "dynamic";
+    const mediaLayoutSingletonEditor =
+      exactResource.kind === "singleton" && Boolean(exactResource.editorLayout?.mediaSide);
 
-    if (directCollectionEditor) {
+    if (directCollectionEditor || mediaLayoutSingletonEditor) {
       return (
         <UnifiedResourceEditorPage
           config={exactResource}

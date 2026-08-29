@@ -255,6 +255,9 @@ function ResourceEditorGroup({
 
   // Bố cục mô phỏng website (xem `AdminEditorRecordLayout`).
   const layout = config.editorLayout;
+  const comfortableTwoColumnCards =
+    config.key === "settings/partners" || config.key === "settings/navigation";
+  const stackRecordFields = config.key === "settings/navigation";
   const sharedField = layout?.sharedRowField
     ? editableFields.find((field) => field.key === layout.sharedRowField)
     : undefined;
@@ -283,8 +286,12 @@ function ResourceEditorGroup({
         ]),
     ).values(),
   );
+  const keepAltWithMedia = layout?.mediaAltPlacement === "media";
   const textFields = layout?.mediaSide
-    ? [...recordFields.filter((field) => field.type !== "image"), ...altFields]
+    ? [
+        ...recordFields.filter((field) => field.type !== "image"),
+        ...(keepAltWithMedia ? [] : altFields),
+      ]
     : recordFields;
   // Section được chỉ định chia hai cột theo đúng vị trí trên website. Mỗi cột
   // tự xếp dọc nên ô ngắn ở cột này không phải chờ hết chiều cao ô dài ở cột
@@ -304,11 +311,11 @@ function ResourceEditorGroup({
     refinedEditor && !layout?.mediaSide && !useSplit
       ? packEditorFields(recordFields)
       : null;
-  // Section để ảnh cao bằng cột chữ (`mediaPreview: "fill"`): cột chữ xếp lưới
-  // 12 cột thay vì chồng dọc, vì chồng cả chục ô làm cột chữ dài gấp mấy lần
-  // cột ảnh. Section ít ô chữ giữ kiểu chồng dọc — trông gọn hơn.
+  // Section để ảnh cao bằng cột chữ (`mediaPreview: "fill"`) hoặc có khai báo
+  // `span` rõ ràng cho field: cột chữ xếp lưới 12 cột thay vì chồng dọc.
   const packedTextFields =
-    layout?.mediaSide && layout.mediaPreview === "fill" && refinedEditor
+    layout?.mediaSide &&
+    (layout.mediaPreview === "fill" || textFields.some((field) => field.span !== undefined))
       ? packEditorFields(textFields)
       : null;
 
@@ -367,7 +374,7 @@ function ResourceEditorGroup({
         altDirty={Boolean(field.altKey && isFieldDirty(config, record, field.altKey, dirtyKeys))}
         contentEditorStyle={requestedContentEditor}
         lockItemCount={refinedEditor}
-        hideAlt={Boolean(layout?.mediaSide)}
+        hideAlt={Boolean(layout?.mediaSide && !keepAltWithMedia)}
         onChange={(value) => onChange(config.key, record.id, field.key, value)}
         onAltChange={field.altKey ? (value) => onChange(config.key, record.id, field.altKey!, value) : undefined}
       />
@@ -414,7 +421,13 @@ function ResourceEditorGroup({
             // Website bày các mục cạnh nhau thì admin cũng xếp thành lưới thẻ,
             // thay vì danh sách dọc ngăn bằng đường kẻ.
             layout?.recordsPerRow
-              ? `grid gap-4 p-4 sm:p-5 ${RECORDS_PER_ROW[layout.recordsPerRow] ?? ""}`
+              ? cn(
+                  "grid p-4 sm:p-5",
+                  layout.recordStyle === "flat" ? "gap-x-6 gap-y-7" : "gap-4",
+                  comfortableTwoColumnCards && layout.recordsPerRow === 2
+                    ? "xl:grid-cols-2"
+                    : RECORDS_PER_ROW[layout.recordsPerRow] ?? "",
+                )
               : "divide-y first:border-t-0",
           )}
         >
@@ -434,7 +447,9 @@ function ResourceEditorGroup({
               <article
                 className={cn(
                   layout?.recordsPerRow
-                    ? "rounded-xl border p-4"
+                    ? layout.recordStyle === "flat"
+                      ? "min-w-0 border-b pb-5"
+                      : "rounded-xl border p-4"
                     : "p-4 sm:p-5",
                 )}
                 key={record.id}
@@ -450,16 +465,28 @@ function ResourceEditorGroup({
                       {recordDirtyCount > 0 && (
                         <span className="size-2 shrink-0 rounded-full bg-brand" aria-label={`${recordDirtyCount} thay đổi chưa lưu`} />
                       )}
-                      <span className="truncate">{recordLabel}</span>
+                      <span
+                        className={
+                          layout?.recordsPerRow && layout.recordStyle !== "flat"
+                            ? "truncate"
+                            : "break-words"
+                        }
+                      >
+                        {recordLabel}
+                      </span>
                     </h3>
                   </div>
                   {/* Nhóm trang có layout cố định: bỏ hẳn nút xóa thay vì để nút
                       chết, đổi bằng dòng chữ giải thích số mục là cố định. */}
                   {config.kind === "collection" &&
                     (refinedEditor ? (
+                      layout?.recordsPerRow &&
+                      layout.recordStyle !== "flat" &&
+                      !layout.hideFixedItemHint ? (
                       <span className="shrink-0 text-xs text-muted-foreground">
                         Số mục cố định theo layout website
                       </span>
+                      ) : null
                     ) : (
                       <Button
                         type="button"
@@ -479,6 +506,7 @@ function ResourceEditorGroup({
                     width={layout.mediaWidth}
                     index={recordIndex}
                     fill={layout.mediaPreview === "fill"}
+                    compact={Boolean(layout.recordsPerRow)}
                     packedText={packedTextFields !== null}
                     media={mediaFields.map((field) => (
                       <Fragment key={field.key}>
@@ -511,6 +539,7 @@ function ResourceEditorGroup({
                     packedFields ? EDITOR_GRID_CLASS : "grid gap-4 lg:gap-5",
                     !packedFields &&
                       !singleColumnContentEditor &&
+                      !stackRecordFields &&
                       recordFields.length > 1 &&
                       "md:grid-cols-2",
                   )}
@@ -566,15 +595,18 @@ function MediaRecordLayout({
   width = "half",
   index,
   fill = false,
+  compact = false,
   packedText = false,
   media,
   text,
 }: {
   side: "left" | "right" | "alternate";
-  width?: "half" | "third";
+  width?: "half" | "third" | "twoFifths" | "fortyFive";
   index: number;
   /** Cột ảnh cao bằng cột chữ thay vì chỉ cao bằng tấm ảnh xem trước nhỏ. */
   fill?: boolean;
+  /** Bố cục nằm trong thẻ nhiều cột nên giảm khoảng hở giữa media và nội dung. */
+  compact?: boolean;
   /** Cột chữ đã được xếp sẵn theo lưới 12 cột thay vì chồng dọc. */
   packedText?: boolean;
   media: React.ReactNode;
@@ -586,13 +618,14 @@ function MediaRecordLayout({
   // `fill`: cột ảnh cao bằng cột chữ (`h-full` + ô ảnh `flex-1`) nên không còn
   // mảng trống hẫng bên dưới tấm ảnh.
   const mediaColumn = (
-    <div className={cn(fill ? "flex h-full flex-col gap-4" : "space-y-4")}>
+    <div className={cn("min-w-0", fill ? "flex h-full flex-col gap-4" : "space-y-4")}>
       {media}
     </div>
   );
   const textColumn = (
     <div
       className={cn(
+        "min-w-0",
         packedText ? EDITOR_GRID_CLASS : "space-y-4",
         width === "half" && "max-w-[31.875rem]",
       )}
@@ -604,13 +637,22 @@ function MediaRecordLayout({
   return (
     <div
       className={cn(
-        "grid gap-5 lg:gap-10",
+        "grid min-w-0 gap-5",
+        compact ? "lg:gap-5" : "lg:gap-10",
         fill ? "items-stretch" : "items-start",
         width === "third"
           ? mediaOnRight
-            ? "lg:grid-cols-[2fr_1fr]"
-            : "lg:grid-cols-[1fr_2fr]"
-          : "lg:grid-cols-2",
+            ? "lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)]"
+            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)]"
+          : width === "twoFifths"
+            ? mediaOnRight
+              ? "lg:grid-cols-[minmax(0,3fr)_minmax(0,2fr)]"
+              : "lg:grid-cols-[minmax(0,2fr)_minmax(0,3fr)]"
+            : width === "fortyFive"
+            ? mediaOnRight
+              ? "lg:grid-cols-[minmax(0,11fr)_minmax(0,9fr)]"
+              : "lg:grid-cols-[minmax(0,9fr)_minmax(0,11fr)]"
+            : "lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]",
       )}
     >
       {mediaOnRight ? (

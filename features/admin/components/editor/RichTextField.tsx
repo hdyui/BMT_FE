@@ -19,6 +19,7 @@ export function RichTextField({
   onChange: (value: string) => void;
 }) {
   const editorRef = useRef<HTMLDivElement>(null);
+  const selectionRef = useRef<Range | null>(null);
 
   useLayoutEffect(() => {
     const editor = editorRef.current;
@@ -26,38 +27,75 @@ export function RichTextField({
     editor.innerHTML = sanitizeRichText(value);
   }, [value]);
 
+  function rememberSelection() {
+    const editor = editorRef.current;
+    const selection = window.getSelection();
+    if (!editor || !selection || selection.rangeCount === 0) return;
+
+    const range = selection.getRangeAt(0);
+    if (!editor.contains(range.commonAncestorContainer)) return;
+    selectionRef.current = range.cloneRange();
+  }
+
+  function restoreSelection() {
+    const editor = editorRef.current;
+    if (!editor) return;
+    editor.focus();
+
+    const selection = window.getSelection();
+    const range = selectionRef.current;
+    if (!selection || !range) return;
+    selection.removeAllRanges();
+    selection.addRange(range);
+  }
+
   function run(command: "bold" | "italic" | "insertUnorderedList" | "formatBlock", argument?: string) {
-    editorRef.current?.focus();
+    restoreSelection();
     document.execCommand(command, false, argument);
+    rememberSelection();
     commit();
   }
 
   function addLink() {
+    rememberSelection();
     const href = window.prompt("Nhập liên kết (https://, /duong-dan, mailto: hoặc tel:)");
     if (!href) return;
     const normalized = href.trim();
     if (!/^(https?:\/\/|\/(?!\/)|mailto:|tel:|#)/i.test(normalized)) return;
-    editorRef.current?.focus();
+    restoreSelection();
     document.execCommand("createLink", false, normalized);
+    rememberSelection();
     commit();
+  }
+
+  function emitDraft() {
+    const editor = editorRef.current;
+    if (!editor) return;
+
+    // Không sanitize/rewrite DOM trong lúc người dùng đang gõ. Trình duyệt cần
+    // giữ các node tạm (đặc biệt khi Enter trong <li>) để caret và danh sách hoạt
+    // động đúng. Nội dung vẫn được sanitize khi blur hoặc sau thao tác toolbar.
+    onChange(editor.innerHTML);
+    rememberSelection();
   }
 
   function commit() {
     const editor = editorRef.current;
     if (!editor) return;
     const next = sanitizeRichText(editor.innerHTML);
+    const previous = sanitizeRichText(value);
     if (editor.innerHTML !== next) editor.innerHTML = next;
-    onChange(next);
+    if (next !== previous) onChange(next);
   }
 
   return (
     <div className="overflow-hidden rounded-xl border bg-background focus-within:ring-3 focus-within:ring-ring/20" aria-invalid={invalid}>
       <div className="flex flex-wrap gap-1 border-b bg-muted/30 p-1.5" aria-label="Định dạng nội dung">
-        <ToolbarButton label="Đoạn văn" onClick={() => run("formatBlock", "p")}><Pilcrow /></ToolbarButton>
-        <ToolbarButton label="In đậm" onClick={() => run("bold")}><Bold /></ToolbarButton>
-        <ToolbarButton label="In nghiêng" onClick={() => run("italic")}><Italic /></ToolbarButton>
-        <ToolbarButton label="Thêm liên kết" onClick={addLink}><Link2 /></ToolbarButton>
-        <ToolbarButton label="Danh sách dấu đầu dòng" onClick={() => run("insertUnorderedList")}><List /></ToolbarButton>
+        <ToolbarButton label="Đoạn văn" onMouseDown={rememberSelection} onClick={() => run("formatBlock", "p")}><Pilcrow /></ToolbarButton>
+        <ToolbarButton label="In đậm" onMouseDown={rememberSelection} onClick={() => run("bold")}><Bold /></ToolbarButton>
+        <ToolbarButton label="In nghiêng" onMouseDown={rememberSelection} onClick={() => run("italic")}><Italic /></ToolbarButton>
+        <ToolbarButton label="Thêm liên kết" onMouseDown={rememberSelection} onClick={addLink}><Link2 /></ToolbarButton>
+        <ToolbarButton label="Danh sách dấu đầu dòng" onMouseDown={rememberSelection} onClick={() => run("insertUnorderedList")}><List /></ToolbarButton>
       </div>
       <div
         ref={editorRef}
@@ -68,15 +106,39 @@ export function RichTextField({
         data-placeholder={placeholder ?? "Nhập nội dung..."}
         className="admin-richtext min-h-36 px-3 py-2.5 text-sm leading-relaxed outline-none empty:before:pointer-events-none empty:before:text-muted-foreground empty:before:content-[attr(data-placeholder)] [&_a]:text-brand [&_a]:underline [&_li]:ml-5 [&_ul]:list-disc"
         onBlur={commit}
-        onInput={commit}
+        onFocus={rememberSelection}
+        onInput={emitDraft}
+        onKeyUp={rememberSelection}
+        onMouseUp={rememberSelection}
       />
     </div>
   );
 }
 
-function ToolbarButton({ label, onClick, children }: { label: string; onClick: () => void; children: React.ReactNode }) {
+function ToolbarButton({
+  label,
+  onMouseDown,
+  onClick,
+  children,
+}: {
+  label: string;
+  onMouseDown: () => void;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
   return (
-    <Button type="button" variant="ghost" size="icon-sm" aria-label={label} title={label} onMouseDown={(event) => event.preventDefault()} onClick={onClick}>
+    <Button
+      type="button"
+      variant="ghost"
+      size="icon-sm"
+      aria-label={label}
+      title={label}
+      onMouseDown={(event) => {
+        onMouseDown();
+        event.preventDefault();
+      }}
+      onClick={onClick}
+    >
       {children}
     </Button>
   );

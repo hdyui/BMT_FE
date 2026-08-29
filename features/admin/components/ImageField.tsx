@@ -137,7 +137,7 @@ export function ImageField({
         </button>
         {/* Ảnh là một slot cố định của layout nên không có nút xóa — bỏ trống ô
             ảnh sẽ để lại lỗ hổng trên website, chỉ cho đổi ảnh khác. */}
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex flex-col items-start gap-2">
           {value && (
             <Button type="button" variant="outline" size="sm" onClick={() => setViewerOpen(true)}>
               <Expand /> Xem ảnh

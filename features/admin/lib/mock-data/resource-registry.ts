@@ -95,6 +95,12 @@ const textarea = (
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "textarea", ...options });
 
+const richtext = (
+  key: string,
+  label: string,
+  options: Partial<AdminFieldConfig> = {},
+): AdminFieldConfig => ({ key, label, type: "richtext", ...options });
+
 const number = (
   key: string,
   label: string,
@@ -153,12 +159,16 @@ const record = (
   data: Record<string, string | number | boolean | string[]>,
 ): AdminCrudRecord => ({ id, ...data });
 
-function stripSimpleHtml(value: string) {
-  return value
-    .replace(/<\/p>\s*<p>/gi, "\n\n")
-    .replace(/<br\s*\/?>/gi, "\n")
-    .replace(/<[^>]+>/g, "")
-    .trim();
+function listItemsToRichText(items: readonly string[]) {
+  const escapeHtml = (value: string) =>
+    value
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+
+  return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
 }
 
 const moduleLabels: Record<AdminModuleKey, string> = {
@@ -184,13 +194,57 @@ const moduleContentHrefs: Partial<Record<AdminModuleKey, string>> = {
   contacts: "/admin/content/contact",
 };
 
+const textareaLimitedModules = new Set<AdminModuleKey>([
+  "home",
+  "about",
+  "projects",
+  "news",
+  "recruitment",
+  "contacts",
+]);
+
+function textareaLineRules(
+  module: AdminModuleKey,
+  path: string,
+  field: AdminFieldConfig,
+): Pick<AdminFieldConfig, "rows" | "maxLines"> {
+  if (field.type !== "textarea" || !textareaLimitedModules.has(module)) return {};
+  if (field.rows || field.maxLines) return {};
+
+  if (field.key === "successMessage") return { rows: 3, maxLines: 4 };
+  if (field.key === "summary" || field.key.toLowerCase().includes("excerpt")) {
+    return { rows: 3, maxLines: 4 };
+  }
+  if (field.key.toLowerCase().includes("title")) return { rows: 2, maxLines: 2 };
+
+  if (module === "projects" && path === "details") {
+    if (field.key === "ctaDescription") return { rows: 4, maxLines: 5 };
+    return { rows: 6, maxLines: 8 };
+  }
+
+  if (module === "about" && path === "vision-mission") {
+    return { rows: 4, maxLines: 6 };
+  }
+
+  if (path.includes("hero") || path === "page-hero") {
+    return { rows: 4, maxLines: 5 };
+  }
+
+  return { rows: 4, maxLines: 6 };
+}
+
 function resource(
   config: Omit<AdminResourceConfig, "key" | "moduleLabel" | "moduleHref">,
 ): AdminResourceConfig {
   const sections = config.sections
     .map((item) => ({
       ...item,
-      fields: item.fields.filter((field) => field.key !== "order"),
+      fields: item.fields
+        .filter((field) => field.key !== "order")
+        .map((field) => ({
+          ...field,
+          ...textareaLineRules(config.module, config.path, field),
+        })),
     }))
     .filter((item) => item.fields.length > 0);
 
@@ -311,15 +365,23 @@ const homeResources: AdminResourceConfig[] = [
     previewField: "image",
     orderField: "order",
     companionResourceKey: "home/projects-section-content",
-    // Public site trình bày các dự án thành các card song song.
-    editorLayout: { recordsPerRow: 2 },
+    // Desktop chia thành hai cột dọc nhưng vẫn giữ cảm giác danh sách phẳng:
+    // mỗi dự án thu gọn, ảnh ở trái và metadata ở phải, không quay lại kiểu box
+    // lồng box trước đây. Tablet/mobile tự về một cột.
+    editorLayout: {
+      recordsPerRow: 2,
+      recordStyle: "flat",
+      mediaSide: "left",
+      mediaWidth: "third",
+      mediaAltPlacement: "media",
+    },
     sections: [
       section("content", "Nội dung dự án", [
-        text("title", "Tiêu đề", { required: true }),
-        text("categoryLabel", "Nhãn danh mục", { required: true }),
-        text("area", "Diện tích"),
-        text("styleText", "Phong cách"),
-        number("year", "Năm", { min: 2000 }),
+        text("title", "Tiêu đề", { required: true, span: 12 }),
+        text("categoryLabel", "Nhãn danh mục", { required: true, span: 6 }),
+        text("area", "Diện tích", { span: 6 }),
+        text("styleText", "Phong cách", { span: 6 }),
+        number("year", "Năm", { min: 2000, span: 6 }),
       ]),
       section("media", "Hình ảnh", [
         image("image", "Ảnh dự án", { altKey: "imageAlt", ratio: "16:9" }),
@@ -397,12 +459,12 @@ const homeResources: AdminResourceConfig[] = [
     kind: "collection",
     titleField: "label",
     orderField: "order",
-    editorLayout: { recordsPerRow: 3 },
     sections: [
       section("content", "Số liệu", [
-        number("value", "Giá trị", { required: true }),
-        text("label", "Nhãn", { required: true }),
-        text("suffix", "Hậu tố", { placeholder: "+" }),
+        // Ba bản ghi xếp thành ba thanh ngang; bên trong mỗi thanh là 3 cột.
+        number("value", "Giá trị", { required: true, span: 4 }),
+        text("label", "Nhãn", { required: true, span: 4 }),
+        text("suffix", "Hậu tố", { placeholder: "+", span: 4 }),
         orderField,
       ]),
     ],
@@ -497,9 +559,16 @@ const homeResources: AdminResourceConfig[] = [
     previewField: "logoImage",
     orderField: "order",
     companionResourceKey: "settings/partners-section-content",
-    // Hai thẻ trên một hàng để logo và các ô nhập không bị bó hẹp. Trước đây 3
-    // thẻ/hàng làm phần logo + liên kết co quá nhỏ và dòng trạng thái bị tràn.
-    editorLayout: { recordsPerRow: 2 },
+    // Logo và nội dung được tách thành hai vùng rõ ràng. Renderer chỉ chuyển
+    // thành hai card/hàng ở màn hình đủ rộng, tránh ô liên kết đè lên logo khi
+    // sidebar + viewport làm phần nội dung admin bị hẹp.
+    editorLayout: {
+      recordsPerRow: 2,
+      mediaSide: "left",
+      mediaWidth: "third",
+      mediaAltPlacement: "text",
+      hideFixedItemHint: true,
+    },
     sections: [
       section("content", "Thông tin đối tác", [
         text("name", "Tên đối tác", { required: true }),
@@ -649,16 +718,20 @@ const aboutResources: AdminResourceConfig[] = [
     editorLayout: {
       splitColumns: {
         left: ["eyebrow", "heading", "description"],
-        right: ["desktopImage", "mobileImage"],
+        right: ["desktopImage"],
       },
     },
     sections: [
       section("layout", "Bố cục phần mở đầu", [
-        text("eyebrow", "Eyebrow", { required: true }),
-        textarea("heading", "Tiêu đề chính", { required: true, maxLength: 90 }),
-        textarea("description", "Mô tả", { required: true, maxLength: 420 }),
-        image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt", ratio: "16:9" }),
-        image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt", ratio: "4:5" }),
+        text("eyebrow", "Dòng giới thiệu", { required: true, span: 12 }),
+        text("heading", "Tiêu đề chính", { required: true, maxLength: 90, span: 12 }),
+        textarea("description", "Mô tả", { required: true, maxLength: 420, span: 12 }),
+        image("desktopImage", "Ảnh Hero", {
+          altKey: "desktopAlt",
+          ratio: "16:9",
+          recommendedSize: "1920 x 1080px",
+          required: true,
+        }),
       ]),
     ],
     initialRecords: [
@@ -669,8 +742,6 @@ const aboutResources: AdminResourceConfig[] = [
           "BMT Decor là đơn vị thiết kế kiến trúc, thiết kế nội thất, thi công xây dựng và cải tạo trọn gói với hơn 15 năm kinh nghiệm.",
         desktopImage: "/images/about/source/hero-interior.png",
         desktopAlt: "Không gian nội thất phòng ăn hiện đại do BMT Decor thiết kế",
-        mobileImage: "/images/about/source/hero-interior.png",
-        mobileAlt: "Không gian nội thất BMT Decor trên thiết bị di động",
       }),
     ],
   }),
@@ -715,14 +786,23 @@ const aboutResources: AdminResourceConfig[] = [
     previewField: "image",
     orderField: "order",
     companionResourceKey: "about/core-values-section-content",
-    editorLayout: { recordsPerRow: 2 },
+    editorLayout: {
+      recordsPerRow: 2,
+      mediaSide: "left",
+      mediaWidth: "third",
+      mediaPreview: "large",
+      hideFixedItemHint: true,
+    },
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),
         textarea("description", "Mô tả", { required: true }),
-        image("image", "Hình minh họa", { altKey: "imageAlt" }),
-        orderField,
+        text("imageAlt", "Văn bản thay thế"),
       ]),
+      section("media", "Hình minh họa", [
+        image("image", "Hình minh họa"),
+      ]),
+      section("display", "Thứ tự", [orderField]),
     ],
     initialRecords: aboutCoreValues.map((item, index) =>
       record(`core-value-${index + 1}`, {
@@ -780,16 +860,19 @@ const aboutResources: AdminResourceConfig[] = [
     priority: "P2",
     kind: "collection",
     titleField: "title",
-    previewField: "defaultImage",
+    previewField: "normalImage",
     orderField: "order",
     companionResourceKey: "about/capabilities-section-content",
     editorLayout: { recordsPerRow: 2 },
     sections: [
       section("content", "Nội dung", [
-        text("number", "Số thứ tự", { required: true }),
+        text("number", "Số thứ tự", { required: true, editable: false }),
         text("title", "Tiêu đề", { required: true }),
         text("mobileTitle", "Tiêu đề trên điện thoại"),
-        textarea("description", "Mô tả", { required: true }),
+        richtext("description", "Mô tả", {
+          required: true,
+          placeholder: "Nhập mô tả năng lực...",
+        }),
       ]),
       section("display", "Thứ tự", [orderField]),
     ],
@@ -1652,34 +1735,59 @@ const remainingResources: AdminResourceConfig[] = [
     path: "page-hero",
     title: "Mở đầu trang Dự án",
     singular: "Phần mở đầu trang Dự án",
-    description: "Quản lý trọn phần mở đầu trang Dự án gồm tiêu đề nhiều dòng, nội dung mô tả, nút bấm, liên kết và hình ảnh cho máy tính/điện thoại.",
+    description: "Quản lý phần mở đầu trang Dự án theo bố cục ảnh bên trái và nội dung bên phải. Một ảnh Hero dùng chung cho máy tính và điện thoại; giao diện mobile tự co/cắt theo kích thước màn hình.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
     previewField: "desktopImage",
-    editorLayout: { mediaSide: "right", mediaWidth: "half", mediaPreview: "wide" },
+    editorLayout: {
+      mediaSide: "left",
+      mediaWidth: "twoFifths",
+      mediaPreview: "wide",
+      mediaAltPlacement: "text",
+    },
     sections: [
-      section("content", "Nội dung", [textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
-      section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
+      section("content", "Nội dung", [
+        textarea("title", "Tiêu đề chính", { required: true, span: 12 }),
+        textarea("description", "Mô tả", { span: 12 }),
+        text("ctaLabel", "Chữ trên nút bấm", { span: 5 }),
+        siteLink("ctaHref", "Liên kết của nút bấm", { span: 7 }),
+      ]),
+      section("media", "Hình ảnh", [
+        image("desktopImage", "Ảnh Hero", { altKey: "imageAlt", required: true }),
+      ]),
     ],
-    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/contact", desktopImage: "/images/projects/hero-composition.png", desktopAlt: "Các dự án tiêu biểu của BMT Decor", mobileImage: "/images/projects/mobile/hero-composition.png", mobileAlt: "Các dự án tiêu biểu của BMT Decor" })],
+    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/lien-he", desktopImage: "/images/projects/hero-composition.png", imageAlt: "Các dự án tiêu biểu của BMT Decor" })],
   }),
   resource({
     module: "news",
     path: "page-hero",
     title: "Mở đầu trang Tin tức",
     singular: "Phần mở đầu trang Tin tức",
-    description: "Quản lý trọn phần mở đầu trang Tin tức gồm dòng giới thiệu, tiêu đề, mô tả, nút bấm, liên kết và hình ảnh trên máy tính/điện thoại.",
+    description: "Quản lý phần mở đầu trang Tin tức theo bố cục ảnh bên trái và nội dung bên phải. Một ảnh Hero dùng chung cho máy tính và điện thoại; giao diện mobile tự co/cắt theo kích thước màn hình.",
     priority: "P2",
     kind: "singleton",
     titleField: "title",
     previewField: "desktopImage",
-    editorLayout: { mediaSide: "right", mediaWidth: "half", mediaPreview: "wide" },
+    editorLayout: {
+      mediaSide: "left",
+      mediaWidth: "twoFifths",
+      mediaPreview: "wide",
+      mediaAltPlacement: "text",
+    },
     sections: [
-      section("content", "Nội dung", [text("eyebrow", "Dòng giới thiệu"), textarea("title", "Tiêu đề chính", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
-      section("media", "Hình ảnh", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
+      section("content", "Nội dung", [
+        text("eyebrow", "Dòng giới thiệu", { span: 12 }),
+        text("title", "Tiêu đề chính", { required: true, span: 12 }),
+        textarea("description", "Mô tả", { span: 12 }),
+        text("ctaLabel", "Chữ trên nút bấm", { span: 5 }),
+        siteLink("ctaHref", "Liên kết của nút bấm", { span: 7 }),
+      ]),
+      section("media", "Hình ảnh", [
+        image("desktopImage", "Ảnh Hero", { altKey: "imageAlt", required: true }),
+      ]),
     ],
-    initialRecords: [record("news-page-hero", { eyebrow: "KIẾN THỨC", title: "THIẾT KẾ & THI CÔNG", description: "Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ BMT Decor.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "/contact", desktopImage: "/images/news/hero-house.jpg", desktopAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế", mobileImage: "/images/news/mobile/hero-photo.png", mobileAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế" })],
+    initialRecords: [record("news-page-hero", { eyebrow: "KIẾN THỨC", title: "THIẾT KẾ & THI CÔNG", description: "Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ BMT Decor.", ctaLabel: "LIÊN HỆ NGAY", ctaHref: "/lien-he", desktopImage: "/images/news/hero-house.jpg", imageAlt: "Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế" })],
   }),
   resource({
     module: "quotation",
@@ -1857,9 +1965,33 @@ const remainingResources: AdminResourceConfig[] = [
     titleField: "title",
     previewField: "desktopImage",
     orderField: "order",
-    editorLayout: { mediaSide: "left", mediaWidth: "third", mediaPreview: "large" },
-    sections: [section("content", "Nội dung", [text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả"), image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt" }), image("mobileImage", "Ảnh trên điện thoại", { altKey: "imageAlt" }), siteLink("href", "Liên kết"), orderField])],
-    initialRecords: featuredNews.map((item, index) => record(item.id, { ...item, order: index + 1 })),
+    editorLayout: {
+      mediaSide: "left",
+      mediaWidth: "twoFifths",
+      mediaPreview: "wide",
+      mediaAltPlacement: "text",
+    },
+    sections: [
+      section("content", "Nội dung", [
+        text("title", "Tiêu đề", { required: true, span: 12 }),
+        textarea("excerpt", "Mô tả", { span: 12 }),
+        siteLink("href", "Liên kết", { span: 12 }),
+      ]),
+      section("media", "Hình ảnh", [
+        image("desktopImage", "Ảnh tin nổi bật", { altKey: "imageAlt", ratio: "1.38:1" }),
+      ]),
+      section("display", "Thứ tự", [orderField]),
+    ],
+    initialRecords: featuredNews.map((item, index) =>
+      record(item.id, {
+        title: item.title,
+        excerpt: item.excerpt,
+        desktopImage: item.desktopImage,
+        imageAlt: item.imageAlt,
+        href: item.href,
+        order: index + 1,
+      }),
+    ),
   }),
   resource({
     module: "news",
@@ -1886,14 +2018,24 @@ const remainingResources: AdminResourceConfig[] = [
     previewField: "desktopImage",
     orderField: "order",
     sections: [
-      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn hệ thống", { required: true, editable: false }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), siteLink("href", "Liên kết")]),
+      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn hệ thống", { required: true, editable: false }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), siteLink("href", "Liên kết"), text("imageAlt", "Văn bản thay thế")]),
       section("media", "Hình ảnh", [
-        image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt", ratio: "1.38:1" }),
-        image("mobileImage", "Ảnh trên điện thoại", { altKey: "imageAlt", ratio: "5:3" }),
+        image("desktopImage", "Ảnh bài viết", { ratio: "1.38:1" }),
       ]),
-      section("body", "Nội dung bài viết", [textarea("body", "Nội dung", { required: true }), orderField]),
+      section("body", "Nội dung bài viết", [richtext("body", "Nội dung", { required: true }), orderField]),
     ],
-    initialRecords: articles.map((item, index) => record(item.id, { ...item, body: stripSimpleHtml(item.body), order: index + 1 })),
+    initialRecords: articles.map((item, index) =>
+      record(item.id, {
+        slug: item.slug,
+        title: item.title,
+        excerpt: item.excerpt,
+        desktopImage: item.desktopImage,
+        imageAlt: item.imageAlt,
+        href: item.href,
+        body: item.body,
+        order: index + 1,
+      }),
+    ),
   }),
   scopedContactFormResource("news", "contact-form", "Tin tức"),
   resource({
@@ -1901,18 +2043,34 @@ const remainingResources: AdminResourceConfig[] = [
     path: "hero",
     title: "Mở đầu trang Tuyển dụng",
     singular: "Phần mở đầu trang Tuyển dụng",
-    description: "Quản lý trọn phần mở đầu trang Tuyển dụng gồm tiêu đề, mô tả, nút bấm, liên kết và hình ảnh riêng cho máy tính/điện thoại.",
+    description: "Quản lý phần mở đầu trang Tuyển dụng theo bố cục ảnh bên trái và nội dung bên phải. Một ảnh dùng chung cho máy tính và điện thoại; giao diện mobile tự co/cắt ảnh theo kích thước màn hình.",
     priority: "P2",
     kind: "singleton",
     titleField: "title",
     previewField: "desktopImage",
-    editorLayout: { mediaSide: "left", mediaWidth: "half", mediaPreview: "wide" },
+    editorLayout: {
+      mediaSide: "left",
+      mediaWidth: "twoFifths",
+      mediaPreview: "wide",
+      mediaAltPlacement: "text",
+    },
     sections: [
-      section("content", "Nội dung", [textarea("title", "Tiêu đề", { required: true }), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")]),
-      section("desktop", "Ảnh trên máy tính", [image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt" })]),
-      section("mobile", "Ảnh trên điện thoại", [image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt" })]),
+      section("content", "Nội dung", [
+        text("title", "Tiêu đề", { required: true, span: 12 }),
+        textarea("description", "Mô tả", { span: 12 }),
+        text("ctaLabel", "Chữ trên nút bấm", { span: 5 }),
+        siteLink("ctaHref", "Liên kết của nút bấm", { span: 7 }),
+      ]),
+      section("media", "Hình ảnh", [
+        image("desktopImage", "Ảnh Hero", {
+          altKey: "desktopAlt",
+          ratio: "1.486:1",
+          recommendedSize: "1486 x 1000px",
+          required: true,
+        }),
+      ]),
     ],
-    initialRecords: [record("career-hero", { title: "Gia nhập đội ngũ BMT Decor", description: "Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm.", ctaLabel: "Xem vị trí đang tuyển", ctaHref: "#career-openings-title", desktopImage: "/images/careers/hero.png", desktopAlt: "Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor", mobileImage: "/images/careers/mobile/hero-artwork.png", mobileAlt: "Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor trên thiết bị di động" })],
+    initialRecords: [record("career-hero", { title: "Gia nhập đội ngũ BMT Decor", description: "Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm.", ctaLabel: "Xem vị trí đang tuyển", ctaHref: "#career-openings-title", desktopImage: "/images/careers/hero.png", desktopAlt: "Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor" })],
   }),
   resource({
     module: "recruitment",
@@ -1927,9 +2085,16 @@ const remainingResources: AdminResourceConfig[] = [
     previewField: "image",
     sections: [
       section("general", "Thông tin vị trí", [text("title", "Tiêu đề", { required: true }), text("department", "Phòng ban"), text("location", "Địa điểm"), text("schedule", "Lịch làm việc"), text("compensation", "Thu nhập"), textarea("summary", "Mô tả ngắn")]),
-      section("details", "Chi tiết công việc", [list("responsibilities", "Trách nhiệm"), list("benefits", "Quyền lợi"), image("image", "Ảnh", { altKey: "imageAlt", ratio: "1.38:1" })]),
+      section("details", "Chi tiết công việc", [richtext("responsibilities", "Trách nhiệm", { required: true }), richtext("benefits", "Quyền lợi", { required: true }), image("image", "Ảnh", { altKey: "imageAlt", ratio: "1.38:1" })]),
     ],
-    initialRecords: careerJobs.map((job) => record(job.id, { ...job, imageAlt: job.title })),
+    initialRecords: careerJobs.map((job) =>
+      record(job.id, {
+        ...job,
+        responsibilities: listItemsToRichText(job.responsibilities),
+        benefits: listItemsToRichText(job.benefits),
+        imageAlt: job.title,
+      }),
+    ),
   }),
   resource({
     module: "recruitment",
@@ -2051,7 +2216,7 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "collection",
     titleField: "label",
     orderField: "order",
-    editorLayout: { recordsPerRow: 4 },
+    editorLayout: { recordsPerRow: 2, hideFixedItemHint: true },
     sections: [section("menu", "Mục trong danh mục", [text("label", "Tên hiển thị", { required: true }), siteLink("href", "Liên kết", { required: true }), orderField])],
     initialRecords: navigation.map((item, index) => record(`navigation-${index + 1}`, { label: item.label, href: item.href, order: index + 1 })),
   }),

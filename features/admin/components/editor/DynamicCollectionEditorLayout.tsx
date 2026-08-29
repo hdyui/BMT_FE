@@ -90,28 +90,20 @@ export function DynamicCollectionEditorLayout({
 
   if (kind === "news") {
     return (
-      <div className="grid gap-5">
-        <VisualEditorSection
-          title="Hàng tin tức trên website"
-          description="Bản desktop hiển thị ảnh bên trái, tiêu đề và mô tả bên phải. Ảnh mobile được giữ thành một slot riêng ngay dưới ảnh desktop để dễ đối chiếu."
-        >
-          <div className="grid items-start gap-6 p-5 sm:p-6 lg:grid-cols-[minmax(300px,.78fr)_minmax(0,1.22fr)] lg:gap-8">
-            <div className="grid gap-5">
-              {renderField("desktopImage", { imageSize: "wide", label: "Ảnh danh sách trên máy tính" })}
-              {renderField("mobileImage", { imageSize: "large", label: "Ảnh danh sách trên điện thoại" })}
-            </div>
-            <div className="grid content-start gap-5 rounded-2xl border bg-muted/15 p-4 sm:p-5">
-              {renderField("title", { label: "Tiêu đề bài viết" })}
-              {renderField("excerpt", { label: "Mô tả ngắn dưới tiêu đề" })}
-              {renderField("href", { label: "Trang mở khi bấm Xem chi tiết" })}
-            </div>
+      <div className="grid gap-6">
+        <div className="grid items-start gap-6 rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6 lg:grid-cols-[minmax(300px,.78fr)_minmax(0,1.22fr)] lg:gap-8">
+          <div>
+            {renderField("desktopImage", { imageSize: "wide", label: "Ảnh bài viết" })}
           </div>
-        </VisualEditorSection>
+          <div className="grid content-start gap-5">
+            {renderField("title", { label: "Tiêu đề bài viết" })}
+            {renderField("excerpt", { label: "Mô tả ngắn" })}
+            {renderField("href", { label: "Liên kết bài viết" })}
+            {renderField("imageAlt", { label: "Văn bản thay thế" })}
+          </div>
+        </div>
 
-        <VisualEditorSection
-          title="Nội dung bài viết"
-          description="Phần này không xuất hiện trong hàng danh sách; người đọc thấy nội dung sau khi mở bài viết."
-        >
+        <VisualEditorSection title="Nội dung bài viết">
           <div className="p-5 sm:p-6">{renderField("body")}</div>
         </VisualEditorSection>
       </div>
@@ -119,35 +111,25 @@ export function DynamicCollectionEditorLayout({
   }
 
   return (
-    <div className="grid gap-5">
-      <VisualEditorSection
-        title="Vị trí tuyển dụng trên website"
-        description="Giữ đúng nhịp ngoài trang Tuyển dụng: ảnh bên trái; tiêu đề, 4 thông tin nhanh và mô tả ngắn bên phải."
-      >
-        <div className="grid items-start gap-6 p-5 sm:p-6 md:grid-cols-[34%_minmax(0,1fr)] lg:gap-8">
-          <div>{renderField("image", { imageSize: "wide", label: "Ảnh vị trí tuyển dụng" })}</div>
-          <div className="grid content-start gap-5">
-            {renderField("title", { label: "Tên vị trí" })}
-            <div className="grid gap-4 sm:grid-cols-2">
-              {renderField("department", { label: "Phòng ban" })}
-              {renderField("location", { label: "Địa điểm" })}
-              {renderField("schedule", { label: "Lịch làm việc" })}
-              {renderField("compensation", { label: "Thu nhập" })}
-            </div>
-            {renderField("summary", { label: "Mô tả ngắn" })}
+    <div className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
+      <div className="grid items-start gap-6 p-5 sm:p-6 md:grid-cols-[34%_minmax(0,1fr)] lg:gap-8">
+        <div>{renderField("image", { imageSize: "wide", label: "Ảnh vị trí tuyển dụng" })}</div>
+        <div className="grid content-start gap-5">
+          {renderField("title", { label: "Tên vị trí" })}
+          <div className="grid gap-4 sm:grid-cols-2">
+            {renderField("department", { label: "Phòng ban" })}
+            {renderField("location", { label: "Địa điểm" })}
+            {renderField("schedule", { label: "Lịch làm việc" })}
+            {renderField("compensation", { label: "Thu nhập" })}
           </div>
+          {renderField("summary", { label: "Mô tả ngắn" })}
         </div>
-      </VisualEditorSection>
+      </div>
 
-      <VisualEditorSection
-        title="Chi tiết khi người dùng bấm Xem chi tiết"
-        description="Hai danh sách này nằm trong phần mở rộng của từng vị trí tuyển dụng."
-      >
-        <div className="grid gap-5 p-5 sm:p-6 lg:grid-cols-2">
-          <div className="rounded-2xl border bg-muted/10 p-4">{renderField("responsibilities")}</div>
-          <div className="rounded-2xl border bg-muted/10 p-4">{renderField("benefits")}</div>
-        </div>
-      </VisualEditorSection>
+      <div className="grid gap-6 border-t p-5 sm:p-6 lg:grid-cols-2 lg:gap-8">
+        {renderField("responsibilities")}
+        {renderField("benefits")}
+      </div>
     </div>
   );
 }
@@ -158,16 +140,18 @@ function VisualEditorSection({
   children,
 }: {
   title: string;
-  description: string;
+  description?: string;
   children: ReactNode;
 }) {
   return (
     <section className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
       <div className="border-b px-5 py-4 sm:px-6">
         <h2 className="text-lg font-bold">{title}</h2>
-        <p className="mt-1 max-w-4xl text-xs leading-relaxed text-muted-foreground">
-          {description}
-        </p>
+        {description ? (
+          <p className="mt-1 max-w-4xl text-xs leading-relaxed text-muted-foreground">
+            {description}
+          </p>
+        ) : null}
       </div>
       {children}
     </section>
