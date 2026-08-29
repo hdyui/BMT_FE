@@ -132,7 +132,7 @@ export function CapabilitiesSection() {
 
                 <div className="col-start-2 row-start-1 min-w-0">
                   <span className="block text-[32px] font-extrabold leading-none tabular-nums text-brand">
-                    {index === capabilities.length - 1 ? "01" : number}
+                    {number}
                   </span>
                   <div
                     className="mt-1.5 flex w-[60px] items-center"
