@@ -1144,6 +1144,14 @@ function serviceCollection(
 
 const heroCardFields = [image("image", "Ảnh", { altKey: "alt", required: true })];
 const processFields = [
+  textarea("title", "Tiêu đề", { required: true }),
+  textarea("description", "Mô tả", { required: true }),
+  image("image", "Hình ảnh"),
+];
+// Chỉ trang Xây dựng trọn gói xếp 2 bước/hàng theo lưới 12 cột
+// (`serviceProcessLayouts["xay-dung-tron-goi"]`); span ở đây riêng cho hàng đó
+// để không ảnh hưởng các trang dịch vụ khác đang xếp ảnh–chữ theo cột.
+const turnkeyProcessFields = [
   textarea("title", "Tiêu đề", { required: true, span: 4 }),
   textarea("description", "Mô tả", { required: true, span: 5 }),
   image("image", "Hình ảnh"),
@@ -1709,7 +1717,7 @@ function addServicePageResources(
       // Trang Thi công và Cải tạo tách tiêu đề bước thành 2 dòng (title +
       // subtitle), site render mỗi phần một dòng nên admin cũng phải như vậy.
       processes.map((item, index) => record(`${base}-process-${index + 1}`, { title: item.subtitle ? `${item.title.trim()}\n${item.subtitle}` : item.title, description: item.description ?? item.copy ?? "", image: item.icon ?? "", order: index + 1 })),
-      processFields,
+      base === "xay-dung-tron-goi" ? turnkeyProcessFields : processFields,
       "image",
       {
         ...(sectionPresets.process
