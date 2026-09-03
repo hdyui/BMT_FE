@@ -44,7 +44,7 @@ export const adminHeaderNavigation: AdminHeaderNavItem[] = [
   {
     key: "settings",
     label: "Cấu hình",
-    href: "/admin/settings",
+    href: "/admin/settings/branding",
     icon: Settings2,
   },
 ];

@@ -66,19 +66,37 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
           </header>
 
           {catalogShortcut && (
-            <section className="mb-6 flex flex-col gap-3 rounded-xl border border-dashed bg-muted/20 p-4 sm:flex-row sm:items-center sm:justify-between">
-              <div>
-                <p className="text-sm font-semibold">Danh sách được quản lý riêng trong Danh mục</p>
-                <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                  Tại đây chỉ chỉnh nội dung trình bày của trang. Muốn thêm, xóa hoặc sửa từng {catalogShortcut.itemLabel}, hãy chuyển sang Danh mục.
-                </p>
+            <section className="mb-6 overflow-hidden rounded-xl border border-dashed bg-muted/20">
+              <div className="flex flex-col gap-3 p-4 sm:flex-row sm:items-center sm:justify-between">
+                <div>
+                  <p className="text-sm font-semibold">Danh sách được quản lý riêng trong Danh mục</p>
+                  <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                    Tại đây chỉ chỉnh nội dung trình bày của trang. Muốn thêm, xóa hoặc sửa từng {catalogShortcut.itemLabel}, hãy chuyển sang Danh mục.
+                  </p>
+                </div>
+                <Link
+                  href={catalogShortcut.href}
+                  className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border bg-background px-3 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
+                >
+                  Mở Danh mục <ArrowRight className="size-4" />
+                </Link>
               </div>
-              <Link
-                href={catalogShortcut.href}
-                className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border bg-background px-3 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
-              >
-                Mở Danh mục <ArrowRight className="size-4" />
-              </Link>
+              {selected.id === "news" && (
+                <div className="flex flex-col gap-3 border-t border-dashed p-4 sm:flex-row sm:items-center sm:justify-between">
+                  <div>
+                    <p className="text-sm font-semibold">Tin nổi bật</p>
+                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                      Quản lý các bài viết xuất hiện trong section Tin nổi bật.
+                    </p>
+                  </div>
+                  <Link
+                    href="/admin/news/featured"
+                    className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border bg-background px-3 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
+                  >
+                    Mở Tin nổi bật <ArrowRight className="size-4" />
+                  </Link>
+                </div>
+              )}
             </section>
           )}
 
@@ -112,8 +130,6 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
                 items={getContentItems(["about/hero"])}
               />
               <ContentGroupGrid
-                title="Hành trình · Tầm nhìn & Sứ mệnh · Giá trị cốt lõi"
-                description="Ba nhóm nội dung liên tiếp trên trang Giới thiệu được gom chung để quản lý theo đúng mạch giao diện người dùng."
                 startIndex={1}
                 items={getContentItems([
                   "about/journey",
