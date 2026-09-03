@@ -229,6 +229,14 @@ function textareaLineRules(
     return { rows: 4, maxLines: 6 };
   }
 
+  // Đoạn giới thiệu của dịch vụ con (dự án tiêu biểu/giải pháp/quy trình) là
+  // văn bản dài nhiều dòng, xếp cạnh cột tiêu đề ngắn — cho ô cao hơn mức mặc
+  // định để hiện hết chữ, không co cụm rồi cuộn trong khi cột bên cạnh còn
+  // khoảng trống.
+  if (module === "services" && path.endsWith("-intro")) {
+    return { rows: 3, maxLines: 10 };
+  }
+
   if (path.includes("hero") || path === "page-hero") {
     return { rows: 4, maxLines: 5 };
   }
@@ -1136,8 +1144,8 @@ function serviceCollection(
 
 const heroCardFields = [image("image", "Ảnh", { altKey: "alt", required: true })];
 const processFields = [
-  textarea("title", "Tiêu đề", { required: true }),
-  textarea("description", "Mô tả", { required: true }),
+  textarea("title", "Tiêu đề", { required: true, span: 4 }),
+  textarea("description", "Mô tả", { required: true, span: 5 }),
   image("image", "Hình ảnh"),
 ];
 // Dòng chữ đứng ngay trên danh sách gạch đầu dòng của mỗi thẻ giải pháp.
