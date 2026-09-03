@@ -197,10 +197,13 @@ const moduleContentHrefs: Partial<Record<AdminModuleKey, string>> = {
 const textareaLimitedModules = new Set<AdminModuleKey>([
   "home",
   "about",
+  "services",
   "projects",
   "news",
   "recruitment",
+  "quotation",
   "contacts",
+  "settings",
 ]);
 
 function textareaLineRules(
