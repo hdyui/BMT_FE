@@ -886,6 +886,16 @@ function ResourceEditorGroup({
                           <div className={editorSpanClass(span)} key={field.key}>
                             {renderField(record, field)}
                           </div>
+                        ) : field.key === "title" && config.key.endsWith("/process") ? (
+                          <div className="mt-3" key={field.key}>
+                            {renderField(record, field)}
+                          </div>
+                        ) : field.key === "description" && config.key.endsWith("/process") ? (
+                          // Đẩy nhãn + ô "Mô tả" xuống thấp hơn "Tiêu đề" một chút,
+                          // vì ảnh bên cạnh đã được nâng sát nhãn của nó.
+                          <div className="mt-16" key={field.key}>
+                            {renderField(record, field)}
+                          </div>
                         ) : (
                           <Fragment key={field.key}>{renderField(record, field)}</Fragment>
                         ),
