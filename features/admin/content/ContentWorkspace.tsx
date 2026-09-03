@@ -84,8 +84,6 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
 
           {selected.id === "services" ? (
             <ContentGroupGrid
-              title="Các trang Dịch vụ"
-              description="Chọn trang cần quản lý nội dung."
               items={(selected.children ?? []).map((page) => ({
                 title: page.label,
                 description: getServicePageDescription(page.id),

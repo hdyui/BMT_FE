@@ -36,6 +36,7 @@ export function EditorField({
   lockItemCount = false,
   hideAlt = false,
   imageSize = "thumb",
+  imageActionsLayout = "row",
   onChange,
   onAltChange,
 }: {
@@ -64,6 +65,7 @@ export function EditorField({
    * một bên, chữ một bên để cột ảnh không còn là một mẩu nhỏ trên vùng trống.
    */
   imageSize?: "thumb" | "large" | "wide" | "fill";
+  imageActionsLayout?: "row" | "column";
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;
 }) {
@@ -79,6 +81,7 @@ export function EditorField({
           dirty={dirty}
           streamlined={contentEditorStyle}
           size={imageSize}
+          actionsLayout={imageActionsLayout}
           onChange={onChange}
         />
         {!hideAlt && field.altKey && onAltChange && (
@@ -152,12 +155,52 @@ export function EditorField({
   }
 
   const currentValue = String(value ?? "");
+  const lineCount = currentValue === "" ? 0 : currentValue.split(/\r?\n/).length;
   const counter = field.maxLength
     ? `${currentValue.length}/${field.maxLength}`
-    : undefined;
+    : field.maxLines
+      ? `${lineCount}/${field.maxLines} dòng`
+      : undefined;
+
+  if (field.type === "richtext") {
+    return (
+      <div className="grid gap-2 text-sm font-normal">
+        <div className="flex flex-wrap items-center justify-between gap-2">
+          <span
+            className={cn(
+              "flex items-center gap-2",
+              contentEditorStyle ? "font-semibold" : "font-medium",
+            )}
+          >
+            {dirty && <span className="size-2 rounded-full bg-brand" aria-label="Có thay đổi chưa lưu" />}
+            {field.label}
+          </span>
+          {counter && (
+            <span className="text-[11px] font-normal text-muted-foreground">
+              {counter}
+            </span>
+          )}
+        </div>
+        <div className="font-normal">
+          <RichTextField
+            value={currentValue}
+            placeholder={field.placeholder}
+            invalid={Boolean(error)}
+            onChange={onChange}
+          />
+        </div>
+        {field.description && (
+          <span className="text-xs font-normal text-muted-foreground">
+            {field.description}
+          </span>
+        )}
+        {error && <FieldError>{error}</FieldError>}
+      </div>
+    );
+  }
 
   return (
-    <label className="grid gap-2 text-sm font-normal">
+    <label className="grid min-w-0 gap-2 text-sm font-normal">
       <span className="flex flex-wrap items-center justify-between gap-2">
         <span
           className={cn(
@@ -174,26 +217,21 @@ export function EditorField({
           </span>
         )}
       </span>
-      {field.type === "richtext" ? (
-        <div className="font-normal">
-          <RichTextField
-            value={currentValue}
-            placeholder={field.placeholder}
-            invalid={Boolean(error)}
-            onChange={onChange}
-          />
-        </div>
-      ) : field.type === "textarea" || (multilineText && field.type === "text") ? (
+      {field.type === "textarea" || (multilineText && field.type === "text") ? (
         <AutoGrowTextarea
           value={currentValue}
           placeholder={field.placeholder}
           maxLength={field.maxLength}
+          rows={field.rows}
+          maxLines={field.maxLines}
           aria-invalid={Boolean(error)}
-          onChange={(event) => onChange(event.target.value)}
+          onChange={(event) =>
+            onChange(limitTextareaLines(event.target.value, field.maxLines))
+          }
         />
       ) : field.type === "select" ? (
         <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
-          <SelectTrigger className="w-full font-normal" aria-invalid={Boolean(error)}>
+          <SelectTrigger className="w-full min-w-0 max-w-full font-normal" aria-invalid={Boolean(error)}>
             <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"} />
           </SelectTrigger>
           {/* `alignItemWithTrigger={false}`: mặc định base-ui đặt mục đang chọn
@@ -290,11 +328,14 @@ const supportsFieldSizing =
 function AutoGrowTextarea({
   value,
   className,
+  rows = 1,
+  maxLines,
   ...props
-}: React.ComponentProps<typeof Textarea>) {
+}: React.ComponentProps<typeof Textarea> & { maxLines?: number }) {
   const ref = useRef<HTMLTextAreaElement>(null);
 
   useLayoutEffect(() => {
+    if (maxLines) return;
     if (supportsFieldSizing) return;
     const textarea = ref.current;
     if (!textarea) return;
@@ -316,22 +357,31 @@ function AutoGrowTextarea({
     });
     observer.observe(textarea);
     return () => observer.disconnect();
-  }, [value]);
+  }, [maxLines, value]);
 
   return (
     <Textarea
       {...props}
       ref={ref}
       value={value}
-      rows={1}
+      rows={rows}
+      style={
+        maxLines
+          ? ({ ...props.style, fieldSizing: "fixed" } as React.CSSProperties)
+          : props.style
+      }
       className={cn(
-        // Bỏ `overflow-hidden`: lỡ chiều cao có đo hụt thì nội dung vẫn cuộn
-        // được để đọc tiếp, chứ không biến mất.
         "min-h-10 resize-none bg-background font-normal",
+        maxLines && "overflow-y-auto",
         className,
       )}
     />
   );
+}
+
+function limitTextareaLines(value: string, maxLines?: number) {
+  if (!maxLines) return value;
+  return value.split(/\r?\n/).slice(0, maxLines).join("\n");
 }
 
 function ArrayField({
