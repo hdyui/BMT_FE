@@ -985,7 +985,7 @@ function MediaRecordLayout({
   // `fill`: cột ảnh cao bằng cột chữ (`h-full` + ô ảnh `flex-1`) nên không còn
   // mảng trống hẫng bên dưới tấm ảnh.
   const mediaColumn = (
-    <div className={cn("min-w-0", fill ? "flex h-full flex-col gap-4" : "space-y-4")}>
+    <div className={cn("min-w-0", fill ? "flex h-full flex-col gap-4" : "space-y-0")}>
       {media}
     </div>
   );
