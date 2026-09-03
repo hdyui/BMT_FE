@@ -326,7 +326,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "hero",
     title: "Mở đầu Trang chủ",
     singular: "Ảnh mở đầu",
-    description: "Quản lý toàn bộ nội dung mở đầu Trang chủ gồm tiêu đề, mô tả, nút bấm, liên kết và hình ảnh hiển thị trên máy tính và điện thoại.",
+    description: "Quản lý nội dung mở đầu Trang chủ gồm tiêu đề, mô tả, nút bấm, liên kết và một ảnh banner dùng chung cho mọi kích thước màn hình.",
     priority: "P1",
     kind: "collection",
     titleField: "title",
@@ -342,19 +342,11 @@ const homeResources: AdminResourceConfig[] = [
         text("ctaLabel", "Chữ trên nút bấm", { required: true }),
         siteLink("ctaHref", "Liên kết của nút bấm", { required: true }),
       ]),
-      section("desktop", "Ảnh trên máy tính", [
-        image("desktopImage", "Ảnh trên máy tính", {
+      section("media", "Hình ảnh", [
+        image("desktopImage", "Ảnh banner", {
           altKey: "desktopAlt",
           ratio: "16:9",
           recommendedSize: "1920 × 1080px",
-          required: true,
-        }),
-      ]),
-      section("mobile", "Ảnh trên điện thoại", [
-        image("mobileImage", "Ảnh trên điện thoại", {
-          altKey: "mobileAlt",
-          ratio: "4:5",
-          recommendedSize: "1080 × 1350px",
           required: true,
         }),
       ]),
@@ -399,8 +391,8 @@ const homeResources: AdminResourceConfig[] = [
       ]),
       section("display", "Thứ tự", [orderField]),
     ],
-    initialRecords: homeProjectCategories.flatMap((category) =>
-      category.projects.slice(0, 2).map((project, index) =>
+    initialRecords: homeProjectCategories.flatMap((category, categoryIndex) =>
+      category.projects.slice(0, 1).map((project) =>
         record(`home-project-${project.id}`, {
           title: project.title,
           categoryLabel: category.label,
@@ -409,7 +401,7 @@ const homeResources: AdminResourceConfig[] = [
           year: project.year,
           image: project.image,
           imageAlt: project.title,
-          order: index + 1,
+          order: categoryIndex + 1,
         }),
       ),
     ),
@@ -419,25 +411,21 @@ const homeResources: AdminResourceConfig[] = [
     path: "featured-services",
     title: "Dịch vụ nổi bật trên Trang chủ",
     singular: "Dịch vụ nổi bật",
-    description: "Quản lý trọn section Dịch vụ nổi bật gồm tiêu đề, mô tả giới thiệu và nội dung, hình ảnh, liên kết của từng dịch vụ trên Trang chủ.",
+    description: "Quản lý trọn section Dịch vụ nổi bật gồm tiêu đề, mô tả giới thiệu, nội dung và hình ảnh của từng dịch vụ trên Trang chủ.",
     priority: "P1",
     kind: "collection",
     titleField: "title",
     previewField: "desktopImage",
     orderField: "order",
     companionResourceKey: "home/services-section-content",
-    // Giữ ảnh cùng một phía ở mọi dịch vụ để admin quét nội dung nhanh hơn.
-    editorLayout: { mediaSide: "left", mediaWidth: "half", mediaPreview: "large" },
     sections: [
       section("content", "Nội dung", [
         text("title", "Tiêu đề", { required: true }),
-        textarea("description", "Mô tả", { required: true }),
-        text("ctaLabel", "Chữ trên nút bấm"),
-        siteLink("ctaHref", "Liên kết của nút bấm", { required: true }),
+        textarea("description", "Mô tả", { required: true, span: 12 }),
       ]),
       section("media", "Hình ảnh", [
-        image("desktopImage", "Ảnh trên máy tính", { altKey: "desktopAlt", ratio: "16:9" }),
-        image("mobileImage", "Ảnh trên điện thoại", { altKey: "mobileAlt", ratio: "4:5" }),
+        image("desktopImage", "Ảnh trên máy tính", { altKey: "imageAlt", ratio: "16:9" }),
+        image("mobileImage", "Ảnh trên điện thoại", { ratio: "4:5" }),
       ]),
       section("display", "Thứ tự", [orderField]),
     ],
@@ -446,16 +434,8 @@ const homeResources: AdminResourceConfig[] = [
         title: homeMobileServiceLabels[index].join(" "),
         description: service.copy,
         desktopImage: service.desktopImage,
-        desktopAlt: homeMobileServiceLabels[index].join(" "),
         mobileImage: service.image,
-        mobileAlt: homeMobileServiceLabels[index].join(" "),
-        ctaLabel: "Xem dịch vụ",
-        ctaHref: [
-          "/services/turnkey",
-          "/services/design",
-          "/services/construction",
-          "/services/renovation",
-        ][index],
+        imageAlt: homeMobileServiceLabels[index].join(" "),
         order: index + 1,
       }),
     ),
@@ -483,7 +463,7 @@ const homeResources: AdminResourceConfig[] = [
       record(`home-stat-${index + 1}`, {
         value: item.value,
         label: item.label,
-        suffix: index < 2 ? "+" : "",
+        suffix: "+",
         order: index + 1,
       }),
     ),
@@ -493,7 +473,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "why-bmt",
     title: "Vì sao chọn BMT",
     singular: "Lý do",
-    description: "Quản lý nội dung và ảnh chính của từng lý do khách hàng lựa chọn BMT Decor. Hình minh họa là tài sản cố định; trạng thái hover dùng cùng ảnh mặc định.",
+    description: "Quản lý nội dung và hình ảnh của từng lý do khách hàng lựa chọn BMT Decor, gồm ảnh trên máy tính và ảnh trên điện thoại.",
     priority: "P2",
     kind: "collection",
     titleField: "title",
@@ -503,12 +483,12 @@ const homeResources: AdminResourceConfig[] = [
     editorLayout: { recordsPerRow: 2 },
     sections: [
       section("content", "Nội dung", [
-        text("title", "Tiêu đề", { required: true }),
-        textarea("description", "Mô tả", { required: true }),
+        text("title", "Tiêu đề", { required: true, span: 6 }),
+        textarea("description", "Mô tả", { required: true, span: 6 }),
       ]),
       section("media", "Hình ảnh", [
-        image("defaultImage", "Ảnh trên máy tính (dùng cho mặc định và hover)"),
-        image("mobileImage", "Ảnh trên điện thoại"),
+        image("defaultImage", "Ảnh trên máy tính", { span: 6 }),
+        image("mobileImage", "Ảnh trên điện thoại", { span: 6 }),
       ]),
       section("display", "Thứ tự cố định", [orderField]),
     ],
@@ -518,7 +498,6 @@ const homeResources: AdminResourceConfig[] = [
         description: item.copy,
         iconImage: item.icon,
         defaultImage: item.desktopImage,
-        hoverImage: item.desktopImage,
         mobileImage: item.image,
         order: index + 1,
         enabled: true,
@@ -582,7 +561,6 @@ const homeResources: AdminResourceConfig[] = [
     },
     sections: [
       section("content", "Thông tin đối tác", [
-        text("name", "Tên đối tác", { required: true }),
         siteLink("href", "Liên kết"),
         image("logoImage", "Logo", { altKey: "logoAlt", ratio: "5:4" }),
         orderField,
@@ -613,12 +591,13 @@ const homeResources: AdminResourceConfig[] = [
     description: "Tiêu đề và mô tả hiển thị phía trên các lý do khách hàng lựa chọn BMT Decor.",
     priority: "P1",
     kind: "singleton",
-    titleField: "title",
-    sections: [section("content", "Nội dung section", [text("title", "Tiêu đề"), textarea("descriptionDesktop", "Mô tả trên máy tính"), textarea("descriptionMobile", "Mô tả trên điện thoại")])],
+    titleField: "titleDesktop",
+    sections: [section("content", "Nội dung section", [text("titleDesktop", "Tiêu đề trên máy tính"), text("titleMobile", "Tiêu đề trên điện thoại"), textarea("descriptionDesktop", "Mô tả trên máy tính"), textarea("descriptionMobile", "Mô tả trên điện thoại")])],
     initialRecords: [record("home-trust-section-content", {
-      title: "Vì sao chọn BMT Decor",
-      descriptionDesktop: "BMT Decor đồng hành cùng khách hàng bằng kinh nghiệm, quy trình rõ ràng và cam kết chất lượng trong từng công trình.",
-      descriptionMobile: "Kinh nghiệm, quy trình rõ ràng và chất lượng trong từng công trình.",
+      titleDesktop: "Vì sao khách hàng tin chọn BMT Decor?",
+      titleMobile: "Vì sao khách hàng tin chọn",
+      descriptionDesktop: "Với tư duy thiết kế sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo những không gian hài hòa giữa thẩm mỹ, công năng và giá trị sử dụng bền vững.",
+      descriptionMobile: "Với tư duy thiết kế luôn đổi mới trong sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo nên những không gian có giá trị thẩm mỹ cao cấp, tối ưu công năng một cách tuyệt đối và có độ bền vững theo thời gian cho không gian sống.",
     })],
   }),
   resource({
@@ -648,7 +627,7 @@ const homeResources: AdminResourceConfig[] = [
     sections: [section("content", "Nội dung section", [text("title", "Tiêu đề"), textarea("description", "Mô tả")])],
     initialRecords: [record("home-services-section-content", {
       title: "Dịch vụ nổi bật",
-      description: "Giải pháp thiết kế, thi công, xây dựng và cải tạo đồng bộ cho từng nhu cầu.",
+      description: "BMT Decor cung cấp dịch vụ thiết kế và thi công trọn gói, đáp ứng đa dạng nhu cầu từ nhà ở đến không gian kinh doanh.",
     })],
   }),
   resource({
@@ -668,26 +647,34 @@ const homeResources: AdminResourceConfig[] = [
     path: "profile-section-content",
     title: "Hồ sơ năng lực trên Trang chủ",
     singular: "Section Hồ sơ năng lực",
-    description: "Quản lý tiêu đề, mô tả và nút bấm của section Hồ sơ năng lực. Hình ảnh được cố định theo thiết kế website.",
+    description: "Quản lý tiêu đề, mô tả, nút bấm và hai asset hình ảnh của section Hồ sơ năng lực.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
-    previewField: "image",
-    editorLayout: {
-      splitColumns: {
-        left: ["title", "subtitle", "ctaLabel"],
-        right: ["description", "ctaHref"],
-      },
-    },
-    sections: [section("content", "Nội dung section", [textarea("title", "Tiêu đề"), text("subtitle", "Tiêu đề phụ"), textarea("description", "Mô tả"), text("ctaLabel", "Chữ trên nút bấm"), siteLink("ctaHref", "Liên kết của nút bấm")])],
+    previewField: "threeBooksImage",
+    editorLayout: { mediaSide: "right", mediaWidth: "half", mediaPreview: "large" },
+    sections: [
+      section("content", "Nội dung section", [
+        textarea("title", "Tiêu đề"),
+        text("subtitle", "Tiêu đề phụ"),
+        textarea("description", "Mô tả"),
+        text("ctaLabel", "Chữ trên nút bấm"),
+        siteLink("ctaHref", "Liên kết của nút bấm"),
+      ]),
+      section("media", "Hình ảnh", [
+        image("oneBookImage", "Asset 1 cuốn sách màu cam", { altKey: "portfolioAlt" }),
+        image("threeBooksImage", "Asset 3 cuốn sách màu cam"),
+      ]),
+    ],
     initialRecords: [record("home-profile-section-content", {
-      title: "HỒ SƠ NĂNG LỰC BMT DECOR",
-      subtitle: "Khẳng định năng lực",
-      description: "Khám phá năng lực, quy trình và các dự án tiêu biểu của BMT Decor.",
-      ctaLabel: "Xem hồ sơ năng lực",
+      title: "Hồ sơ năng lực",
+      subtitle: "Đơn vị thiết kế thi công kiến trúc và nội thất, ngoại thất chuyên nghiệp tại Việt Nam",
+      description: "Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT Decor luôn mong muốn phát triển và mang đến những thiết kế ấn tượng và độc đáo. Là đối tác độc quyền của nhiều thương hiệu lớn. Thiết kế và thi công nhiều trung tâm thương mại tại TP.HCM.",
+      ctaLabel: "XEM THÊM",
       ctaHref: "/capability-profile",
-      image: "/images/home/portfolio-set.png",
-      imageAlt: "Hồ sơ năng lực BMT Decor",
+      oneBookImage: "/images/home/portfolio-book.png",
+      threeBooksImage: "/images/home/portfolio-set-orange.png",
+      portfolioAlt: "Hồ sơ năng lực BMT Decor màu cam",
     })],
   }),
   resource({
@@ -761,7 +748,7 @@ const aboutResources: AdminResourceConfig[] = [
     path: "journey",
     title: "Hành trình BMT",
     singular: "Cột mốc",
-    description: "Quản lý các cột mốc Hành trình gồm năm, tiêu đề và mô tả. Hình minh họa được cố định theo giao diện website.",
+    description: "Quản lý các cột mốc Hành trình gồm năm, tiêu đề và mô tả.",
     priority: "P1",
     kind: "collection",
     titleField: "title",
@@ -771,9 +758,9 @@ const aboutResources: AdminResourceConfig[] = [
     editorLayout: { recordsPerRow: 2 },
     sections: [
       section("content", "Cột mốc", [
-        text("year", "Năm", { required: true }),
-        text("title", "Tiêu đề", { required: true }),
-        textarea("description", "Mô tả", { required: true }),
+        text("year", "Năm", { required: true, span: 6 }),
+        text("title", "Tiêu đề", { required: true, span: 6 }),
+        textarea("description", "Mô tả", { required: true, span: 12 }),
       ]),
       section("display", "Thứ tự", [orderField]),
     ],
@@ -828,7 +815,7 @@ const aboutResources: AdminResourceConfig[] = [
     path: "vision-mission",
     title: "Tầm nhìn & Sứ mệnh",
     singular: "Tầm nhìn & Sứ mệnh",
-    description: "Quản lý nội dung Tầm nhìn & Sứ mệnh. Hình nền và hình trang trí được cố định theo giao diện website.",
+    description: "Quản lý nội dung Tầm nhìn & Sứ mệnh.",
     priority: "P2",
     kind: "singleton",
     titleField: "visionHeading",
@@ -867,7 +854,7 @@ const aboutResources: AdminResourceConfig[] = [
     path: "capabilities",
     title: "Năng lực BMT",
     singular: "Năng lực",
-    description: "Quản lý nội dung Năng lực nổi bật gồm số thứ tự, tiêu đề và mô tả. Hình ảnh được cố định theo giao diện website.",
+    description: "Quản lý nội dung Năng lực nổi bật gồm số thứ tự, tiêu đề và mô tả.",
     priority: "P2",
     kind: "collection",
     titleField: "title",
@@ -880,8 +867,9 @@ const aboutResources: AdminResourceConfig[] = [
         text("number", "Số thứ tự", { required: true, editable: false }),
         text("title", "Tiêu đề", { required: true }),
         text("mobileTitle", "Tiêu đề trên điện thoại"),
-        richtext("description", "Mô tả", {
+        textarea("description", "Mô tả", {
           required: true,
+          span: 12,
           placeholder: "Nhập mô tả năng lực...",
         }),
       ]),
@@ -1761,14 +1749,12 @@ const remainingResources: AdminResourceConfig[] = [
       section("content", "Nội dung", [
         textarea("title", "Tiêu đề chính", { required: true, span: 12 }),
         textarea("description", "Mô tả", { span: 12 }),
-        text("ctaLabel", "Chữ trên nút bấm", { span: 5 }),
-        siteLink("ctaHref", "Liên kết của nút bấm", { span: 7 }),
       ]),
       section("media", "Hình ảnh", [
         image("desktopImage", "Ảnh Hero", { altKey: "imageAlt", required: true }),
       ]),
     ],
-    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", ctaLabel: "Liên hệ ngay", ctaHref: "/lien-he", desktopImage: "/images/projects/hero-composition.png", imageAlt: "Các dự án tiêu biểu của BMT Decor" })],
+    initialRecords: [record("projects-page-hero", { title: "MỖI CÔNG TRÌNH, MỘT CAM KẾT CHẤT LƯỢNG", description: "Mỗi dự án là minh chứng cho năng lực thiết kế thi công và sự tận tâm của BMT Decor.", desktopImage: "/images/projects/hero-composition.png", imageAlt: "Các dự án tiêu biểu của BMT Decor" })],
   }),
   resource({
     module: "news",
@@ -2261,18 +2247,42 @@ const remainingResources: AdminResourceConfig[] = [
       ]),
       section("contact", "Liên hệ", [
         text("contactHeading", "Tiêu đề Liên hệ", { required: true, span: 12 }),
-        textarea("officeAddress", "Địa chỉ chính", { required: true, span: 12 }),
-        text("phone", "Số hỗ trợ tư vấn / Zalo", { required: true, span: 6 }),
-        text("email", "Email", { required: true, span: 6 }),
+        textarea("officeAddress", "Địa chỉ chính", {
+          required: true,
+          span: 12,
+          placeholder: "Địa chỉ: 7/92 Thành Thái, Phường Diên Hồng, TP.HCM",
+        }),
+        text("phone", "Số hỗ trợ tư vấn / Zalo", {
+          required: true,
+          span: 6,
+          placeholder: "Hỗ trợ tư vấn: 0934 888 881",
+        }),
+        text("email", "Email", {
+          required: true,
+          span: 6,
+          placeholder: "Email: bmt.decor@gmail.com",
+        }),
       ]),
       section("branches", "Chi nhánh và nhà xưởng", [
         text("branchesHeading", "Tiêu đề Chi nhánh và nhà xưởng", {
           required: true,
           span: 12,
         }),
-        textarea("branch1Address", "Địa chỉ chi nhánh 1", { required: true, span: 4 }),
-        textarea("branch2Address", "Địa chỉ chi nhánh 2", { required: true, span: 4 }),
-        textarea("workshopAddress", "Địa chỉ xưởng sản xuất", { required: true, span: 4 }),
+        textarea("branch1Address", "Chi nhánh 1", {
+          required: true,
+          span: 4,
+          placeholder: "Địa chỉ chi nhánh 1: 380 Vũ Huy Tấn, Phường Gia Định, TP.HCM",
+        }),
+        textarea("branch2Address", "Chi nhánh 2", {
+          required: true,
+          span: 4,
+          placeholder: "Địa chỉ chi nhánh 2: 58 Thành Thái, Phường Hoà Hưng, TP.HCM",
+        }),
+        textarea("workshopAddress", "Xưởng sản xuất", {
+          required: true,
+          span: 4,
+          placeholder: "Xưởng sản xuất: Nguyễn Thị Tự, Phường Bình Tân, TP.HCM",
+        }),
       ]),
       section("social", "Mạng xã hội", [
         url("facebookUrl", "Đường dẫn Facebook", { span: 6 }),
@@ -2299,13 +2309,13 @@ const remainingResources: AdminResourceConfig[] = [
         service4Label: services[3].label,
         service4Href: services[3].href,
         contactHeading: "Liên hệ:",
-        officeAddress: contactInformation.office,
-        phone: contactInformation.phone,
-        email: contactInformation.email,
+        officeAddress: `Địa chỉ: ${contactInformation.office}`,
+        phone: `Hỗ trợ tư vấn: ${contactInformation.phone}`,
+        email: `Email: ${contactInformation.email}`,
         branchesHeading: "Chi nhánh và nhà xưởng:",
-        branch1Address: contactInformation.branches[0],
-        branch2Address: contactInformation.branches[1],
-        workshopAddress: contactInformation.branches[2],
+        branch1Address: `Địa chỉ chi nhánh 1: ${contactInformation.branches[0]}`,
+        branch2Address: `Địa chỉ chi nhánh 2: ${contactInformation.branches[1]}`,
+        workshopAddress: `Xưởng sản xuất: ${contactInformation.branches[2]}`,
         facebookUrl: "https://facebook.com",
         tiktokUrl: "https://tiktok.com",
         instagramUrl: "https://instagram.com",

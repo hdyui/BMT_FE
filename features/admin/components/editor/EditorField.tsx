@@ -64,7 +64,7 @@ export function EditorField({
    * Cỡ ảnh xem trước. `fill` cho ô ảnh cao hết cột chứa nó — dùng ở bố cục ảnh
    * một bên, chữ một bên để cột ảnh không còn là một mẩu nhỏ trên vùng trống.
    */
-  imageSize?: "thumb" | "large" | "wide" | "fill";
+  imageSize?: "thumb" | "large" | "wide" | "row" | "fill";
   imageActionsLayout?: "row" | "column";
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;

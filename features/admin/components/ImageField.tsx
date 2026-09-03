@@ -28,7 +28,7 @@ interface ImageFieldProps {
    * nó — dùng cho bố cục ảnh một bên, chữ một bên, nơi cột ảnh chỉ có một ô nên
    * để tem nhỏ là cả cột toàn khoảng trắng.
    */
-  size?: "thumb" | "large" | "wide" | "fill";
+  size?: "thumb" | "large" | "wide" | "row" | "fill";
   /** Chỉ Partners cần hai nút xếp dọc; các editor khác giữ hàng ngang. */
   actionsLayout?: "row" | "column";
   onChange: (value: string) => void;
@@ -94,7 +94,7 @@ export function ImageField({
           streamlined ? "mt-0.5 gap-3" : "mt-3 gap-3",
           fill
             ? "flex min-h-0 flex-1 flex-col"
-            : size === "wide"
+            : size === "wide" || size === "row"
               ? // Ảnh to thì hàng nút xuống dưới, đứng thẳng mép trái tấm ảnh —
                 // để cạnh ảnh cao gần 300px trông rất chông chênh.
                 "flex flex-col items-start"
@@ -114,6 +114,8 @@ export function ImageField({
               ? // Cao theo cột chữ bên cạnh (tối thiểu 12rem, tối đa 22rem) nên
                 // hai cột kết thúc gần bằng nhau thay vì lệch cả gang tay.
                 "min-h-48 w-full flex-1 rounded-xl bg-muted/25 sm:max-h-[22rem]"
+              : size === "row"
+                ? "h-44 w-full shrink-0 rounded-xl bg-muted/25 sm:h-52"
               : size === "large"
                 ? "h-40 w-full max-w-[18rem] shrink-0 rounded-xl bg-muted/25 sm:h-48"
                 : size === "wide"
