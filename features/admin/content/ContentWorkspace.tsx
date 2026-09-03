@@ -45,7 +45,7 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
 
   return (
     // Danh sách trang giờ nằm ở sidebar chung của shell, nên ở đây chỉ còn nội dung.
-    <div className="min-h-[calc(100dvh-64px)]">
+    <div className="min-h-[calc(100dvh-96px)]">
       <div className="min-w-0 p-4 sm:p-6 lg:p-8">
         <div className="mx-auto max-w-[1180px]">
           <header className="flex flex-col gap-4 pb-6 sm:flex-row sm:items-end sm:justify-between">

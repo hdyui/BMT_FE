@@ -42,7 +42,7 @@ export function AdminSectionSidebar() {
     // thì thẻ `fixed` lấy vị trí tĩnh và trôi sang phải mất 232px.
     <aside
       data-admin-sidebar
-      className="border-b border-sidebar-border bg-sidebar text-sidebar-foreground lg:fixed lg:top-16 lg:bottom-0 lg:left-0 lg:w-[232px] lg:border-r lg:border-b-0"
+      className="border-b border-sidebar-border bg-sidebar text-sidebar-foreground lg:fixed lg:top-24 lg:bottom-0 lg:left-0 lg:w-[232px] lg:border-r lg:border-b-0"
     >
       <div className="admin-scrollbar max-h-[42dvh] overflow-y-auto p-3 lg:h-full lg:max-h-none">
         <p className="px-2.5 pb-2 text-[10px] font-bold tracking-[0.12em] text-sidebar-foreground/50 uppercase">
