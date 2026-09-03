@@ -101,13 +101,7 @@ export function UnifiedResourceEditorPage({
     const previous = record?.[fieldKey] ?? "";
     if (sameValue(previous, value)) return;
 
-    let next = replaceRecordField(drafts, resourceKey, recordId, fieldKey, value);
-    // Vì sao chọn BMT chỉ có một ảnh desktop: website dùng cùng ảnh cho trạng
-    // thái mặc định và hover. Giữ field hover trong dữ liệu để tương thích cấu
-    // trúc hiện tại, nhưng luôn đồng bộ nó theo ảnh mặc định và không mở editor.
-    if (resourceKey === "home/why-bmt" && fieldKey === "defaultImage") {
-      next = replaceRecordField(next, resourceKey, recordId, "hoverImage", value);
-    }
+    const next = replaceRecordField(drafts, resourceKey, recordId, fieldKey, value);
     setDrafts(next);
     setHistory((current) => [
       ...current,
@@ -125,22 +119,13 @@ export function UnifiedResourceEditorPage({
   function undoLast() {
     const action = history.at(-1);
     if (!action) return;
-    let next = replaceRecordField(
+    const next = replaceRecordField(
       drafts,
       action.resourceKey,
       action.recordId,
       action.fieldKey,
       cloneValue(action.previous),
     );
-    if (action.resourceKey === "home/why-bmt" && action.fieldKey === "defaultImage") {
-      next = replaceRecordField(
-        next,
-        action.resourceKey,
-        action.recordId,
-        "hoverImage",
-        cloneValue(action.previous),
-      );
-    }
     setDrafts(next);
     setHistory((current) => (sameDrafts(next, savedSnapshot) ? [] : current.slice(0, -1)));
   }
@@ -180,6 +165,9 @@ export function UnifiedResourceEditorPage({
   const homeFeaturedNewsEditor =
     config.key === "home/featured-news" &&
     companionConfig?.key === "home/news-section-content";
+  const homeFeaturedServicesEditor =
+    config.key === "home/featured-services" &&
+    companionConfig?.key === "home/services-section-content";
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 pb-8 sm:p-6 lg:p-8">
@@ -203,7 +191,17 @@ export function UnifiedResourceEditorPage({
         />
       </div>
 
-      {homeFeaturedNewsEditor && companionConfig ? (
+      {homeFeaturedServicesEditor && companionConfig ? (
+        <HomeFeaturedServicesEditor
+          config={config}
+          companionConfig={companionConfig}
+          records={drafts[config.key] ?? []}
+          companionRecords={drafts[companionConfig.key] ?? []}
+          dirtyKeys={dirtyKeys}
+          errors={errors}
+          onChange={updateField}
+        />
+      ) : homeFeaturedNewsEditor && companionConfig ? (
         <HomeFeaturedNewsEditor
           config={config}
           companionConfig={companionConfig}
@@ -243,6 +241,154 @@ export function UnifiedResourceEditorPage({
   );
 }
 
+function HomeFeaturedServicesEditor({
+  config,
+  companionConfig,
+  records,
+  companionRecords,
+  dirtyKeys,
+  errors,
+  onChange,
+}: {
+  config: AdminResourceConfig;
+  companionConfig: AdminResourceConfig;
+  records: AdminCrudRecord[];
+  companionRecords: AdminCrudRecord[];
+  dirtyKeys: Set<string>;
+  errors: Record<string, string>;
+  onChange: (resourceKey: string, recordId: string, fieldKey: string, value: AdminFieldValue) => void;
+}) {
+  const companionRecord = companionRecords[0];
+  const companionFields = getEditableAdminSections(companionConfig.sections).flatMap(
+    (section) => section.fields,
+  );
+  const serviceFields = getEditableAdminSections(config.sections).flatMap(
+    (section) => section.fields,
+  );
+
+  function fieldByKey(fields: AdminFieldConfig[], key: string) {
+    return fields.find((field) => field.key === key);
+  }
+
+  const desktopImageField = fieldByKey(serviceFields, "desktopImage");
+  const serviceImageAltField: AdminFieldConfig | undefined = desktopImageField?.altKey
+    ? {
+        key: desktopImageField.altKey,
+        label: "Văn bản thay thế",
+        type: "text",
+      }
+    : undefined;
+
+  function renderField(
+    resourceConfig: AdminResourceConfig,
+    record: AdminCrudRecord,
+    field: AdminFieldConfig | undefined,
+    options: {
+      imageSize?: "large" | "wide" | "row" | "fill";
+      labelOverride?: string;
+      hideAlt?: boolean;
+    } = {},
+  ) {
+    if (!field) return null;
+    const identity = fieldIdentity(resourceConfig.key, record.id, field.key);
+    return (
+      <EditorField
+        field={field}
+        value={record[field.key]}
+        imageSize={options.imageSize}
+        labelOverride={options.labelOverride}
+        error={errors[identity]}
+        dirty={isFieldDirty(resourceConfig, record, field.key, dirtyKeys)}
+        altValue={field.altKey ? record[field.altKey] : undefined}
+        altDirty={Boolean(
+          field.altKey && isFieldDirty(resourceConfig, record, field.altKey, dirtyKeys),
+        )}
+        contentEditorStyle
+        lockItemCount
+        hideAlt={options.hideAlt}
+        onChange={(value) => onChange(resourceConfig.key, record.id, field.key, value)}
+        onAltChange={
+          field.altKey
+            ? (value) => onChange(resourceConfig.key, record.id, field.altKey!, value)
+            : undefined
+        }
+      />
+    );
+  }
+
+  if (!companionRecord) {
+    return (
+      <section className="mt-6 rounded-2xl border bg-card p-6 text-sm text-muted-foreground">
+        Chưa có nội dung Dịch vụ nổi bật để chỉnh sửa.
+      </section>
+    );
+  }
+
+  return (
+    <div className="mt-6 grid gap-6">
+      <section className="rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6">
+        <div className="grid gap-5 lg:grid-cols-12">
+          <div className="lg:col-span-4">
+            {renderField(
+              companionConfig,
+              companionRecord,
+              fieldByKey(companionFields, "title"),
+            )}
+          </div>
+          <div className="lg:col-span-8">
+            {renderField(
+              companionConfig,
+              companionRecord,
+              fieldByKey(companionFields, "description"),
+            )}
+          </div>
+        </div>
+      </section>
+
+      {records.length === 0 ? (
+        <section className="rounded-2xl border bg-card p-6 text-sm text-muted-foreground">
+          Chưa có dịch vụ nổi bật để chỉnh sửa.
+        </section>
+      ) : (
+        <div className="grid gap-5 xl:grid-cols-2">
+          {records.map((record, recordIndex) => (
+            <article
+              className="rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6"
+              key={record.id}
+            >
+              <h3 className="mb-4 text-lg font-bold">
+                {String(recordIndex + 1).padStart(2, "0")}. {String(record.title ?? "")}
+              </h3>
+              <div className="grid min-w-0 gap-4 md:grid-cols-12 lg:gap-5">
+                <div className="min-w-0 md:col-span-8">
+                  {renderField(config, record, desktopImageField, {
+                    imageSize: "row",
+                    labelOverride: "Ảnh trên máy tính",
+                    hideAlt: true,
+                  })}
+                </div>
+                <div className="min-w-0 md:col-span-4">
+                  {renderField(
+                    config,
+                    record,
+                    fieldByKey(serviceFields, "mobileImage"),
+                    { imageSize: "row", labelOverride: "Ảnh trên điện thoại" },
+                  )}
+                </div>
+              </div>
+              <div className="mt-5 grid min-w-0 gap-4 border-t pt-5">
+                {renderField(config, record, fieldByKey(serviceFields, "title"))}
+                {renderField(config, record, fieldByKey(serviceFields, "description"))}
+                {renderField(config, record, serviceImageAltField)}
+              </div>
+            </article>
+          ))}
+        </div>
+      )}
+    </div>
+  );
+}
+
 function HomeFeaturedNewsEditor({
   config,
   companionConfig,
@@ -276,6 +422,14 @@ function HomeFeaturedNewsEditor({
   const featuredImageAltField: AdminFieldConfig | undefined = featuredImageField?.altKey
     ? {
         key: featuredImageField.altKey,
+        label: "Văn bản thay thế",
+        type: "text",
+      }
+    : undefined;
+  const newsImageField = fieldByKey(newsFields, "image");
+  const newsImageAltField: AdminFieldConfig | undefined = newsImageField?.altKey
+    ? {
+        key: newsImageField.altKey,
         label: "Văn bản thay thế",
         type: "text",
       }
@@ -405,8 +559,8 @@ function HomeFeaturedNewsEditor({
                 {renderField(
                   config,
                   record,
-                  fieldByKey(newsFields, "image"),
-                  { imageSize: "wide", labelOverride: "Ảnh bài viết" },
+                  newsImageField,
+                  { imageSize: "wide", labelOverride: "Ảnh bài viết", hideAlt: true },
                 )}
               </div>
               <div className="grid min-w-0 content-start gap-5">
@@ -428,6 +582,7 @@ function HomeFeaturedNewsEditor({
                   fieldByKey(newsFields, "href"),
                   { labelOverride: "Liên kết bài viết" },
                 )}
+                {renderField(config, record, newsImageAltField)}
               </div>
             </article>
           ))}
@@ -457,6 +612,7 @@ function ResourceEditorGroup({
   const requestedContentEditor = singleColumnContentEditor;
   // Nhóm trang đã tinh chỉnh xếp ô theo lưới 12 cột mô phỏng bố cục website.
   const refinedEditor = isRefinedEditorResource(config);
+  const hideFixedLayoutCopy = config.module === "home" || config.module === "about";
   const imageOnlyCollection =
     config.kind === "collection" &&
     editableFields.length === 1 &&
@@ -692,7 +848,8 @@ function ResourceEditorGroup({
                     (refinedEditor ? (
                       layout?.recordsPerRow &&
                       layout.recordStyle !== "flat" &&
-                      !layout.hideFixedItemHint ? (
+                      !layout.hideFixedItemHint &&
+                      !hideFixedLayoutCopy ? (
                       <span className="shrink-0 text-xs text-muted-foreground">
                         Số mục cố định theo layout website
                       </span>
@@ -704,7 +861,7 @@ function ResourceEditorGroup({
                         size="sm"
                         className="shrink-0 text-destructive hover:bg-destructive/10 hover:text-destructive"
                         disabled
-                        title="Số lượng mục được cố định theo layout website"
+                        title={hideFixedLayoutCopy ? undefined : "Số lượng mục được cố định theo layout website"}
                       >
                         <Trash2 /> Xóa
                       </Button>
