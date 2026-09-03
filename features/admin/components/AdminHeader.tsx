@@ -36,10 +36,10 @@ export function AdminHeader() {
   }
 
   return (
-    <header className="fixed inset-x-0 top-0 z-40 flex h-16 shrink-0 items-center gap-3 border-b bg-background/95 px-4 shadow-sm backdrop-blur sm:px-5 lg:px-6">
-      {/* Hai bên cùng `flex-1 basis-0` nên chia đều phần còn lại — nhờ vậy cụm
-          điều hướng nằm đúng giữa header dù logo và cụm nút phải rộng khác nhau. */}
-      <div className="flex min-w-0 flex-1 basis-0 items-center">
+    <header className="fixed inset-x-0 top-0 z-40 flex h-24 shrink-0 flex-col bg-background/95 shadow-sm backdrop-blur">
+      {/* Hàng 1: thương hiệu bên trái, tài khoản/tiện ích bên phải. Cố định
+          không phụ thuộc số lượng mục điều hướng. */}
+      <div className="flex h-14 shrink-0 items-center gap-3 border-b px-4 sm:px-5 lg:px-6">
         <Link
           href="/admin/dashboard"
           className="flex shrink-0 items-center"
@@ -55,15 +55,36 @@ export function AdminHeader() {
             priority
           />
         </Link>
+
+        <div className="ml-auto flex min-w-0 items-center gap-2">
+          <ThemeSwitcher />
+          <Button type="button" variant="outline" size="icon" aria-label="Thông báo">
+            <Bell strokeWidth={1.8} />
+          </Button>
+          <DropdownMenu>
+            <DropdownMenuTrigger
+              render={<Button type="button" variant="outline" size="icon" />}
+              aria-label="Tài khoản quản trị BMT"
+            >
+              <UserRound strokeWidth={1.8} />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end" sideOffset={6} className="w-40">
+              <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
+                <LogOut /> {loggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
 
-      {/* Điều hướng cấp một: trước đây là sidebar to bên trái, nay nằm ngang ở
-          đây để nhường chỗ cho sidebar riêng của từng mục. */}
+      {/* Hàng 2: điều hướng cấp một, tách riêng khỏi hàng thương hiệu/tài
+          khoản — hệ thống có thêm bao nhiêu mục thì dải này chỉ cuộn ngang
+          trong chính nó, không đẩy lệch logo hay cụm nút bên trên. */}
       <nav
         aria-label="Điều hướng chính"
-        className="admin-scrollbar -mx-1 min-w-0 shrink overflow-x-auto px-1"
+        className="admin-scrollbar flex h-10 min-w-0 shrink-0 items-center overflow-x-auto border-b px-4 sm:px-5 lg:px-6"
       >
-        <ul className="flex min-w-max items-center justify-center gap-1">
+        <ul className="flex min-w-max items-center gap-1">
           {adminHeaderNavigation.map((item) => (
             <li key={item.key}>
               <HeaderNavLink
@@ -76,26 +97,6 @@ export function AdminHeader() {
           ))}
         </ul>
       </nav>
-
-      <div className="flex min-w-0 flex-1 basis-0 items-center justify-end gap-2">
-        <ThemeSwitcher />
-        <Button type="button" variant="outline" size="icon" aria-label="Thông báo">
-          <Bell strokeWidth={1.8} />
-        </Button>
-        <DropdownMenu>
-          <DropdownMenuTrigger
-            render={<Button type="button" variant="outline" size="icon" />}
-            aria-label="Tài khoản quản trị BMT"
-          >
-            <UserRound strokeWidth={1.8} />
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end" sideOffset={6} className="w-40">
-            <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
-              <LogOut /> {loggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div>
     </header>
   );
 }

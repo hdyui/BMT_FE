@@ -8,8 +8,8 @@ import { Badge } from "@/features/admin/components/ui/badge";
 import { Button } from "@/features/admin/components/ui/button";
 import { Separator } from "@/features/admin/components/ui/separator";
 
-/** Chiều cao của `AdminHeader` (`fixed top-0 h-16`), tính bằng px. */
-const ADMIN_HEADER_HEIGHT = 64;
+/** Chiều cao của `AdminHeader` (`fixed top-0 h-24`, 2 hàng), tính bằng px. */
+const ADMIN_HEADER_HEIGHT = 96;
 
 /**
  * Theo dõi cụm nút ở đầu trang còn nằm trong tầm nhìn hay không, để thanh dính
