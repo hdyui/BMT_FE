@@ -319,23 +319,29 @@ const supportsFieldSizing =
     : false;
 
 /**
- * Ô nhiều dòng luôn cao vừa đủ để thấy hết nội dung.
+ * Ô nhiều dòng luôn cao vừa đủ để thấy hết nội dung — nội dung ngắn thì ô
+ * thấp, nội dung dài thì ô cao dần cho tới mức `maxLines`, sau đó mới cuộn.
  *
- * Bản cũ gán cứng `height` đo một lần theo `value` rồi `overflow-hidden`, nên
- * mỗi khi bề ngang ô đổi (lưới 12 cột đổi theo khổ màn hình, thanh cuộn xuất
- * hiện, font tải xong) số dòng đổi theo mà chiều cao thì không — chữ bị cắt mất.
+ * Bản cũ dùng `field-sizing: fixed` khi có `maxLines`, nên ô luôn cao đúng
+ * bằng `rows` bất kể nội dung dài hay ngắn — chữ ngắn để lại khoảng trống,
+ * chữ dài lại bị cắt/cuộn sớm. Giờ vẫn dùng `field-sizing: content` (tự co
+ * giãn theo nội dung) như ô không giới hạn, chỉ thêm trần `max-height` tính
+ * theo `maxLines` để chặn việc phình cao vô hạn.
  */
 function AutoGrowTextarea({
   value,
   className,
   rows = 1,
   maxLines,
+  style,
   ...props
 }: React.ComponentProps<typeof Textarea> & { maxLines?: number }) {
   const ref = useRef<HTMLTextAreaElement>(null);
+  // Ước lượng chiều cao tối đa theo số dòng: line-height ~1.5rem + đệm trên
+  // dưới (py-2) + viền, đủ gần đúng cho một ô nhập admin.
+  const maxHeight = maxLines ? `${maxLines * 1.5 + 1.1}rem` : undefined;
 
   useLayoutEffect(() => {
-    if (maxLines) return;
     if (supportsFieldSizing) return;
     const textarea = ref.current;
     if (!textarea) return;
@@ -357,7 +363,7 @@ function AutoGrowTextarea({
     });
     observer.observe(textarea);
     return () => observer.disconnect();
-  }, [maxLines, value]);
+  }, [value]);
 
   return (
     <Textarea
@@ -365,11 +371,7 @@ function AutoGrowTextarea({
       ref={ref}
       value={value}
       rows={rows}
-      style={
-        maxLines
-          ? ({ ...props.style, fieldSizing: "fixed" } as React.CSSProperties)
-          : props.style
-      }
+      style={maxHeight ? { ...style, maxHeight } : style}
       className={cn(
         "min-h-10 resize-none bg-background font-normal",
         maxLines && "overflow-y-auto",

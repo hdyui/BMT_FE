@@ -91,7 +91,7 @@ export function ImageField({
 
       <div
         className={cn(
-          "mt-3 gap-3",
+          streamlined ? "mt-0.5 gap-3" : "mt-3 gap-3",
           fill
             ? "flex min-h-0 flex-1 flex-col"
             : size === "wide"
