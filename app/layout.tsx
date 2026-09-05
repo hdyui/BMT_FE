@@ -29,7 +29,12 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="vi" className={font.variable} suppressHydrationWarning>
+    <html
+      lang="vi"
+      className={font.variable}
+      data-scroll-behavior="smooth"
+      suppressHydrationWarning
+    >
       <body suppressHydrationWarning>
         {children}
         <Toaster position="top-center" richColors />
