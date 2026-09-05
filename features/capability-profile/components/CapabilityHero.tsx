@@ -18,7 +18,7 @@ export function CapabilityHero() {
      562 / 1525 = 36.85vw — buộc chiều cao chạy theo bề ngang thì tỉ lệ khung
      không đổi, bố cục giữ nguyên ở mọi khổ màn hình. */
   return (
-    <section className="relative isolate min-h-[690px] overflow-hidden bg-[#f3f3f3] pb-16 lg:h-[36.85vw] lg:min-h-[36.85vw] lg:pb-0">
+    <section className="relative isolate min-h-[615px] overflow-hidden bg-[#f3f3f3] pb-6 lg:h-[36.85vw] lg:min-h-[36.85vw] lg:pb-0">
       <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
         <motion.div
           className="absolute inset-y-0 right-0 z-0 w-[20%] rounded-l-[4rem] bg-[#eeeeee]"
@@ -109,7 +109,7 @@ export function CapabilityHero() {
       </div>
 
       <motion.div
-        className="pointer-events-none absolute bottom-0 left-0 -z-10 w-full opacity-55 lg:hidden"
+        className="pointer-events-none absolute -bottom-12 left-0 -z-10 w-[130%] max-w-none opacity-55 lg:hidden"
         initial={reduceMotion ? false : { opacity: 0 }}
         animate={{ opacity: 0.55 }}
         transition={{ duration: 0.7, delay: 0.35 }}
@@ -118,9 +118,81 @@ export function CapabilityHero() {
         <Image className="h-auto w-full" src="/images/capability-profile/decor-08.webp" alt="" width={3690} height={2774} sizes="100vw" />
       </motion.div>
 
-      <div className="relative z-10 mx-auto w-[calc(100%-2rem)] pt-10 lg:absolute lg:top-[25.7%] lg:left-[7.1%] lg:w-[41%] lg:max-w-[49rem] lg:p-0">
+      {/* Chấm bi góc trên trái + vòng cam góc trên phải: bản mobile tách riêng
+          khỏi khối decor desktop (hidden lg:block) vì bố cục desktop đặt hai
+          hoạ tiết này theo % khớp banner cao 36.85vw — không dùng chung được
+          với banner mobile cao cố định. */}
+      <motion.div
+        className="pointer-events-none absolute top-4 left-6 z-[1] w-8 opacity-55 lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 0.55 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full" src="/images/capability-profile/decor-04.webp" alt="" width={284} height={429} sizes="32px" />
+      </motion.div>
+
+      <motion.div
+        className="pointer-events-none absolute -top-12 right-[4%] z-[1] w-[56%] lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.55, delay: 0.12 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full" src="/images/capability-profile/decor-06.webp" alt="" width={1476} height={662} sizes="56vw" />
+      </motion.div>
+
+      <motion.div
+        className="pointer-events-none absolute top-14 right-0 z-[1] w-[4.75rem] lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.48, delay: 0.32 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full" src="/images/capability-profile/decor-07.webp" alt="" width={672} height={284} sizes="76px" />
+      </motion.div>
+
+      <motion.div
+        className="pointer-events-none absolute top-50 -right-8 z-[1] aspect-square w-32 rounded-tl-full border-t-[2rem] border-l-[2rem] border-[#d4d4d4] opacity-65 lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 0.65 }}
+        transition={{ duration: 0.58, delay: 0.44 }}
+        aria-hidden="true"
+      />
+
+      <motion.div
+        className="pointer-events-none absolute top-[19rem] right-5 z-[2] w-[3.75rem] lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.48, delay: 0.56 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full rounded-[20px]" src="/images/capability-profile/decor-12.webp" alt="" width={566} height={567} sizes="60px" />
+      </motion.div>
+
+      <motion.div
+        className="pointer-events-none absolute right-[-2rem] bottom-12 z-[1] w-36 opacity-40 lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 0.4 }}
+        transition={{ duration: 0.55, delay: 0.62 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full" src="/images/capability-profile/decor-09.webp" alt="" width={1977} height={1077} sizes="144px" />
+      </motion.div>
+
+      <motion.div
+        className="pointer-events-none absolute bottom-7 left-4 z-[4] w-[12.5rem] lg:hidden"
+        initial={reduceMotion ? false : { opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.58, delay: 0.68 }}
+        aria-hidden="true"
+      >
+        <Image className="h-auto w-full" src="/images/capability-profile/decor-05.webp" alt="" width={1707} height={666} sizes="200px" />
+      </motion.div>
+
+      <div className="relative z-10 mx-auto w-full max-w-[26rem] px-10 pt-[4.5rem] text-left lg:absolute lg:top-[25.7%] lg:left-[7.1%] lg:w-[41%] lg:max-w-[49rem] lg:p-0">
         <motion.h1
-          className="text-[2.25rem] leading-[1.08] font-extrabold tracking-[-0.025em] text-[#242122] uppercase lg:text-[clamp(2.25rem,2.7vw,3.25rem)]"
+          className="text-[1.5rem] leading-[1.08] font-extrabold tracking-[-0.025em] text-[#242122] uppercase lg:text-[clamp(2.25rem,2.7vw,3.25rem)]"
           initial={initialUp}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.08 }}
@@ -130,16 +202,17 @@ export function CapabilityHero() {
         </motion.h1>
 
         <motion.p
-          className="mt-4 max-w-[39rem] text-[1.2rem] leading-[1.3] font-normal tracking-[-0.02em] text-[#1a1a1a] uppercase lg:mt-2 lg:w-[32vw] lg:max-w-[38rem] lg:text-[clamp(1.15rem,1.62vw,1.95rem)]"
+          className="mx-auto mt-1.5 max-w-[39rem] text-[.9rem] leading-[1.3] font-normal tracking-[-0.02em] text-[#1a1a1a] uppercase lg:mx-0 lg:mt-2 lg:w-[32vw] lg:max-w-[38rem] lg:text-[clamp(1.15rem,1.62vw,1.95rem)]"
           initial={initialUp}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.28 }}
         >
-          Khẳng định năng lực - Đồng hành kiến tạo giá trị bền vững
+          Khẳng định năng lực - Đồng hành
+          <br className="lg:hidden" /> kiến tạo giá trị bền vững
         </motion.p>
 
         <motion.div
-          className="mt-3 w-full max-w-[24.5rem] lg:mt-3 lg:w-[15.5vw] lg:max-w-[18.6rem]"
+          className="mt-3 w-40 lg:mt-3 lg:w-[15.5vw] lg:max-w-[18.6rem]"
           initial={initialLeft}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.48 }}
@@ -149,7 +222,7 @@ export function CapabilityHero() {
         </motion.div>
 
         <motion.p
-          className="mt-2 max-w-[42rem] text-justify text-[.95rem] leading-[1.55] font-medium text-[#242122] lg:mt-2 lg:w-max lg:max-w-[41vw] lg:text-[clamp(.8rem,.88vw,1.02rem)] lg:leading-[1.5]"
+          className="mt-2 max-w-[42rem] text-justify text-[.78rem] leading-[1.55] font-medium tracking-[-0.02em] text-[#242122] [word-spacing:-0.1em] lg:mt-2 lg:w-max lg:max-w-[41vw] lg:text-[clamp(.8rem,.88vw,1.02rem)] lg:leading-[1.5] lg:tracking-normal lg:[word-spacing:normal]"
           initial={initialLeft}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.66 }}
@@ -159,6 +232,15 @@ export function CapabilityHero() {
               dòng trên justify tới đúng bề ngang đó nên ba dòng thẳng đều hai
               lề mà phần dãn chữ thêm là nhỏ nhất có thể. */}
           <span className="lg:block lg:[text-align-last:justify]">
+            <Image
+              className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
+              src="/images/capability-profile/intro-logo.png"
+              alt=""
+              width={90}
+              height={95}
+              sizes="1em"
+              aria-hidden="true"
+            />
             Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ{" "}
           </span>
           <span className="lg:block lg:[text-align-last:justify]">
@@ -171,7 +253,7 @@ export function CapabilityHero() {
       </div>
 
       <motion.div
-        className="group relative z-[3] mx-auto mt-16 w-[calc(100%-4rem)] max-w-[45rem] overflow-hidden rounded-[2rem] shadow-[0_18px_45px_rgb(65_57_51/.15)] lg:absolute lg:top-[13.9%] lg:left-[51%] lg:mt-0 lg:w-[41.8%] lg:max-w-[44rem] lg:rounded-[1.9rem]"
+        className="group relative z-[3] mx-auto mt-8 w-[calc(100%-4rem)] max-w-[45rem] overflow-hidden rounded-[2rem] shadow-[0_18px_45px_rgb(65_57_51/.15)] lg:absolute lg:top-[13.9%] lg:left-[51%] lg:mt-0 lg:w-[41.8%] lg:max-w-[44rem] lg:rounded-[1.9rem]"
         initial={reduceMotion ? false : { opacity: 0, scale: 1.05 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease, delay: 0.18 }}

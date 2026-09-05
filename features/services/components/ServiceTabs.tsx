@@ -18,15 +18,29 @@ const MOBILE_TAB_LINES = [
   ["CẢI TẠO &", "SỬA CHỮA"],
 ] as const;
 
+// Điện thoại hẹp cần thêm một điểm ngắt ở nhãn dài nhất để bốn tab vẫn nằm
+// trọn trong viewport. Từ 481px trở lên dùng đúng bản hai dòng của mockup.
+const NARROW_MOBILE_TAB_LINES = [
+  ["XÂY DỰNG", "TRỌN GÓI"],
+  ["THIẾT KẾ", "KIẾN TRÚC &", "NỘI THẤT"],
+  ["THI CÔNG", "XÂY DỰNG"],
+  ["CẢI TẠO &", "SỬA CHỮA"],
+] as const;
+
 // Điểm ngắt dòng cố định cho TIÊU ĐỀ bên cạnh số 01/02/03/04 (khác với nhãn
-// tab phía trên): chỉ "Thiết kế kiến trúc & nội thất" cần 2 dòng, 3 tiêu đề
-// còn lại nằm gọn 1 dòng (vd "GÓI" không được rớt xuống dòng riêng).
+// tab phía trên): cả 4 tiêu đề đều nằm gọn 1 dòng (vd "GÓI"/"NỘI THẤT" không
+// được rớt xuống dòng riêng) — "Thiết kế kiến trúc & nội thất" dài nhất nên
+// dùng cỡ chữ nhỏ hơn riêng, xem NOWRAP_TITLE_INDEXES bên dưới.
 const DETAIL_TITLE_LINES = [
   ["XÂY DỰNG TRỌN GÓI"],
-  ["THIẾT KẾ KIẾN TRÚC &", "NỘI THẤT"],
+  ["THIẾT KẾ KIẾN TRÚC & NỘI THẤT"],
   ["THI CÔNG XÂY DỰNG"],
   ["CẢI TẠO & SỬA CHỮA"],
 ] as const;
+
+// Tiêu đề dài nhất trong 4 tiêu đề trên cần thu nhỏ cỡ chữ ở mobile/tablet để
+// vẫn nằm gọn 1 dòng thay vì tự động ngắt dòng theo bề rộng cột.
+const NOWRAP_SMALL_TITLE_INDEXES = new Set([1]);
 
 /**
  * Khoảng cách ngang từ `node` tới `container`, tính theo layout (bỏ qua mọi
@@ -123,7 +137,12 @@ export function ServiceTabs() {
         aria-label="Các dịch vụ"
       >
         {serviceTabs.map((service, index) => (
-          <Reveal delay={index * 110} from="left" key={service.tabLabel}>
+          <Reveal
+            className="min-w-0"
+            delay={index * 110}
+            from="left"
+            key={service.tabLabel}
+          >
             <button
               className={cn(
                 // Cùng font / độ đậm / viết hoa với tiêu đề trong phần nội dung
@@ -142,8 +161,16 @@ export function ServiceTabs() {
                   labelRefs.current[index] = element;
                 }}
               >
-                <span className="lg:hidden">
+                <span className="max-[480px]:hidden lg:hidden">
                   {MOBILE_TAB_LINES[index].map((line, lineIndex) => (
+                    <span key={line}>
+                      {lineIndex > 0 && <br />}
+                      {line}
+                    </span>
+                  ))}
+                </span>
+                <span className="hidden max-[480px]:inline">
+                  {NARROW_MOBILE_TAB_LINES[index].map((line, lineIndex) => (
                     <span key={line}>
                       {lineIndex > 0 && <br />}
                       {line}
@@ -180,50 +207,56 @@ export function ServiceTabs() {
         )}
       </div>
 
-      {/* Mockup mobile chia đúng 50/50: ảnh bo góc đổ bóng bên trái cao bằng
-          hẳn cột chữ bên phải (đúng bằng phần tiêu đề/tagline/mô tả, KHÔNG
-          tính hàng chấm — hàng chấm là một khối riêng, full-width, nằm dưới
-          CẢ ảnh lẫn text), nhờ `items-stretch` + ảnh dùng `fill` không khoá
-          aspect-ratio riêng. Từ lg trở lên giữ nguyên bố cục/kích thước cũ
-          (ảnh tự nhiên không bo góc, 2 cột đều, item căn giữa theo chiều dọc
-          thay vì kéo giãn). */}
+      {/* Mobile/tablet dùng bố cục mới theo mockup: ảnh panorama ở trên, toàn
+          bộ nội dung ở dưới. Desktop từ lg trở lên vẫn giữ bố cục hai cột. */}
       <div
         className={cn(
-          "grid grid-cols-2 items-stretch gap-4 pt-8 transition-opacity ease-out sm:gap-6 sm:pt-12 lg:items-center lg:gap-20",
+          "pt-6 transition-opacity ease-out sm:pt-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-20 lg:pt-12",
           faded ? "opacity-0 duration-200" : "opacity-100 duration-500",
         )}
       >
         <Reveal
-          className="group relative w-full overflow-hidden rounded-2xl shadow-lg lg:aspect-1600/1093 lg:overflow-visible lg:rounded-none lg:shadow-none"
+          className="group relative aspect-9/5 w-full overflow-hidden rounded-2xl lg:aspect-1600/1093 lg:overflow-visible lg:rounded-none"
           from="left"
         >
           <Image
-            /* Cùng bộ số với các nút CTA: phóng 102%, 300ms ease-out. Danh
-               sách transition phải có `translate` và `scale` — Tailwind v4
-               nhấc/phóng bằng 2 thuộc tính CSS riêng chứ không gói trong
-               `transform` nữa, danh sách cũ `[transform,filter]` không bắt
-               được nên ảnh giật một phát.
-               Cú nhấc 5px chỉ bật từ lg: dưới lg ảnh nằm trong khung bo góc
-               `overflow-hidden`, đẩy ảnh lên sẽ hở một dải trống ở đáy khung;
-               từ lg khung để `overflow-visible` nên ảnh nổi lên tự nhiên. */
-            className="object-cover transition-[transform,translate,scale,filter] duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:drop-shadow-md lg:group-hover:-translate-y-[5px] lg:group-hover:drop-shadow-2xl lg:group-active:-translate-y-[5px] lg:group-active:drop-shadow-2xl"
+            className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:hidden"
+            src={detail.mobileImage}
+            alt={detail.label}
+            fill
+            sizes="(max-width: 1024px) calc(100vw - 2.25rem), 1px"
+            priority
+          />
+          <Image
+            className="hidden object-cover transition-[transform,translate,scale,filter] duration-300 ease-out lg:block lg:drop-shadow-md lg:group-hover:-translate-y-[5px] lg:group-hover:scale-[1.02] lg:group-hover:drop-shadow-2xl lg:group-active:-translate-y-[5px] lg:group-active:scale-[1.02] lg:group-active:drop-shadow-2xl"
             src={detail.image}
             alt={detail.label}
             fill
-            sizes="(max-width: 1024px) 46vw, 46vw"
+            sizes="(min-width: 1024px) 46vw, 1px"
             priority
           />
         </Reveal>
 
-        <div className="max-w-[31.875rem]">
-          <Reveal from="left">
-            <span className="block text-[clamp(2rem,9vw,3rem)] leading-none font-extrabold text-neutral-400 transition-colors duration-300 hover:text-brand lg:text-7xl">
+        <div className="mt-7 grid max-w-[31.875rem] grid-cols-[clamp(4rem,11vw,5rem)_minmax(0,1fr)] gap-x-3 sm:gap-x-4 lg:mt-0 lg:block">
+          <Reveal className="col-start-1 row-start-1" from="left">
+            <span className="block text-[clamp(3rem,13vw,4.5rem)] leading-[0.8] font-extrabold text-[#c4c4c4] transition-colors duration-300 hover:text-brand lg:text-7xl lg:leading-none">
               {String(shown + 1).padStart(2, "0")}.
             </span>
+            <span className="mt-2 block h-0.5 w-[128%] bg-brand lg:hidden" />
           </Reveal>
-          <Reveal delay={120}>
-            <h2 className="mt-2 font-heading text-[clamp(1.125rem,4.6vw,1.75rem)] font-extrabold uppercase lg:mt-3 lg:text-4xl lg:text-pretty">
-              <span className="lg:hidden">
+          <Reveal
+            className="col-start-2 row-start-1 min-w-0 translate-x-2 sm:translate-x-3 lg:translate-x-0"
+            delay={120}
+          >
+            <h2
+              className={cn(
+                "font-heading leading-[1.08] font-extrabold tracking-[-0.025em] uppercase lg:mt-3 lg:text-4xl lg:leading-normal lg:tracking-normal lg:text-pretty",
+                NOWRAP_SMALL_TITLE_INDEXES.has(shown)
+                  ? "text-[clamp(0.8125rem,4vw,1.75rem)]"
+                  : "text-[clamp(1.125rem,4.6vw,1.75rem)]",
+              )}
+            >
+              <span className="whitespace-nowrap lg:hidden lg:whitespace-normal">
                 {DETAIL_TITLE_LINES[shown].map((line, lineIndex) => (
                   <span key={line}>
                     {lineIndex > 0 && <br />}
@@ -233,15 +266,24 @@ export function ServiceTabs() {
               </span>
               <span className="hidden lg:inline">{detail.label}</span>
             </h2>
+            <p
+              className={cn(
+                "whitespace-nowrap text-[clamp(0.625rem,2.5vw,1.1875rem)] font-medium tracking-[-0.025em] sm:text-[min(1.25rem,2.8vw)] lg:mt-2 lg:max-w-fit lg:text-2xl lg:font-extrabold lg:tracking-normal",
+                shown === 1 ? "mt-1" : "mt-0.5",
+              )}
+            >
+              {detail.tagline}
+            </p>
           </Reveal>
-          <Reveal delay={240}>
-            <p className="mt-2 text-[clamp(0.75rem,2.6vw,0.9375rem)] font-medium max-w-fit lg:mt-3 lg:font-extrabold lg:text-md">{detail.tagline}</p>
-            <span className="mt-3 mb-1.5 block h-0.5 w-16 bg-brand lg:mt-5 lg:mb-2 lg:w-36" />
-            {/* Căn đều hai lề. Bỏ `text-pretty` vì `text-wrap: pretty` tự cân
-                lại số chữ giữa các dòng (nhất là dòng áp chót), làm dòng đó
-                ngắn đi trong khi justify vẫn kéo nó ra đủ bề rộng — khoảng
-                trắng giữa các từ giãn bất thường. */}
-            <p className="text-justify text-[clamp(0.75rem,2.4vw,0.9375rem)] leading-relaxed lg:text-base">{detail.copy}</p>
+          <Reveal className="col-span-2 row-start-2" delay={240}>
+            <div className="lg:block">
+              <span className="hidden h-0.5 bg-brand lg:mt-5 lg:mb-2 lg:block lg:w-36" />
+              {/* Mobile căn trái để khoảng trắng giữa các từ luôn tự nhiên.
+                  Desktop giữ kiểu căn đều hai lề của bố cục cũ. */}
+              <p className="mt-3 text-[clamp(0.75rem,2.4vw,0.9375rem)] leading-relaxed tracking-[-0.01em] lg:mt-0 lg:text-justify lg:text-base lg:tracking-normal">
+                {detail.copy}
+              </p>
+            </div>
           </Reveal>
         </div>
       </div>
@@ -251,14 +293,14 @@ export function ServiceTabs() {
           chọn: viền cam + tâm đặc cam (kiểu radio button); chấm còn lại chỉ
           là vòng viền đen rỗng. */}
       <div
-        className="mt-6 flex items-center justify-center gap-2.5 lg:hidden"
+        className="mt-6 flex items-center justify-center gap-2 lg:hidden"
         role="tablist"
         aria-label="Chọn dịch vụ"
       >
         {serviceTabs.map((service, index) => (
           <button
             className={cn(
-              "grid size-6 shrink-0 place-items-center rounded-full border-2 transition-colors duration-300",
+              "grid size-5 shrink-0 place-items-center rounded-full border-2 transition-colors duration-300",
               index === active ? "border-brand" : "border-charcoal",
             )}
             onClick={() => select(index)}
@@ -269,7 +311,7 @@ export function ServiceTabs() {
             key={service.tabLabel}
           >
             {index === active && (
-              <span className="size-3.5 rounded-full bg-brand" aria-hidden="true" />
+              <span className="size-3 rounded-full bg-brand" aria-hidden="true" />
             )}
           </button>
         ))}

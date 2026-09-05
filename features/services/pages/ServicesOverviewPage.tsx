@@ -23,7 +23,7 @@ const cardPositions = [
 
 export function ServicesOverviewPage() {
   return (
-    <div className="min-h-screen bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
+    <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
 
       {/* --hero-lift: kéo TOÀN BỘ nội dung banner (cột chữ trái + cụm 4 thẻ

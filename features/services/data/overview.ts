@@ -38,6 +38,7 @@ export const serviceTabs = [
     tagline: "KIẾN TẠO CÔNG TRÌNH BỀN VỮNG - TỪ THIẾT KẾ ĐẾN THI CÔNG",
     copy: "Triển khai đồng bộ từ tư vấn, thiết kế đến thi công và bàn giao, giúp khách hàng kiểm soát tiến độ, tối ưu chi phí và đảm bảo chất lượng công trình trong từng giai đoạn.",
     image: "/images/services/service-01.webp",
+    mobileImage: "/images/services/service-mobile-01.webp",
   },
   {
     tabLabel: "THIẾT KẾ KIẾN TRÚC & NỘI THẤT",
@@ -45,6 +46,7 @@ export const serviceTabs = [
     tagline: "KIẾN TẠO KHÔNG GIAN HÀI HÒA GIỮA THẨM MỸ VÀ CÔNG NĂNG",
     copy: "Mỗi phương án được nghiên cứu từ hiện trạng, nhu cầu sử dụng và phong cách sống nhằm tạo nên không gian có dấu ấn riêng, tối ưu công năng và giá trị sử dụng lâu dài.",
     image: "/images/services/service-02.webp",
+    mobileImage: "/images/services/service-mobile-02.webp",
   },
   {
     tabLabel: "THI CÔNG XÂY DỰNG",
@@ -52,6 +54,7 @@ export const serviceTabs = [
     tagline: "THI CÔNG CHUẨN KỸ THUẬT - ĐẢM BẢO CHẤT LƯỢNG CÔNG TRÌNH",
     copy: "Quy trình thi công được triển khai theo đúng hồ sơ thiết kế và tiêu chuẩn kỹ thuật. Từng hạng mục đều được kiểm soát chặt chẽ để đảm bảo chất lượng, tiến độ, an toàn và độ bền của công trình.",
     image: "/images/services/service-03.webp",
+    mobileImage: "/images/services/service-mobile-03.webp",
   },
   {
     tabLabel: "CẢI TẠO & SỬA CHỮA",
@@ -59,6 +62,7 @@ export const serviceTabs = [
     tagline: "LÀM MỚI KHÔNG GIAN - GIA TĂNG GIÁ TRỊ SỬ DỤNG",
     copy: "Từ khảo sát hiện trạng đến đề xuất phương án và triển khai thi công, mọi hạng mục đều được thực hiện đồng bộ nhằm cải thiện công năng, nâng cấp diện mạo và đáp ứng tốt hơn nhu cầu sử dụng.",
     image: "/images/services/service-04.webp",
+    mobileImage: "/images/services/service-mobile-04.webp",
   },
 ] as const;
 
