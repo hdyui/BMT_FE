@@ -56,22 +56,22 @@ export const homeStats = [
 
 export const homeServiceDetails = [
   {
-    image: "/images/home/trust-card-interior.png",
+    image: "/images/home/service-mobile-turnkey.webp",
     desktopImage: "/images/home/service-turnkey-optimized.webp",
     copy: "Cung cấp giải pháp xây dựng trọn gói từ tư vấn, thiết kế, thi công đến hoàn thiện, đảm bảo chất lượng, tiến độ và tối ưu chi phí.",
   },
   {
-    image: "/images/home/trust-card-design.png",
+    image: "/images/home/service-mobile-design.webp",
     desktopImage: "/images/home/service-design-optimized.webp",
     copy: "Thiết kế không gian hài hòa giữa công năng và thẩm mỹ, mang đến giải pháp phù hợp với nhu cầu sử dụng và phong cách của từng khách hàng.",
   },
   {
-    image: "/images/home/trust-card-build.png",
+    image: "/images/home/service-mobile-construction.webp",
     desktopImage: "/images/home/service-construction-optimized.webp",
     copy: "Thi công công trình theo đúng bản vẽ và tiêu chuẩn kỹ thuật, đảm bảo chất lượng, an toàn và tiến độ trong suốt quá trình thực hiện.",
   },
   {
-    image: "/images/home/trust-card-site.png",
+    image: "/images/home/service-mobile-renovation.webp",
     desktopImage: "/images/home/service-renovation-optimized.webp",
     copy: "Nâng cấp, cải tạo và sửa chữa công trình hiện hữu, tối ưu công năng, làm mới không gian và gia tăng giá trị sử dụng.",
   },

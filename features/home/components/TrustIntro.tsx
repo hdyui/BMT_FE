@@ -47,20 +47,20 @@ export function TrustIntro() {
   return (
     <motion.div
       ref={ref}
-      className="text-center"
+      className="text-center text-charcoal"
       animate={visible ? "visible" : "hidden"}
       initial="hidden"
       variants={introContainerVariants}
     >
       <motion.h2
-        className="text-3xl font-bold uppercase motion-reduce:transform-none sm:text-4xl lg:text-charcoal"
+        className="text-3xl font-extrabold tracking-[-0.035em] uppercase motion-reduce:transform-none sm:text-4xl"
         variants={introItemVariants}
       >
         <span className="sm:hidden">Vì sao khách hàng tin chọn</span>
         <span className="hidden sm:inline">Vì sao khách hàng tin chọn BMT Decor?</span>
       </motion.h2>
       <motion.p
-        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-white/80 motion-reduce:transform-none max-sm:text-base lg:text-muted-foreground"
+        className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-muted-foreground motion-reduce:transform-none max-sm:text-[14px] max-sm:leading-[1.42]"
         variants={introItemVariants}
       >
         <span className="sm:hidden">
