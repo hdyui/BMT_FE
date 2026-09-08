@@ -12,7 +12,7 @@ type Side = "left" | "right";
    4 trang dịch vụ con (features/services/components/ProjectCarousel.tsx):
    cùng class và cùng cặp icon nav-prev/nav-next. */
 const navButtonClass =
-  "grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95 disabled:pointer-events-none max-md:size-7";
+  "grid size-9 place-items-center overflow-hidden rounded-full bg-brand text-white shadow-[0_4px_10px_rgba(244,122,42,0.25)] transition-all duration-300 hover:scale-110 hover:brightness-110 hover:saturate-105 hover:shadow-[0_6px_14px_rgba(244,122,42,0.35)] active:scale-95 disabled:pointer-events-none max-md:size-6";
 const navIcons = {
   prev: "/images/cai-tao-sua-chua/nav-prev.png",
   next: "/images/cai-tao-sua-chua/nav-next.png",
@@ -81,11 +81,16 @@ const EASE = [0.4, 0.02, 0.22, 1] as const;
 
 /* Góc của dải đầu tiên (sát gáy) và độ lệch góc giữa 2 dải liền nhau.
    Mép ngoài đi trước, mép gáy theo sau — giống hệt khi ta nhấc mép trang lên. */
-function bend(progress: number) {
+function bend(progress: number, maxBend: number = MAX_BEND) {
   const sweep = -180 * progress;
-  const arc = Math.min(MAX_BEND * Math.sin(Math.PI * progress), FOLD_GUARD * Math.abs(progress - 0.5));
+  const arc = Math.min(maxBend * Math.sin(Math.PI * progress), FOLD_GUARD * Math.abs(progress - 0.5));
   return { base: sweep + arc / 2, step: -arc / (STRIP_COUNT - 1) };
 }
+
+/* Trang lật mobile chỉ có 1 dải cong tại một thời điểm (không có tờ đối
+   diện bù trừ thị giác như bản desktop) nên cần cong rõ hơn mới thấy được
+   hiệu ứng giấy thật. */
+const MOBILE_MAX_BEND = 104;
 
 /* Độ tối của một mặt giấy theo góc nó đang quay: quay nghiêng khỏi mắt thì tối
    dần, kèm một vệt sáng hẹp giả phản chiếu lúc giấy dựng gần vuông góc. */
@@ -220,6 +225,278 @@ function shiftFor(stage: Stage) {
 }
 
 export function ProfileBook() {
+  return (
+    <>
+      <div className="lg:hidden">
+        <MobileProfileBook />
+      </div>
+      <div className="hidden lg:block">
+        <DesktopProfileBook />
+      </div>
+    </>
+  );
+}
+
+/* Bề ngang lớn (gần full màn hình) khiến bố cục "trang đôi" của desktop
+   (2 trang A4 nằm cạnh nhau) không còn hợp lý ở mobile — trang lúc này quá
+   to để hiện đủ 2 trang cùng lúc mà không bị cắt. Mobile dùng mô hình khác:
+   CHỈ 1 trang hiện ra tại một thời điểm, lật từng trang một (kiểu lật app
+   đọc PDF) thay vì mở ra như quyển sách vật lý của desktop. */
+/* Trang lật mobile dùng lại đúng kỹ thuật "cắt dải cong" của TurningSheet
+   (desktop) — chỉ khác là 1 dải phủ full bề ngang trang (không chia đôi
+   spread) và mặt sau chỉ là màu giấy trơn (trang đơn không có nội dung in ở
+   mặt sau). `progress` chạy 0→1 theo chiều thao tác của người dùng; `dir`
+   quyết định lật xuôi (0°→-180°) hay lật ngược (-180°→0°) nên cùng một hàm
+   `bend()` gốc (vốn chỉ biết lật xuôi) dùng lại được cho cả hai chiều bằng
+   cách đảo ngược tham số truyền vào. */
+function MobileTurningFlap({ src, progress, dir }: { src: string; progress: MotionValue<number>; dir: 1 | -1 }) {
+  const stripRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const shadeRefs = useRef<(HTMLSpanElement | null)[]>([]);
+
+  useEffect(() => {
+    function draw(value: number) {
+      const t = dir === 1 ? value : 1 - value;
+      const { base, step } = bend(t, MOBILE_MAX_BEND);
+      for (let i = 0; i < STRIP_COUNT; i += 1) {
+        const strip = stripRefs.current[i];
+        if (strip) strip.style.transform = `rotateY(${i === 0 ? base : step}deg)`;
+        const angle = base + step * i;
+        const front = shadeRefs.current[i * 2];
+        const back = shadeRefs.current[i * 2 + 1];
+        if (front) front.style.opacity = shade(angle).toFixed(3);
+        if (back) back.style.opacity = shade(angle + 180).toFixed(3);
+      }
+    }
+
+    draw(progress.get());
+    return progress.on("change", draw);
+  }, [progress, dir]);
+
+  let stack: React.ReactNode = null;
+  for (let i = STRIP_COUNT - 1; i >= 0; i -= 1) {
+    const index = i;
+    stack = (
+      <div
+        key={index}
+        ref={(node) => {
+          stripRefs.current[index] = node;
+        }}
+        className={`absolute inset-y-0 origin-left transform-3d ${index === 0 ? "left-0" : "left-full"}`}
+        style={{ width: index === 0 ? `${100 / STRIP_COUNT}%` : "100%" }}
+      >
+        <div className="absolute inset-y-0 bg-no-repeat backface-hidden" style={faceStyle(src, index, false)}>
+          <span
+            className="absolute inset-0 bg-black"
+            ref={(node) => {
+              shadeRefs.current[index * 2] = node;
+            }}
+            style={{ opacity: 0 }}
+          />
+        </div>
+        <div className="absolute inset-y-0 bg-neutral-100 backface-hidden transform-[rotateY(180deg)]">
+          <span
+            className="absolute inset-0 bg-black"
+            ref={(node) => {
+              shadeRefs.current[index * 2 + 1] = node;
+            }}
+            style={{ opacity: 0 }}
+          />
+        </div>
+        {stack}
+      </div>
+    );
+  }
+
+  return (
+    <div
+      className="absolute inset-0 z-20 transform-3d"
+      style={{ transform: `translateZ(${LIFT}px)` }}
+      aria-hidden="true"
+    >
+      {stack}
+    </div>
+  );
+}
+
+function MobileProfileBook() {
+  const order = [pages.cover, pages.contents, pages.letter, pages.back] as const;
+  const orderLabels = [labels.cover, labels.contents, labels.letter, labels.back] as const;
+
+  const [index, setIndex] = useState(0);
+  const [turn, setTurn] = useState<{ from: number; dir: 1 | -1 } | null>(null);
+  const reduceMotion = useReducedMotion();
+  const progress = useMotionValue(0);
+  const busyRef = useRef(false);
+  const frameRef = useRef<HTMLDivElement>(null);
+  const dragRef = useRef<{ dir: 1 | -1; startX: number; width: number; moved: number } | null>(null);
+  const draggedRef = useRef(false);
+
+  const settle = useCallback(
+    (dir: 1 | -1, to: number) => {
+      const distance = Math.abs(to - progress.get());
+      const duration = 0.32 + 0.5 * distance;
+      busyRef.current = true;
+      animate(progress, to, {
+        duration,
+        ease: EASE,
+        onComplete: () => {
+          busyRef.current = false;
+          if (to === 1) {
+            setIndex((current) => Math.min(order.length - 1, current + dir));
+          }
+          setTurn(null);
+          progress.set(0);
+        },
+      });
+    },
+    [progress, order.length],
+  );
+
+  const flip = useCallback(
+    (dir: 1 | -1) => {
+      if (busyRef.current) return;
+      const next = index + dir;
+      if (next < 0 || next >= order.length) return;
+
+      if (reduceMotion) {
+        setIndex(next);
+        return;
+      }
+
+      setTurn({ from: index, dir });
+      progress.set(0);
+      settle(dir, 1);
+    },
+    [index, order.length, progress, reduceMotion, settle],
+  );
+
+  function beginDrag(event: ReactPointerEvent<HTMLButtonElement>, dir: 1 | -1) {
+    if (busyRef.current || reduceMotion) return;
+    const next = index + dir;
+    if (next < 0 || next >= order.length) return;
+    const frame = frameRef.current;
+    if (!frame) return;
+
+    draggedRef.current = false;
+    busyRef.current = true;
+    dragRef.current = { dir, startX: event.clientX, width: frame.getBoundingClientRect().width, moved: 0 };
+    setTurn({ from: index, dir });
+    progress.set(0);
+    event.currentTarget.setPointerCapture(event.pointerId);
+  }
+
+  function moveDrag(event: ReactPointerEvent<HTMLButtonElement>) {
+    const drag = dragRef.current;
+    if (!drag) return;
+    const dx = event.clientX - drag.startX;
+    drag.moved = Math.max(drag.moved, Math.abs(dx));
+    const raw = drag.dir === 1 ? -dx / drag.width : dx / drag.width;
+    progress.set(Math.min(1, Math.max(0, raw)));
+  }
+
+  function endDrag(event: ReactPointerEvent<HTMLButtonElement>, cancelled = false) {
+    const drag = dragRef.current;
+    if (!drag) return;
+    dragRef.current = null;
+    if (event.currentTarget.hasPointerCapture(event.pointerId)) {
+      event.currentTarget.releasePointerCapture(event.pointerId);
+    }
+
+    if (cancelled) {
+      draggedRef.current = true;
+      settle(drag.dir, 0);
+      return;
+    }
+
+    if (drag.moved < 6) {
+      settle(drag.dir, 1);
+      return;
+    }
+    draggedRef.current = true;
+    settle(drag.dir, progress.get() > 0.5 ? 1 : 0);
+  }
+
+  const flapIndex = turn ? (turn.dir === 1 ? turn.from : turn.from - 1) : null;
+  const staticIndex = turn ? (turn.dir === 1 ? Math.min(order.length - 1, turn.from + 1) : turn.from) : index;
+
+  return (
+    <div className="relative mx-auto flex max-w-[45rem] flex-col items-center gap-4">
+      {Object.values(pages).map((src) => (
+        <link key={src} rel="preload" as="image" href={src} />
+      ))}
+
+      <div
+        className="relative aspect-[1.414/2] w-full overflow-hidden shadow-[0_18px_45px_rgb(65_57_51/.15)] [perspective:1600px]"
+        ref={frameRef}
+      >
+        <div
+          className="absolute inset-0 z-10 bg-white bg-cover bg-center"
+          style={{ backgroundImage: `url(${order[staticIndex]})` }}
+          role="img"
+          aria-label={orderLabels[staticIndex]}
+        />
+
+        {turn && flapIndex !== null && flapIndex >= 0 && flapIndex < order.length && (
+          <MobileTurningFlap src={order[flapIndex]} progress={progress} dir={turn.dir} />
+        )}
+
+        {index > 0 && (
+          <button
+            className="absolute inset-y-0 left-0 z-30 w-1/4 cursor-grab touch-pan-y bg-transparent active:cursor-grabbing"
+            type="button"
+            aria-label="Trang trước"
+            onPointerDown={(event) => beginDrag(event, -1)}
+            onPointerMove={moveDrag}
+            onPointerUp={(event) => endDrag(event)}
+            onPointerCancel={(event) => endDrag(event, true)}
+            onClick={() => {
+              if (!draggedRef.current) flip(-1);
+              draggedRef.current = false;
+            }}
+          />
+        )}
+        {index < order.length - 1 && (
+          <button
+            className="absolute inset-y-0 right-0 z-30 w-1/4 cursor-grab touch-pan-y bg-transparent active:cursor-grabbing"
+            type="button"
+            aria-label="Trang sau"
+            onPointerDown={(event) => beginDrag(event, 1)}
+            onPointerMove={moveDrag}
+            onPointerUp={(event) => endDrag(event)}
+            onPointerCancel={(event) => endDrag(event, true)}
+            onClick={() => {
+              if (!draggedRef.current) flip(1);
+              draggedRef.current = false;
+            }}
+          />
+        )}
+      </div>
+
+      <div className="flex items-center gap-3">
+        <button
+          className={navButtonClass}
+          type="button"
+          aria-label="Trang trước"
+          disabled={index === 0}
+          onClick={() => flip(-1)}
+        >
+          <Image className="size-full object-cover" src={navIcons.prev} alt="" width={48} height={48} aria-hidden="true" />
+        </button>
+        <button
+          className={`${navButtonClass} ${index === order.length - 1 ? "opacity-25" : "opacity-100"}`}
+          type="button"
+          aria-label="Trang sau"
+          disabled={index === order.length - 1}
+          onClick={() => flip(1)}
+        >
+          <Image className="size-full object-cover" src={navIcons.next} alt="" width={48} height={48} aria-hidden="true" />
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DesktopProfileBook() {
   const [stage, setStage] = useState<Stage>(0);
   const [turning, setTurning] = useState<SheetIndex | null>(null);
   const reduceMotion = useReducedMotion();
@@ -370,14 +647,17 @@ export function ProfileBook() {
   const grabbable = !reduceMotion;
 
   return (
-    <div className="relative mx-auto grid min-h-[300px] max-w-[1080px] grid-cols-[36px_minmax(0,1fr)_36px] items-center gap-1.5 max-md:grid-cols-[28px_minmax(0,1fr)_28px] max-md:gap-1 md:min-h-[500px] xl:min-h-[660px]">
+    <div className="relative mx-auto grid max-w-[1080px] grid-cols-2 items-center gap-3 [grid-template-areas:'frame_frame'_'prev_next'] md:min-h-[500px] md:grid-cols-[36px_minmax(0,1fr)_36px] md:gap-1.5 md:[grid-template-areas:'prev_frame_next'] xl:min-h-[660px]">
+      {/* Mobile xếp ảnh sách phía trên, 2 nút lật nằm thành 1 hàng ngay dưới
+          (giữa khung), khớp mockup — desktop giữ nguyên bố cục 3 cột cũ (nút
+          nằm 2 bên khung) qua vùng grid-area riêng cho từng khổ màn hình. */}
       {/* Nạp sẵn cả 4 mặt giấy để cú lật đầu tiên không bị trắng trang. */}
       {Object.values(pages).map((src) => (
         <link key={src} rel="preload" as="image" href={src} />
       ))}
 
       <button
-        className={`${navButtonClass} justify-self-end ${stage === 0 ? "opacity-0" : "opacity-100"}`}
+        className={`${navButtonClass} [grid-area:prev] justify-self-end md:justify-self-end`}
         type="button"
         aria-label="Trang trước"
         disabled={stage === 0}
@@ -389,7 +669,7 @@ export function ProfileBook() {
       {/* Khung = khổ TRANG ĐÔI (2 trang A4 dọc cạnh nhau, tỉ lệ 1.414). Bìa khi
           đóng rộng đúng nửa khung ≈ 470px — nhỉnh hơn dòng tiêu đề
           "HỒ SƠ DOANH NGHIỆP" một chút, giữ đúng khổ đã canh trước đó. */}
-      <div className="relative mx-auto aspect-[1.414] w-full max-w-[940px] [perspective:2200px] [perspective-origin:50%_45%]" ref={frameRef}>
+      <div className="relative mx-auto aspect-[1.414] w-full max-w-[940px] [grid-area:frame] [perspective:2200px] [perspective-origin:50%_45%]" ref={frameRef}>
         <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ x: shift }}>
           {/* Tờ giấy nghiêng lên thì bề ngang chiếu xuống màn hình của nó hẹp
               lại, hở ra nửa sách nằm sau nó — mà nửa đó không có trang tĩnh nào
@@ -481,7 +761,7 @@ export function ProfileBook() {
       </div>
 
       <button
-        className={`${navButtonClass} justify-self-start ${stage === 0 ? "opacity-0" : stage === 2 ? "opacity-25" : "opacity-100"}`}
+        className={`${navButtonClass} [grid-area:next] justify-self-start md:justify-self-start ${stage === 2 ? "opacity-25" : "opacity-100"}`}
         type="button"
         aria-label="Trang sau"
         disabled={stage === 2}

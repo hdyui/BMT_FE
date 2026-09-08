@@ -4,7 +4,6 @@ import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { aboutCoreValues as coreValues } from "@/features/about/data/about-content";
-import styles from "./VisionMissionValues.module.css";
 
 const imageRoot = "/images/about/source";
 
@@ -162,7 +161,7 @@ function CoreValueIllustration({
     >
       {coreValues.map((value, index) => (
         <Image
-          className={`${index === 3 ? "object-fill" : "object-contain"} transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${index === 4 ? styles.dedicationIllustration : ""} ${
+          className={`${index === 3 ? "object-fill" : "object-contain"} transition-[opacity,scale,filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:transition-none ${index === 4 ? "[clip-path:polygon(10%_0,100%_0,100%_100%,0_100%,0_10%)]" : ""} ${
             activeValue === index
               ? "scale-100 opacity-100 blur-0"
               : "pointer-events-none scale-[.965] opacity-0 blur-[2px]"
@@ -263,7 +262,7 @@ export function VisionMissionValues() {
           }`}
           style={{ transitionDelay: "430ms" }}
         >
-          <div className={styles.illustrationFloat}>
+          <div className="animate-[illustration-float_4.8s_ease-in-out_1.5s_infinite] motion-reduce:animate-none">
             <CoreValueIllustration activeValue={activeMobileValue} mobile />
             <CoreValueIllustration
               activeValue={activeDesktopValue}

@@ -40,7 +40,13 @@ export function AdminModuleShell({
             </div>
           </div>
         )}
-        <div className={singleColumnOrange ? "space-y-4" : "grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0"}>
+        <div
+          className={
+            singleColumnOrange
+              ? "space-y-4"
+              : "grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0"
+          }
+        >
           {items.map((item, index) => {
             const className = singleColumnOrange
               ? "group flex min-h-32 items-start gap-4 rounded-2xl border border-brand/25 bg-brand/[0.035] p-5 shadow-[0_10px_28px_rgb(244_122_42/.06)] outline-none transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.055] hover:shadow-[0_14px_34px_rgb(244_122_42/.1)] focus-visible:ring-3 focus-visible:ring-brand/25 sm:p-6"
@@ -49,30 +55,34 @@ export function AdminModuleShell({
                 }`;
             const content = (
               <>
-              <span className={`grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand ${singleColumnOrange ? "border-brand/25" : ""}`}>
-                {String(index + 1).padStart(2, "0")}
-              </span>
-              <div className="min-w-0 flex-1">
-                <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="font-semibold">{item.title}</h3>
-                  {item.count && (
-                    <span className="text-xs text-muted-foreground">
-                      {item.count}
+                <span
+                  className={`grid size-8 shrink-0 place-items-center rounded-lg border bg-background text-xs font-bold text-brand ${singleColumnOrange ? "border-brand/25" : ""}`}
+                >
+                  {String(index + 1).padStart(2, "0")}
+                </span>
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-center gap-2">
+                    <h3 className="font-semibold">{item.title}</h3>
+                    {item.count && (
+                      <span className="text-xs text-muted-foreground">
+                        {item.count}
+                      </span>
+                    )}
+                  </div>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+                    {item.description}
+                  </p>
+                  {item.href && (
+                    <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
+                      Quản lý <ArrowRight className="size-3.5" />
                     </span>
                   )}
                 </div>
-                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                  {item.description}
-                </p>
                 {item.href && (
-                  <span className="mt-4 inline-flex items-center gap-1.5 text-xs font-semibold text-brand">
-                    Quản lý <ArrowRight className="size-3.5" />
-                  </span>
+                  <ArrowRight
+                    className={`mt-1 size-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${singleColumnOrange ? "text-brand" : "text-muted-foreground group-hover:text-brand"}`}
+                  />
                 )}
-              </div>
-              {item.href && (
-                <ArrowRight className={`mt-1 size-4 shrink-0 transition-transform group-hover:translate-x-0.5 ${singleColumnOrange ? "text-brand" : "text-muted-foreground group-hover:text-brand"}`} />
-              )}
               </>
             );
 

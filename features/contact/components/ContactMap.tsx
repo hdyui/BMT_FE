@@ -1,5 +1,4 @@
 import { Reveal } from "@/shared/components/Reveal";
-import styles from "./ContactMap.module.css";
 
 export const defaultContactMapContent = {
   title: "Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM",
@@ -9,13 +8,16 @@ export const defaultContactMapContent = {
 
 export function ContactMap({ content = defaultContactMapContent }: { content?: typeof defaultContactMapContent }) {
   return (
-    <Reveal className={styles.reveal} from="left">
-      <section className={styles.section} aria-labelledby="contact-map-title">
+    <Reveal className="w-full overflow-hidden bg-[#e9e5dc]" from="left">
+      <section
+        className="relative aspect-[3.46/1] w-full overflow-hidden bg-[#e9e5dc] max-[55rem]:aspect-[1.7/1] max-[34rem]:aspect-[1.42/1]"
+        aria-labelledby="contact-map-title"
+      >
         <h2 className="sr-only" id="contact-map-title">
           {content.title}
         </h2>
         <iframe
-          className={styles.map}
+          className="block h-full w-full border-0 [filter:saturate(.72)_contrast(.94)_brightness(1.04)] [touch-action:auto] pointer-events-auto"
           src={content.googleMapsUrl}
           title={content.title}
           loading="lazy"

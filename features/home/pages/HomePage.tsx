@@ -13,6 +13,7 @@ import { PartnerSection } from "@/features/home/components/PartnerSection";
 import { CapabilityProfileSection } from "@/features/home/components/CapabilityProfileSection";
 import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
+import { MobileTrustAccordion } from "@/features/home/components/MobileTrustAccordion";
 import {
   homeNews as news,
   homeSectionContent,
@@ -62,69 +63,13 @@ export function HomePage() {
       <HomeHero />
 
       <section className="bg-white">
-        <div className="relative overflow-hidden bg-charcoal pt-16 text-white lg:bg-white lg:text-charcoal">
-          <Image
-            className="object-cover lg:hidden"
-            src="/images/home/trust-background.png"
-            alt=""
-            fill
-            sizes="100vw"
-          />
-          <div className="absolute inset-0 bg-charcoal/15 lg:hidden" />
-
+        <div className="relative overflow-hidden bg-white pt-16 text-charcoal">
           <div className="relative mx-auto w-[min(1360px,calc(100%-2rem))]">
             <TrustIntro />
 
             <div className="mt-9 hidden h-44 lg:block" aria-hidden="true" />
-
-            <div className="mt-9 grid gap-6 pb-12 sm:grid-cols-2 lg:hidden max-sm:relative max-sm:left-1/2 max-sm:w-screen max-sm:-translate-x-1/2 max-sm:gap-4 max-sm:px-4 max-sm:text-charcoal max-sm:before:absolute max-sm:before:inset-x-0 max-sm:before:top-36 max-sm:before:bottom-0 max-sm:before:bg-white">
-              {trustReasons.map((reason, index) => (
-                <TrustCardReveal
-                  className="group/card-lift relative z-0 hover:z-10 sm:h-full"
-                  delay={index * 180}
-                  key={reason.title}
-                  motionClassName="origin-[center_176px] [transform:scale(1)] transition-transform duration-300 ease-in-out group-hover/card-lift:[transform:scale(1.015)] sm:h-full"
-                >
-                  <article
-                    className="group/card relative z-0 overflow-hidden rounded-2xl bg-white text-charcoal shadow-xl transition-shadow duration-300 ease-in-out hover:z-10 hover:shadow-[0_20px_45px_rgb(47_38_34/.2)] sm:flex sm:h-[410px] sm:flex-col max-sm:z-10 max-sm:shadow-[0_6px_18px_rgb(36_33_34/.16)]"
-                  >
-                    <div className="relative h-44 overflow-hidden sm:shrink-0 max-sm:h-36">
-                      <Image
-                        className="object-cover"
-                        src={reason.image}
-                        alt={reason.title}
-                        fill
-                        sizes="(max-width:640px) 100vw, 50vw"
-                      />
-                    </div>
-                    <div className="relative px-6 pt-11 pb-7 sm:min-h-0 sm:flex-1 max-sm:px-4 max-sm:pt-9 max-sm:pb-4">
-                      <span className="absolute -top-8 left-6 z-20 grid size-16 place-items-center rounded-lg bg-white shadow-lg transition-colors duration-[700ms] group-hover/card:bg-brand max-sm:left-4">
-                        <Image
-                          className="size-9 object-contain transition-opacity duration-[700ms] group-hover/card:opacity-0"
-                          src={reason.icon}
-                          alt=""
-                          width={44}
-                          height={44}
-                        />
-                        <Image
-                          className="absolute size-9 object-contain opacity-0 brightness-0 invert transition-opacity duration-[700ms] group-hover/card:opacity-100"
-                          src={reason.icon}
-                          alt=""
-                          width={44}
-                          height={44}
-                        />
-                      </span>
-                      <h3 className="text-lg font-bold leading-snug sm:line-clamp-1 max-sm:text-[20px] max-sm:font-extrabold max-sm:leading-[1.12] max-sm:tracking-[-0.025em]">
-                        {reason.title}
-                      </h3>
-                      <p className="mt-3 text-xl leading-relaxed text-muted-foreground sm:line-clamp-4 sm:text-[17px] sm:leading-[1.55] max-sm:mt-1.5 max-sm:text-[14px] max-sm:font-medium max-sm:leading-[1.3] max-sm:tracking-[-0.012em] max-sm:text-charcoal/90">
-                        {reason.copy}
-                      </p>
-                    </div>
-                    <span className="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-brand transition-transform duration-500 ease-out group-hover/card:scale-x-100" />
-                  </article>
-                </TrustCardReveal>
-              ))}
+            <div className="mt-7 pb-10 lg:hidden">
+              <MobileTrustAccordion />
             </div>
           </div>
         </div>
