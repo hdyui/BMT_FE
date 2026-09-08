@@ -1,7 +1,6 @@
 import Image from "next/image";
 import { BmtCta } from "@/shared/components/BmtCta";
 import { Reveal } from "@/shared/components/Reveal";
-import styles from "./CareersHero.module.css";
 
 const heroParts = [
   {
@@ -123,26 +122,26 @@ function HeroVisual() {
 
 function MobileCareersHero() {
   return (
-    <div className={styles.mobilePresentation}>
-      <div className={styles.mobileCopy}>
-        <h1 className={styles.mobileHeading}>
+    <div className="absolute inset-0 hidden max-sm:block">
+      <div className="absolute left-[10.84%] top-[17.72%] z-[1] w-[77.68%] text-charcoal">
+        <h1 className="m-0 whitespace-nowrap text-[clamp(19px,5.84cqw,32px)] font-extrabold uppercase leading-[.88] tracking-[-.045em] [&>span]:block">
           <span>Gia nhập đội ngũ</span>
-          <Image className={styles.mobileWordmark} src="/images/careers/mobile/hero-wordmark.png" alt="BMT Decor" width={1230} height={214} sizes="32vw" />
+          <Image className="mt-[.9cqw] block h-auto w-[31.44cqw]" src="/images/careers/mobile/hero-wordmark.png" alt="BMT Decor" width={1230} height={214} sizes="32vw" />
         </h1>
-        <Image className={styles.mobileDivider} src="/images/careers/mobile/hero-divider.png" alt="" width={1388} height={128} sizes="36vw" aria-hidden="true" />
-        <p className={styles.mobileDescription}>
-          <Image className={styles.mobileBuildingMark} src="/images/careers/mobile/hero-building-mark.png" alt="" width={86} height={91} sizes="10px" aria-hidden="true" />
+        <Image className="mt-[2.5cqw] block h-auto w-[35.62cqw]" src="/images/careers/mobile/hero-divider.png" alt="" width={1388} height={128} sizes="36vw" aria-hidden="true" />
+        <p className="mt-[1.9cqw] max-w-[77.68cqw] text-justify text-[clamp(9.5px,2.58cqw,14px)] font-normal leading-[1.16] tracking-[-.018em] [text-align-last:left] [text-justify:inter-character]">
+          <Image className="mr-[.38em] inline-block h-[2.1cqw] w-auto align-[-.16em]" src="/images/careers/mobile/hero-building-mark.png" alt="" width={86} height={91} sizes="10px" aria-hidden="true" />
           Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm. Nếu bạn yêu thích lĩnh vực thiết kế, kiến trúc và thi công, BMT Decor luôn sẵn sàng chào đón bạn đồng hành trên hành trình phát triển lâu dài.
         </p>
       </div>
-      <Image className={styles.mobileArtwork} src="/images/careers/mobile/hero-artwork.png" alt="Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor" fill fetchPriority="high" sizes="100vw" />
+      <Image className="z-0 object-contain object-top" src="/images/careers/mobile/hero-artwork.png" alt="Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor" fill fetchPriority="high" sizes="100vw" />
     </div>
   );
 }
 
 export function CareersHero() {
   return (
-    <section className={`relative isolate overflow-hidden bg-[#f7f7f7] lg:aspect-[8000/3468] ${styles.careersHero}`}>
+    <section className="relative isolate overflow-hidden bg-[#f7f7f7] max-sm:aspect-[3884/5972] max-sm:[container-type:inline-size] lg:aspect-[8000/3468]">
       <CareersHeroBackdrop />
       <MobileCareersHero />
 
