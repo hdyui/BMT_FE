@@ -13,7 +13,6 @@ import { careerJobs, type CareerJob } from "@/features/careers/data/jobs";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { ListDivider } from "@/shared/components/ListDivider";
 import { Reveal } from "@/shared/components/Reveal";
-import styles from "./CareerOpenings.module.css";
 
 const pageSize = 3;
 
@@ -94,7 +93,7 @@ function JobRow({
                 <span className="relative hidden size-[9px] shrink-0 max-sm:inline-block"><Image className="object-contain" src={open ? "/images/careers/mobile/detail-arrow-down.png" : "/images/careers/mobile/detail-arrow-right.png"} alt="" fill sizes="9px" aria-hidden="true" /></span>
               </button>
               <a
-                className={`${styles.careerApplyButton} relative inline-flex h-9 min-w-40 items-center justify-center overflow-hidden rounded-full px-7 text-[12px] font-bold uppercase text-white max-sm:aspect-[854/201] max-sm:h-auto max-sm:w-[22vw] max-sm:min-w-0 max-sm:rounded-none max-sm:px-0 max-sm:text-[11px] max-sm:leading-none`}
+                className="relative inline-flex h-9 min-w-40 items-center justify-center overflow-hidden rounded-full bg-brand px-7 text-[12px] font-bold uppercase text-white shadow-[0_8px_22px_rgb(244_122_42/.28)] transition-[background-color,box-shadow,transform,filter] duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:hover:scale-[1.04] sm:hover:bg-[#ff8a3b] sm:hover:shadow-[0_12px_30px_rgb(244_122_42/.42)] sm:active:scale-[.97] max-sm:aspect-[854/201] max-sm:h-auto max-sm:w-[22vw] max-sm:min-w-0 max-sm:rounded-none max-sm:bg-transparent max-sm:px-0 max-sm:text-[11px] max-sm:leading-none max-sm:shadow-none max-sm:hover:brightness-105 max-sm:active:brightness-105"
                 href="#contact-form"
               >
                 <Image className="absolute inset-0 hidden size-full object-contain max-sm:block" src="/images/careers/mobile/apply-cta.png" alt="" width={854} height={201} sizes="22vw" aria-hidden="true" />
@@ -207,26 +206,26 @@ export function CareerOpenings() {
 
         {visibleCount < careerJobs.length ? (
           <button
-            className={styles.mobileLoadMore}
+            className="mx-auto mt-[22px] hidden w-fit items-center gap-2.5 text-[clamp(15px,4vw,18px)] font-normal leading-none text-charcoal transition-[color,transform] duration-[250ms] ease-out hover:text-brand focus-visible:rounded-[3px] focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand active:translate-y-px max-sm:flex"
             type="button"
             onClick={() => setVisibleCount((current) => Math.min(current + pageSize, careerJobs.length))}
             aria-label="Hiển thị thêm vị trí tuyển dụng"
           >
             <span>Xem thêm</span>
-            <Image className={styles.mobileLoadMoreIcon} src="/images/careers/mobile/load-more.png" alt="" width={237} height={237} sizes="28px" aria-hidden="true" />
+            <Image className="h-auto w-[clamp(23px,6.5vw,28px)] shrink-0" src="/images/careers/mobile/load-more.png" alt="" width={237} height={237} sizes="28px" aria-hidden="true" />
           </button>
         ) : null}
 
         {!isMobile ? (
-          <nav className={styles.careerPagination} aria-label="Phân trang tuyển dụng">
-            <button className={styles.careerPageButton} type="button" onClick={() => changePage(page - 1)} disabled={page === 0 || leaving}>
-              <Image className={styles.careerPageButtonIcon} src="/images/careers/page-previous.jpg" alt="" width={104} height={104} aria-hidden="true" />
+          <nav className="mt-[clamp(18px,2.2vw,30px)] grid grid-cols-3 items-center text-sm font-medium uppercase text-[#262626]" aria-label="Phân trang tuyển dụng">
+            <button className="inline-flex w-fit items-center gap-1.5 text-[#262626] underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-300 ease-out enabled:hover:text-brand enabled:hover:decoration-brand enabled:focus-visible:text-brand enabled:focus-visible:decoration-brand disabled:cursor-not-allowed focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand [&:enabled:hover_img]:-translate-x-[3px]" type="button" onClick={() => changePage(page - 1)} disabled={page === 0 || leaving}>
+              <Image className="size-[18px] shrink-0 rounded-full transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]" src="/images/careers/page-previous.jpg" alt="" width={104} height={104} aria-hidden="true" />
               <span>PREVIOUS PAGE</span>
             </button>
-            <span className={styles.careerPageIndicator}>Page {page + 1}/{pageCount}</span>
-            <button className={`${styles.careerPageButton} ${styles.careerPageButtonNext}`} type="button" onClick={() => changePage(page + 1)} disabled={page === pageCount - 1 || leaving}>
+            <span className="justify-self-center normal-case text-brand">Page {page + 1}/{pageCount}</span>
+            <button className="inline-flex w-fit justify-self-end items-center gap-1.5 text-[#262626] underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-300 ease-out enabled:hover:text-brand enabled:hover:decoration-brand enabled:focus-visible:text-brand enabled:focus-visible:decoration-brand disabled:cursor-not-allowed focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand [&:enabled:hover_img]:translate-x-[3px]" type="button" onClick={() => changePage(page + 1)} disabled={page === pageCount - 1 || leaving}>
               <span>NEXT PAGE</span>
-              <Image className={styles.careerPageButtonIcon} src="/images/careers/page-next.jpg" alt="" width={104} height={104} aria-hidden="true" />
+              <Image className="size-[18px] shrink-0 rounded-full transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]" src="/images/careers/page-next.jpg" alt="" width={104} height={104} aria-hidden="true" />
             </button>
           </nav>
         ) : null}

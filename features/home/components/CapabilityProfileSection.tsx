@@ -1,6 +1,6 @@
 import Image from "next/image";
-import Link from "next/link";
 import portfolioBook from "@/features/home/assets/portfolio-book.png";
+import { BmtCta } from "@/shared/components/BmtCta";
 import { Reveal } from "@/shared/components/Reveal";
 
 const portfolioBooks = [
@@ -87,11 +87,12 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8 max-sm:mt-6" delay={360}>
-            <Link className="home-contact-cta" href="/capability-profile">
-              <span className="inline-flex h-full w-4/5 items-center justify-center">
-                XEM THÊM
-              </span>
-            </Link>
+            <BmtCta
+              className="max-sm:min-h-10 max-sm:w-[158px] max-sm:text-[17px]"
+              href="/capability-profile"
+            >
+              XEM THÊM
+            </BmtCta>
           </Reveal>
         </div>
 
