@@ -716,7 +716,7 @@ export function NewsPage() {
 
             {mobileVisibleCount < articles.length && (
               <button
-                className={styles.articleLoadMore}
+                className="mt-6 ml-[50%] hidden -translate-x-1/2 items-center gap-2.5 border-0 bg-transparent p-0 text-[clamp(18px,4.85vw,20px)] font-normal leading-none text-[#242122] transition-[color,translate] duration-400 ease-in-out hover:-translate-y-1 hover:text-brand active:translate-y-0 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-brand motion-reduce:translate-y-0 motion-reduce:transition-none max-sm:inline-flex"
                 type="button"
                 onClick={() =>
                   setMobileVisibleCount((count) =>
@@ -727,7 +727,7 @@ export function NewsPage() {
               >
                 <span>Xem thêm</span>
                 <Image
-                  className={styles.articleLoadMoreIcon}
+                  className="block size-[25px] object-contain"
                   src="/images/news/mobile/load-more-icon.png"
                   alt=""
                   width={237}

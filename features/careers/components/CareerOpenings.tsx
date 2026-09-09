@@ -93,7 +93,7 @@ function JobRow({
                 <span className="relative hidden size-[9px] shrink-0 max-sm:inline-block"><Image className="object-contain" src={open ? "/images/careers/mobile/detail-arrow-down.png" : "/images/careers/mobile/detail-arrow-right.png"} alt="" fill sizes="9px" aria-hidden="true" /></span>
               </button>
               <a
-                className="relative inline-flex h-9 min-w-40 items-center justify-center overflow-hidden rounded-full bg-brand px-7 text-[12px] font-bold uppercase text-white shadow-[0_8px_22px_rgb(244_122_42/.28)] transition-[background-color,box-shadow,transform,filter] duration-300 focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:hover:scale-[1.04] sm:hover:bg-[#ff8a3b] sm:hover:shadow-[0_12px_30px_rgb(244_122_42/.42)] sm:active:scale-[.97] max-sm:aspect-[854/201] max-sm:h-auto max-sm:w-[22vw] max-sm:min-w-0 max-sm:rounded-none max-sm:bg-transparent max-sm:px-0 max-sm:text-[11px] max-sm:leading-none max-sm:shadow-none max-sm:hover:brightness-105 max-sm:active:brightness-105"
+                className="relative inline-flex h-9 min-w-40 items-center justify-center overflow-hidden rounded-full bg-brand px-7 text-[12px] font-bold uppercase text-white shadow-[0_8px_22px_rgb(244_122_42/.28)] transition-[background-color,box-shadow,translate,filter] duration-400 ease-in-out hover:-translate-y-1 motion-reduce:translate-none motion-reduce:transition-none focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand sm:hover:bg-[#ff8a3b] sm:hover:shadow-[0_12px_30px_rgb(244_122_42/.42)] active:translate-y-0 max-sm:aspect-[854/201] max-sm:h-auto max-sm:w-[22vw] max-sm:min-w-0 max-sm:rounded-none max-sm:bg-transparent max-sm:px-0 max-sm:text-[11px] max-sm:leading-none max-sm:shadow-none max-sm:hover:brightness-105 max-sm:active:brightness-105"
                 href="#contact-form"
               >
                 <Image className="absolute inset-0 hidden size-full object-contain max-sm:block" src="/images/careers/mobile/apply-cta.png" alt="" width={854} height={201} sizes="22vw" aria-hidden="true" />
@@ -206,7 +206,7 @@ export function CareerOpenings() {
 
         {visibleCount < careerJobs.length ? (
           <button
-            className="mx-auto mt-[22px] hidden w-fit items-center gap-2.5 text-[clamp(15px,4vw,18px)] font-normal leading-none text-charcoal transition-[color,transform] duration-[250ms] ease-out hover:text-brand focus-visible:rounded-[3px] focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand active:translate-y-px max-sm:flex"
+            className="mx-auto mt-[22px] hidden w-fit items-center gap-2.5 text-[clamp(15px,4vw,18px)] font-normal leading-none text-charcoal transition-[color,translate] duration-400 ease-in-out hover:-translate-y-1 hover:text-brand motion-reduce:translate-none motion-reduce:transition-none focus-visible:rounded-[3px] focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand active:translate-y-px max-sm:flex"
             type="button"
             onClick={() => setVisibleCount((current) => Math.min(current + pageSize, careerJobs.length))}
             aria-label="Hiển thị thêm vị trí tuyển dụng"
