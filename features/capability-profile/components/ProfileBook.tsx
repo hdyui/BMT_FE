@@ -1,11 +1,24 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
-import { animate, motion, useMotionValue, useReducedMotion, useTransform, type MotionValue } from "motion/react";
+import {
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+  type PointerEvent as ReactPointerEvent,
+} from "react";
+import {
+  animate,
+  motion,
+  useMotionValue,
+  useReducedMotion,
+  useTransform,
+  type MotionValue,
+} from "motion/react";
 
-type Stage = 0 | 1 | 2;
-type SheetIndex = 0 | 1;
+type Stage = number;
+type SheetIndex = number;
 type Side = "left" | "right";
 
 /* Nút lật trang dùng đúng nút cam + hiệu ứng hover của carousel dự án trong
@@ -18,29 +31,31 @@ const navIcons = {
   next: "/images/cai-tao-sua-chua/nav-next.png",
 } as const;
 
-const pages = {
-  cover: "/images/capability-profile/profile-page-17.webp",
-  contents: "/images/capability-profile/profile-page-18.webp",
-  letter: "/images/capability-profile/profile-page-19.webp",
-  back: "/images/capability-profile/profile-page-20.webp",
-} as const;
+type ProfilePage = { src: string; label: string };
 
-const labels = {
-  cover: "Bìa hồ sơ năng lực BMT Decor",
-  contents: "Mục lục hồ sơ doanh nghiệp BMT Decor",
-  letter: "Lời ngỏ trong hồ sơ doanh nghiệp BMT Decor",
-  back: "Bìa sau hồ sơ năng lực BMT Decor",
-} as const;
+const profilePages: ProfilePage[] = Array.from({ length: 20 }, (_, index) => {
+  const pageNumber = index + 1;
+  const paddedNumber = String(pageNumber).padStart(2, "0");
+  const label =
+    pageNumber === 1
+      ? "Bìa trước hồ sơ năng lực BMT Decor"
+      : pageNumber === 20
+        ? "Bìa sau hồ sơ năng lực BMT Decor"
+        : `Trang ${pageNumber} hồ sơ năng lực BMT Decor`;
 
-/* Cuốn hồ sơ là 2 TỜ GIẤY vật lý, mỗi tờ in 2 mặt:
-     tờ 0 = bìa trước / mục lục  → lật qua lại giữa stage 0 và 1
-     tờ 1 = lời ngỏ / bìa sau    → lật qua lại giữa stage 1 và 2
-   Mặt trước luôn nằm nửa phải khi chưa lật, mặt sau nằm nửa trái sau khi lật
-   xong — đúng như cầm cuốn sách thật. */
-const sheets = [
-  { front: pages.cover, back: pages.contents, frontLabel: labels.cover, backLabel: labels.contents },
-  { front: pages.letter, back: pages.back, frontLabel: labels.letter, backLabel: labels.back },
-] as const;
+  return {
+    src: `/images/capability-profile/profile-page-${paddedNumber}.webp`,
+    label,
+  };
+});
+
+/* Cuốn hồ sơ gồm 10 tờ giấy vật lý, mỗi tờ in hai mặt theo thứ tự đọc 01-20.
+   Khi mở sách, mặt sau của tờ trước nằm bên trái và mặt trước của tờ kế tiếp
+   nằm bên phải, tạo đúng các spread 02 | 03, 04 | 05 ... 18 | 19 trong PDF mẫu. */
+const sheets = Array.from({ length: profilePages.length / 2 }, (_, index) => ({
+  front: profilePages[index * 2],
+  back: profilePages[index * 2 + 1],
+}));
 
 /* Tờ giấy được cắt thành nhiều dải dọc, mỗi dải xoay lệch nhau một chút để
    ghép lại thành mặt cong — đây là mấu chốt để trang lật cong như giấy thật
@@ -83,7 +98,10 @@ const EASE = [0.4, 0.02, 0.22, 1] as const;
    Mép ngoài đi trước, mép gáy theo sau — giống hệt khi ta nhấc mép trang lên. */
 function bend(progress: number, maxBend: number = MAX_BEND) {
   const sweep = -180 * progress;
-  const arc = Math.min(maxBend * Math.sin(Math.PI * progress), FOLD_GUARD * Math.abs(progress - 0.5));
+  const arc = Math.min(
+    maxBend * Math.sin(Math.PI * progress),
+    FOLD_GUARD * Math.abs(progress - 0.5),
+  );
   return { base: sweep + arc / 2, step: -arc / (STRIP_COUNT - 1) };
 }
 
@@ -105,7 +123,10 @@ function shade(angleDeg: number) {
    xóm; 2 mép ngoài cùng của cả tờ thì không nới, nếu không sẽ thừa ra ngoài
    khổ giấy. */
 function pads(index: number) {
-  return { left: index === 0 ? 0 : OVERLAP, right: index === STRIP_COUNT - 1 ? 0 : OVERLAP };
+  return {
+    left: index === 0 ? 0 : OVERLAP,
+    right: index === STRIP_COUNT - 1 ? 0 : OVERLAP,
+  };
 }
 
 /* Một mặt giấy chỉ là lát cắt dọc thứ `index` của ảnh trang, lấy bằng
@@ -127,7 +148,13 @@ function faceStyle(src: string, index: number, mirrored: boolean) {
   };
 }
 
-function TurningSheet({ sheet, progress }: { sheet: SheetIndex; progress: MotionValue<number> }) {
+function TurningSheet({
+  sheet,
+  progress,
+}: {
+  sheet: SheetIndex;
+  progress: MotionValue<number>;
+}) {
   const stripRefs = useRef<(HTMLDivElement | null)[]>([]);
   const shadeRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
@@ -138,7 +165,8 @@ function TurningSheet({ sheet, progress }: { sheet: SheetIndex; progress: Motion
       const { base, step } = bend(value);
       for (let i = 0; i < STRIP_COUNT; i += 1) {
         const strip = stripRefs.current[i];
-        if (strip) strip.style.transform = `rotateY(${i === 0 ? base : step}deg)`;
+        if (strip)
+          strip.style.transform = `rotateY(${i === 0 ? base : step}deg)`;
         const angle = base + step * i;
         const front = shadeRefs.current[i * 2];
         const back = shadeRefs.current[i * 2 + 1];
@@ -167,7 +195,10 @@ function TurningSheet({ sheet, progress }: { sheet: SheetIndex; progress: Motion
         className={`absolute inset-y-0 origin-left transform-3d ${index === 0 ? "left-0" : "left-full"}`}
         style={{ width: index === 0 ? `${100 / STRIP_COUNT}%` : "100%" }}
       >
-        <div className="absolute inset-y-0 bg-no-repeat backface-hidden" style={faceStyle(front, index, false)}>
+        <div
+          className="absolute inset-y-0 bg-no-repeat backface-hidden"
+          style={faceStyle(front.src, index, false)}
+        >
           <span
             className="absolute inset-0 bg-black"
             ref={(node) => {
@@ -178,7 +209,7 @@ function TurningSheet({ sheet, progress }: { sheet: SheetIndex; progress: Motion
         </div>
         <div
           className="absolute inset-y-0 bg-no-repeat backface-hidden transform-[rotateY(180deg)]"
-          style={faceStyle(back, index, true)}
+          style={faceStyle(back.src, index, true)}
         >
           <span
             className="absolute inset-0 bg-black"
@@ -205,7 +236,15 @@ function TurningSheet({ sheet, progress }: { sheet: SheetIndex; progress: Motion
 }
 
 /* Nửa trang đứng yên bên dưới tờ đang lật. */
-function StaticPage({ src, label, side }: { src: string; label: string; side: Side }) {
+function StaticPage({
+  src,
+  label,
+  side,
+}: {
+  src: string;
+  label: string;
+  side: Side;
+}) {
   return (
     <div
       className={`absolute inset-y-0 z-10 w-1/2 bg-white bg-cover bg-center ${side === "left" ? "left-0 shadow-[-5px_12px_28px_rgb(41_34_30/.18)]" : "right-0 shadow-[5px_12px_28px_rgb(41_34_30/.18)]"}`}
@@ -221,7 +260,7 @@ function shiftFor(stage: Stage) {
      nửa đó nằm giữa màn hình — mở ra là khung trượt về 0.
      Bìa trước nằm ở nửa PHẢI nên phải kéo sang trái, bìa sau nằm ở nửa TRÁI nên
      đẩy sang phải. */
-  return stage === 0 ? "-25%" : stage === 2 ? "25%" : "0%";
+  return stage === 0 ? "-25%" : stage === sheets.length ? "25%" : "0%";
 }
 
 export function ProfileBook() {
@@ -249,7 +288,15 @@ export function ProfileBook() {
    quyết định lật xuôi (0°→-180°) hay lật ngược (-180°→0°) nên cùng một hàm
    `bend()` gốc (vốn chỉ biết lật xuôi) dùng lại được cho cả hai chiều bằng
    cách đảo ngược tham số truyền vào. */
-function MobileTurningFlap({ src, progress, dir }: { src: string; progress: MotionValue<number>; dir: 1 | -1 }) {
+function MobileTurningFlap({
+  src,
+  progress,
+  dir,
+}: {
+  src: string;
+  progress: MotionValue<number>;
+  dir: 1 | -1;
+}) {
   const stripRefs = useRef<(HTMLDivElement | null)[]>([]);
   const shadeRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
@@ -259,7 +306,8 @@ function MobileTurningFlap({ src, progress, dir }: { src: string; progress: Moti
       const { base, step } = bend(t, MOBILE_MAX_BEND);
       for (let i = 0; i < STRIP_COUNT; i += 1) {
         const strip = stripRefs.current[i];
-        if (strip) strip.style.transform = `rotateY(${i === 0 ? base : step}deg)`;
+        if (strip)
+          strip.style.transform = `rotateY(${i === 0 ? base : step}deg)`;
         const angle = base + step * i;
         const front = shadeRefs.current[i * 2];
         const back = shadeRefs.current[i * 2 + 1];
@@ -284,7 +332,10 @@ function MobileTurningFlap({ src, progress, dir }: { src: string; progress: Moti
         className={`absolute inset-y-0 origin-left transform-3d ${index === 0 ? "left-0" : "left-full"}`}
         style={{ width: index === 0 ? `${100 / STRIP_COUNT}%` : "100%" }}
       >
-        <div className="absolute inset-y-0 bg-no-repeat backface-hidden" style={faceStyle(src, index, false)}>
+        <div
+          className="absolute inset-y-0 bg-no-repeat backface-hidden"
+          style={faceStyle(src, index, false)}
+        >
           <span
             className="absolute inset-0 bg-black"
             ref={(node) => {
@@ -319,8 +370,7 @@ function MobileTurningFlap({ src, progress, dir }: { src: string; progress: Moti
 }
 
 function MobileProfileBook() {
-  const order = [pages.cover, pages.contents, pages.letter, pages.back] as const;
-  const orderLabels = [labels.cover, labels.contents, labels.letter, labels.back] as const;
+  const order = profilePages;
 
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<{ from: number; dir: 1 | -1 } | null>(null);
@@ -328,7 +378,12 @@ function MobileProfileBook() {
   const progress = useMotionValue(0);
   const busyRef = useRef(false);
   const frameRef = useRef<HTMLDivElement>(null);
-  const dragRef = useRef<{ dir: 1 | -1; startX: number; width: number; moved: number } | null>(null);
+  const dragRef = useRef<{
+    dir: 1 | -1;
+    startX: number;
+    width: number;
+    moved: number;
+  } | null>(null);
   const draggedRef = useRef(false);
 
   const settle = useCallback(
@@ -379,7 +434,12 @@ function MobileProfileBook() {
 
     draggedRef.current = false;
     busyRef.current = true;
-    dragRef.current = { dir, startX: event.clientX, width: frame.getBoundingClientRect().width, moved: 0 };
+    dragRef.current = {
+      dir,
+      startX: event.clientX,
+      width: frame.getBoundingClientRect().width,
+      moved: 0,
+    };
     setTurn({ from: index, dir });
     progress.set(0);
     event.currentTarget.setPointerCapture(event.pointerId);
@@ -394,7 +454,10 @@ function MobileProfileBook() {
     progress.set(Math.min(1, Math.max(0, raw)));
   }
 
-  function endDrag(event: ReactPointerEvent<HTMLButtonElement>, cancelled = false) {
+  function endDrag(
+    event: ReactPointerEvent<HTMLButtonElement>,
+    cancelled = false,
+  ) {
     const drag = dragRef.current;
     if (!drag) return;
     dragRef.current = null;
@@ -417,12 +480,20 @@ function MobileProfileBook() {
   }
 
   const flapIndex = turn ? (turn.dir === 1 ? turn.from : turn.from - 1) : null;
-  const staticIndex = turn ? (turn.dir === 1 ? Math.min(order.length - 1, turn.from + 1) : turn.from) : index;
+  const staticIndex = turn
+    ? turn.dir === 1
+      ? Math.min(order.length - 1, turn.from + 1)
+      : turn.from
+    : index;
+  const preloadPages = order.slice(
+    Math.max(0, index - 1),
+    Math.min(order.length, index + 3),
+  );
 
   return (
     <div className="relative mx-auto flex max-w-[45rem] flex-col items-center gap-4">
-      {Object.values(pages).map((src) => (
-        <link key={src} rel="preload" as="image" href={src} />
+      {preloadPages.map((page) => (
+        <link key={page.src} rel="preload" as="image" href={page.src} />
       ))}
 
       <div
@@ -431,14 +502,21 @@ function MobileProfileBook() {
       >
         <div
           className="absolute inset-0 z-10 bg-white bg-cover bg-center"
-          style={{ backgroundImage: `url(${order[staticIndex]})` }}
+          style={{ backgroundImage: `url(${order[staticIndex].src})` }}
           role="img"
-          aria-label={orderLabels[staticIndex]}
+          aria-label={order[staticIndex].label}
         />
 
-        {turn && flapIndex !== null && flapIndex >= 0 && flapIndex < order.length && (
-          <MobileTurningFlap src={order[flapIndex]} progress={progress} dir={turn.dir} />
-        )}
+        {turn &&
+          flapIndex !== null &&
+          flapIndex >= 0 &&
+          flapIndex < order.length && (
+            <MobileTurningFlap
+              src={order[flapIndex].src}
+              progress={progress}
+              dir={turn.dir}
+            />
+          )}
 
         {index > 0 && (
           <button
@@ -480,7 +558,14 @@ function MobileProfileBook() {
           disabled={index === 0}
           onClick={() => flip(-1)}
         >
-          <Image className="size-full object-cover" src={navIcons.prev} alt="" width={48} height={48} aria-hidden="true" />
+          <Image
+            className="size-full object-cover"
+            src={navIcons.prev}
+            alt=""
+            width={48}
+            height={48}
+            aria-hidden="true"
+          />
         </button>
         <button
           className={`${navButtonClass} ${index === order.length - 1 ? "opacity-25" : "opacity-100"}`}
@@ -489,7 +574,14 @@ function MobileProfileBook() {
           disabled={index === order.length - 1}
           onClick={() => flip(1)}
         >
-          <Image className="size-full object-cover" src={navIcons.next} alt="" width={48} height={48} aria-hidden="true" />
+          <Image
+            className="size-full object-cover"
+            src={navIcons.next}
+            alt=""
+            width={48}
+            height={48}
+            aria-hidden="true"
+          />
         </button>
       </div>
     </div>
@@ -505,7 +597,9 @@ function DesktopProfileBook() {
   const shift = useMotionValue(shiftFor(0));
   /* Bóng tờ đang lật hắt xuống 2 trang bên dưới, đậm nhất lúc tờ giấy dựng
      đứng giữa cú lật. */
-  const castShadow = useTransform(progress, (value) => Math.sin(Math.PI * value));
+  const castShadow = useTransform(progress, (value) =>
+    Math.sin(Math.PI * value),
+  );
   /* Độ đậm của mặt bàn lộ ra dưới tờ đang lật. Tờ 0 lật xuôi thì nửa TRÁI dần
      có trang nên nền hiện dần theo `progress`; tờ 1 lật xuôi thì nửa PHẢI dần
      trống nên nền mờ dần đi. Nhờ vậy lúc sách đóng hẳn (chỉ còn 1 nửa) nền tắt
@@ -514,12 +608,18 @@ function DesktopProfileBook() {
 
   const frameRef = useRef<HTMLDivElement>(null);
   const busyRef = useRef(false);
-  const dragRef = useRef<{ sheet: SheetIndex; from: 0 | 1; startX: number; width: number; moved: number } | null>(null);
+  const dragRef = useRef<{
+    sheet: SheetIndex;
+    from: 0 | 1;
+    startX: number;
+    width: number;
+    moved: number;
+  } | null>(null);
   const draggedRef = useRef(false);
 
   const settle = useCallback(
     (sheet: SheetIndex, to: 0 | 1) => {
-      const nextStage = (sheet === 0 ? to : to + 1) as Stage;
+      const nextStage = sheet + to;
       const distance = Math.abs(to - progress.get());
       const duration = 0.42 + 0.62 * distance;
 
@@ -542,7 +642,7 @@ function DesktopProfileBook() {
     (direction: -1 | 1) => {
       if (busyRef.current) return;
       const next = stage + direction;
-      if (next < 0 || next > 2) return;
+      if (next < 0 || next > sheets.length) return;
 
       if (reduceMotion) {
         setStage(next as Stage);
@@ -580,7 +680,7 @@ function DesktopProfileBook() {
     if (busyRef.current || reduceMotion) return;
     const sheet = side === "right" ? stage : stage - 1;
     const frame = frameRef.current;
-    if (sheet < 0 || sheet > 1 || !frame) return;
+    if (sheet < 0 || sheet >= sheets.length || !frame) return;
 
     draggedRef.current = false;
     busyRef.current = true;
@@ -610,7 +710,10 @@ function DesktopProfileBook() {
     progress.set(Math.min(1, Math.max(0, raw)));
   }
 
-  function endDrag(event: ReactPointerEvent<HTMLButtonElement>, cancelled = false) {
+  function endDrag(
+    event: ReactPointerEvent<HTMLButtonElement>,
+    cancelled = false,
+  ) {
     const drag = dragRef.current;
     if (!drag) return;
     dragRef.current = null;
@@ -636,13 +739,33 @@ function DesktopProfileBook() {
     settle(drag.sheet, progress.get() > 0.5 ? 1 : 0);
   }
 
-  const spreadOpen = stage === 1 || turning !== null;
+  const spreadOpen = (stage > 0 && stage < sheets.length) || turning !== null;
   /* Nửa nào đang có tờ giấy bay qua thì phần dưới nó là trang tĩnh sẽ lộ ra
      sau cú lật; nửa còn lại giữ nguyên trang hiện tại. */
-  const leftPage = turning === 1 ? pages.contents : turning === 0 ? null : stage === 1 ? pages.contents : stage === 2 ? pages.back : null;
-  const rightPage = turning === 0 ? pages.letter : turning === 1 ? null : stage === 0 ? pages.cover : stage === 1 ? pages.letter : null;
-  const leftLabel = leftPage === pages.back ? labels.back : labels.contents;
-  const rightLabel = rightPage === pages.cover ? labels.cover : labels.letter;
+  const leftPage =
+    turning !== null
+      ? turning > 0
+        ? sheets[turning - 1].back
+        : null
+      : stage > 0
+        ? sheets[stage - 1].back
+        : null;
+  const rightPage =
+    turning !== null
+      ? turning + 1 < sheets.length
+        ? sheets[turning + 1].front
+        : null
+      : stage < sheets.length
+        ? sheets[stage].front
+        : null;
+  const nearbySheets = sheets.slice(
+    Math.max(0, stage - 1),
+    Math.min(sheets.length, stage + 2),
+  );
+  const preloadPages = nearbySheets.flatMap((sheet) => [
+    sheet.front,
+    sheet.back,
+  ]);
 
   const grabbable = !reduceMotion;
 
@@ -651,9 +774,9 @@ function DesktopProfileBook() {
       {/* Mobile xếp ảnh sách phía trên, 2 nút lật nằm thành 1 hàng ngay dưới
           (giữa khung), khớp mockup — desktop giữ nguyên bố cục 3 cột cũ (nút
           nằm 2 bên khung) qua vùng grid-area riêng cho từng khổ màn hình. */}
-      {/* Nạp sẵn cả 4 mặt giấy để cú lật đầu tiên không bị trắng trang. */}
-      {Object.values(pages).map((src) => (
-        <link key={src} rel="preload" as="image" href={src} />
+      {/* Nạp trước các tờ lân cận để lật nhanh mà không tải đồng thời cả 20 trang. */}
+      {preloadPages.map((page) => (
+        <link key={page.src} rel="preload" as="image" href={page.src} />
       ))}
 
       <button
@@ -663,14 +786,27 @@ function DesktopProfileBook() {
         disabled={stage === 0}
         onClick={() => turnPage(-1)}
       >
-        <Image className="size-full object-cover" src={navIcons.prev} alt="" width={48} height={48} aria-hidden="true" />
+        <Image
+          className="size-full object-cover"
+          src={navIcons.prev}
+          alt=""
+          width={48}
+          height={48}
+          aria-hidden="true"
+        />
       </button>
 
       {/* Khung = khổ TRANG ĐÔI (2 trang A4 dọc cạnh nhau, tỉ lệ 1.414). Bìa khi
           đóng rộng đúng nửa khung ≈ 470px — nhỉnh hơn dòng tiêu đề
           "HỒ SƠ DOANH NGHIỆP" một chút, giữ đúng khổ đã canh trước đó. */}
-      <div className="relative mx-auto aspect-[1.414] w-full max-w-[940px] [grid-area:frame] [perspective:2200px] [perspective-origin:50%_45%]" ref={frameRef}>
-        <motion.div className="absolute inset-0 [transform-style:preserve-3d]" style={{ x: shift }}>
+      <div
+        className="relative mx-auto aspect-[1.414] w-full max-w-[940px] [grid-area:frame] [perspective:2200px] [perspective-origin:50%_45%]"
+        ref={frameRef}
+      >
+        <motion.div
+          className="absolute inset-0 [transform-style:preserve-3d]"
+          style={{ x: shift }}
+        >
           {/* Tờ giấy nghiêng lên thì bề ngang chiếu xuống màn hình của nó hẹp
               lại, hở ra nửa sách nằm sau nó — mà nửa đó không có trang tĩnh nào
               (trang của nó chính là mặt đang nằm trên tờ giấy đang lật). Trải
@@ -683,7 +819,7 @@ function DesktopProfileBook() {
               aria-hidden="true"
             />
           )}
-          {turning === 1 && (
+          {turning === sheets.length - 1 && (
             <motion.span
               className="pointer-events-none absolute inset-y-0 right-0 z-0 w-1/2 bg-[linear-gradient(270deg,rgb(41_34_30/.16)_0%,rgb(41_34_30/.11)_52%,rgb(41_34_30/.24)_100%)]"
               style={{ opacity: deskFade }}
@@ -691,10 +827,20 @@ function DesktopProfileBook() {
             />
           )}
 
-          {leftPage && <StaticPage src={leftPage} label={leftLabel} side="left" />}
-          {rightPage && <StaticPage src={rightPage} label={rightLabel} side="right" />}
+          {leftPage && (
+            <StaticPage src={leftPage.src} label={leftPage.label} side="left" />
+          )}
+          {rightPage && (
+            <StaticPage
+              src={rightPage.src}
+              label={rightPage.label}
+              side="right"
+            />
+          )}
 
-          {turning !== null && !reduceMotion && <TurningSheet sheet={turning} progress={progress} />}
+          {turning !== null && !reduceMotion && (
+            <TurningSheet sheet={turning} progress={progress} />
+          )}
 
           {/* Bóng tờ giấy hắt xuống trang bên dưới, toả ra từ gáy sách. Chỉ vẽ
               trên nửa nào thực sự có trang, nếu không sẽ thành vệt đen lơ lửng
@@ -740,11 +886,15 @@ function DesktopProfileBook() {
               }}
             />
           )}
-          {grabbable && stage < 2 && (
+          {grabbable && stage < sheets.length && (
             <button
               className="absolute inset-y-0 right-0 z-40 w-1/2 cursor-grab touch-pan-y bg-transparent active:cursor-grabbing"
               type="button"
-              aria-label={stage === 0 ? "Mở hồ sơ doanh nghiệp BMT Decor" : "Lật sang trang sau"}
+              aria-label={
+                stage === 0
+                  ? "Mở hồ sơ doanh nghiệp BMT Decor"
+                  : "Lật sang trang sau"
+              }
               onPointerDown={(event) => beginDrag(event, "right")}
               onPointerMove={moveDrag}
               onPointerUp={(event) => endDrag(event)}
@@ -761,13 +911,20 @@ function DesktopProfileBook() {
       </div>
 
       <button
-        className={`${navButtonClass} [grid-area:next] justify-self-start md:justify-self-start ${stage === 2 ? "opacity-25" : "opacity-100"}`}
+        className={`${navButtonClass} [grid-area:next] justify-self-start md:justify-self-start ${stage === sheets.length ? "opacity-25" : "opacity-100"}`}
         type="button"
         aria-label="Trang sau"
-        disabled={stage === 2}
+        disabled={stage === sheets.length}
         onClick={() => turnPage(1)}
       >
-        <Image className="size-full object-cover" src={navIcons.next} alt="" width={48} height={48} aria-hidden="true" />
+        <Image
+          className="size-full object-cover"
+          src={navIcons.next}
+          alt=""
+          width={48}
+          height={48}
+          aria-hidden="true"
+        />
       </button>
     </div>
   );
