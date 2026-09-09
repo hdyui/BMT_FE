@@ -66,6 +66,59 @@ function ArticleReveal({
   );
 }
 
+function MobileArticleDivider() {
+  const dividerRef = useRef<HTMLDivElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const element = dividerRef.current;
+    if (!element) return;
+
+    const alignToDevicePixel = () => {
+      const devicePixelRatio = window.devicePixelRatio || 1;
+      const documentTop = element.getBoundingClientRect().top + window.scrollY;
+      const offset =
+        (Math.round(documentTop * devicePixelRatio) -
+          documentTop * devicePixelRatio) /
+        devicePixelRatio;
+
+      element.style.setProperty("--divider-pixel-offset", `${offset}px`);
+    };
+
+    alignToDevicePixel();
+    window.addEventListener("resize", alignToDevicePixel);
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (!entry.isIntersecting) return;
+        alignToDevicePixel();
+        setVisible(true);
+        observer.disconnect();
+      },
+      { threshold: 0.2 },
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener("resize", alignToDevicePixel);
+    };
+  }, []);
+
+  return (
+    <div
+      ref={dividerRef}
+      className={styles.mobileArticleDivider}
+      aria-hidden="true"
+    >
+      <span
+        className={`${styles.mobileArticleDividerLine} ${visible ? styles.mobileArticleDividerLineVisible : ""}`}
+      />
+    </div>
+  );
+}
+
 function MoreLink({ href }: { href: string }) {
   return (
     <Link className={styles.articleMoreLink} href={href}>
@@ -607,9 +660,14 @@ export function NewsPage() {
               aria-live="polite"
             >
               {mobileVisibleArticles.map((article, index) => (
-                <ArticleReveal delay={80 + (index % mobileBatchSize) * 45} key={article.id}>
-                  <ArticleCard article={article} showDivider={index > 0} />
-                </ArticleReveal>
+                <div className={styles.mobileArticleEntry} key={article.id}>
+                  {index > 0 && <MobileArticleDivider />}
+                  <ArticleReveal
+                    delay={80 + (index % mobileBatchSize) * 45}
+                  >
+                    <ArticleCard article={article} showDivider={false} />
+                  </ArticleReveal>
+                </div>
               ))}
             </div>
 
@@ -658,7 +716,7 @@ export function NewsPage() {
 
             {mobileVisibleCount < articles.length && (
               <button
-                className={styles.articleLoadMore}
+                className="mt-6 ml-[50%] hidden -translate-x-1/2 items-center gap-2.5 border-0 bg-transparent p-0 text-[clamp(18px,4.85vw,20px)] font-normal leading-none text-[#242122] transition-[color,translate] duration-400 ease-in-out hover:-translate-y-1 hover:text-brand active:translate-y-0 focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-6 focus-visible:outline-brand motion-reduce:translate-y-0 motion-reduce:transition-none max-sm:inline-flex"
                 type="button"
                 onClick={() =>
                   setMobileVisibleCount((count) =>
@@ -669,7 +727,7 @@ export function NewsPage() {
               >
                 <span>Xem thêm</span>
                 <Image
-                  className={styles.articleLoadMoreIcon}
+                  className="block size-[25px] object-contain"
                   src="/images/news/mobile/load-more-icon.png"
                   alt=""
                   width={237}

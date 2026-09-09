@@ -99,7 +99,7 @@ export function HomeHero() {
 
   return (
     <section
-      className="relative h-[calc(75svh+100px)] min-h-[624px] touch-pan-y cursor-grab select-none overflow-hidden bg-charcoal outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset lg:min-h-[744px] xl:h-[calc(100svh-var(--site-header-desktop-height))]"
+      className="relative h-[calc(100dvh-60px)] touch-pan-y cursor-grab select-none overflow-hidden bg-charcoal outline-none active:cursor-grabbing focus-visible:ring-2 focus-visible:ring-brand focus-visible:ring-inset lg:min-h-[744px] xl:h-[calc(100svh-var(--site-header-desktop-height))]"
       aria-label="Banner giới thiệu BMT Decor"
       aria-roledescription="carousel"
       onKeyDown={(event) => {
@@ -172,7 +172,7 @@ export function HomeHero() {
                 </motion.p>
                 <motion.div className="mt-6" variants={bodyItemVariants}>
                   <Link
-                    className="group inline-flex items-center gap-3 rounded-full border border-white px-5 py-2 text-sm font-bold transition-[color,background-color,border-color,transform] duration-300 hover:scale-105 hover:border-brand hover:bg-brand active:scale-95"
+                    className="group inline-flex items-center gap-3 rounded-full border border-white px-5 py-2 text-sm font-bold transition-[color,background-color,border-color,translate] duration-300 ease-in-out hover:-translate-y-1 motion-reduce:translate-none motion-reduce:transition-none hover:border-brand hover:bg-brand active:translate-y-0"
                     href={slide.href}
                     tabIndex={isActive ? 0 : -1}
                   >
