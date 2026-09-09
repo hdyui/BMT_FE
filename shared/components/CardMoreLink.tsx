@@ -16,7 +16,7 @@ export function CardMoreLink({
   return (
     <Link
       className={cn(
-        "group/card-more inline-flex w-fit items-center gap-3 text-sm font-semibold text-white underline decoration-1 underline-offset-4 transition-colors duration-300 hover:text-brand focus-visible:text-brand",
+        "group/card-more inline-flex w-fit items-center gap-3 text-sm font-semibold text-white underline decoration-1 underline-offset-4 transition-[color,translate] duration-400 ease-in-out hover:-translate-y-1 hover:text-brand motion-reduce:translate-none motion-reduce:transition-none focus-visible:text-brand",
         className,
       )}
       href={href}
