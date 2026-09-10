@@ -1902,7 +1902,7 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     sections: [section("map", "Bản đồ", [text("title", "Mô tả bản đồ"), url("googleMapsUrl", "Liên kết Google Maps", { required: true })])],
-    initialRecords: [record("contact-map", { title: "Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM", googleMapsUrl: "https://www.google.com/maps?q=7%2F92%20Th%C3%A0nh%20Th%C3%A1i%2C%20Ph%C6%B0%E1%BB%9Dng%20Di%C3%AAn%20H%E1%BB%93ng%2C%20TP.HCM&output=embed" })],
+    initialRecords: [record("contact-map", { title: "Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM", googleMapsUrl: "https://www.google.com/maps?q=10.7690413%2C106.6658361&z=18&iwloc=0&output=embed" })],
   }),
   resource({
     module: "settings",
