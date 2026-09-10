@@ -142,7 +142,7 @@ export function HomeHero() {
                 // unoptimized
               />
             </div>
-            <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/25 to-transparent" />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/25 to-transparent sm:bg-gradient-to-r" />
 
             <div className="relative mx-auto flex h-full w-[min(1380px,calc(100%-2.5rem))] items-end pb-20 sm:pb-24 lg:pb-28">
               <motion.div

@@ -68,7 +68,11 @@ export function CountUpStats() {
           <strong className="block text-[clamp(2.3rem,11vw,3.4rem)] font-extrabold leading-none tracking-[-0.06em] transition-colors group-hover:text-brand sm:text-[88px] lg:text-[96px]">
             <CountUpNumber value={stat.value} delay={index * 140} />
           </strong>
-          <span className="mx-auto mt-3 block max-w-52 border-t-2 border-brand pt-3 text-sm font-extrabold uppercase sm:text-base max-sm:px-1 max-sm:text-[10px] max-sm:leading-tight">
+          <span
+            aria-hidden="true"
+            className="mx-auto mt-3 block w-[62%] border-t-2 border-brand sm:w-full sm:max-w-52"
+          />
+          <span className="mx-auto mt-3 block max-w-52 text-sm font-extrabold uppercase sm:text-base max-sm:whitespace-nowrap max-sm:text-[10px] max-sm:leading-tight">
             {stat.label}
           </span>
         </div>
