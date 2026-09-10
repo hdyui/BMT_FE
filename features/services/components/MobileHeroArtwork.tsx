@@ -65,44 +65,53 @@ export function MobileHeroArtwork({ variant }: MobileHeroArtworkProps) {
   const preset = artwork[variant];
 
   return (
-    <div className="pointer-events-none absolute inset-x-0 bottom-0 aspect-3884/5972 w-full md:hidden">
-      <Reveal
-        className="pointer-events-none absolute inset-0 z-0"
-        delay={260 + preset.clips.length * 130}
-        duration={700}
-        from="fade"
-      >
-        <Image
-          className="object-fill"
-          src={preset.src}
-          alt=""
-          fill
-          sizes="100vw"
-          loading="eager"
-          aria-hidden="true"
-        />
-      </Reveal>
-
-      {preset.clips.map((clip, index) => (
+    // ẢNH LÊN TRÊN: artwork mobile (đã ghép sẵn, chừa ~24% rỗng ở đỉnh cho khối
+    // chữ) nay đứng theo luồng thường ở đầu banner. Bọc khung cắt
+    // (`overflow-hidden` + `h-[108vw]`) rồi kéo canvas gốc lên 30% để bỏ dải
+    // rỗng phía trên (artwork chỉ phủ ảnh kín bề ngang từ ~32%) — các vùng ảnh
+    // (clip-path) giữ nguyên toạ độ. Núm chỉnh mắt: `h-[108vw]` (chiều cao ô
+    // nhìn thấy), `-translate-y-[30%]` (cắt rỗng trên bao nhiêu; giảm số = ảnh
+    // tụt thấp xuống).
+    <div className="pointer-events-none relative h-[108vw] w-full overflow-hidden md:hidden">
+      <div className="absolute inset-x-0 top-0 aspect-3884/5972 w-full -translate-y-[30%]">
         <Reveal
-          className="group/frame pointer-events-auto absolute inset-0 z-10"
-          delay={260 + index * 130}
-          duration={620}
+          className="pointer-events-none absolute inset-0 z-0"
+          delay={260 + preset.clips.length * 130}
+          duration={700}
           from="fade"
-          key={clip.path}
-          style={{ clipPath: clip.path }}
         >
           <Image
-            className="object-fill transition-transform duration-500 ease-out group-hover/frame:scale-105 group-active/frame:scale-105 motion-reduce:scale-100 motion-reduce:transition-none"
+            className="object-fill"
             src={preset.src}
-            alt={clip.alt}
+            alt=""
             fill
             sizes="100vw"
             loading="eager"
-            style={{ transformOrigin: clip.origin }}
+            aria-hidden="true"
           />
         </Reveal>
-      ))}
+
+        {preset.clips.map((clip, index) => (
+          <Reveal
+            className="group/frame pointer-events-auto absolute inset-0 z-10"
+            delay={260 + index * 130}
+            duration={620}
+            from="fade"
+            key={clip.path}
+            style={{ clipPath: clip.path }}
+          >
+            <Image
+              className="object-fill transition-transform duration-500 ease-out group-hover/frame:scale-105 group-active/frame:scale-105 motion-reduce:scale-100 motion-reduce:transition-none"
+              src={preset.src}
+              alt={clip.alt}
+              fill
+              sizes="100vw"
+              loading="eager"
+              style={{ transformOrigin: clip.origin }}
+            />
+          </Reveal>
+        ))}
+      </div>
     </div>
   );
 }

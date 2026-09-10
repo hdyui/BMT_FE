@@ -118,6 +118,42 @@ const HERO_DIAMONDS = [
 ] as const;
 
 /**
+ * Các lớp shadow thật do khách hàng xuất riêng từ artwork 8000x3468.
+ *
+ * Tọa độ dùng cùng hệ phần trăm với banner. Các lớp cast bám khung của bản cũ
+ * được giữ nguyên; nhóm này chỉ thêm các diamond lớn ở nền được đánh dấu trong
+ * mockup. Mỗi file giữ alpha gốc và được fade riêng, không ghép chung với ảnh.
+ */
+const HERO_DECORATIVE_SHADOWS = [
+  {
+    key: "top-left-field",
+    src: "/images/thi-cong-xay-dung/hero-shadows/shadow-02.webp",
+    left: "-12%",
+    top: "-20%",
+    width: "30%",
+    opacity: 0.85,
+  },
+  // top-right-field (shadow-03.webp) — vệt bóng "xẹt xuống" ở góc phải trên đã
+  // bỏ; thay bằng `title-diamond.png` phía trên tiêu đề (xem trong phần map).
+  {
+    key: "bottom-left-field",
+    src: "/images/thi-cong-xay-dung/hero-shadows/shadow-07.webp",
+    left: "-12%",
+    top: "18%",
+    width: "40%",
+    opacity: 0.18,
+  },
+  {
+    key: "bottom-right-field",
+    src: "/images/thi-cong-xay-dung/hero-shadows/shadow-12.webp",
+    left: "45%",
+    top: "45%",
+    width: "27%",
+    opacity: 0.8,
+  },
+] as const;
+
+/**
  * NHÓM 1 — các mảng nằm DƯỚI 4 ảnh.
  *
  * ĐO TRỰC TIẾP trên mockup `...xay dung-14.png`: quét độ sáng theo pháp tuyến ra
@@ -153,24 +189,34 @@ const HERO_DIAMONDS = [
  * đi theo.
  */
 const HERO_BACKDROPS = [
-  // Quầng chung của cả cụm. Rất nhạt: nền quanh cụm đo được 235..237 ở vài cạnh,
-  // tức chỉ tối hơn nền 5..7 đơn vị. Để đậm hơn là bốn cạnh sạch (right U+/V-,
-  // bottom U+/V-, đo đúng 242 phẳng lì) bị đục đi, sai mockup ngay.
+  // VIỀN SẮC — tấm nền KHÔNG nhoè, dời NGANG sang trái 20px (thang 2000) nên ló
+  // ~20px ở CẢ HAI cạnh trái (U- và V+). Vẽ SAU quầng chung. Theo yêu cầu: cả
+  // 4 hình dùng CHUNG một kiểu viền như hình "văn phòng" (dx -7.5%, dy 0,
+  // không blur, tone #dedee1) — chỗ nào bị hình khác đè thì tự khuất.
   {
-    key: "cluster",
-    left: "29.3%",
-    top: "47.4%",
-    size: "95%",
-    dx: "0%",
-    dy: "3%",
-    blur: "blur-[5vw]",
-    tone: "bg-[rgb(36_33_34/.015)]",
+    key: "top-edge",
+    from: "top",
+    dx: "-7.5%",
+    dy: "0%",
+    blur: "",
+    tone: "bg-[#dedee1]",
   },
-
-  // VIỀN SẮC — tấm nền KHÔNG nhoè, dời đi vài % nên ló ra dải mép rõ nét.
-  // Vẽ SAU quầng chung. Chỉ hai hình này có trong mockup.
-  //   left: dời NGANG sang trái 20px (thang 2000) -> ló 20px ở CẢ HAI cạnh trái
-  //         (U- và V+). Đây chính là cái viền bạn thấy ở hình văn phòng.
+  {
+    key: "right-edge",
+    from: "right",
+    dx: "-7.5%",
+    dy: "0%",
+    blur: "",
+    tone: "bg-[#dedee1]",
+  },
+  {
+    key: "bottom-edge",
+    from: "bottom",
+    dx: "-7.5%",
+    dy: "0%",
+    blur: "",
+    tone: "bg-[#dedee1]",
+  },
   {
     key: "left-edge",
     from: "left",
@@ -178,126 +224,6 @@ const HERO_BACKDROPS = [
     dy: "0%",
     blur: "",
     tone: "bg-[#dedee1]",
-  },
-  //   right: dời CHÉO lên-trái 16px -> chỉ ló ở U-. Nền 242, viền 238 — rất nhạt,
-  //         mockup đúng như vậy; muốn rõ hơn thì chỉnh tone tối xuống.
-  {
-    key: "right-edge",
-    from: "right",
-    dx: "-3.1%",
-    dy: "-3.1%",
-    blur: "",
-    tone: "bg-[#eeeef0]",
-  },
-] as const;
-
-/**
- * BÓNG MỀM bám MỘT ĐOẠN của MỘT cạnh.
- *
- * Hai cái bẫy đã đâm phải, đừng lặp lại:
- *
- * 1. KHÔNG lấy nguyên hình kim cương dời đi rồi blur. Dời theo +U thì hai cạnh V
- *    vẫn trùng khít mép ảnh, blur xong mỗi cạnh V lòi ra đúng 50% độ đậm — bản
- *    dựng thử đo ra 202 trong khi mockup là 237.
- * 2. Bóng KHÔNG trải đều suốt cạnh. Quét dọc từng cạnh (cách mép 12px) cho thấy
- *    nó là vệt cục bộ nằm trong KHE giữa các hình. Ví dụ cạnh U+ của `top`:
- *      vị trí dọc cạnh  -0,5  -0,4  -0,3  -0,2  -0,1   0   0,1  0,2  0,3  0,4  0,5
- *      độ sáng           242   242   242   242   222  175  156  164  175  198  223
- *    nửa phía đỉnh phải (giáp Zena) sạch trơn, chỉ nửa phía đỉnh dưới mới tối.
- *    Đó là lý do cạnh U- của Zena đo ra 238 dù nó nhìn thẳng vào khe.
- *
- * Nên mỗi vệt là một DẢI GRADIENT có giới hạn hai đầu, đặt trong khung đã xoay
- * 45° của hình. Trong hệ đã xoay, +x cục bộ = +U (xuống-phải) trên màn hình,
- * +y cục bộ = +V (xuống-trái).
- *
- *   dir    cạnh mang bóng, theo trục cục bộ
- *   alpha  độ đậm sát mép (= độ tối đo được / 242)
- *   reach  tầm với ra ngoài, % cạnh khối vuông
- *   along  tâm của vệt dọc theo cạnh, % cạnh (0 = đầu này, 100 = đầu kia)
- *   len    bề dài vệt, % cạnh. Hai đầu vệt được `mask` vuốt tắt nên không cụt.
- *
- * Bốn con số này dò bằng cách dựng lại banner rồi đo y hệt cách đo mockup, chỉnh
- * tới khi 16 đường quét khớp. Sửa một số là phải đo lại, đừng chỉnh mò.
- */
-const HERO_EDGE_CASTS = [
-  {
-    key: "top-cast",
-    from: "top",
-    dir: "u+",
-    alpha: 0.4,
-    reach: 34,
-    along: 70,
-    len: 58,
-    blur: "blur-[0.6vw]",
-  },
-  {
-    key: "left-cast",
-    from: "left",
-    dir: "u+",
-    alpha: 0.5,
-    reach: 38,
-    along: 38,
-    len: 86,
-    blur: "blur-[0.5vw]",
-  },
-  {
-    key: "bottom-cast",
-    from: "bottom",
-    dir: "v+",
-    alpha: 0.5,
-    reach: 23,
-    along: 48,
-    len: 85,
-    blur: "blur-[0.5vw]",
-  },
-  // Zena chỉ tối ở mẩu cạnh trên-trái sát đỉnh trái của nó, chỗ chui vào khe.
-  {
-    key: "right-cast",
-    from: "right",
-    dir: "u-",
-    alpha: 0.24,
-    reach: 20,
-    along: 90,
-    len: 26,
-    blur: "blur-[0.5vw]",
-  },
-] as const;
-
-/**
- * NHÓM 2 — vết bóng của hình bên cạnh HẮT LÊN mặt ảnh, không được loang ra nền.
- * Nên mỗi vết gồm hai lớp: khung ngoài sao chép đúng hình nhận bóng và
- * `overflow-hidden` để cắt, bên trong xoay ngược `-rotate-45` về hệ toạ độ màn
- * hình rồi mới đặt vệt mờ vào góc cần.
- *
- * Chỉ còn hai vết, đúng theo hai khe CÓ bóng trong mockup (khe top|right và khe
- * left|bottom). Hai khe còn lại (top|left, right|bottom) đo ra 242 phẳng nên
- * không có vết nào — trước đây code đặt bóng ở đó là không đúng mockup.
- *
- * `zIndex` phải nằm giữa hình nhận bóng và hình đè lên nó: hình Top z10, Bên
- * phải z20, Bên trái z30, Dưới cùng z40.
- */
-const HERO_OVERLAP_SHADOWS = [
-  // `left` hắt sang mép trên-trái của `bottom` — khe này đo được 33 độ tối.
-  {
-    key: "left-on-bottom",
-    on: "bottom",
-    zIndex: 41,
-    x: "-26%",
-    y: "-26%",
-    size: "70%",
-    tone: "bg-[rgb(36_33_34/.16)]",
-    blur: "blur-[1.4vw]",
-  },
-  // `top` hắt sang mép trên-trái của `right` — chỉ 4 độ tối nên để rất nhẹ.
-  {
-    key: "top-on-right",
-    on: "right",
-    zIndex: 21,
-    x: "-14%",
-    y: "-14%",
-    size: "48%",
-    tone: "bg-[rgb(36_33_34/.05)]",
-    blur: "blur-[1.2vw]",
   },
 ] as const;
 
@@ -343,10 +269,191 @@ export function ConstructionServicePage() {
             Màn nhỏ giữ khung theo đúng tỉ lệ mockup (1254/530) để cách xếp 4 hình
             không đổi, chỉ nhỏ lại. */}
         <div className="relative mx-auto aspect-1254/530 w-full max-w-140 lg:absolute lg:inset-0 lg:mx-0 lg:aspect-auto lg:h-full lg:w-full lg:max-w-none">
-          {/* NHÓM 1: vẽ trước 4 ảnh nên nằm dưới. */}
+          {/* Shadow PNG giữ alpha gốc và xuất hiện tuần tự, độc lập với bốn ảnh. */}
+          {HERO_DECORATIVE_SHADOWS.map((shadow, index) => (
+            <Reveal
+              className="pointer-events-none absolute z-[2] aspect-square"
+              delay={80 + index * 75}
+              duration={650}
+              from="fade"
+              style={{
+                left: shadow.left,
+                top: shadow.top,
+                width: shadow.width,
+              }}
+              key={shadow.key}
+              aria-hidden="true"
+            >
+              <Image
+                className="object-contain"
+                src={shadow.src}
+                alt=""
+                fill
+                sizes="50vw"
+                style={{ opacity: shadow.opacity }}
+                aria-hidden="true"
+              />
+            </Reveal>
+          ))}
+
+          {/* Bóng ở TRUNG TÂM cụm 4 hình kim cương (file khách cấp
+              `hero-shadows/cluster-center.png`). `z-[2]` nên nằm SAU 4 ảnh,
+              chỉ hiện ở khoảng trống giữa cụm. Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[-5%] left-[-15%] z-[2] h-[97%] w-[78%]"
+            delay={300}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/cluster-center.png"
+              alt=""
+              fill
+              sizes="46vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Bóng TRUNG TÂM cụm — lớp thứ 2 (file khách cấp
+              `hero-shadows/cluster-center-2.png`). Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[5%] left-[-8%] z-[2] h-[97%] w-[78%]"
+            delay={450}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply [filter:brightness(.78)_contrast(1.55)]"
+              src="/images/thi-cong-xay-dung/hero-shadows/cluster-center-2.png"
+              alt=""
+              fill
+              sizes="46vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Bóng ở GÓC TRÁI của hình "bottom" (file khách cấp
+              `hero-shadows/bottom-left-corner.png`). `z-[2]` nên nằm sau ảnh.
+              Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[20%] left-[-4%] z-[2] h-[74%] w-[62%] -rotate-90"
+            delay={600}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/bottom-left-corner.png"
+              alt=""
+              fill
+              sizes="38vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Bóng ở GÓC TRÁI của banner (file khách cấp
+              `hero-shadows/left-corner.png`). Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[18%] left-[-24%] z-[2] h-[92%] w-[70%] rotate-90 opacity-40"
+            delay={750}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/left-corner.png"
+              alt=""
+              fill
+              sizes="38vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Cùng file `bottom-left-corner.png` nhưng đặt ở BÊN PHẢI (lật ngang
+              `-scale-x-100` cho phần đậm quay sang phải). Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[2%] left-[-11%] z-[2] h-[82%] w-[74%] -scale-x-100 -rotate-45 opacity-40"
+            delay={900}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/bottom-left-corner.png"
+              alt=""
+              fill
+              sizes="38vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Cục bóng nền phía trên tiêu đề — dùng file khách cấp
+              (`hero-shadows/title-diamond.png`, mảng kim cương bo góc mờ dần).
+              `z-[2]` nên nằm sau chữ (chữ ở `z-20`). Núm: `left`/`top` (vị trí),
+              `w`/`h` (kích thước khung). */}
+          <Reveal
+            className="pointer-events-none absolute top-[-1%] left-[60%] z-[2] h-[40%] w-[30%]"
+            delay={1050}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain object-top mix-blend-multiply -scale-y-100"
+              src="/images/thi-cong-xay-dung/hero-shadows/title-diamond.png"
+              alt=""
+              fill
+              sizes="30vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Hai cục bóng cùng loại ở khoảng trống góc trái-dưới banner (theo ảnh
+              `pic_thicong/same.jpg`). `z-[10]` để nổi lên trên nền + bản vẽ
+              (dưới 4 ảnh kim cương z>=10 nên vẫn khuất sau ảnh, chỉ hiện ở
+              khoảng trống). Núm mỗi cục: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[66%] left-[42%] z-[41] h-[40%] w-[25%] -rotate-90"
+            delay={1200}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain object-top mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/title-diamond.png"
+              alt=""
+              fill
+              sizes="34vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          <Reveal
+            className="pointer-events-none absolute top-[90%] left-[38%] z-[41] h-[24%] w-[14%]"
+            delay={1350}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain object-top mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/title-diamond.png"
+              alt=""
+              fill
+              sizes="33vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+
+          {/* Viền sắc bám cạnh trái của từng hình — vẽ trước 4 ảnh nên nằm dưới. */}
           {HERO_BACKDROPS.map((shadow, index) => {
-            const base =
-              "from" in shadow ? DIAMOND_BY_KEY[shadow.from] : shadow;
+            const base = DIAMOND_BY_KEY[shadow.from];
             return (
               <Reveal
                 className="pointer-events-none absolute z-[1] aspect-square"
@@ -369,72 +476,6 @@ export function ConstructionServicePage() {
             );
           })}
 
-          {/* Dải bóng bám cạnh — vẫn nằm dưới 4 ảnh. */}
-          {HERO_EDGE_CASTS.map((cast, index) => {
-            const host = DIAMOND_BY_KEY[cast.from];
-            const axis = cast.dir[0]; // "u" | "v"
-            const out = cast.dir[1] === "-" ? -1 : 1;
-            // Dải chạy từ TÂM hình ra ngoài nên dài 50% + tầm với. Đoạn nằm
-            // trong lòng ảnh giữ nguyên độ đậm (ảnh che mất), qua mép mới nhạt
-            // dần -> `solid` chính là chỗ mép ảnh rơi vào trên dải.
-            const span = 50 + cast.reach;
-            const solid = ((50 / span) * 100).toFixed(1);
-            const tone = `rgb(36 33 34 / ${cast.alpha})`;
-            const fade =
-              axis === "u"
-                ? out > 0
-                  ? "to right"
-                  : "to left"
-                : out > 0
-                  ? "to bottom"
-                  : "to top";
-            // vuốt tắt hai đầu vệt để nó không cụt ngang ở giữa khe
-            const taper = `linear-gradient(${axis === "u" ? "to bottom" : "to right"}, transparent 0%, #000 18%, #000 82%, transparent 100%)`;
-            const near = out > 0 ? "50%" : "auto";
-            const far = out > 0 ? "auto" : "50%";
-            const start = `${cast.along - cast.len / 2}%`;
-            const size = `${cast.len}%`;
-            const bar =
-              axis === "u"
-                ? {
-                    left: near,
-                    right: far,
-                    width: `${span}%`,
-                    top: start,
-                    height: size,
-                  }
-                : {
-                    top: near,
-                    bottom: far,
-                    height: `${span}%`,
-                    left: start,
-                    width: size,
-                  };
-            return (
-              <Reveal
-                className="pointer-events-none absolute z-[1] aspect-square -translate-x-1/2 -translate-y-1/2"
-                delay={220 + index * 90}
-                duration={650}
-                from="fade"
-                style={{ left: host.left, top: host.top, height: host.size }}
-                key={cast.key}
-                aria-hidden="true"
-              >
-                <div className="relative size-full rotate-45">
-                  <div
-                    className={`absolute ${cast.blur}`}
-                    style={{
-                      ...bar,
-                      background: `linear-gradient(${fade}, ${tone} 0%, ${tone} ${solid}%, transparent 100%)`,
-                      WebkitMaskImage: taper,
-                      maskImage: taper,
-                    }}
-                  />
-                </div>
-              </Reveal>
-            );
-          })}
-
           {HERO_DIAMONDS.map((diamond, index) => (
             <DiamondPhotoFrame
               key={diamond.key}
@@ -447,44 +488,6 @@ export function ConstructionServicePage() {
               delay={index * 170}
             />
           ))}
-
-          {/* NHÓM 2: vẽ sau 4 ảnh, mỗi vết bị khung của chính hình nhận bóng cắt
-              nên không loang ra nền. */}
-          {HERO_OVERLAP_SHADOWS.map((shadow, index) => {
-            const host = DIAMOND_BY_KEY[shadow.on];
-            return (
-              <Reveal
-                className="pointer-events-none absolute aspect-square -translate-x-1/2 -translate-y-1/2"
-                delay={520 + index * 90}
-                duration={650}
-                from="fade"
-                style={{
-                  left: host.left,
-                  top: host.top,
-                  height: host.size,
-                  zIndex: shadow.zIndex,
-                }}
-                key={shadow.key}
-                aria-hidden="true"
-              >
-                {/* `relative` là bắt buộc: không có nó thì lớp `absolute` bên
-                    trong lấy mốc từ div ngoài — vốn là CHA của div này — nên
-                    `overflow-hidden` ở đây không cắt được, vệt bóng loang ra nền. */}
-                <div className="relative size-full rotate-45 overflow-hidden rounded-[16%]">
-                  <div className="absolute inset-0 -rotate-45">
-                    <div
-                      className={`absolute aspect-square rounded-[12%] ${shadow.tone} ${shadow.blur}`}
-                      style={{
-                        left: shadow.x,
-                        top: shadow.y,
-                        width: shadow.size,
-                      }}
-                    />
-                  </div>
-                </div>
-              </Reveal>
-            );
-          })}
         </div>
 
         <div className="relative z-20 px-6 pt-10 pb-14 lg:absolute lg:top-[44%] lg:left-[60.2%] lg:px-0 lg:pt-0 lg:pb-0">
@@ -580,7 +583,10 @@ export function ConstructionServicePage() {
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
-            <p className="mx-auto mt-4 max-w-[73.75rem] text-[clamp(0.78rem,2.75vw,1rem)] leading-[1.25] text-pretty text-center md:text-sm md:leading-relaxed">
+            {/* Chỉ MOBILE đồng bộ với section 02 trang thiết kế kiến trúc nội
+                thất (size + justify 2 lề, dòng cuối canh giữa). Desktop giữ
+                nguyên: max-w-[73.75rem], text-center, text-sm. */}
+            <p className="mx-auto mt-4 max-w-[73.75rem] text-pretty text-center text-sm leading-relaxed max-md:max-w-3xl max-md:text-justify max-md:[text-align-last:center] max-md:text-[0.82rem] max-md:leading-[1.3]">
               Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ
               của công trình. BMT Decor triển khai{" "}
               <strong className="font-normal lg:font-bold">

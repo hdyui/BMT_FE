@@ -40,38 +40,77 @@ const mobileSolutionCtas = [
 
 function RenovationMobileHero() {
   return (
-    <section className="relative isolate aspect-[932/1293] min-h-[34rem] overflow-hidden bg-[#f2f2f3]">
-      <Reveal className="absolute inset-0 -z-20" from="fade">
-        <Image
-          className="origin-bottom object-cover object-bottom animate-[hero-bg-drift_24s_ease-in-out_infinite_alternate] motion-reduce:animate-none"
-          src="/images/cai-tao-sua-chua/hero-background.png"
-          alt=""
-          fill
-          sizes="100vw"
+    <section className="relative isolate overflow-hidden bg-[#f2f2f3]">
+      {/* ẢNH LÊN TRÊN: lưới 3 ảnh dự án theo luồng thường ở đầu banner. Bọc
+          trong 1 khối `relative isolate` để đặt lại NỀN: ảnh gradient
+          `hero-background.png` (-z-20, phủ cả khối) + bản vẽ wireframe
+          (-z-10, canh giữa) + bóng vuông mờ (-z-10). `pt-[9vw]` là khoảng
+          cách với SiteHeader — tăng/giảm để lưới ảnh cách header nhiều/ít hơn. */}
+      <div className="relative isolate pt-[9vw]">
+        <Reveal className="absolute inset-0 -z-20" from="fade">
+          <Image
+            className="origin-bottom object-cover object-bottom animate-[hero-bg-drift_24s_ease-in-out_infinite_alternate] motion-reduce:animate-none"
+            src="/images/cai-tao-sua-chua/hero-background.png"
+            alt=""
+            fill
+            sizes="100vw"
+            aria-hidden="true"
+          />
+        </Reveal>
+        <Reveal
+          className="pointer-events-none absolute top-0 left-[63%] -z-10 h-[104%] w-[84%] -translate-x-1/2 -translate-y-[19.5%]"
+          delay={100}
+          from="fade"
+        >
+          <Image
+            className="size-full object-contain object-top opacity-70"
+            src="/images/cai-tao-sua-chua/hero-wireframe.png"
+            alt=""
+            width={2721}
+            height={3468}
+            aria-hidden="true"
+          />
+        </Reveal>
+        {/* Bóng vuông bo góc, mờ mềm, nhô lên quá cạnh trên khối. */}
+        <div
+          className="pointer-events-none absolute -top-[4%] right-[9%] -z-10 h-[19%] w-[16%] rounded-[1.75rem] bg-charcoal/[0.035] blur-[1.2vw]"
           aria-hidden="true"
         />
-      </Reveal>
-      <Reveal
-        className="pointer-events-none absolute bottom-0 left-0 -z-10 h-[72%] w-[54%]"
-        delay={100}
-        from="fade"
-      >
-        <Image
-          className="size-full object-contain object-left-bottom opacity-70"
-          src="/images/cai-tao-sua-chua/hero-wireframe.png"
-          alt=""
-          width={2721}
-          height={3468}
-          aria-hidden="true"
-        />
-      </Reveal>
 
-      {/* Cỡ chữ/leading/hiệu ứng Reveal đồng bộ với banner thiết kế kiến trúc
-          nội thất (DesignServicePage). Section này nằm ngay dưới header nhờ
-          `pt-[60px]` của RenovationMobileContent, nên khoảng cách header ->
-          tiêu đề chính là `top`: đặt `calc(25px + 5vw)` cho bằng trang xây dựng
-          trọn gói (bên đó = 85px + 5vw tính từ đỉnh banner, trừ header 60px). */}
-      <div className="absolute top-[calc(25px+5vw)] left-[7.3%] w-[83%] border-l-[3px] border-brand pl-[3.2%]">
+        <div className="mx-[5.7%] grid aspect-[1.09] grid-cols-2 grid-rows-[1.08fr_0.92fr] gap-[1.7%]">
+          <Reveal className="group/frame relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={160} from="right">
+            <Image
+              className="object-cover"
+              src="/images/cai-tao-sua-chua/hero-correct-top.png"
+              alt="Phòng khách sau cải tạo"
+              fill
+              sizes="45vw"
+            />
+          </Reveal>
+          <Reveal className="group/frame relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={320} from="right">
+            <Image
+              className="object-cover"
+              src="/images/cai-tao-sua-chua/hero-correct-bottom.png"
+              alt="Không gian phòng khách được cải tạo"
+              fill
+              sizes="45vw"
+            />
+          </Reveal>
+          <Reveal className="group/frame relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={480} from="right">
+            <Image
+              className="object-cover"
+              src="/images/cai-tao-sua-chua/hero-correct-large.png"
+              alt="Mặt tiền nhà sau cải tạo"
+              fill
+              sizes="45vw"
+            />
+          </Reveal>
+        </div>
+      </div>
+
+      {/* CHỮ XUỐNG DƯỚI: nối ngay sau lưới ảnh theo luồng thường (trước đây
+          `absolute top-[calc(25px+5vw)]`). */}
+      <div className="mt-[11vw] mb-[9vw] mr-[7%] ml-[7.3%] border-l-[3px] border-brand pl-[3.2%]">
         <Reveal>
           <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] leading-[1.12] font-extrabold text-brand uppercase">
             Dịch vụ cải tạo &amp;
@@ -103,58 +142,6 @@ function RenovationMobileHero() {
           </p>
         </Reveal>
       </div>
-
-      {/* Bóng vuông bo góc, mờ mềm, nhô lên quá cạnh trên banner — nằm sau
-          hoa văn chấm cam theo đúng mockup. */}
-      <div
-        className="pointer-events-none absolute -top-[4%] right-[9%] -z-10 h-[19%] w-[16%] rounded-[1.75rem] bg-charcoal/[0.035] blur-[1.2vw]"
-        aria-hidden="true"
-      />
-
-      <Reveal
-        className="absolute top-[20%] right-[7.5%] w-[7.2%]"
-        delay={460}
-        from="fade"
-      >
-        <Image
-          className="h-auto w-full object-contain"
-          src="/images/cai-tao-sua-chua/dots-pattern.png"
-          alt=""
-          width={288}
-          height={480}
-          aria-hidden="true"
-        />
-      </Reveal>
-
-      <div className="absolute inset-x-[5.7%] bottom-[4.2%] grid h-[58.6%] grid-cols-2 grid-rows-[1.08fr_0.92fr] gap-[1.7%]">
-        <Reveal className="group/frame relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={160} from="right">
-          <Image
-            className="object-cover"
-            src="/images/cai-tao-sua-chua/hero-correct-top.png"
-            alt="Phòng khách sau cải tạo"
-            fill
-            sizes="45vw"
-          />
-        </Reveal>
-        <Reveal className="group/frame relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={320} from="right">
-          <Image
-            className="object-cover"
-            src="/images/cai-tao-sua-chua/hero-correct-bottom.png"
-            alt="Không gian phòng khách được cải tạo"
-            fill
-            sizes="45vw"
-          />
-        </Reveal>
-        <Reveal className="group/frame relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_8px_18px_rgb(36_33_34/.14)]" delay={480} from="right">
-          <Image
-            className="object-cover"
-            src="/images/cai-tao-sua-chua/hero-correct-large.png"
-            alt="Mặt tiền nhà sau cải tạo"
-            fill
-            sizes="45vw"
-          />
-        </Reveal>
-      </div>
     </section>
   );
 }
@@ -166,7 +153,10 @@ function RenovationMobileProjects() {
           luôn trắng tinh 100%, không phụ thuộc vào chiều cao tổng của section
           (khác với dùng 1 gradient trải hết section, tỉ lệ trắng/xám sẽ đổi
           theo chiều cao carousel mỗi màn hình). */}
-      <div className="mx-auto max-w-[29rem] text-center">
+      {/* Lề trái/phải bằng section 02 trang thiết kế kiến trúc nội thất: bên đó
+          `w-[calc(100%-2.25rem)]` (18px mỗi bên) + `px-4` (16px) = 34px. Ở đây
+          section đã có `px-4` (16px) nên chỉ cần thêm `px-[1.125rem]` (18px). */}
+      <div className="mx-auto w-full max-w-[29rem] px-[1.125rem] text-center">
         <Reveal from="bottom">
           <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase">
             Giải pháp cải tạo phù hợp cho
@@ -174,7 +164,7 @@ function RenovationMobileProjects() {
           </h2>
         </Reveal>
         <Reveal delay={100} from="bottom">
-          <p className="mt-3 text-[clamp(0.7rem,2.75vw,0.82rem)] leading-[1.28] text-justify [text-align-last:center]">
+          <p className="mt-4 text-pretty text-[0.82rem] leading-[1.3] text-justify [text-align-last:center]">
             BMT Decor cung cấp dịch vụ cải tạo nhà ở, cải tạo văn phòng, cải tạo
             showroom, cải tạo nhà hàng, sửa chữa nhà và nâng cấp không gian theo
             nhu cầu thực tế, giúp khắc phục các hạng mục xuống cấp, tối ưu công
@@ -259,7 +249,7 @@ function RenovationMobileSolutions() {
         </Reveal>
         <Reveal delay={140} from="bottom">
           <p className="mt-2 text-[clamp(0.72rem,2.9vw,0.86rem)]">
-            Giải Pháp Cải Tạo Theo Từng Loại Hình Công Trình
+            Giải pháp cải tạo tối ưu cho từng không gian
           </p>
         </Reveal>
         <BuildingRule

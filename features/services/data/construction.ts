@@ -73,7 +73,8 @@ export const solutionCards = [
   },
   {
     number: "03",
-    titlePrefix: "THI CÔNG SHOWROOM &",
+    titlePrefix: "THI CÔNG",
+    titlePrefixAccent: "SHOWROOM &",
     titleCategory: "THẨM MỸ VIỆN",
     tagline:
       "Chính xác trong từng chi tiết hoàn thiện và nhận diện thương hiệu",
@@ -96,7 +97,8 @@ export const solutionCards = [
   },
   {
     number: "04",
-    titlePrefix: "THI CÔNG NHÀ HÀNG &",
+    titlePrefix: "THI CÔNG",
+    titlePrefixAccent: "NHÀ HÀNG &",
     titleCategory: "KHÁCH SẠN",
     tagline: "Đảm bảo chất lượng thi công cho công trình khai thác liên tục",
     description:

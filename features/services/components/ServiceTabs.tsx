@@ -70,6 +70,9 @@ export function ServiceTabs() {
   const timer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const tabsRef = useRef<HTMLDivElement>(null);
   const labelRefs = useRef<Array<HTMLSpanElement | null>>([]);
+  /* Điểm chạm khi bắt đầu vuốt trên vùng nội dung — để lướt tay qua trái/phải
+     đổi dịch vụ (ngoài cách bấm tab / bấm chấm). */
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   useEffect(
     () => () => {
@@ -124,6 +127,22 @@ export function ServiceTabs() {
       setShown(index);
       setFaded(false);
     }, FADE_DURATION);
+  }
+
+  function onSwipeStart(event: React.PointerEvent) {
+    swipeStart.current = { x: event.clientX, y: event.clientY };
+  }
+
+  function onSwipeEnd(event: React.PointerEvent) {
+    const start = swipeStart.current;
+    swipeStart.current = null;
+    if (!start) return;
+    const dx = event.clientX - start.x;
+    const dy = event.clientY - start.y;
+    // Chỉ tính là "vuốt ngang" khi đủ xa và rõ ràng ngang hơn dọc.
+    if (Math.abs(dx) < 45 || Math.abs(dx) <= Math.abs(dy)) return;
+    const next = dx < 0 ? active + 1 : active - 1;
+    if (next >= 0 && next < serviceTabs.length) select(next);
   }
 
   const detail = serviceTabs[shown];
@@ -208,16 +227,28 @@ export function ServiceTabs() {
       </div>
 
       {/* Mobile/tablet dùng bố cục mới theo mockup: ảnh panorama ở trên, toàn
-          bộ nội dung ở dưới. Desktop từ lg trở lên vẫn giữ bố cục hai cột. */}
+          bộ nội dung ở dưới. Desktop từ lg trở lên vẫn giữ bố cục hai cột.
+          `touch-pan-y` + cặp handler pointer: vuốt ngang trên vùng này để lướt
+          qua/lại giữa các dịch vụ (vẫn cuộn dọc trang bình thường). */}
       <div
         className={cn(
-          "pt-6 transition-opacity ease-out sm:pt-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-20 lg:pt-12",
+          "pt-6 transition-opacity ease-out touch-pan-y sm:pt-8 lg:grid lg:grid-cols-2 lg:items-center lg:gap-20 lg:pt-12",
           faded ? "opacity-0 duration-200" : "opacity-100 duration-500",
         )}
+        onPointerDown={onSwipeStart}
+        onPointerUp={onSwipeEnd}
+        onPointerCancel={() => {
+          swipeStart.current = null;
+        }}
       >
+        {/* Desktop: mép trái ảnh thụt vào trùng chữ đầu của tab 1 ("XÂY DỰNG
+            TRỌN GÓI") trên thanh tab — dùng lại số đo `rule.left` vốn đã tính
+            cho vạch xám — và bớt bề rộng đúng lượng đó để mép phải giữ nguyên
+            (ảnh vẫn to như cũ, chỉ dịch vào cho thẳng hàng). */}
         <Reveal
-          className="group relative aspect-9/5 w-full overflow-hidden rounded-2xl lg:aspect-1600/1093 lg:overflow-visible lg:rounded-none"
+          className="group relative aspect-9/5 w-full overflow-hidden rounded-2xl lg:ml-[var(--tab1-inset)] lg:aspect-1600/1093 lg:w-[calc(100%-var(--tab1-inset))] lg:overflow-visible lg:rounded-none"
           from="left"
+          style={{ "--tab1-inset": `${rule.left}px` } as React.CSSProperties}
         >
           <Image
             className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:hidden"
@@ -268,7 +299,10 @@ export function ServiceTabs() {
             </h2>
             <p
               className={cn(
-                "whitespace-nowrap text-[clamp(0.625rem,2.5vw,1.1875rem)] font-medium tracking-[-0.025em] sm:text-[min(1.25rem,2.8vw)] lg:mt-2 lg:max-w-fit lg:text-2xl lg:font-extrabold lg:tracking-normal",
+                // Desktop: bỏ nowrap + max-w-fit của bản mobile để phụ đề dài
+                // (vd tab 01) tự xuống hàng trong bề rộng cột thay vì tràn ra
+                // ngoài và bị che; đồng thời giảm cỡ chữ 2xl -> lg cho gọn.
+                "whitespace-nowrap text-[clamp(0.625rem,2.5vw,1.1875rem)] font-medium tracking-[-0.025em] sm:text-[min(1.25rem,2.8vw)] lg:mt-2 lg:max-w-none lg:text-lg lg:leading-snug lg:font-extrabold lg:tracking-normal lg:whitespace-normal",
                 shown === 1 ? "mt-1" : "mt-0.5",
               )}
             >

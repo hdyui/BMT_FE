@@ -3,10 +3,7 @@ import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
-import {
-  mobileHeroBlueprint,
-  processSteps,
-} from "@/features/services/data/construction";
+import { processSteps } from "@/features/services/data/construction";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";
 
@@ -35,7 +32,7 @@ const mobileHeroDiamonds = [
     alt: "Thi công nhà ở",
     left: "60.9%",
     top: "88%",
-    size: "24.8%",
+    size: "27.5%",
     zIndex: 40,
   },
   {
@@ -51,58 +48,163 @@ const mobileHeroDiamonds = [
 
 export function ConstructionMobileHero() {
   return (
-    <section className="relative aspect-3884/5972 w-full overflow-hidden bg-[#F2F2F3] md:hidden">
-      <Reveal
-        className="pointer-events-none absolute inset-x-0 top-[22%] -bottom-[22%]"
-        delay={80}
-        from="fade"
-      >
-        <Image
-          className="object-cover object-right-bottom opacity-75 mix-blend-multiply"
-          src={mobileHeroBlueprint}
-          alt=""
-          fill
-          sizes="100vw"
-          priority
-          aria-hidden="true"
-        />
-      </Reveal>
+    <section className="relative w-full overflow-hidden bg-[#F2F2F3] md:hidden">
+      {/* ẢNH LÊN TRÊN: cụm 4 hình kim cương giữ NGUYÊN mọi toạ độ % trong khung
+          tỉ lệ gốc 3884/5972. KHÔNG cắt hình top nữa — bỏ `pt-[60px]` để section
+          bắt đầu từ đỉnh trang (y=0), kéo khung gốc lên 35%: cụm hạ thấp xuống
+          một chút, mép trên hình top ở ~y=0; SiteHeader fixed cao 60px (z-50)
+          ĐÈ LÊN che phần trên hình top, phần còn lại hiện đủ. Núm chỉnh mắt:
+          `-translate-y-[35%]` (giảm số = cụm tụt thấp xuống, header che ít hơn),
+          `h-[102vw]` (chiều cao vùng chứa — tăng nếu hình bottom bị mép dưới
+          cắt). */}
+      <div className="relative h-[110vw] w-full">
+        <div className="absolute inset-x-0 top-0 aspect-3884/5972 w-full -translate-y-[32%]">
+          {/* Bóng nền — 5 lớp Y HỆT desktop (`ConstructionServicePage`), toạ độ
+              được chiếu từ bounding-box cụm diamond desktop sang bounding-box
+              cụm diamond mobile (khung này). `z-[1]` (dưới diamonds) nên chỉ
+              hiện ở khoảng trống. Fade-in lần lượt, delay tăng dần. */}
+          <Reveal
+            className="pointer-events-none absolute top-[44%] left-[-15%] z-[1] h-[56%] w-[140%]"
+            delay={200}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/cluster-center.png"
+              alt=""
+              fill
+              sizes="130vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          <Reveal
+            className="pointer-events-none absolute top-[50%] left-[-15%] z-[1] h-[56%] w-[140%]"
+            delay={340}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply [filter:brightness(.78)_contrast(1.55)]"
+              src="/images/thi-cong-xay-dung/hero-shadows/cluster-center-2.png"
+              alt=""
+              fill
+              sizes="130vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          <Reveal
+            className="pointer-events-none absolute top-[58%] left-[-8%] z-[1] h-[43%] w-[111%] -rotate-90"
+            delay={480}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/bottom-left-corner.png"
+              alt=""
+              fill
+              sizes="110vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          <Reveal
+            className="pointer-events-none absolute top-[57%] left-[-44%] z-[1] h-[53%] w-[126%] rotate-90 opacity-40"
+            delay={620}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/left-corner.png"
+              alt=""
+              fill
+              sizes="120vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          <Reveal
+            className="pointer-events-none absolute top-[48%] left-[-20%] z-[1] h-[47%] w-[133%] -scale-x-100 -rotate-45 opacity-40"
+            delay={760}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain mix-blend-multiply"
+              src="/images/thi-cong-xay-dung/hero-shadows/bottom-left-corner.png"
+              alt=""
+              fill
+              sizes="130vw"
+              aria-hidden="true"
+            />
+          </Reveal>
+          {/* `title-diamond.png` — bên desktop nằm phía trên tiêu đề (góc phải
+              banner). Mobile không có tiêu đề ở cụm này nên đặt thẳng vào GÓC
+              PHẢI banner. Núm: `left`/`top`/`w`/`h`. */}
+          <Reveal
+            className="pointer-events-none absolute top-[36%] left-[64%] z-[2] h-[46%] w-[48%]"
+            delay={880}
+            duration={750}
+            from="fade"
+            aria-hidden="true"
+          >
+            <Image
+              className="object-contain object-top mix-blend-multiply [filter:brightness(.8)_contrast(1.45)]"
+              src="/images/thi-cong-xay-dung/hero-shadows/title-diamond.png"
+              alt=""
+              fill
+              sizes="46vw"
+              aria-hidden="true"
+            />
+          </Reveal>
 
-      <Reveal
-        className="pointer-events-none absolute top-[32%] right-[34%] w-[8%]"
-        delay={160}
-        from="fade"
-      >
-        <Image
-          className="h-auto w-full object-contain"
-          src="/images/thi-cong-xay-dung/dots-pattern.png"
-          alt=""
-          width={288}
-          height={207}
-          aria-hidden="true"
-        />
-      </Reveal>
+          {/* Viền sắc `#dedee1` ló ra ở cạnh trái mỗi hình — y hệt
+              `HERO_BACKDROPS` bên desktop: tấm kim cương cùng kích thước, dời
+              `-7.5%` KÍCH THƯỚC CHÍNH NÓ nên sliver tự scale theo mỗi hình.
+              Vẽ TRƯỚC 4 ảnh nên chỉ ló mép trái. */}
+          {mobileHeroDiamonds.map((diamond, index) => (
+            <Reveal
+              key={`edge-${diamond.key}`}
+              className="pointer-events-none absolute z-[2] aspect-square"
+              delay={80 + index * 90}
+              duration={650}
+              from="fade"
+              style={{
+                left: diamond.left,
+                top: diamond.top,
+                height: diamond.size,
+                transform: "translate(calc(-50% + -7.5%), -50%)",
+              }}
+              aria-hidden="true"
+            >
+              <div className="size-full rotate-45 rounded-[16%] bg-[#dedee1]" />
+            </Reveal>
+          ))}
 
-      <div className="absolute inset-0">
-        {mobileHeroDiamonds.map((diamond, index) => (
-          <DiamondPhotoFrame
-            key={diamond.key}
-            src={diamond.src}
-            alt={diamond.alt}
-            left={diamond.left}
-            top={diamond.top}
-            size={diamond.size}
-            zIndex={diamond.zIndex}
-            delay={160 + index * 160}
-          />
-        ))}
+          {mobileHeroDiamonds.map((diamond, index) => (
+            <DiamondPhotoFrame
+              key={diamond.key}
+              src={diamond.src}
+              alt={diamond.alt}
+              left={diamond.left}
+              top={diamond.top}
+              size={diamond.size}
+              zIndex={diamond.zIndex}
+              delay={160 + index * 160}
+            />
+          ))}
+        </div>
       </div>
 
-      {/* Section này bắt đầu ngay đỉnh trang (header 60px là `fixed`), nên mốc
-          `85px + 5vw` cho ra khoảng cách header -> tiêu đề bằng đúng trang xây
-          dựng trọn gói. Thay cho `top-32` (128px) cũ, tức bớt ~23px khoảng
-          trắng; con số này cũng khớp mockup (58/512 = 11,3vw dưới header). */}
-      <div className="absolute top-[calc(85px+5vw)] right-[3.5%] left-[7.3%] flex items-start gap-[3vw]">
+      {/* CHỮ XUỐNG DƯỚI: nối ngay sau cụm hình theo luồng thường. Trước đây khối
+          này `absolute top-[calc(85px+5vw)]`; nay bỏ absolute, canh bằng margin
+          — nội dung bên trong giữ nguyên. */}
+      <div className="mt-[12vw] mb-[9vw] mr-[3.5%] ml-[7.3%] flex items-start gap-[3vw]">
         <Reveal className="h-[20vw] shrink-0" from="fade">
           <span
             className="block h-full w-[0.55vw] rounded-full bg-brand"
@@ -191,7 +293,7 @@ export function ConstructionMobileProcess() {
               style={{ top: `${processNumberTops[index]}%` }}
             >
               <Reveal delay={base} from="zoom">
-                <span className="font-heading text-[clamp(2.45rem,10.2vw,4.8rem)] leading-none font-extrabold text-black">
+                <span className="font-heading text-[clamp(1.9rem,8.2vw,3.8rem)] leading-none font-extrabold text-black">
                   {step.number}
                 </span>
               </Reveal>
@@ -199,11 +301,11 @@ export function ConstructionMobileProcess() {
 
             {/* Tiêu đề: trượt từ trái sang phải và hiện dần */}
             <div
-              className="absolute left-[34.3%] w-[62%] -translate-y-1/2"
+              className="absolute left-[32.5%] w-[71%] -translate-y-1/2"
               style={{ top: `${processTitleTops[index]}%` }}
             >
               <Reveal delay={base + 90} from="left">
-                <h3 className="font-heading text-[2.65vw] leading-none font-extrabold whitespace-nowrap text-black">
+                <h3 className="font-heading text-[3.25vw] leading-none font-extrabold whitespace-nowrap text-black">
                   {processTitles[index]}
                 </h3>
               </Reveal>

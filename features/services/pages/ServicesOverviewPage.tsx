@@ -33,17 +33,26 @@ export function ServicesOverviewPage() {
           mobile xếp dọc theo luồng thường, không đụng tới. */}
       <section className={`${SERVICE_HERO_CLASS_NAME} [--hero-lift:3.5vw]`}>
         <Image
-          className="-z-30 object-cover"
+          className="-z-30 object-cover max-md:hidden"
           src="/images/services/hero-background.webp"
           alt=""
           fill
           priority
           sizes="100vw"
         />
-        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgb(255_255_255/.95)_0%,rgb(255_255_255/.78)_38%,rgb(255_255_255/.08)_68%)] max-md:bg-[linear-gradient(180deg,rgb(255_255_255/.96)_0%,rgb(255_255_255/.88)_55%,rgb(255_255_255/.18)_100%)]" />
+        <Image
+          className="hidden -z-30 object-cover max-md:block"
+          src="/images/services/bg-mobile-dichvu-default.png"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+        />
+        <div className="absolute inset-0 -z-20 bg-[linear-gradient(90deg,rgb(255_255_255/.95)_0%,rgb(255_255_255/.78)_38%,rgb(255_255_255/.08)_68%)] max-md:bg-[linear-gradient(180deg,rgb(255_255_255/.07)_0%,rgb(255_255_255/.7)_45%,rgb(255_255_255/.99)_100%)]" />
 
         {/* Màn nhỏ: bỏ kiểu "chữ + cụm ảnh chồng tuyệt đối trong khung cố định
-            chiều cao" (dễ đè lên nhau khi ước lượng chiều cao sai) — chuyển cụm
+            chiều cao" (dễ
+             đè lên nhau khi ước lượng chiều cao sai) — chuyển cụm
             ảnh sang `relative` (vẫn là mốc % cho 4 thẻ con bên trong, nhưng bản
             thân nó lại nằm trong luồng thường), nối ngay sau khối chữ bằng
             margin-top thay vì `bottom-0` tuyệt đối, nên không bao giờ đè lên
@@ -51,13 +60,33 @@ export function ServicesOverviewPage() {
             (64px) để né SiteHeader cao 60px trên mobile, nên chỉ cần thêm chút
             khoảng thở, không lặp lại toàn bộ chiều cao header lần nữa. */}
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
+          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] md:translate-y-[calc(var(--hero-lift)*-1)] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full max-md:translate-y-0">
+            {heroCards.map((card, index) => (
+              <Reveal
+                className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
+                delay={(heroCards.length - 1 - index) * 130}
+                from="right"
+                key={card.image}
+              >
+                <Image
+                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
+                  src={card.image}
+                  alt={card.alt}
+                  width={800}
+                  height={1501}
+                  sizes="280px"
+                  priority
+                />
+              </Reveal>
+            ))}
+          </div>
           <div className="relative z-10 flex h-full w-[36%] max-w-160 flex-col justify-center md:translate-y-[calc(var(--hero-lift)*-1)] lg:ml-[7.3%] lg:translate-y-[calc(3.5vw-var(--hero-lift))] max-md:h-auto max-md:w-full max-md:translate-y-0 max-md:justify-start max-md:pt-6">
             <Reveal>
               {/* Dưới md trước đây là `border-b-2`: dày 2px và nằm ở đáy hộp
                   inline-block (~6,5px dưới baseline) nên nhìn đậm và rời chữ.
                   Đổi sang cùng kiểu gạch chân như bản PC — 1px, nhưng offset 4px
                   thay vì 8px để sát chữ hơn. Giá trị md/lg giữ nguyên. */}
-              <p className="mb-4 inline-block text-base max-md:underline max-md:decoration-1 max-md:underline-offset-4 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
+              <p className="mb-4 inline-block text-base max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] max-md:underline max-md:decoration-1 max-md:underline-offset-4 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
                 {servicesOverviewSectionContent.hero.eyebrow}
               </p>
               {/* Dưới md: cỡ chữ 5,6vw cho ngang các trang dịch vụ con (5,9vw),
@@ -68,8 +97,10 @@ export function ServicesOverviewPage() {
                   ngắt dòng cũ của bản desktop. */}
               <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand max-md:text-[clamp(1.1rem,5.6vw,1.75rem)] lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
                 <span className="block lg:whitespace-nowrap">
-                  {servicesOverviewSectionContent.hero.title.split("\n")[0].replace(/\s+VÀ$/, "")}
-                  <span className="max-md:hidden">{" "}VÀ</span>
+                  {servicesOverviewSectionContent.hero.title
+                    .split("\n")[0]
+                    .replace(/\s+VÀ$/, "")}
+                  <span className="max-md:hidden"> VÀ</span>
                 </span>
 
                 <span className="block lg:whitespace-nowrap">
@@ -121,26 +152,6 @@ export function ServicesOverviewPage() {
               Dưới lg: cụm thẻ chuyển sang `relative`, xuống dòng bình thường
               ngay sau khối chữ (margin-top thay vì `bottom-0` tuyệt đối) nên
               không bao giờ chồng lên đoạn mô tả cho dù chữ dài ngắn ra sao. */}
-          <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] md:translate-y-[calc(var(--hero-lift)*-1)] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full max-md:translate-y-0">
-            {heroCards.map((card, index) => (
-              <Reveal
-                className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
-                delay={(heroCards.length - 1 - index) * 130}
-                from="right"
-                key={card.image}
-              >
-                <Image
-                  className="h-auto w-full transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
-                  src={card.image}
-                  alt={card.alt}
-                  width={800}
-                  height={1501}
-                  sizes="280px"
-                  priority
-                />
-              </Reveal>
-            ))}
-          </div>
         </div>
       </section>
 
