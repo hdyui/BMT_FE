@@ -10,7 +10,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetHeader,
   SheetTitle,
   SheetTrigger,
@@ -182,11 +181,10 @@ export function SiteHeader({
                 unoptimized
               />
             </SheetClose>
-            <SheetHeader className="border-b border-white/10">
-              <SheetTitle className="text-white">BMT DECOR</SheetTitle>
-              <SheetDescription className="text-white/60">
-                Điều hướng website
-              </SheetDescription>
+            <SheetHeader className="min-h-[60px] justify-center border-b border-white/10 px-4 py-0 pr-14">
+              <SheetTitle className="text-lg font-extrabold tracking-[0.015em] text-white">
+                BMT DECOR
+              </SheetTitle>
             </SheetHeader>
             <nav className="grid px-4">
               {mobileNavigation.map((item) => {

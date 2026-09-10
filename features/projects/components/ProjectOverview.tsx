@@ -96,7 +96,7 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
                   className="my-3 h-auto w-full object-fill"
                   aria-hidden="true"
                 />
-                <div className="grid gap-3 text-[clamp(15px,1.15vw,18px)] leading-[1.45] tracking-[-0.015em]">
+                <div className="grid gap-3 text-justify text-[clamp(15px,1.15vw,18px)] leading-[1.45] tracking-[-0.015em] [text-align-last:left] [text-justify:inter-character]">
                   {project.description.map((paragraph) => (
                     <p key={paragraph}>{paragraph}</p>
                   ))}
@@ -135,7 +135,7 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
             ))}
           </div>
           <Reveal delay={360} distance="long" duration={950} from="left">
-            <p className="mt-6 text-[clamp(15px,1.2vw,19px)] leading-[1.48] tracking-[-0.02em]">
+            <p className="mt-6 text-justify text-[clamp(15px,1.2vw,19px)] leading-[1.48] tracking-[-0.02em] [text-align-last:left] [text-justify:inter-character]">
               <ProjectRichText
                 text={project.surveyDescription}
                 emphasis={["BMT Decor"]}

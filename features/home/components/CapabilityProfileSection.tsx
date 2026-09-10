@@ -87,12 +87,14 @@ export function CapabilityProfileSection() {
           </Reveal>
 
           <Reveal className="mt-8 max-sm:mt-6" delay={360}>
-            <BmtCta
-              className="max-sm:min-h-10 max-sm:w-[158px] max-sm:text-[17px]"
-              href="/capability-profile"
-            >
-              XEM THÊM
-            </BmtCta>
+            <div className="max-sm:-translate-y-10">
+              <BmtCta
+                className="max-sm:min-h-10 max-sm:w-[158px] max-sm:text-[17px]"
+                href="/capability-profile"
+              >
+                XEM THÊM
+              </BmtCta>
+            </div>
           </Reveal>
         </div>
 

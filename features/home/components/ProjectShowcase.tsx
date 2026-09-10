@@ -95,13 +95,18 @@ export function ProjectShowcase() {
 
       const compactLayout = window.innerWidth < 640;
       const desktopLayout = window.innerWidth >= 1024;
+      const label = button.lastElementChild as HTMLElement | null;
 
       setCategoryIndicator({
         left: desktopLayout
           ? gridItem.offsetLeft + button.offsetLeft
           : gridItem.offsetLeft + button.offsetLeft + button.offsetWidth * 0.29,
         top: compactLayout
-          ? container.offsetHeight + 10
+          ? gridItem.offsetTop +
+            button.offsetTop +
+            (label?.offsetTop ?? button.offsetHeight) +
+            (label?.offsetHeight ?? 0) +
+            5
           : gridItem.offsetTop + button.offsetTop + button.offsetHeight,
         width: desktopLayout
           ? button.offsetWidth
