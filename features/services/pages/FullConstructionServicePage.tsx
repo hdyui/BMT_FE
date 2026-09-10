@@ -33,15 +33,14 @@ export function FullConstructionServicePage() {
       <SiteHeader mobileServiceMockup />
 
       <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+138.95vw)] max-md:!min-h-0 md:h-[55vw] md:min-h-0`}
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-auto max-md:!min-h-0 max-md:pt-[60px] md:h-[55vw] md:min-h-0`}
       >
         <MobileHeroArtwork variant="full-construction" />
 
-        <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
-          {/* `top` hạ 5,4% -> 3,6%: cộng phần chữ hoa nằm thấp hơn mép hộp
-              ~5px, mốc này đưa đỉnh chữ về 4,6% chiều cao banner, đúng bằng
-              mockup, bớt được ~10px khoảng trắng dưới header. */}
-          <div className="absolute top-[3.6%] left-[10.5%] w-[86%]">
+        {/* CHỮ XUỐNG DƯỚI: nối ngay sau artwork theo luồng thường (trước đây
+            `absolute inset-x-0 top-[85px]` + con `absolute top-[3.6%]`). */}
+        <div className="mt-[6vw] mb-[9vw] mr-[7%] ml-[10%] md:hidden">
+          <div>
             <Reveal>
               {/* Chặn dưới 1,35rem cũ không co theo bề ngang: ở 320px dòng 1
                   rộng 112% khung nên rớt dòng, còn ở 390-430px chỉ lấp 85-92%
@@ -206,11 +205,10 @@ export function FullConstructionServicePage() {
             </h2>
           </Reveal>
           <Reveal delay={140}>
-            {/* Mockup: đoạn này 5 dòng, giãn dòng chặt. 2,7vw cho ra đúng 5
-                dòng ở mọi bề ngang (text-sm 14px cũ ra 7 dòng) và trùng cỡ suy
-                từ bề rộng chữ trong mockup (2,69-2,70vw). Giãn dòng đo được
-                ~1,1-1,15; lấy 1,2 để dấu tiếng Việt không chạm nhau. */}
-            <p className="mx-auto mt-4 max-w-3xl text-sm leading-relaxed text-center max-md:text-[clamp(0.5rem,2.7vw,0.875rem)] max-md:leading-[1.2]">
+            {/* Chỉ MOBILE đồng bộ với section 02 trang thiết kế kiến trúc nội
+                thất (size + justify 2 lề, dòng cuối canh giữa). Desktop giữ
+                nguyên: text-center, text-sm. */}
+            <p className="mx-auto mt-4 max-w-3xl text-pretty text-center text-sm leading-relaxed max-md:text-justify max-md:[text-align-last:center] max-md:text-[0.82rem] max-md:leading-[1.3]">
               Dịch vụ <span className="font-normal md:font-bold">thiết kế thi công</span> và{" "}
               <span className="font-normal md:font-bold">xây dựng trọn gói</span> giúp chủ đầu
               tư triển khai công trình một cách đồng bộ, từ ý tưởng,

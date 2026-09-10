@@ -42,22 +42,9 @@ export function DesignServicePage() {
           khớp đúng tỉ lệ gốc và neo đáy (`bottom-0`) — phần dư ra thành
           khoảng trắng thật ở đỉnh cho khối chữ `pt-32`, không đè lên ảnh. */}
       <section
-        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-[calc(85px+140.16vw)] max-md:!min-h-0`}
+        className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-auto max-md:!min-h-0 max-md:pt-[60px]`}
       >
         <MobileHeroArtwork variant="design" />
-
-        {/* Ảnh Nền Banner */}
-        <Reveal className="absolute inset-0 -z-20 max-md:hidden" from="fade">
-          <Image
-            className="size-full object-cover"
-            src="/images/thiet-ke-kien-truc-noi-that/background-banner.png" // <-- URL ẢNH NỀN BANNER
-            alt=""
-            fill
-            sizes="100vw"
-            priority
-            aria-hidden="true"
-          />
-        </Reveal>
 
         {/* Bản vẽ wireframe nền trái. `object-contain` nên bề rộng thật của
             hình = 0.698 x chiều cao banner, KHÔNG phải w-[38%]. Kéo sang trái
@@ -100,9 +87,15 @@ export function DesignServicePage() {
         {/* `max-md:!pt-32` khớp khoảng cách header->tiêu đề chuẩn lấy từ
             RenovationMobileHero (~85px header + ~41px khoảng trắng riêng =
             ~128px), thay cho `pt-24` cũ (96px, chỉ chừa ~11px dưới header). */}
-        <div className="absolute inset-x-0 top-[85px] bottom-0 z-10 md:hidden">
+        {/* CHỮ XUỐNG DƯỚI: nối ngay sau artwork theo luồng thường. Trước đây cả
+            khối này `absolute inset-x-0 top-[85px]` với tiêu đề/vạch/mô tả định
+            vị bằng `top-[%]`; nay xếp dọc bình thường. Vạch accent là ảnh nên
+            đặt `absolute` bên trái, KHÔNG nằm trong flow — nếu bỏ nó vào flex
+            row thì bề rộng tiêu đề bị bóp còn ~82vw và dòng 1 "DỊCH VỤ THIẾT KẾ
+            KIẾN TRÚC" rớt dòng (dòng này cần ~90vw). */}
+        <div className="relative mt-[6vw] mb-[9vw] mr-[1%] ml-[5%] pl-[3.5vw] md:hidden">
           <Reveal
-            className="absolute top-[4.72vw] bottom-[75.5%] left-[6.55%] w-0.5"
+            className="absolute top-[0.5vw] bottom-[0.5vw] left-0 w-0.5"
             delay={90}
             from="fade"
           >
@@ -116,28 +109,22 @@ export function DesignServicePage() {
             />
           </Reveal>
 
-          {/* `top-[5vw]` = đúng mốc của trang xây dựng trọn gói (khối overlay ở
-              cả hai trang đều bắt đầu tại 85px, bên đó là 3,6% x 138,95vw =
-              5,0vw). `w-` chỉ là mốc ngắt dòng chứ không dời chữ (tiêu đề canh
-              trái, vạch và dòng mô tả nằm ở element riêng), nên nới 86% -> 89,5%
-              để dòng "DỊCH VỤ THIẾT KẾ KIẾN TRÚC" ở cỡ mới không bị rớt dòng. */}
-          <div className="absolute top-[5vw] left-[10.2%] w-[89.5%]">
-            <Reveal>
-              <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
-                DỊCH VỤ THIẾT KẾ KIẾN TRÚC
-                <br />&amp; NỘI THẤT CHUYÊN NGHIỆP
-              </h1>
-            </Reveal>
-          </div>
+          <Reveal>
+            <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
+              DỊCH VỤ THIẾT KẾ KIẾN TRÚC
+              <br />
+              &amp; NỘI THẤT CHUYÊN NGHIỆP
+            </h1>
+          </Reveal>
 
           <BuildingRule
-            className="absolute top-[14.5%] left-[10.2%] h-[4.2%] w-[40%] max-w-none [&_img]:object-contain [&_img]:object-right"
+            className="mt-2 h-5 w-[40%] max-w-none [&_img]:object-contain [&_img]:object-right"
             src="/images/services/rule-dark.png"
             delay={160}
           />
 
           <Reveal
-            className="absolute top-[22%] left-[10.2%] flex items-center gap-[0.2em] text-[clamp(0.55rem,2.75vw,0.68rem)]"
+            className="mt-2 flex items-center gap-[0.2em] text-[clamp(0.55rem,2.75vw,0.68rem)]"
             delay={280}
             from="left"
           >
@@ -149,7 +136,7 @@ export function DesignServicePage() {
               height={169}
               aria-hidden="true"
             />
-            <p className="whitespace-nowrap text-[clamp(0.55rem,2.75vw,0.68rem)] leading-relaxed">
+            <p className="text-[clamp(0.55rem,2.75vw,0.68rem)] leading-relaxed">
               Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
             </p>
           </Reveal>
@@ -185,7 +172,8 @@ export function DesignServicePage() {
               <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand max-md:text-[clamp(1.35rem,5.25vw,1.55rem)] sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
                 <span className="md:hidden">
                   DỊCH VỤ THIẾT KẾ KIẾN TRÚC
-                  <br />&amp; NỘI THẤT CHUYÊN NGHIỆP
+                  <br />
+                  &amp; NỘI THẤT CHUYÊN NGHIỆP
                 </span>
                 <span className="hidden md:inline">
                   DỊCH VỤ THIẾT KẾ KIẾN TRÚC&nbsp;&amp;
@@ -318,7 +306,9 @@ export function DesignServicePage() {
               <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
                 <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
                 <br />
-                <span className="font-extrabold">THEO TỪNG LOẠI HÌNH CÔNG TRÌNH</span>
+                <span className="font-extrabold">
+                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
+                </span>
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">

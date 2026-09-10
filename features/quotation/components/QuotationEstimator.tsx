@@ -235,7 +235,7 @@ export function QuotationEstimator() {
               >
                 {stepCopy[step][0]}
               </h2>
-              <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[26rem] text-[0.8125rem] leading-[1.35] md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
+              <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[26rem] text-[0.72rem] leading-[1.35] text-balance md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
                 {stepCopy[step][1]}
               </p>
               <HeadingRule />
@@ -300,16 +300,13 @@ export function QuotationEstimator() {
 
           {step === 4 && (
             <div>
+              {/* Viền cam vẽ bằng CSS (`border-2 border-[#ef7b30]`) nên bo tròn
+                  đều tuyệt đối. Trước đây khung cam là ảnh `decor-23.jpg`
+                  (5019x385, tỉ lệ 13:1) bị `object-fill` kéo vào ô ~7:1 → hai
+                  đầu bo tròn của khung bị ép méo, nhìn như lõm vào. */}
               <div
-                className={`group/result relative grid h-[3.25rem] w-full place-items-center overflow-hidden rounded-full border border-transparent bg-[#f2f2f4] transition-[border-color,background-color] duration-[250ms] hover:border-[#ef7b30] hover:bg-[#ececee] md:h-19 ${styles.animResult}`}
+                className={`group/result relative grid h-[3.25rem] w-full place-items-center overflow-hidden rounded-full border-2 border-[#ef7b30] bg-[#f2f2f4] transition-[background-color] duration-[250ms] hover:bg-[#ececee] md:h-19 ${styles.animResult}`}
               >
-                <Image
-                  className="z-0 object-fill"
-                  src="/images/bao-gia/decor-23.jpg"
-                  alt=""
-                  fill
-                  sizes="900px"
-                />
                 <strong className="relative z-[1] text-[clamp(1.3125rem,6.3vw,1.875rem)] leading-none md:text-[clamp(1.75rem,3.2vw,2.6875rem)]">
                   {formatNumber(estimate.low)}đ - {formatNumber(estimate.high)}đ
                 </strong>
@@ -342,7 +339,7 @@ export function QuotationEstimator() {
 
 function HeadingRule() {
   return (
-    <span className="mx-auto mt-1.5 mb-4 block h-[1.125rem] w-[10.5rem] max-w-full -translate-y-[10px] md:mt-2 md:mb-[1.375rem] md:h-[1.4375rem] md:w-62.5 md:translate-y-0">
+    <span className="mx-auto mt-1.5 mb-4 block h-[1.125rem] w-[10.5rem] max-w-full -translate-y-[3px] md:mt-2 md:mb-[1.375rem] md:h-[1.4375rem] md:w-62.5 md:translate-y-0">
       <Image
         className={`size-full object-fill ${styles.animRule}`}
         src="/images/bao-gia/decor-27.jpg"
@@ -379,7 +376,7 @@ function StepButton({
 
   return (
     <button
-      className={`relative flex h-12 items-center gap-2 overflow-hidden rounded-full border-0 text-[#231f20] transition-[color,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] focus-visible:-translate-y-[5px] focus-visible:scale-[1.02] active:translate-y-[2px] active:scale-[0.99] md:h-[3.625rem] md:min-w-[10.3125rem] md:justify-center md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "min-w-[8.5rem] justify-center bg-[#231f20] px-3 text-white" : "min-w-0 justify-start bg-white px-0"} ${styles.stepButton}`}
+      className={`relative flex h-12 items-center gap-2 overflow-hidden rounded-full border-0 text-[#231f20] transition-[color,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] focus-visible:-translate-y-[5px] focus-visible:scale-[1.02] active:translate-y-[2px] active:scale-[0.99] md:h-[3.625rem] md:min-w-[10.3125rem] md:justify-center md:gap-2.5 md:bg-white md:px-[1.375rem] md:text-[#231f20] md:hover:text-white md:focus-visible:text-white ${icon === "right" ? "min-w-[8.5rem] justify-center bg-white px-3" : "min-w-0 justify-start bg-white px-0"} ${styles.stepButton}`}
       type="button"
       onClick={onClick}
     >
@@ -388,8 +385,11 @@ function StepButton({
         {label}
       </span>
       {icon === "right" && arrow}
+      {/* Lớp nền tối chỉ là hiệu ứng hover cho desktop; ẩn trên mobile vì
+          `:hover`/`:focus-visible` khi chạm làm nút đen (chữ không đổi sang
+          trắng ở mobile). */}
       <Image
-        className={`z-[1] object-fill opacity-0 transition-opacity duration-[250ms] ${styles.buttonHoverFill}`}
+        className={`z-[1] hidden object-fill opacity-0 transition-opacity duration-[250ms] md:block ${styles.buttonHoverFill}`}
         src="/images/bao-gia/decor-31.jpg"
         alt=""
         fill

@@ -11,12 +11,12 @@ export function ProfileDocumentSection() {
 
   return (
     <section className="relative bg-[#fdfdfd] pt-8 pb-6 sm:pt-10 lg:pt-10 lg:pb-8">
-      {/* Tiêu đề + vạch logo: mobile thu nhỏ về ~60% bề ngang khung (khớp
-          mockup) bằng padding ngang riêng; desktop giữ nguyên khung
-          min(1510px, 100%-2rem) như cũ. */}
-      <div className="mx-auto w-[min(1510px,calc(100%-2rem))] px-[18%] lg:px-0">
+      {/* Tiêu đề + vạch logo: mobile thu nhỏ khung bằng padding ngang riêng
+          (trước là px-[18%] nhưng làm "NGHIỆP" của tiêu đề rớt dòng, nay
+          px-[6%]); desktop giữ nguyên khung min(1510px, 100%-2rem) như cũ. */}
+      <div className="mx-auto w-[min(1510px,calc(100%-2rem))] px-[6%] lg:px-0">
         <motion.h2
-          className="text-center text-[1.4rem] leading-[1.08] font-extrabold tracking-[-0.025em] text-[#242122] uppercase lg:text-[clamp(2.25rem,2.7vw,3.25rem)]"
+          className="text-center text-[clamp(1.1rem,5.5vw,1.6rem)] leading-[1.08] font-extrabold tracking-[-0.025em] whitespace-nowrap text-[#242122] uppercase lg:whitespace-normal lg:text-[clamp(2.25rem,2.7vw,3.25rem)]"
           initial={reduceMotion ? false : { opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.7 }}

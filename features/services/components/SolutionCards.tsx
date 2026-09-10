@@ -7,6 +7,9 @@ import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 export type SolutionCard = {
   number: string;
   titlePrefix: string;
+  /** Phần đuôi của dòng tiền tố được tô cam (vd "SHOWROOM &"), vẫn nằm cùng
+   *  dòng 1 với `titlePrefix`. */
+  titlePrefixAccent?: string;
   titleCategory: string;
   tagline: string;
   description: string;
@@ -71,14 +74,25 @@ export function SolutionCards({
                 from={imageFirst ? "right" : "left"}
               >
                 <div className="flex min-w-0 items-start gap-[4%] md:gap-4">
-                  <span className="shrink-0 text-[clamp(2.95rem,13vw,4.35rem)] leading-[0.9] font-extrabold text-[#b8babc] md:text-6xl md:leading-none md:text-neutral-400 lg:text-[4.5rem]">
+                  {/* Cỡ số hạ 13vw -> 10.5vw (mobile) cho chiều cao con số ~ bằng
+                      2 dòng tiêu đề cộng lại. Nhánh md/lg giữ nguyên. */}
+                  <span className="shrink-0 text-[clamp(2.4rem,10.5vw,3.5rem)] leading-[0.9] font-extrabold text-[#b8babc] md:text-6xl md:leading-none md:text-neutral-400 lg:text-[4.5rem]">
                     {card.number}.
                   </span>
                   {/* Tiền tố và nhóm công trình không tự xuống dòng (mỗi dòng
                       luôn 1 hàng như mockup); cỡ chữ co theo bề rộng màn hình
-                      để dòng dài nhất vẫn vừa khít, chỉ ngắt dòng ở vị trí <br />. */}
-                  <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(0.875rem,4.15vw,1.45rem)] leading-[1.3] font-extrabold uppercase md:mt-1 md:pt-0 md:text-2xl md:leading-tight md:whitespace-nowrap lg:text-[1.75rem]">
+                      để dòng dài nhất vẫn vừa khít, chỉ ngắt dòng ở vị trí <br />.
+                      Hệ số vw hạ 4,15 -> 3,7 để dòng dài nhất "SHOWROOM & THẨM MỸ
+                      VIỆN" (card 03, whitespace-nowrap) không tràn khỏi khung
+                      trên mobile. Nhánh md/lg giữ nguyên. */}
+                  <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(0.8rem,3.7vw,1.45rem)] leading-[1.3] font-extrabold uppercase md:mt-1 md:pt-0 md:text-2xl md:leading-tight md:whitespace-nowrap lg:text-[1.75rem]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
+                    {card.titlePrefixAccent ? (
+                      // Chỉ tô cam ở MOBILE; desktop giữ nguyên màu chữ như cũ.
+                      <span className="text-brand md:text-charcoal">
+                        {card.titlePrefixAccent}
+                      </span>
+                    ) : null}
                     <br />
                     <span className="text-brand whitespace-nowrap">
                       {card.titleCategory}

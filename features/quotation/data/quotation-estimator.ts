@@ -28,7 +28,7 @@ export const quotationStepCopy = [
   ["DIỆN TÍCH BAO NHIÊU?", "Điền diện tích sàn ước tính"],
   [
     "NGÂN SÁCH CỦA ANH CHỊ?",
-    "Một khoảng ngân sách thực tế giúp chúng tôi gợi ý gói phù hợp",
+    "Một khoảng ngân sách thực tế giúp chúng tôi gợi ý gói phù hợp",
   ],
   ["CHỌN MỨC DỊCH VỤ", "Có thể đổi bất cứ lúc nào, chỉ ảnh hưởng đến ước tính"],
 ] as const;

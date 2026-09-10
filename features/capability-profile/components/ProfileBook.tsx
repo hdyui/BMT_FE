@@ -4,6 +4,7 @@ import Image from "next/image";
 import {
   useCallback,
   useEffect,
+  useLayoutEffect,
   useRef,
   useState,
   type PointerEvent as ReactPointerEvent,
@@ -300,7 +301,12 @@ function MobileTurningFlap({
   const stripRefs = useRef<(HTMLDivElement | null)[]>([]);
   const shadeRefs = useRef<(HTMLSpanElement | null)[]>([]);
 
-  useEffect(() => {
+  // useLayoutEffect (không phải useEffect): áp góc cong ban đầu cho các dải giấy
+  // TRƯỚC khi trình duyệt vẽ khung hình đầu tiên. Nếu để useEffect, frame đầu
+  // các dải chưa có inline transform -> chuỗi `left-full` lồng nhau văng hết
+  // sang phải, lộ trang KẾ phía sau, rồi mới bật vào chỗ -> giật một cái mỗi
+  // lần bắt đầu lật.
+  useLayoutEffect(() => {
     function draw(value: number) {
       const t = dir === 1 ? value : 1 - value;
       const { base, step } = bend(t, MOBILE_MAX_BEND);
@@ -400,7 +406,11 @@ function MobileProfileBook() {
             setIndex((current) => Math.min(order.length - 1, current + dir));
           }
           setTurn(null);
-          progress.set(0);
+          // KHÔNG `progress.set(0)` ở đây: `setTurn(null)` chỉ LÊN LỊCH unmount,
+          // còn dòng này chạy ngay -> `draw(0)` kịp bắn lên tờ giấy CHƯA kịp
+          // biến mất, làm nó bật phẳng về trang cũ 1 frame trước khi unmount ->
+          // giật ở cuối mỗi lần lật. `progress` đã được reset ở đầu
+          // `flip()` / `beginDrag()` rồi.
         },
       });
     },
