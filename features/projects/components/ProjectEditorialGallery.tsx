@@ -59,7 +59,7 @@ export function ProjectEditorialGallery({ project }: { project: ProjectDetail })
             <h3 className="mt-4 text-center text-[clamp(17px,1.5vw,22px)] font-bold uppercase">
               {project.drawingCaption}
             </h3>
-            <p className="mx-auto mt-4 max-w-[1180px] text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em]">
+            <p className="mx-auto mt-4 max-w-[1180px] text-justify text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em] [text-align-last:left] [text-justify:inter-character]">
               <ProjectRichText
                 text={project.solutionDescription}
                 emphasis={["Wabi Sabi"]}
@@ -108,7 +108,7 @@ export function ProjectEditorialGallery({ project }: { project: ProjectDetail })
             ))}
           </div>
           <Reveal delay={420} distance="long" duration={950} from="left">
-            <p className="mt-6 text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em]">
+            <p className="mt-6 text-justify text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em] [text-align-last:left] [text-justify:inter-character]">
               <ProjectRichText
                 text={project.galleryDescription}
                 emphasis={[project.style]}

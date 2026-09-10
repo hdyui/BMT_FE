@@ -12,10 +12,12 @@ import {
 export function JourneyTimeline() {
   const sectionRef = useRef<HTMLElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
+  const mobileMilestoneRefs = useRef<Array<HTMLLIElement | null>>([]);
   const dragRef = useRef({ startX: 0, startScroll: 0, isDragging: false });
   const [isVisible, setIsVisible] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
   const [isAutoPaused, setIsAutoPaused] = useState(false);
+  const [highestActivatedIndex, setHighestActivatedIndex] = useState(-1);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -35,6 +37,49 @@ export function JourneyTimeline() {
     return () => {
       observer.disconnect();
       if (revealTimer) window.clearTimeout(revealTimer);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!window.matchMedia("(max-width: 639px)").matches) return;
+
+    let animationFrame = 0;
+
+    const updateActivatedMilestones = () => {
+      animationFrame = 0;
+      // Mobile uses one fixed trigger line: a milestone only turns orange after
+      // it has travelled through the lower 30% of the viewport. This avoids
+      // several milestones activating together just because they are visible.
+      const triggerY = window.innerHeight * 0.7;
+      let furthestPassedIndex = -1;
+
+      mobileMilestoneRefs.current.forEach((element, index) => {
+        if (!element) return;
+        if (element.getBoundingClientRect().top <= triggerY) {
+          furthestPassedIndex = index;
+        }
+      });
+
+      if (furthestPassedIndex >= 0) {
+        setHighestActivatedIndex((current) =>
+          Math.max(current, furthestPassedIndex),
+        );
+      }
+    };
+
+    const scheduleUpdate = () => {
+      if (animationFrame) return;
+      animationFrame = window.requestAnimationFrame(updateActivatedMilestones);
+    };
+
+    scheduleUpdate();
+    window.addEventListener("scroll", scheduleUpdate, { passive: true });
+    window.addEventListener("resize", scheduleUpdate);
+
+    return () => {
+      if (animationFrame) window.cancelAnimationFrame(animationFrame);
+      window.removeEventListener("scroll", scheduleUpdate);
+      window.removeEventListener("resize", scheduleUpdate);
     };
   }, []);
 
@@ -133,6 +178,7 @@ export function JourneyTimeline() {
             {milestones.map((milestone, index) => {
               const isLeft = index % 2 === 0;
               const isFirst = index === 0;
+              const isActive = index <= highestActivatedIndex;
               return (
                 <li
                   className={`relative grid min-h-[170px] border-t-2 border-dashed border-neutral-300 px-4 transition-[opacity,translate] duration-700 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
@@ -141,6 +187,9 @@ export function JourneyTimeline() {
                       : "translate-y-10 opacity-0"
                   }`}
                   style={{ transitionDelay: `${180 + index * 90}ms` }}
+                  ref={(element) => {
+                    mobileMilestoneRefs.current[index] = element;
+                  }}
                   key={milestone.year}
                 >
                   <span
@@ -151,7 +200,9 @@ export function JourneyTimeline() {
                   />
                   {isFirst ? (
                     <span
-                      className="absolute left-0 top-0 z-10 grid size-5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full bg-brand"
+                      className={`absolute left-0 top-0 z-10 grid size-5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full transition-colors duration-500 ${
+                        isActive ? "bg-brand" : "bg-neutral-400"
+                      }`}
                       aria-hidden="true"
                     >
                       <span className="size-2 rounded-full bg-charcoal" />
@@ -159,13 +210,21 @@ export function JourneyTimeline() {
                   ) : (
                     <>
                       <span
-                        className="absolute left-0 top-0 z-10 size-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full bg-charcoal"
+                        className={`absolute left-0 top-0 z-10 grid size-5 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full transition-colors duration-500 ${
+                          isActive ? "bg-brand" : "bg-neutral-400"
+                        }`}
                         aria-hidden="true"
-                      />
+                      >
+                        <span className="size-2 rounded-full bg-charcoal" />
+                      </span>
                       <span
-                        className="absolute right-0 top-0 z-10 size-2.5 translate-x-1/2 -translate-y-1/2 rounded-full bg-charcoal"
+                        className={`absolute right-0 top-0 z-10 grid size-5 translate-x-1/2 -translate-y-1/2 place-items-center rounded-full transition-colors duration-500 ${
+                          isActive ? "bg-brand" : "bg-neutral-400"
+                        }`}
                         aria-hidden="true"
-                      />
+                      >
+                        <span className="size-2 rounded-full bg-charcoal" />
+                      </span>
                     </>
                   )}
 
@@ -177,9 +236,9 @@ export function JourneyTimeline() {
                     }`}
                   >
                     <span
-                      className={`flex self-stretch items-center justify-center text-[27px] font-extrabold leading-none tabular-nums ${
+                      className={`flex self-stretch items-center justify-center text-[27px] font-extrabold leading-none tabular-nums transition-colors duration-500 ${
                         isLeft ? "col-start-1" : "col-start-2"
-                      } ${isFirst ? "text-brand" : "text-neutral-400"}`}
+                      } ${isActive ? "text-brand" : "text-neutral-400"}`}
                     >
                       <span className="[writing-mode:vertical-rl] rotate-180">
                         {milestone.year}
@@ -193,7 +252,9 @@ export function JourneyTimeline() {
                         }`}
                       >
                         <Image
-                          className="object-cover"
+                          className={`object-cover transition-[filter] duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                            isActive ? "grayscale-0" : "grayscale"
+                          }`}
                           src={milestone.image}
                           alt=""
                           fill

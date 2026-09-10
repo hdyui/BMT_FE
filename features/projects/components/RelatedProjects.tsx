@@ -108,8 +108,7 @@ export function RelatedProjects() {
         </ProjectSectionHeading>
 
         <BuildingRule
-          className="mx-auto mt-4 max-w-[350px] text-brand"
-          fullWidth
+          className="mx-auto mt-4 max-w-72 text-brand"
           delay={160}
         />
 

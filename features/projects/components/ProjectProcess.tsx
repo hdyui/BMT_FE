@@ -33,7 +33,7 @@ export function ProjectProcess({ project }: { project: ProjectDetail }) {
           ))}
         </div>
         <Reveal delay={320} distance="long" duration={950} from="left">
-          <p className="mt-7 text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em]">
+          <p className="mt-7 text-justify text-[clamp(15px,1.2vw,19px)] leading-[1.5] tracking-[-0.02em] [text-align-last:left] [text-justify:inter-character]">
             <ProjectRichText text={project.processDescription} />
           </p>
         </Reveal>

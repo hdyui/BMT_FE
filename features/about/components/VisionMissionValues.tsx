@@ -66,12 +66,14 @@ function CoreValuesList({
     <div
       className={
         mobile
-          ? "mt-4 flex h-[320px] flex-col sm:hidden"
+          ? "mt-4 flex flex-col sm:hidden"
           : "mt-7 hidden h-[400px] space-y-2 sm:block"
       }
     >
       {coreValues.map(({ title, description }, index) => {
         const isActive = activeValue === index;
+        const mobileVisualIndex = index === 3 ? 4 : index === 4 ? 3 : index;
+        const revealIndex = mobile ? mobileVisualIndex : index;
         const mobileOrder =
           mobile && index === 3
             ? "order-5"
@@ -86,7 +88,7 @@ function CoreValuesList({
                 ? "translate-x-0 opacity-100"
                 : "translate-x-20 opacity-0"
             }`}
-            style={{ transitionDelay: `${620 + index * 120}ms` }}
+            style={{ transitionDelay: `${620 + revealIndex * 120}ms` }}
             key={title}
           >
             <button

@@ -21,8 +21,23 @@ export function AboutHero() {
 
   return (
     <section className="group relative isolate min-h-[100svh] overflow-hidden bg-white lg:min-h-[784px]">
+      <div className="absolute inset-x-0 top-0 -z-20 h-[90%] overflow-hidden sm:hidden">
+        <Image
+          className={`object-cover object-center transition-[opacity,scale] delay-100 duration-[1600ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:delay-150 group-hover:duration-700 motion-reduce:opacity-100 motion-reduce:scale-100 ${
+            isImageReady
+              ? "scale-100 opacity-100 group-hover:scale-[1.02]"
+              : "scale-105 opacity-0"
+          }`}
+          src={`${imageRoot}/hero-interior-mobile.png`}
+          alt="Không gian nội thất phòng ăn hiện đại do BMT Decor thiết kế"
+          fill
+          priority
+          sizes="100vw"
+          onLoad={handleImageLoad}
+        />
+      </div>
       <Image
-        className={`-z-20 object-cover object-[62%_center] transition-[opacity,scale] delay-100 duration-[1600ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:delay-150 group-hover:duration-700 motion-reduce:opacity-100 motion-reduce:scale-100 max-sm:object-[64%_center] ${
+        className={`-z-20 hidden object-cover object-[62%_center] transition-[opacity,scale] delay-100 duration-[1600ms] ease-[cubic-bezier(.22,1,.36,1)] group-hover:delay-150 group-hover:duration-700 motion-reduce:opacity-100 motion-reduce:scale-100 sm:block ${
           isImageReady
             ? "scale-100 opacity-100 group-hover:scale-[1.02]"
             : "scale-105 opacity-0"

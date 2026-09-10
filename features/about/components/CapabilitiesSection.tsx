@@ -11,6 +11,9 @@ export function CapabilitiesSection() {
   const [hoveredCapability, setHoveredCapability] = useState<number | null>(
     null,
   );
+  const [activeMobileCapability, setActiveMobileCapability] = useState<
+    number | null
+  >(null);
 
   useEffect(() => {
     const section = sectionRef.current;
@@ -88,46 +91,99 @@ export function CapabilitiesSection() {
                 mobileTitle,
                 description,
                 normalImage,
+                hoverImage,
+                symbolClass,
+                hoverSymbolClass,
                 mobileSymbolClass,
+                extractWhiteArtwork,
+                hoverComposite,
               },
               index,
-            ) => (
-              <article
-                className={`grid grid-cols-[clamp(5.5rem,23vw,6rem)_minmax(0,1fr)] items-start gap-x-[10px] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
-                  isVisible
-                    ? "translate-y-0 opacity-100"
-                    : "translate-y-16 opacity-0"
-                }`}
-                style={{ transitionDelay: `${520 + index * 150}ms` }}
-                key={`mobile-${number}`}
-              >
-                <div className="relative col-start-1 row-start-1 size-[clamp(5.5rem,23vw,6rem)] self-center justify-self-center overflow-hidden rounded-full bg-white">
-                  {index === 0 ? (
-                    <Image
-                      className="object-contain"
-                      src={normalImage}
-                      alt=""
-                      fill
-                      sizes="(max-width: 417px) 23vw, 96px"
-                    />
-                  ) : (
-                    <>
+            ) => {
+              const isActive = activeMobileCapability === index;
+
+              return (
+                <article
+                  className={`grid grid-cols-[clamp(5.5rem,23vw,6rem)_minmax(0,1fr)] items-start gap-x-[10px] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 ${
+                    isVisible
+                      ? "translate-y-0 opacity-100"
+                      : "translate-y-16 opacity-0"
+                  }`}
+                  style={{ transitionDelay: `${520 + index * 150}ms` }}
+                  onClick={() => setActiveMobileCapability(index)}
+                  onKeyDown={(event) => {
+                    if (event.key !== "Enter" && event.key !== " ") return;
+                    event.preventDefault();
+                    setActiveMobileCapability(index);
+                  }}
+                  role="button"
+                  tabIndex={0}
+                  aria-pressed={isActive}
+                  key={`mobile-${number}`}
+                >
+                <div
+                  className={`relative col-start-1 row-start-1 size-[clamp(5.5rem,23vw,6rem)] self-center justify-self-center overflow-hidden rounded-full bg-white transition-transform duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                    isActive ? "scale-[1.04]" : "scale-100"
+                  }`}
+                >
+                  <Image
+                    className={`object-contain transition-opacity duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                      isActive ? "opacity-0" : "opacity-100"
+                    }`}
+                    src="/images/about/source/capability-ring.png"
+                    alt=""
+                    fill
+                    sizes="(max-width: 417px) 23vw, 96px"
+                  />
+                  <Image
+                    className={`object-contain transition-opacity duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                      mobileSymbolClass ?? symbolClass ?? ""
+                    } ${isActive ? "opacity-0" : "opacity-100"}`}
+                    style={
+                      extractWhiteArtwork
+                        ? { filter: "url(#turnkey-line-orange)" }
+                        : undefined
+                    }
+                    src={normalImage}
+                    alt=""
+                    fill
+                    sizes="(max-width: 417px) 48px, 52px"
+                  />
+
+                  <div
+                    className={`absolute inset-0 overflow-hidden rounded-full transition-opacity duration-500 ease-[cubic-bezier(.22,1,.36,1)] ${
+                      isActive ? "opacity-100" : "opacity-0"
+                    }`}
+                    aria-hidden="true"
+                  >
+                    {hoverComposite ? (
                       <Image
-                        className="object-contain"
-                        src="/images/about/source/capability-ring.png"
+                        className={`object-contain ${hoverSymbolClass ?? symbolClass ?? ""}`}
+                        src={hoverImage}
                         alt=""
                         fill
                         sizes="(max-width: 417px) 23vw, 96px"
                       />
-                      <Image
-                        className={`object-contain ${mobileSymbolClass ?? ""}`}
-                        src={normalImage}
-                        alt=""
-                        fill
-                        sizes="(max-width: 417px) 48px, 52px"
-                      />
-                    </>
-                  )}
+                    ) : (
+                      <>
+                        <Image
+                          className="object-contain"
+                          src="/images/about/source/capability-turnkey.png"
+                          alt=""
+                          fill
+                          sizes="(max-width: 417px) 23vw, 96px"
+                        />
+                        <span className="absolute inset-[6px] rounded-full bg-brand" />
+                        <Image
+                          className={`object-contain ${mobileSymbolClass ?? symbolClass ?? ""}`}
+                          src={hoverImage}
+                          alt=""
+                          fill
+                          sizes="(max-width: 417px) 48px, 52px"
+                        />
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 <div className="col-start-2 row-start-1 min-w-0">
@@ -165,8 +221,9 @@ export function CapabilitiesSection() {
                     />
                   </svg>
                 )}
-              </article>
-            ),
+                </article>
+              );
+            },
           )}
         </div>
 

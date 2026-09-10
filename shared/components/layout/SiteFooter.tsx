@@ -202,8 +202,8 @@ export function SiteFooter({
       id="footer"
     >
       <div className="px-[clamp(16px,4.2vw,24px)] py-8 sm:hidden">
-        <Reveal className="flex justify-center">
-          <BrandLogo className="w-[160px] mix-blend-multiply" large />
+        <Reveal className="flex justify-start px-[clamp(8px,2.2vw,12px)]">
+          <BrandLogo className="w-[100px] mix-blend-multiply" large />
         </Reveal>
 
         <Reveal
