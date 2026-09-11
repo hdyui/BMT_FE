@@ -336,7 +336,7 @@ export function DesignServicePage() {
 
       <section
         id="design-process"
-        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 rounded-br-[48px] bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] max-md:pt-8 max-md:pb-[calc(2.5rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
+        className="relative z-10 -mb-[2.342945vw] scroll-mt-16 bg-[#f4f4f5] pt-16 pb-[calc(4rem+2.342945vw)] max-md:pt-8 max-md:pb-[calc(2.5rem+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(4rem+2.57vw)]"
       >
         {/* Dưới md: đỉnh section 64px -> 32px và khoảng cách vạch cam -> khối 6
             bước 56px -> 24px, cho khớp mức 48px/28-32px của section cuối ở các

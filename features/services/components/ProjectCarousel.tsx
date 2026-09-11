@@ -76,6 +76,10 @@ export function ProjectCarousel({
   const dragStartX = useRef<number | null>(null);
   const wrapSettleFrameRef = useRef<number | null>(null);
   const wrapResetFrameRef = useRef<number | null>(null);
+  /* Khóa trong lúc track đang trượt: nếu cho phép bấm/lướt chồng lên nhau,
+     active có thể vọt ra ngoài dải bản sao giữa trước khi handleTransitionEnd
+     kịp kéo nó về — đó là lúc carousel bị giật một nhịp. */
+  const isAnimatingRef = useRef(false);
   const logicalActive = ((active % count) + count) % count;
 
   useEffect(() => {
@@ -95,6 +99,8 @@ export function ProjectCarousel({
   }, [count, mobileInitialIndex]);
 
   const move = useCallback((direction: number) => {
+    if (direction === 0 || isAnimatingRef.current) return;
+    isAnimatingRef.current = true;
     if (wrapSettleFrameRef.current !== null) {
       cancelAnimationFrame(wrapSettleFrameRef.current);
       wrapSettleFrameRef.current = null;
@@ -106,6 +112,15 @@ export function ProjectCarousel({
     setAnimate(true);
     setActive((current) => current + direction);
   }, []);
+
+  /* Nhảy thẳng tới một dự án theo đường ngắn nhất (có thể lùi) thay vì luôn
+     tiến, để bấm chấm số 1 từ chấm số 3 chỉ lướt 1 nhịp thay vì 2. */
+  const goTo = (targetLogical: number) => {
+    let diff = targetLogical - logicalActive;
+    if (diff > count / 2) diff -= count;
+    else if (diff < -count / 2) diff += count;
+    move(diff);
+  };
 
   /* Căn track trực tiếp trong layout phase để cú đổi từ bản sao ngoài về bộ giữa
      không tạo thêm một render lệch vị trí, vốn nhìn giống như carousel reload. */
@@ -163,7 +178,10 @@ export function ProjectCarousel({
     ) {
       return;
     }
-    if (active >= count && active < count * 2) return;
+    if (active >= count && active < count * 2) {
+      isAnimatingRef.current = false;
+      return;
+    }
 
     /* Đợi trạng thái cuối của card được vẽ trọn một frame rồi mới teleport.
        Nhờ vậy thẻ phụ không bị chốt scale sớm hơn một nhịp ở điểm nối vòng. */
@@ -176,6 +194,7 @@ export function ProjectCarousel({
         });
         wrapSettleFrameRef.current = null;
         wrapResetFrameRef.current = null;
+        isAnimatingRef.current = false;
       });
     });
   };
@@ -424,21 +443,22 @@ export function ProjectCarousel({
               <span aria-hidden="true">›</span>
             )}
           </button>
-          <div
-            className="mt-3 flex items-center justify-center gap-3 md:hidden"
-            aria-hidden="true"
-          >
-            {Array.from({ length: 4 }, (_, index) => (
-              <span
+          <div className="mt-3 flex items-center justify-center gap-3 md:hidden">
+            {Array.from({ length: count }, (_, index) => (
+              <button
                 className={cn(
-                  "size-5 rounded-full border-2",
+                  "size-5 rounded-full border-2 transition-transform active:scale-90",
                   mobileInitialIndex !== undefined &&
                     "max-md:!size-[clamp(1.1rem,4.2vw,1.65rem)]",
                   index === logicalActive
                     ? "border-brand bg-brand shadow-[inset_0_0_0_3px_white]"
                     : "border-charcoal bg-white",
                 )}
+                onClick={() => goTo(index)}
+                aria-label={`Xem dự án ${index + 1}`}
+                aria-current={index === logicalActive}
                 key={index}
+                type="button"
               />
             ))}
           </div>
