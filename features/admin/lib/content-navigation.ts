@@ -15,6 +15,13 @@ export function getResourceBreadcrumb(config: AdminResourceConfig) {
 
   const items = [{ label: config.moduleLabel, href: config.moduleHref }];
 
+  if (config.key.startsWith("home/featured-projects/")) {
+    items.push({
+      label: "Dự án tiêu biểu",
+      href: "/admin/home/featured-projects",
+    });
+  }
+
   if (config.module === "services") {
     const parent = servicePageBySlug[config.path.split("/")[0]];
     if (parent) items.push(parent);

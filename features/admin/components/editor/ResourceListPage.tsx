@@ -73,6 +73,7 @@ function ResourceListPageContent({
   const [deleteTarget, setDeleteTarget] = useState<AdminCrudRecord | null>(null);
   const [deleting, setDeleting] = useState(false);
   const imageManager = config.listMode === "image-manager";
+  const mutableCollection = config.collectionMode === "dynamic";
   const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
 
   useEffect(() => {
@@ -120,8 +121,10 @@ function ResourceListPageContent({
   }, [config.key, config.previewField, updateRecord]);
 
   const columns = useMemo<ColumnDef<AdminCrudRecord>[]>(() => {
-    const definitions: ColumnDef<AdminCrudRecord>[] = [
-      {
+    const definitions: ColumnDef<AdminCrudRecord>[] = [];
+
+    if (mutableCollection) {
+      definitions.push({
         id: "select",
         size: 44,
         enableSorting: false,
@@ -142,8 +145,10 @@ function ResourceListPageContent({
             aria-label={`Chọn ${String(row.original[config.titleField] ?? config.singular)}`}
           />
         ),
-      },
-      {
+      });
+    }
+
+    definitions.push({
         id: "index",
         accessorFn: (item) => records.findIndex((record) => record.id === item.id) + 1,
         size: 80,
@@ -156,8 +161,7 @@ function ResourceListPageContent({
             {String(row.getValue<number>("index")).padStart(2, "0")}
           </span>
         ),
-      },
-    ];
+      });
 
     if (config.previewField) {
       definitions.push({
@@ -258,16 +262,18 @@ function ResourceListPageContent({
                 <FilePenLine /> Chỉnh sửa
               </Button>
             )}
-            <Button variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => setDeleteTarget(item)}>
-              <Trash2 /> Xóa
-            </Button>
+            {mutableCollection ? (
+              <Button variant="ghost" size="sm" className="text-destructive hover:bg-destructive/10" onClick={() => setDeleteTarget(item)}>
+                <Trash2 /> Xóa
+              </Button>
+            ) : null}
           </div>
         );
       },
     });
 
     return definitions;
-  }, [baseHref, config, imageManager, records, replaceImage]);
+  }, [baseHref, config, imageManager, mutableCollection, records, replaceImage]);
 
   // TanStack Table intentionally returns mutable table methods.
   // eslint-disable-next-line react-hooks/incompatible-library
@@ -293,7 +299,7 @@ function ResourceListPageContent({
           title={config.title}
           actions={
             <div className="flex flex-wrap items-center gap-2">
-              {!imageManager ? (
+              {!imageManager && mutableCollection ? (
                 <Button nativeButton={false} render={<Link href={`${baseHref}/new`} />}><Plus /> Thêm {config.singular.toLocaleLowerCase("vi")}</Button>
               ) : null}
             </div>
@@ -308,9 +314,9 @@ function ResourceListPageContent({
           emptyState={
             <ListMessage
               title={debouncedQuery ? "Không tìm thấy nội dung" : `Chưa có ${config.singular.toLocaleLowerCase("vi")}`}
-              description={debouncedQuery ? "Thử từ khóa khác hoặc xóa bộ lọc hiện tại." : "Thêm nội dung đầu tiên cho danh sách này."}
-              actionLabel={debouncedQuery ? "Xóa tìm kiếm" : `Thêm ${config.singular.toLocaleLowerCase("vi")}`}
-              href={debouncedQuery ? undefined : `${baseHref}/new`}
+              description={debouncedQuery ? "Thử từ khóa khác hoặc xóa bộ lọc hiện tại." : mutableCollection ? "Thêm nội dung đầu tiên cho danh sách này." : "Danh sách cố định hiện chưa có dữ liệu để chỉnh sửa."}
+              actionLabel={debouncedQuery ? "Xóa tìm kiếm" : mutableCollection ? `Thêm ${config.singular.toLocaleLowerCase("vi")}` : undefined}
+              href={debouncedQuery || !mutableCollection ? undefined : `${baseHref}/new`}
               onAction={debouncedQuery ? () => setQuery("") : undefined}
             />
           }
@@ -379,18 +385,18 @@ function ReplaceImageButton({ label, onSelect }: { label: string; onSelect: (dat
   );
 }
 
-function ListMessage({ title, description, actionLabel, href, onAction }: { title: string; description: string; actionLabel: string; href?: string; onAction?: () => void }) {
+function ListMessage({ title, description, actionLabel, href, onAction }: { title: string; description: string; actionLabel?: string; href?: string; onAction?: () => void }) {
   return (
     <div className="grid min-h-72 place-items-center p-6 text-center">
       <div>
         <span className="mx-auto grid size-12 place-items-center rounded-xl bg-muted text-brand"><FolderOpen className="size-5" /></span>
         <h3 className="mt-4 font-semibold">{title}</h3>
         <p className="mx-auto mt-2 max-w-sm text-sm leading-relaxed text-muted-foreground">{description}</p>
-        {href ? (
+        {href && actionLabel ? (
           <Button className="mt-4" nativeButton={false} render={<Link href={href} />}><Plus /> {actionLabel}</Button>
-        ) : (
+        ) : onAction && actionLabel ? (
           <Button className="mt-4" onClick={onAction}><Search /> {actionLabel}</Button>
-        )}
+        ) : null}
       </div>
     </div>
   );

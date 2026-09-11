@@ -361,51 +361,53 @@ const homeResources: AdminResourceConfig[] = [
     path: "featured-projects",
     title: "Dự án tiêu biểu trên Trang chủ",
     singular: "Dự án tiêu biểu",
-    description: "Quản lý trọn section Dự án tiêu biểu gồm tiêu đề, mô tả giới thiệu và các dự án, hình ảnh, liên kết được hiển thị trên Trang chủ.",
+    description: "Quản lý phần giới thiệu và chọn một trong 4 nhóm dự án tiêu biểu để cập nhật nội dung hiển thị trên Trang chủ.",
     priority: "P1",
-    kind: "collection",
+    kind: "singleton",
     titleField: "title",
-    previewField: "image",
-    orderField: "order",
     companionResourceKey: "home/projects-section-content",
-    // Desktop chia thành hai cột dọc nhưng vẫn giữ cảm giác danh sách phẳng:
-    // mỗi dự án thu gọn, ảnh ở trái và metadata ở phải, không quay lại kiểu box
-    // lồng box trước đây. Tablet/mobile tự về một cột.
-    editorLayout: {
-      recordsPerRow: 2,
-      recordStyle: "flat",
-      mediaSide: "left",
-      mediaWidth: "third",
-      mediaAltPlacement: "media",
-    },
-    sections: [
-      section("content", "Nội dung dự án", [
-        text("title", "Tiêu đề", { required: true, span: 12 }),
-        text("categoryLabel", "Nhãn danh mục", { required: true, span: 6 }),
-        text("area", "Diện tích", { span: 6 }),
-        text("styleText", "Phong cách", { span: 6 }),
-        number("year", "Năm", { min: 2000, span: 6 }),
-      ]),
-      section("media", "Hình ảnh", [
-        image("image", "Ảnh dự án", { altKey: "imageAlt", ratio: "16:9" }),
-      ]),
-      section("display", "Thứ tự", [orderField]),
-    ],
-    initialRecords: homeProjectCategories.flatMap((category, categoryIndex) =>
-      category.projects.slice(0, 1).map((project) =>
+    sections: [],
+    initialRecords: [record("home-featured-projects-navigation", { title: "Dự án tiêu biểu" })],
+  }),
+  ...homeProjectCategories.map((category) =>
+    resource({
+      module: "home",
+      path: `featured-projects/${category.slug}`,
+      title: category.label,
+      singular: "Dự án",
+      description: `Quản lý 8 dự án tiêu biểu thuộc nhóm ${category.label}. Chọn một dự án trong bảng để chỉnh sửa nội dung chi tiết.`,
+      priority: "P1",
+      kind: "collection",
+      collectionMode: "fixed",
+      collectionView: "table",
+      titleField: "title",
+      previewField: "image",
+      orderField: "order",
+      sections: [
+        section("content", "Nội dung dự án", [
+          text("title", "Tiêu đề", { required: true, span: 6 }),
+          text("area", "Diện tích", { span: 6 }),
+          text("styleText", "Phong cách", { span: 6 }),
+          number("year", "Năm", { min: 2000, span: 6 }),
+        ]),
+        section("media", "Hình ảnh", [
+          image("image", "Ảnh dự án", { altKey: "imageAlt", ratio: "16:9" }),
+        ]),
+        section("display", "Thứ tự", [orderField]),
+      ],
+      initialRecords: category.projects.map((project, projectIndex) =>
         record(`home-project-${project.id}`, {
           title: project.title,
-          categoryLabel: category.label,
           area: project.area,
           styleText: project.style,
           year: project.year,
           image: project.image,
           imageAlt: project.title,
-          order: categoryIndex + 1,
+          order: projectIndex + 1,
         }),
       ),
-    ),
-  }),
+    }),
+  ),
   resource({
     module: "home",
     path: "featured-services",
@@ -2348,6 +2350,19 @@ export const adminResourceRegistry: Record<string, AdminResourceConfig> =
   );
 
 export const adminResourceGroups: Record<string, AdminResourceGroupConfig> = {
+  "home/featured-projects": {
+    key: "home/featured-projects",
+    title: "Dự án tiêu biểu trên Trang chủ",
+    description: "Chọn nhóm dự án cần chỉnh sửa. Mỗi nhóm có 8 dự án và được quản lý bằng bảng danh sách.",
+    companionResourceKey: "home/projects-section-content",
+    items: homeProjectCategories.map((category) => ({
+      title: category.label,
+      description: `Quản lý các dự án tiêu biểu thuộc nhóm ${category.label}.`,
+      priority: "P1",
+      count: `${category.projects.length} dự án`,
+      href: `/admin/home/featured-projects/${category.slug}`,
+    })),
+  },
   "services/overview": {
     key: "services/overview",
     title: "Tổng quan Dịch vụ",
