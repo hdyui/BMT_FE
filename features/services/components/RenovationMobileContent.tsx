@@ -273,7 +273,7 @@ function RenovationMobileSolutions() {
           >
             <div className="relative aspect-[1.255] w-full overflow-hidden">
               <Image
-                className="object-cover object-center transition-transform duration-500 ease-out group-active/card:scale-105"
+                className="object-cover object-center"
                 src={card.image}
                 alt={card.titleCategory}
                 fill

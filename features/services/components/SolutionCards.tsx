@@ -58,7 +58,7 @@ export function SolutionCards({
                 className="relative aspect-[1.255] w-full overflow-hidden md:aspect-auto md:min-h-56 lg:min-h-full"
               >
                 <Image
-                  className="object-cover object-top md:object-center transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
+                  className="object-cover object-top md:object-center transition-transform duration-500 ease-out md:group-hover/card:scale-105 md:group-active/card:scale-105"
                   src={card.image}
                   alt={card.titleCategory}
                   fill

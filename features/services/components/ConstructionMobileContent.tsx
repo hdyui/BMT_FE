@@ -62,12 +62,17 @@ export function ConstructionMobileHero() {
           {/* Bóng nền — 5 lớp Y HỆT desktop (`ConstructionServicePage`), toạ độ
               được chiếu từ bounding-box cụm diamond desktop sang bounding-box
               cụm diamond mobile (khung này). `z-[1]` (dưới diamonds) nên chỉ
-              hiện ở khoảng trống. Fade-in lần lượt, delay tăng dần. */}
-          <Reveal
+              hiện ở khoảng trống.
+
+              KHÔNG bọc Reveal/fade-in: 5 lớp `mix-blend-multiply` chồng nhau
+              cùng animate opacity ngay lúc trang vừa tải rất tốn để trình
+              duyệt vẽ lại mỗi frame (blend mode không thể chỉ nhờ compositor
+              như opacity thường), chiếm luôn main thread đúng lúc người dùng
+              vuốt lần đầu — vuốt đó bị nuốt, phải vuốt lần 2 mới cuộn được.
+              Hiện tĩnh ngay từ đầu (không mất thẩm mỹ vì đây chỉ là bóng nền
+              mờ phía sau, không phải nội dung chính cần gây chú ý). */}
+          <div
             className="pointer-events-none absolute top-[44%] left-[-15%] z-[1] h-[56%] w-[140%]"
-            delay={200}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -78,12 +83,9 @@ export function ConstructionMobileHero() {
               sizes="130vw"
               aria-hidden="true"
             />
-          </Reveal>
-          <Reveal
+          </div>
+          <div
             className="pointer-events-none absolute top-[50%] left-[-15%] z-[1] h-[56%] w-[140%]"
-            delay={340}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -94,12 +96,9 @@ export function ConstructionMobileHero() {
               sizes="130vw"
               aria-hidden="true"
             />
-          </Reveal>
-          <Reveal
+          </div>
+          <div
             className="pointer-events-none absolute top-[58%] left-[-8%] z-[1] h-[43%] w-[111%] -rotate-90"
-            delay={480}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -110,12 +109,9 @@ export function ConstructionMobileHero() {
               sizes="110vw"
               aria-hidden="true"
             />
-          </Reveal>
-          <Reveal
+          </div>
+          <div
             className="pointer-events-none absolute top-[57%] left-[-44%] z-[1] h-[53%] w-[126%] rotate-90 opacity-40"
-            delay={620}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -126,12 +122,9 @@ export function ConstructionMobileHero() {
               sizes="120vw"
               aria-hidden="true"
             />
-          </Reveal>
-          <Reveal
+          </div>
+          <div
             className="pointer-events-none absolute top-[48%] left-[-20%] z-[1] h-[47%] w-[133%] -scale-x-100 -rotate-45 opacity-40"
-            delay={760}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -142,15 +135,14 @@ export function ConstructionMobileHero() {
               sizes="130vw"
               aria-hidden="true"
             />
-          </Reveal>
+          </div>
           {/* `title-diamond.png` — bên desktop nằm phía trên tiêu đề (góc phải
               banner). Mobile không có tiêu đề ở cụm này nên đặt thẳng vào GÓC
               PHẢI banner. Núm: `left`/`top`/`w`/`h`. */}
-          <Reveal
+          {/* Cũng bỏ Reveal fade-in như 5 lớp bóng trên — lý do tương tự
+              (mix-blend-multiply animate opacity gây giật lần vuốt đầu). */}
+          <div
             className="pointer-events-none absolute top-[36%] left-[64%] z-[2] h-[46%] w-[48%]"
-            delay={880}
-            duration={750}
-            from="fade"
             aria-hidden="true"
           >
             <Image
@@ -161,7 +153,7 @@ export function ConstructionMobileHero() {
               sizes="46vw"
               aria-hidden="true"
             />
-          </Reveal>
+          </div>
 
           {/* Viền sắc `#dedee1` ló ra ở cạnh trái mỗi hình — y hệt
               `HERO_BACKDROPS` bên desktop: tấm kim cương cùng kích thước, dời

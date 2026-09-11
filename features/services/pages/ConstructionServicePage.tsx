@@ -233,7 +233,7 @@ const DIAMOND_BY_KEY = Object.fromEntries(
 
 export function ConstructionServicePage() {
   return (
-    <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-hidden">
+    <div className="min-h-screen bg-white text-charcoal ">
       <SiteHeader />
 
       <ConstructionMobileHero />
