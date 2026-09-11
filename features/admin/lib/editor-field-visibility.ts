@@ -53,6 +53,11 @@ const HOME_STYLE_EDITOR_KEYS = [
  * năng lực) dùng chung bố cục này để toàn bộ admin đồng bộ.
  */
 export function isHomeStyleEditor(config: AdminResourceConfig) {
+  // Dự án tiêu biểu trên Trang chủ dùng bảng để chọn từng bản ghi rồi mới mở
+  // trang chi tiết. Ở trang chi tiết cần giữ lưới 2 cột của các field ngắn,
+  // thay vì luật chung của module `home` ép toàn bộ field thành một cột dọc.
+  if (config.key.startsWith("home/featured-projects/")) return false;
+
   return (
     HOME_STYLE_EDITOR_MODULES.includes(config.module) ||
     HOME_STYLE_EDITOR_KEYS.includes(config.key) ||
