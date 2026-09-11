@@ -86,7 +86,23 @@ export function ProcessStepsGrid({
               </div>
 
               <Reveal
-                className="absolute top-[55%] left-[43%] h-0.5 w-[12%] bg-[radial-gradient(circle,#242122_0_1px,transparent_1.5px)] bg-[length:0.5625rem_0.125rem] bg-repeat-x"
+                className="absolute top-[55%] h-0.5 bg-[radial-gradient(circle,#242122_0_1px,transparent_1.5px)] bg-[length:0.5625rem_0.125rem] bg-repeat-x"
+                style={{
+                  /* Dải chấm phải khít đúng khe hở thật giữa 2 card: mép phải
+                     card trái dừng ở 93% cột trái (bg-span có `right-[7%]`
+                     bên dưới), mép trái card phải bắt đầu ngay từ 0% cột phải
+                     (`left-0`). Cột co giãn theo %, nhưng khe `gap-x-8` giữa
+                     2 cột luôn CỐ ĐỊNH 32px — nếu tính bề rộng dải chấm bằng
+                     % thuần của cả hàng (bản cũ w-[12%]) thì màn càng rộng
+                     (iPhone 16 Pro Max...) khe hở càng co lại tương đối so
+                     với cột, khiến dải chấm tràn lấn vào card bên phải (ô
+                     2, 4, 6). Suy ra đúng từ hình học lưới 2 cột, W = bề
+                     rộng cả hàng:
+                       mép trái = 0.93 × cột trái = 0.465×(W−32px) = 46.5% − 14.88px
+                       bề rộng  = 0.07 × cột trái + 32px = 3.5% + 30.88px */
+                  left: "calc(46.5% - 14.88px)",
+                  width: "calc(3.5% + 30.88px)",
+                }}
                 delay={rowStart * 90 + 300}
                 from="fade"
                 aria-hidden="true"

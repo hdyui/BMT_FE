@@ -101,7 +101,7 @@ export function MobileHeroArtwork({ variant }: MobileHeroArtworkProps) {
             style={{ clipPath: clip.path }}
           >
             <Image
-              className="object-fill transition-transform duration-500 ease-out group-hover/frame:scale-105 group-active/frame:scale-105 motion-reduce:scale-100 motion-reduce:transition-none"
+              className="object-fill"
               src={preset.src}
               alt={clip.alt}
               fill
