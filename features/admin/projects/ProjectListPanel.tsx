@@ -59,6 +59,7 @@ function createEmptyCard(order: number): AdminProjectCard {
     thumbnail: "/images/projects/project-01.png",
     imageAlt: "",
     category: "Nhà ở",
+    highlight: false,
     href: "/projects/nha-pho-2-tang-quan-9",
     status: "draft",
     order,

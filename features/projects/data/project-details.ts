@@ -25,6 +25,7 @@ export type ProjectDetail = {
   processDescription: string;
   ctaDescription: string;
   heroImage: ProjectImage;
+  wordmarkImage: ProjectImage;
   survey: ProjectImage[];
   drawing: ProjectImage;
   renders: ProjectImage[];
@@ -69,6 +70,12 @@ export const projects: Record<string, ProjectDetail> = {
       alt: "Mặt tiền hoàn thiện của Mộc Miên House về đêm",
       width: 2560,
       height: 2500,
+    },
+    wordmarkImage: {
+      src: `${detailRoot}/moc-mien-wordmark.png`,
+      alt: "Mộc Miên House",
+      width: 2075,
+      height: 491,
     },
     survey: [
       {

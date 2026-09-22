@@ -79,7 +79,7 @@ export const adminPageMeta: Record<
   },
   "/admin/news": {
     title: "Tin tức",
-    description: "Quản lý tin nổi bật và danh sách tin",
+    description: "Quản lý danh sách tin và đánh dấu tin nổi bật",
   },
   "/admin/recruitment": {
     title: "Tuyển dụng",

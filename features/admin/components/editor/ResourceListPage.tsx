@@ -31,6 +31,8 @@ import { useDebounce } from "@/shared/hooks/use-debounce";
 import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import type { AdminCrudRecord, AdminResourceConfig } from "@/features/admin/lib/types/crud";
 
+const MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY = 8;
+
 export function ResourceListPage({
   config,
   companionConfig,
@@ -208,15 +210,153 @@ function ResourceListPageContent({
         const title = imageManager
           ? `${config.itemLabel ?? "Ảnh"} ${sourceIndex + 1}`
           : String(row.original[config.titleField] ?? config.singular);
+        const editHref = `${baseHref}/${row.original.id}`;
         return imageManager ? (
           <span className="font-medium">{title}</span>
         ) : (
-          <Link href={`${baseHref}/${row.original.id}`} className="font-medium hover:text-brand hover:underline hover:underline-offset-4">
+          <Link href={editHref} className="font-medium hover:text-brand hover:underline hover:underline-offset-4">
             {title}
           </Link>
         );
       },
     });
+
+    if (config.key === "projects/list") {
+      definitions.push({
+        id: "category",
+        accessorFn: (item) => String(item.category ?? ""),
+        size: 190,
+        enableSorting: true,
+        enableHiding: true,
+        meta: { label: "Danh mục" },
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Danh mục" />
+        ),
+        cell: ({ row }) => {
+          const category = String(row.original.category ?? "");
+          return category ? (
+            <Badge variant="outline" className="font-medium">
+              {category}
+            </Badge>
+          ) : (
+            <span className="text-xs text-muted-foreground">Chưa phân loại</span>
+          );
+        },
+      });
+
+      definitions.push({
+        id: "highlight",
+        accessorFn: (item) => Boolean(item.highlight),
+        size: 130,
+        enableSorting: true,
+        enableHiding: true,
+        meta: { label: "Dự án tiêu biểu" },
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Tiêu biểu" />
+        ),
+        cell: ({ row }) => {
+          const item = row.original;
+          const highlighted = Boolean(item.highlight);
+          return (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={highlighted}
+                onCheckedChange={async (value) => {
+                  const nextHighlight = Boolean(value);
+
+                  if (nextHighlight && !highlighted) {
+                    const category = String(item.category ?? "");
+                    const highlightedInCategory = records.filter(
+                      (record) =>
+                        record.id !== item.id &&
+                        String(record.category ?? "") === category &&
+                        Boolean(record.highlight),
+                    ).length;
+
+                    if (
+                      highlightedInCategory >=
+                      MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY
+                    ) {
+                      toast.error(
+                        `Danh mục "${category}" đã đủ ${MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY} dự án tiêu biểu`,
+                        {
+                          description:
+                            "Bỏ đánh dấu một dự án tiêu biểu hiện tại trước khi chọn dự án khác.",
+                        },
+                      );
+                      return;
+                    }
+                  }
+
+                  await updateRecord(config.key, item.id, {
+                    ...item,
+                    highlight: nextHighlight,
+                  });
+                  toast.success(
+                    nextHighlight
+                      ? "Đã đánh dấu dự án tiêu biểu"
+                      : "Đã bỏ đánh dấu dự án tiêu biểu",
+                  );
+                }}
+                aria-label={
+                  highlighted
+                    ? "Bỏ đánh dấu dự án tiêu biểu"
+                    : "Đánh dấu dự án tiêu biểu"
+                }
+              />
+              <span className="text-xs text-muted-foreground">
+                {highlighted ? "Có" : "Không"}
+              </span>
+            </div>
+          );
+        },
+      });
+    }
+
+    if (config.key === "news/list") {
+      definitions.push({
+        id: "featured",
+        accessorFn: (item) => Boolean(item.featured),
+        size: 130,
+        enableSorting: true,
+        enableHiding: true,
+        meta: { label: "Tin nổi bật" },
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Tin nổi bật" />
+        ),
+        cell: ({ row }) => {
+          const item = row.original;
+          const featured = Boolean(item.featured);
+          return (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={featured}
+                onCheckedChange={async (value) => {
+                  const nextFeatured = Boolean(value);
+                  await updateRecord(config.key, item.id, {
+                    ...item,
+                    featured: nextFeatured,
+                  });
+                  toast.success(
+                    nextFeatured
+                      ? "Đã đánh dấu tin nổi bật"
+                      : "Đã bỏ đánh dấu tin nổi bật",
+                  );
+                }}
+                aria-label={
+                  featured
+                    ? "Bỏ đánh dấu tin nổi bật"
+                    : "Đánh dấu tin nổi bật"
+                }
+              />
+              <span className="text-xs text-muted-foreground">
+                {featured ? "Có" : "Không"}
+              </span>
+            </div>
+          );
+        },
+      });
+    }
 
     if (config.enabledField) {
       definitions.push({
@@ -273,7 +413,15 @@ function ResourceListPageContent({
     });
 
     return definitions;
-  }, [baseHref, config, imageManager, mutableCollection, records, replaceImage]);
+  }, [
+    baseHref,
+    config,
+    imageManager,
+    mutableCollection,
+    records,
+    replaceImage,
+    updateRecord,
+  ]);
 
   // TanStack Table intentionally returns mutable table methods.
   // eslint-disable-next-line react-hooks/incompatible-library

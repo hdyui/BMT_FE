@@ -42,7 +42,6 @@ const HOME_STYLE_EDITOR_MODULES = [
 
 const HOME_STYLE_EDITOR_KEYS = [
   "settings/branding",
-  "settings/navigation",
   "settings/partners",
   "settings/footer",
 ];
