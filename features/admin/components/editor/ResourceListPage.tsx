@@ -32,6 +32,8 @@ import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import type { AdminCrudRecord, AdminResourceConfig } from "@/features/admin/lib/types/crud";
 
 const MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY = 8;
+const MAX_HOME_HIGHLIGHTED_NEWS = 4;
+const MAX_FEATURED_NEWS = 5;
 
 export function ResourceListPage({
   config,
@@ -333,6 +335,26 @@ function ResourceListPageContent({
                 checked={featured}
                 onCheckedChange={async (value) => {
                   const nextFeatured = Boolean(value);
+
+                  if (nextFeatured && !featured) {
+                    const featuredCount = records.filter(
+                      (record) =>
+                        record.id !== item.id &&
+                        Boolean(record.featured),
+                    ).length;
+
+                    if (featuredCount >= MAX_FEATURED_NEWS) {
+                      toast.error(
+                        `Chỉ được chọn tối đa ${MAX_FEATURED_NEWS} tin nổi bật`,
+                        {
+                          description:
+                            "Bỏ đánh dấu một tin nổi bật hiện tại trước khi chọn tin khác.",
+                        },
+                      );
+                      return;
+                    }
+                  }
+
                   await updateRecord(config.key, item.id, {
                     ...item,
                     featured: nextFeatured,
@@ -351,6 +373,70 @@ function ResourceListPageContent({
               />
               <span className="text-xs text-muted-foreground">
                 {featured ? "Có" : "Không"}
+              </span>
+            </div>
+          );
+        },
+      });
+
+      definitions.push({
+        id: "highlightHome",
+        accessorFn: (item) => Boolean(item.highlightHome),
+        size: 150,
+        enableSorting: true,
+        enableHiding: true,
+        meta: { label: "Trang chủ" },
+        header: ({ column }) => (
+          <DataTableColumnHeader column={column} title="Trang chủ" />
+        ),
+        cell: ({ row }) => {
+          const item = row.original;
+          const highlighted = Boolean(item.highlightHome);
+
+          return (
+            <div className="flex items-center gap-2">
+              <Checkbox
+                checked={highlighted}
+                onCheckedChange={async (value) => {
+                  const nextHighlight = Boolean(value);
+
+                  if (nextHighlight && !highlighted) {
+                    const highlightedCount = records.filter(
+                      (record) =>
+                        record.id !== item.id &&
+                        Boolean(record.highlightHome),
+                    ).length;
+
+                    if (highlightedCount >= MAX_HOME_HIGHLIGHTED_NEWS) {
+                      toast.error(
+                        `Trang chủ chỉ được chọn tối đa ${MAX_HOME_HIGHLIGHTED_NEWS} tin`,
+                        {
+                          description:
+                            "Bỏ chọn một tin đang hiển thị trên Trang chủ trước khi chọn tin khác.",
+                        },
+                      );
+                      return;
+                    }
+                  }
+
+                  await updateRecord(config.key, item.id, {
+                    ...item,
+                    highlightHome: nextHighlight,
+                  });
+                  toast.success(
+                    nextHighlight
+                      ? "Đã thêm tin vào Trang chủ"
+                      : "Đã bỏ tin khỏi Trang chủ",
+                  );
+                }}
+                aria-label={
+                  highlighted
+                    ? "Bỏ tin khỏi Trang chủ"
+                    : "Hiển thị tin trên Trang chủ"
+                }
+              />
+              <span className="text-xs text-muted-foreground">
+                {highlighted ? "Có" : "Không"}
               </span>
             </div>
           );

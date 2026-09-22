@@ -9,6 +9,7 @@ export interface NewsArticle {
   href: string;
   body: string;
   featured: boolean;
+  highlightHome: boolean;
 }
 
 const desktopImage = "/images/news/article-model.jpg";
@@ -33,6 +34,7 @@ const featuredArticles: NewsArticle[] = featuredCopy.map(([title, excerpt], inde
   href: `/news#tin-noi-bat-${index + 1}`,
   body: `<p>${excerpt}</p>`,
   featured: true,
+  highlightHome: index < 4,
 }));
 
 const articleTitles = [
@@ -66,6 +68,7 @@ const regularArticles: NewsArticle[] = articleTitles.map((title, index) => ({
   href: `/news#bai-viet-${index + 1}`,
   body: `<p>${defaultExcerpt}</p>`,
   featured: false,
+  highlightHome: false,
 }));
 
 export const articles: NewsArticle[] = [...featuredArticles, ...regularArticles];
@@ -73,3 +76,7 @@ export const articles: NewsArticle[] = [...featuredArticles, ...regularArticles]
 export const featuredNews: NewsArticle[] = articles.filter(
   (article) => article.featured,
 );
+
+export const homeHighlightedNews: NewsArticle[] = articles
+  .filter((article) => article.highlightHome)
+  .slice(0, 4);

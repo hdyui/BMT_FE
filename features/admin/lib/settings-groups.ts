@@ -27,7 +27,7 @@ export const adminSettingsGroups: AdminSettingsGroup[] = [
   },
   {
     title: "Cấu hình Footer",
-    description: "Logo, 4 dịch vụ, liên hệ, chi nhánh & nhà xưởng và ảnh fanpage cuối trang.",
+    description: "Logo, 4 dịch vụ, liên hệ, chi nhánh & nhà xưởng, mạng xã hội và ảnh fanpage cuối trang.",
     resourceKey: "settings/footer",
     href: "/admin/settings/footer",
   },
