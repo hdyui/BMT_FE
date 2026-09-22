@@ -563,6 +563,7 @@ function createEmptyRecord(config: AdminResourceConfig, order: number) {
 
   if (config.key === "news/list") {
     draft.featured = false;
+    draft.highlightHome = false;
   }
 
   return draft;

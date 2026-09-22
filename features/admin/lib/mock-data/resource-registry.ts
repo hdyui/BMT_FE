@@ -7,7 +7,6 @@ import {
 import { careerJobs } from "@/features/careers/data/jobs";
 import {
   homeMobileServiceLabels,
-  homeNews,
   homeProjectCategories,
   homeServiceDetails,
   homeStats,
@@ -180,6 +179,10 @@ const FOOTER_SERVICE_EDITABLE_KEYS = new Set([
   "service3Href",
   "service4Label",
   "service4Href",
+  "facebookUrl",
+  "tiktokUrl",
+  "instagramUrl",
+  "linkedinUrl",
 ]);
 
 const BUTTON_TEXT_FIELD_KEY_PATTERN = /(?:cta|submit|back|next)(?:label|text)$/i;
@@ -340,7 +343,7 @@ const orderField = number("order", "Thứ tự", { min: 1, required: true });
 
 const defaultScopedContactForm = {
   title: "LIÊN HỆ TƯ VẤN",
-  description: "Chia sẻ nhu cầu để đội ngũ BMT Decor tư vấn giải pháp phù hợp.",
+  description: "",
   nameLabel: "Tên khách hàng",
   namePlaceholder: "Tên khách hàng...",
   phoneLabel: "Số điện thoại",
@@ -363,15 +366,14 @@ function scopedContactFormResource(
     path,
     title: "Biểu mẫu liên hệ",
     singular: `Biểu mẫu liên hệ trang ${pageLabel}`,
-    description: `Biểu mẫu liên hệ riêng của trang ${pageLabel}. Chỉ chỉnh tiêu đề, placeholder và thông báo thành công; label, nội dung cố định và hình ảnh không cho thay đổi.`,
+    description: `Biểu mẫu liên hệ riêng của trang ${pageLabel}. Có thể chỉnh tiêu đề, tiêu đề phụ và thông báo thành công; label, placeholder, nội dung cố định và hình ảnh không cho thay đổi.`,
     priority: "P1",
     kind: "singleton",
     titleField: "title",
     sections: [
       section("content", "Nội dung được phép chỉnh", [
         text("title", "Tiêu đề", { required: true, span: 12 }),
-        text("namePlaceholder", "Placeholder ô Họ tên", { span: 6 }),
-        text("phonePlaceholder", "Placeholder ô Điện thoại", { span: 6 }),
+        textarea("description", "Tiêu đề phụ", { span: 12 }),
         text("submitLabel", "Chữ trên nút gửi", { span: 4 }),
         textarea("successMessage", "Thông báo thành công", { span: 8 }),
       ]),
@@ -571,39 +573,6 @@ const homeResources: AdminResourceConfig[] = [
     ),
   }),
   resource({
-    module: "home",
-    path: "featured-news",
-    title: "Tin nổi bật trên Trang chủ",
-    singular: "Tin nổi bật",
-    description: "Quản lý trọn section Tin nổi bật gồm tiêu đề section, nội dung tin chính, danh sách tin và hình ảnh hiển thị trên Trang chủ.",
-    priority: "P2",
-    kind: "collection",
-    titleField: "title",
-    previewField: "image",
-    orderField: "order",
-    companionResourceKey: "home/news-section-content",
-    editorLayout: { mediaSide: "left", mediaWidth: "third", mediaPreview: "large" },
-    sections: [
-      section("content", "Nội dung", [
-        text("title", "Tiêu đề", { required: true }),
-        textarea("description", "Mô tả"),
-        siteLink("href", "Liên kết", { required: true }),
-      ]),
-      section("media", "Hình ảnh", [image("image", "Ảnh", { altKey: "imageAlt" })]),
-      section("display", "Thứ tự", [orderField]),
-    ],
-    initialRecords: homeNews.map((item, index) =>
-      record(`home-news-${index + 1}`, {
-        title: item.title,
-        description: item.copy,
-        image: item.image,
-        imageAlt: item.title,
-        href: "/news",
-        order: index + 1,
-      }),
-    ),
-  }),
-  resource({
     module: "settings",
     path: "partners",
     title: "Đối tác dùng chung",
@@ -737,28 +706,6 @@ const homeResources: AdminResourceConfig[] = [
       oneBookImage: "/images/home/portfolio-book.png",
       threeBooksImage: "/images/home/portfolio-set-orange.png",
       portfolioAlt: "Hồ sơ năng lực BMT Decor màu cam",
-    })],
-  }),
-  resource({
-    module: "home",
-    path: "news-section-content",
-    title: "Giới thiệu section Tin nổi bật",
-    singular: "Giới thiệu Tin nổi bật",
-    description: "Tiêu đề section và nội dung tin chính trên Trang chủ.",
-    priority: "P1",
-    kind: "singleton",
-    titleField: "title",
-    previewField: "featuredImage",
-    sections: [section("content", "Nội dung section", [text("title", "Tiêu đề section"), text("featuredTitle", "Tiêu đề tin chính"), textarea("featuredExcerpt", "Mô tả tin chính"), image("featuredImage", "Ảnh tin chính", { altKey: "featuredImageAlt" }), siteLink("featuredHref", "Liên kết tin chính"), text("ctaLabel", "Chữ xem tất cả"), siteLink("ctaHref", "Liên kết xem tất cả")])],
-    initialRecords: [record("home-news-section-content", {
-      title: "Tin nổi bật",
-      featuredTitle: "Bí quyết kiến tạo không gian sống hiện đại và bền vững",
-      featuredExcerpt: "Cập nhật xu hướng thiết kế, kinh nghiệm thi công và các giải pháp hữu ích từ đội ngũ BMT Decor.",
-      featuredImage: "/images/home/news-featured.png",
-      featuredImageAlt: "Không gian nội thất do BMT Decor thực hiện",
-      featuredHref: "/news",
-      ctaLabel: "XEM TẤT CẢ TIN",
-      ctaHref: "/news",
     })],
   }),
   scopedContactFormResource("home", "contact-form", "Trang chủ"),
@@ -1045,7 +992,7 @@ const projectResources: AdminResourceConfig[] = [
     previewField: "heroImage",
     sections: [
       section("general", "Thông tin chung", [
-        text("title", "Tiêu đề", { required: true }),
+        text("title", "Tiêu đề"),
         text("projectName", "Tên dự án"),
         text("category", "Danh mục"),
         text("location", "Khu vực"),
@@ -1091,15 +1038,79 @@ const projectResources: AdminResourceConfig[] = [
         ...Array.from({ length: 3 }, (_, index) => [
           image(`comparison${index + 1}BeforeImage`, `Hàng ${index + 1} · Ảnh trước`, { altKey: `comparison${index + 1}BeforeAlt` }),
           text(`comparison${index + 1}BeforeLabel`, `Hàng ${index + 1} · Nhãn trước`),
-          text(`comparison${index + 1}BeforeBadge`, `Hàng ${index + 1} · Badge trước`),
           image(`comparison${index + 1}AfterImage`, `Hàng ${index + 1} · Ảnh sau`, { altKey: `comparison${index + 1}AfterAlt` }),
           text(`comparison${index + 1}AfterLabel`, `Hàng ${index + 1} · Nhãn sau`),
-          text(`comparison${index + 1}AfterBadge`, `Hàng ${index + 1} · Badge sau`),
         ]).flat(),
       ]),
+      section("contact", "Biểu mẫu liên hệ", [
+        text("ctaTitle", "Tiêu đề", { span: 12 }),
+        textarea("ctaDescription", "Tiêu đề phụ", { span: 12 }),
+        text("ctaSubmitLabel", "Chữ trên nút gửi", { span: 4 }),
+        textarea("ctaSuccessMessage", "Thông báo sau khi gửi thành công", { span: 12 }),
+      ]),
     ],
-    initialRecords: Object.values(publicProjectDetails).map((item) =>
-      record(`project-detail-${item.slug}`, {
+    initialRecords: mockProjectContent.cards.map((card) => {
+      const item = publicProjectDetails[card.slug];
+
+      if (!item) {
+        return record(`project-detail-${card.slug}`, {
+          slug: card.slug,
+          title: "",
+          projectName: "",
+          category: "",
+          location: "",
+          client: "",
+          area: "",
+          scale: "",
+          description: "",
+          surveyDescription: "",
+          drawingCaption: "",
+          solutionDescription: "",
+          galleryDescription: "",
+          processDescription: "",
+          ctaTitle: "",
+          ctaDescription: "",
+          ctaSubmitLabel: "",
+          ctaSuccessMessage: "",
+          heroImage: "",
+          heroAlt: "",
+          wordmarkImage: "",
+          wordmarkAlt: "",
+          drawingImage: "",
+          drawingAlt: "",
+          ...Object.fromEntries(
+            Array.from({ length: 3 }, (_, index) => [
+              [`survey${index + 1}Image`, ""],
+              [`survey${index + 1}Alt`, ""],
+            ]).flat(),
+          ),
+          ...Object.fromEntries(
+            Array.from({ length: 6 }, (_, index) => [
+              [`render${index + 1}Image`, ""],
+              [`render${index + 1}Alt`, ""],
+            ]).flat(),
+          ),
+          ...Object.fromEntries(
+            Array.from({ length: 4 }, (_, index) => [
+              [`process${index + 1}Label`, ""],
+              [`process${index + 1}Image`, ""],
+              [`process${index + 1}Alt`, ""],
+            ]).flat(),
+          ),
+          ...Object.fromEntries(
+            Array.from({ length: 3 }, (_, index) => [
+              [`comparison${index + 1}BeforeImage`, ""],
+              [`comparison${index + 1}BeforeAlt`, ""],
+              [`comparison${index + 1}BeforeLabel`, ""],
+              [`comparison${index + 1}AfterImage`, ""],
+              [`comparison${index + 1}AfterAlt`, ""],
+              [`comparison${index + 1}AfterLabel`, ""],
+            ]).flat(),
+          ),
+        });
+      }
+
+      return record(`project-detail-${item.slug}`, {
         slug: item.slug,
         title: item.title,
         displayName: item.displayName,
@@ -1117,7 +1128,10 @@ const projectResources: AdminResourceConfig[] = [
         solutionDescription: item.solutionDescription,
         galleryDescription: item.galleryDescription,
         processDescription: item.processDescription,
+        ctaTitle: item.ctaTitle,
         ctaDescription: item.ctaDescription,
+        ctaSubmitLabel: item.ctaSubmitLabel,
+        ctaSuccessMessage: item.ctaSuccessMessage,
         heroImage: item.heroImage.src,
         heroAlt: item.heroImage.alt,
         wordmarkImage: item.wordmarkImage.src,
@@ -1131,14 +1145,12 @@ const projectResources: AdminResourceConfig[] = [
           [`comparison${index + 1}BeforeImage`, entry.before.src],
           [`comparison${index + 1}BeforeAlt`, entry.before.alt],
           [`comparison${index + 1}BeforeLabel`, entry.before.label],
-          [`comparison${index + 1}BeforeBadge`, entry.before.badge ?? ""],
           [`comparison${index + 1}AfterImage`, entry.after.src],
           [`comparison${index + 1}AfterAlt`, entry.after.alt],
           [`comparison${index + 1}AfterLabel`, entry.after.label],
-          [`comparison${index + 1}AfterBadge`, entry.after.badge ?? ""],
         ])),
-      }),
-    ),
+      });
+    }),
   }),
   resource({
     module: "projects",
@@ -1254,6 +1266,8 @@ function contactFormResource(
   content: ContactFormContent,
 ): AdminResourceConfig {
   const { description, ...rest } = content;
+  const editableRequiredMessage =
+    module === "quotation" && path === "contact-form";
   return resource({
     module,
     path,
@@ -1272,20 +1286,23 @@ function contactFormResource(
           span: 12,
           description: "Hiện trên site đúng như gõ ở đây, nên giữ dạng in hoa.",
         }),
-        ...(description === undefined
-          ? []
-          : [textarea("description", "Nội dung mô tả dưới tiêu đề", { required: true, span: 12 })]),
-        text("namePlaceholder", "Chữ gợi ý ô Tên khách hàng", { required: true, span: 6 }),
-        text("phonePlaceholder", "Chữ gợi ý ô Số điện thoại", { required: true, span: 6 }),
+        textarea("description", "Tiêu đề phụ", { span: 12 }),
         text("submitLabel", "Chữ trên nút gửi", { required: true, span: 4 }),
-        text("requiredMessage", "Thông báo khi bỏ trống ô nhập", { required: true, span: 8 }),
+        ...(editableRequiredMessage
+          ? [
+              text("requiredMessage", "Thông báo khi bỏ trống ô nhập", {
+                required: true,
+                span: 8,
+              }),
+            ]
+          : []),
         textarea("successMessage", "Thông báo sau khi gửi thành công", { required: true, span: 12 }),
       ]),
     ],
     initialRecords: [
       record(
         `${module}-${path.replace(/\//g, "-")}`,
-        description === undefined ? rest : { ...rest, description },
+        { ...rest, description: description ?? "" },
       ),
     ],
   });
@@ -2067,6 +2084,7 @@ const remainingResources: AdminResourceConfig[] = [
         href: item.href,
         body: item.body,
         featured: item.featured,
+        highlightHome: item.highlightHome,
         order: index + 1,
       }),
     ),
@@ -2212,20 +2230,19 @@ const remainingResources: AdminResourceConfig[] = [
     path: "form",
     title: "Biểu mẫu liên hệ",
     singular: "Biểu mẫu liên hệ",
-    description: "Chỉ chỉnh tiêu đề, placeholder và thông báo của biểu mẫu. Label, nội dung cố định và hình ảnh không cho thay đổi.",
+    description: "Có thể chỉnh tiêu đề, tiêu đề phụ và thông báo của biểu mẫu. Label, placeholder, nội dung cố định và hình ảnh không cho thay đổi.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
     sections: [
       section("content", "Nội dung được phép chỉnh", [
         text("title", "Tiêu đề", { required: true, span: 12 }),
-        text("namePlaceholder", "Placeholder ô Họ tên", { span: 6 }),
-        text("phonePlaceholder", "Placeholder ô Điện thoại", { span: 6 }),
+        textarea("description", "Tiêu đề phụ", { span: 12 }),
         text("submitLabel", "Chữ trên nút gửi", { span: 4 }),
         textarea("successMessage", "Thông báo thành công", { span: 8 }),
       ]),
     ],
-    initialRecords: [record("contact-form", { title: "Liên hệ tư vấn", description: "Chia sẻ nhu cầu để đội ngũ BMT Decor tư vấn giải pháp phù hợp.", nameLabel: "Tên khách hàng", namePlaceholder: "Tên khách hàng...", phoneLabel: "Số điện thoại", phonePlaceholder: "Số điện thoại...", submitLabel: "Gửi ngay", successMessage: "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ trong thời gian sớm nhất.", backgroundImage: "/images/contact/mobile/form-background.png", formImage: "/images/contact/contact-consultant.jpg", formImageAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng" })],
+    initialRecords: [record("contact-form", { title: "Liên hệ tư vấn", description: "", nameLabel: "Tên khách hàng", namePlaceholder: "Tên khách hàng...", phoneLabel: "Số điện thoại", phonePlaceholder: "Số điện thoại...", submitLabel: "Gửi ngay", successMessage: "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ trong thời gian sớm nhất.", backgroundImage: "/images/contact/mobile/form-background.png", formImage: "/images/contact/contact-consultant.jpg", formImageAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng" })],
   }),
   resource({
     module: "settings",
@@ -2245,7 +2262,7 @@ const remainingResources: AdminResourceConfig[] = [
     path: "footer",
     title: "Cấu hình Footer",
     singular: "Footer website",
-    description: "Toàn bộ nội dung được phép chỉnh ở footer được gom tại đây: logo, 4 dịch vụ và đường dẫn tương ứng, liên hệ, chi nhánh & nhà xưởng và ảnh fanpage.",
+    description: "Toàn bộ nội dung được phép chỉnh ở footer được gom tại đây: logo, 4 dịch vụ và trang tương ứng, liên hệ, chi nhánh & nhà xưởng, mạng xã hội và ảnh fanpage.",
     priority: "P1",
     kind: "singleton",
     titleField: "contactHeading",
@@ -2260,13 +2277,13 @@ const remainingResources: AdminResourceConfig[] = [
       ]),
       section("services", "4 dịch vụ ở Footer", [
         text("service1Label", "Dịch vụ 1 · Nội dung", { required: true, span: 6 }),
-        siteLink("service1Href", "Dịch vụ 1 · Đường dẫn", { required: true, span: 6 }),
+        siteLink("service1Href", "Dịch vụ 1 · Trang", { required: true, span: 6 }),
         text("service2Label", "Dịch vụ 2 · Nội dung", { required: true, span: 6 }),
-        siteLink("service2Href", "Dịch vụ 2 · Đường dẫn", { required: true, span: 6 }),
+        siteLink("service2Href", "Dịch vụ 2 · Trang", { required: true, span: 6 }),
         text("service3Label", "Dịch vụ 3 · Nội dung", { required: true, span: 6 }),
-        siteLink("service3Href", "Dịch vụ 3 · Đường dẫn", { required: true, span: 6 }),
+        siteLink("service3Href", "Dịch vụ 3 · Trang", { required: true, span: 6 }),
         text("service4Label", "Dịch vụ 4 · Nội dung", { required: true, span: 6 }),
-        siteLink("service4Href", "Dịch vụ 4 · Đường dẫn", { required: true, span: 6 }),
+        siteLink("service4Href", "Dịch vụ 4 · Trang", { required: true, span: 6 }),
       ]),
       section("contact", "Liên hệ", [
         text("contactHeading", "Tiêu đề Liên hệ", { required: true, span: 12 }),
@@ -2307,11 +2324,11 @@ const remainingResources: AdminResourceConfig[] = [
           placeholder: "Xưởng sản xuất: Nguyễn Thị Tự, Phường Bình Tân, TP.HCM",
         }),
       ]),
-      section("social", "Ảnh fanpage", [
-        url("facebookUrl", "Đường dẫn Facebook", { span: 6 }),
-        url("tiktokUrl", "Đường dẫn TikTok", { span: 6 }),
-        url("instagramUrl", "Đường dẫn Instagram", { span: 6 }),
-        url("linkedinUrl", "Đường dẫn LinkedIn", { span: 6 }),
+      section("social", "Mạng xã hội", [
+        url("facebookUrl", "Facebook", { span: 6 }),
+        url("tiktokUrl", "TikTok", { span: 6 }),
+        url("instagramUrl", "Instagram", { span: 6 }),
+        url("linkedinUrl", "LinkedIn", { span: 6 }),
         image("socialWidgetImage", "Ảnh nền / fanpage dưới các icon mạng xã hội", {
           altKey: "socialWidgetAlt",
           ratio: "2.33:1",

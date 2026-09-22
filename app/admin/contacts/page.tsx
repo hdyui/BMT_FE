@@ -19,8 +19,7 @@ export default function AdminContactsPage() {
         },
         {
           title: "Biểu mẫu liên hệ",
-          description:
-            "Tiêu đề, mô tả, tên các ô nhập, chữ gợi ý và thông báo thành công.",
+          description: "Tiêu đề, tiêu đề phụ và thông báo thành công.",
           priority: "P1",
           href: "/admin/contacts/form",
         },
