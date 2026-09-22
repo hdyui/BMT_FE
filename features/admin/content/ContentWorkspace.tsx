@@ -81,22 +81,6 @@ export function ContentWorkspace({ selectedId = "home" }: { selectedId?: string 
                   Mở Danh mục <ArrowRight className="size-4" />
                 </Link>
               </div>
-              {selected.id === "news" && (
-                <div className="flex flex-col gap-3 border-t border-dashed p-4 sm:flex-row sm:items-center sm:justify-between">
-                  <div>
-                    <p className="text-sm font-semibold">Tin nổi bật</p>
-                    <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
-                      Quản lý các bài viết xuất hiện trong section Tin nổi bật.
-                    </p>
-                  </div>
-                  <Link
-                    href="/admin/news/featured"
-                    className="inline-flex h-9 shrink-0 items-center justify-center gap-2 rounded-lg border bg-background px-3 text-sm font-semibold outline-none transition-colors hover:bg-muted focus-visible:ring-3 focus-visible:ring-ring/30"
-                  >
-                    Mở Tin nổi bật <ArrowRight className="size-4" />
-                  </Link>
-                </div>
-              )}
             </section>
           )}
 

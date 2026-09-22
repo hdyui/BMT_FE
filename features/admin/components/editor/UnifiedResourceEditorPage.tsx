@@ -620,9 +620,6 @@ function ResourceEditorGroup({
 
   // Bố cục mô phỏng website (xem `AdminEditorRecordLayout`).
   const layout = config.editorLayout;
-  const comfortableTwoColumnCards =
-    config.key === "settings/partners" || config.key === "settings/navigation";
-  const stackRecordFields = config.key === "settings/navigation";
   const sharedField = layout?.sharedRowField
     ? editableFields.find((field) => field.key === layout.sharedRowField)
     : undefined;
@@ -693,8 +690,10 @@ function ResourceEditorGroup({
       <div
         className={cn(
           "grid gap-4 p-4 sm:p-5",
-          (refinedEditor || !singleColumnContentEditor) &&
-            "sm:grid-cols-2 xl:grid-cols-4",
+          layout?.recordsPerRow
+            ? RECORDS_PER_ROW[layout.recordsPerRow] ?? ""
+            : (refinedEditor || !singleColumnContentEditor) &&
+                "sm:grid-cols-2 xl:grid-cols-4",
         )}
       >
         {records.map((record, recordIndex) => {
@@ -790,9 +789,7 @@ function ResourceEditorGroup({
               ? cn(
                   "grid p-4 sm:p-5",
                   layout.recordStyle === "flat" ? "gap-x-6 gap-y-7" : "gap-4",
-                  comfortableTwoColumnCards && layout.recordsPerRow === 2
-                    ? "xl:grid-cols-2"
-                    : RECORDS_PER_ROW[layout.recordsPerRow] ?? "",
+                  RECORDS_PER_ROW[layout.recordsPerRow] ?? "",
                 )
               : "divide-y first:border-t-0",
           )}
@@ -916,7 +913,6 @@ function ResourceEditorGroup({
                     packedFields ? EDITOR_GRID_CLASS : "grid gap-4 lg:gap-5",
                     !packedFields &&
                       !singleColumnContentEditor &&
-                      !stackRecordFields &&
                       recordFields.length > 1 &&
                       "md:grid-cols-2",
                   )}

@@ -1,4 +1,4 @@
-import { contactInformation, navigation, services } from "@/shared/constants/site";
+import { contactInformation, services } from "@/shared/constants/site";
 import {
   aboutCapabilities,
   aboutCoreValues,
@@ -13,7 +13,7 @@ import {
   homeStats,
   homeTrustReasons,
 } from "@/features/home/data/home-content";
-import { articles, featuredNews } from "@/features/news/data/news-page";
+import { articles } from "@/features/news/data/news-page";
 import {
   quotationAreaInput,
   quotationBudgetInput,
@@ -171,6 +171,61 @@ function listItemsToRichText(items: readonly string[]) {
   return `<ul>${items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>`;
 }
 
+const FOOTER_SERVICE_EDITABLE_KEYS = new Set([
+  "service1Label",
+  "service1Href",
+  "service2Label",
+  "service2Href",
+  "service3Label",
+  "service3Href",
+  "service4Label",
+  "service4Href",
+]);
+
+const BUTTON_TEXT_FIELD_KEY_PATTERN = /(?:cta|submit|back|next)(?:label|text)$/i;
+const LINK_FIELD_KEY_PATTERN = /(?:href|url)$/i;
+
+function isFieldInAdminEditingScope(
+  module: AdminModuleKey,
+  path: string,
+  field: AdminFieldConfig,
+) {
+  if (
+    module === "settings" &&
+    path === "footer" &&
+    FOOTER_SERVICE_EDITABLE_KEYS.has(field.key)
+  ) {
+    return true;
+  }
+
+  return (
+    !BUTTON_TEXT_FIELD_KEY_PATTERN.test(field.key) &&
+    !LINK_FIELD_KEY_PATTERN.test(field.key)
+  );
+}
+
+function sanitizeEditorLayout(
+  layout: AdminEditorRecordLayout | undefined,
+  visibleFieldKeys: Set<string>,
+): AdminEditorRecordLayout | undefined {
+  if (!layout?.splitColumns) return layout;
+
+  const left = layout.splitColumns.left.filter((key) => visibleFieldKeys.has(key));
+  const right = layout.splitColumns.right.filter((key) => visibleFieldKeys.has(key));
+
+  if (left.length === 0 || right.length === 0) {
+    return {
+      ...layout,
+      splitColumns: undefined,
+    };
+  }
+
+  return {
+    ...layout,
+    splitColumns: { left, right },
+  };
+}
+
 const moduleLabels: Record<AdminModuleKey, string> = {
   home: "Trang chủ",
   about: "Giới thiệu",
@@ -251,17 +306,26 @@ function resource(
     .map((item) => ({
       ...item,
       fields: item.fields
-        .filter((field) => field.key !== "order")
+        .filter(
+          (field) =>
+            field.key !== "order" &&
+            isFieldInAdminEditingScope(config.module, config.path, field),
+        )
         .map((field) => ({
           ...field,
           ...textareaLineRules(config.module, config.path, field),
         })),
     }))
     .filter((item) => item.fields.length > 0);
+  const visibleFieldKeys = new Set(
+    sections.flatMap((item) => item.fields.map((field) => field.key)),
+  );
+  const editorLayout = sanitizeEditorLayout(config.editorLayout, visibleFieldKeys);
 
   return {
     ...config,
     sections,
+    editorLayout,
     collectionMode:
       config.kind === "collection"
         ? config.collectionMode ?? "fixed"
@@ -299,7 +363,7 @@ function scopedContactFormResource(
     path,
     title: "Biểu mẫu liên hệ",
     singular: `Biểu mẫu liên hệ trang ${pageLabel}`,
-    description: `Biểu mẫu liên hệ riêng của trang ${pageLabel}. Chỉ chỉnh tiêu đề, placeholder, nút gửi và thông báo thành công; label, nội dung cố định và hình ảnh không cho thay đổi.`,
+    description: `Biểu mẫu liên hệ riêng của trang ${pageLabel}. Chỉ chỉnh tiêu đề, placeholder và thông báo thành công; label, nội dung cố định và hình ảnh không cho thay đổi.`,
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -326,7 +390,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "hero",
     title: "Mở đầu Trang chủ",
     singular: "Ảnh mở đầu",
-    description: "Quản lý nội dung mở đầu Trang chủ gồm tiêu đề, mô tả, nút bấm, liên kết và một ảnh banner dùng chung cho mọi kích thước màn hình.",
+    description: "Quản lý nội dung mở đầu Trang chủ gồm tiêu đề, mô tả và một ảnh banner dùng chung cho mọi kích thước màn hình.",
     priority: "P1",
     kind: "collection",
     titleField: "title",
@@ -511,7 +575,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "featured-news",
     title: "Tin nổi bật trên Trang chủ",
     singular: "Tin nổi bật",
-    description: "Quản lý trọn section Tin nổi bật gồm tiêu đề section, nội dung tin chính, nút xem tất cả và danh sách các tin, hình ảnh, liên kết hiển thị trên Trang chủ.",
+    description: "Quản lý trọn section Tin nổi bật gồm tiêu đề section, nội dung tin chính, danh sách tin và hình ảnh hiển thị trên Trang chủ.",
     priority: "P2",
     kind: "collection",
     titleField: "title",
@@ -551,11 +615,9 @@ const homeResources: AdminResourceConfig[] = [
     previewField: "logoImage",
     orderField: "order",
     companionResourceKey: "settings/partners-section-content",
-    // Logo và nội dung được tách thành hai vùng rõ ràng. Renderer chỉ chuyển
-    // thành hai card/hàng ở màn hình đủ rộng, tránh ô liên kết đè lên logo khi
-    // sidebar + viewport làm phần nội dung admin bị hẹp.
+    // Sáu logo chia thành 3 cột trên desktop: 3 mục hàng trên, 3 mục hàng dưới.
     editorLayout: {
-      recordsPerRow: 2,
+      recordsPerRow: 3,
       mediaSide: "left",
       mediaWidth: "third",
       mediaAltPlacement: "text",
@@ -563,7 +625,6 @@ const homeResources: AdminResourceConfig[] = [
     },
     sections: [
       section("content", "Thông tin đối tác", [
-        siteLink("href", "Liên kết"),
         image("logoImage", "Logo", { altKey: "logoAlt", ratio: "5:4" }),
         orderField,
       ]),
@@ -580,7 +641,6 @@ const homeResources: AdminResourceConfig[] = [
         name,
         logoImage,
         logoAlt: name,
-        href: "",
         order: index + 1,
       }),
     ),
@@ -649,7 +709,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "profile-section-content",
     title: "Hồ sơ năng lực trên Trang chủ",
     singular: "Section Hồ sơ năng lực",
-    description: "Quản lý tiêu đề, mô tả, nút bấm và hai asset hình ảnh của section Hồ sơ năng lực.",
+    description: "Quản lý tiêu đề, mô tả và hai asset hình ảnh của section Hồ sơ năng lực.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -684,7 +744,7 @@ const homeResources: AdminResourceConfig[] = [
     path: "news-section-content",
     title: "Giới thiệu section Tin nổi bật",
     singular: "Giới thiệu Tin nổi bật",
-    description: "Tiêu đề section, nội dung tin chính và nút xem toàn bộ tin tức trên Trang chủ.",
+    description: "Tiêu đề section và nội dung tin chính trên Trang chủ.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -934,7 +994,7 @@ const projectResources: AdminResourceConfig[] = [
     path: "list",
     title: "Danh sách dự án",
     singular: "Dự án",
-    description: "Quản lý danh sách dự án, ảnh đại diện, liên kết và nhóm danh mục. Phần tiêu đề, mô tả và icon danh mục được cố định theo giao diện website.",
+    description: "Quản lý danh sách dự án, ảnh đại diện và nhóm danh mục. Phần tiêu đề, mô tả và icon danh mục được cố định theo giao diện website.",
     priority: "P1",
     kind: "collection",
     collectionMode: "dynamic",
@@ -985,46 +1045,49 @@ const projectResources: AdminResourceConfig[] = [
     previewField: "heroImage",
     sections: [
       section("general", "Thông tin chung", [
-        text("slug", "Đường dẫn", { required: true }),
         text("title", "Tiêu đề", { required: true }),
-        text("displayName", "Tên hiển thị"),
         text("projectName", "Tên dự án"),
         text("category", "Danh mục"),
-        text("location", "Địa điểm"),
-        text("client", "Khách hàng"),
+        text("location", "Khu vực"),
+        text("client", "Chủ đầu tư"),
         text("area", "Diện tích"),
         text("scale", "Quy mô"),
-        text("style", "Phong cách"),
-        text("scope", "Phạm vi"),
+        image("heroImage", "Ảnh dự án", { altKey: "heroAlt", ratio: "1:1" }),
+        image("wordmarkImage", "Ảnh Mộc Miên House", {
+          altKey: "wordmarkAlt",
+          ratio: "4.23:1",
+        }),
+        textarea("description", "Nội dung giới thiệu"),
       ]),
-      section("body", "Nội dung dự án", [
-        textarea("description", "Tổng quan dự án"),
+      section("survey", "Khảo sát hiện trạng và lên phương án", [
+        ...Array.from({ length: 3 }, (_, index) =>
+          image(`survey${index + 1}Image`, `Ảnh khảo sát ${index + 1}`, {
+            altKey: `survey${index + 1}Alt`,
+          }),
+        ),
         textarea("surveyDescription", "Mô tả khảo sát"),
+      ]),
+      section("solution", "Phương án", [
         text("drawingCaption", "Chú thích bản vẽ"),
         textarea("solutionDescription", "Mô tả giải pháp"),
-        textarea("galleryDescription", "Mô tả thư viện phối cảnh"),
-        textarea("processDescription", "Mô tả quy trình"),
-        textarea("ctaDescription", "Mô tả kêu gọi liên hệ"),
-      ]),
-      section("hero", "Ảnh mở đầu", [
-        image("heroImage", "Ảnh mở đầu", { altKey: "heroAlt", ratio: "1:1" }),
-      ]),
-      section("survey", "Khảo sát hiện trạng · 3 slot cố định", [
-        ...Array.from({ length: 3 }, (_, index) => image(`survey${index + 1}Image`, `Ảnh khảo sát ${index + 1}`, { altKey: `survey${index + 1}Alt` })),
-      ]),
-      section("drawing", "Bản vẽ", [
         image("drawingImage", "Bản vẽ", { altKey: "drawingAlt" }),
       ]),
-      section("renders", "Phối cảnh 3D · 6 slot cố định", [
-        ...Array.from({ length: 6 }, (_, index) => image(`render${index + 1}Image`, `Ảnh phối cảnh ${index + 1}`, { altKey: `render${index + 1}Alt` })),
+      section("renders", "Hình ảnh 3D", [
+        ...Array.from({ length: 6 }, (_, index) =>
+          image(`render${index + 1}Image`, `Ảnh phối cảnh ${index + 1}`, {
+            altKey: `render${index + 1}Alt`,
+          }),
+        ),
+        textarea("galleryDescription", "Mô tả thư viện phối cảnh"),
       ]),
-      section("process", "Quy trình · 4 bước cố định", [
+      section("process", "Quá trình và năng lực thi công", [
         ...Array.from({ length: 4 }, (_, index) => [
           text(`process${index + 1}Label`, `Bước ${index + 1} · Nhãn`),
           image(`process${index + 1}Image`, `Bước ${index + 1} · Ảnh`, { altKey: `process${index + 1}Alt` }),
         ]).flat(),
+        textarea("processDescription", "Mô tả quy trình"),
       ]),
-      section("comparisons", "So sánh trước / sau · 3 hàng cố định", [
+      section("comparisons", "Thành quả bàn giao · Trước và sau thi công", [
         ...Array.from({ length: 3 }, (_, index) => [
           image(`comparison${index + 1}BeforeImage`, `Hàng ${index + 1} · Ảnh trước`, { altKey: `comparison${index + 1}BeforeAlt` }),
           text(`comparison${index + 1}BeforeLabel`, `Hàng ${index + 1} · Nhãn trước`),
@@ -1057,6 +1120,8 @@ const projectResources: AdminResourceConfig[] = [
         ctaDescription: item.ctaDescription,
         heroImage: item.heroImage.src,
         heroAlt: item.heroImage.alt,
+        wordmarkImage: item.wordmarkImage.src,
+        wordmarkAlt: item.wordmarkImage.alt,
         drawingImage: item.drawing.src,
         drawingAlt: item.drawing.alt,
         ...Object.fromEntries(item.survey.flatMap((entry, index) => [[`survey${index + 1}Image`, entry.src], [`survey${index + 1}Alt`, entry.alt]])),
@@ -1080,7 +1145,7 @@ const projectResources: AdminResourceConfig[] = [
     path: "related",
     title: "Dự án liên quan",
     singular: "Dự án liên quan",
-    description: "Quản lý trọn section Dự án liên quan ở cuối trang Dự án con gồm tiêu đề section và danh sách dự án, hình ảnh, liên kết liên quan.",
+    description: "Quản lý trọn section Dự án liên quan ở cuối trang Dự án con gồm tiêu đề section, danh sách dự án và hình ảnh liên quan.",
     priority: "P2",
     kind: "collection",
     titleField: "title",
@@ -1882,7 +1947,7 @@ const remainingResources: AdminResourceConfig[] = [
     path: "hero",
     title: "Mở đầu trang Liên hệ",
     singular: "Phần mở đầu trang Liên hệ",
-    description: "Nội dung, nút bấm và ảnh tư vấn viên trên trang Liên hệ.",
+    description: "Nội dung và ảnh tư vấn viên trên trang Liên hệ.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -1899,7 +1964,7 @@ const remainingResources: AdminResourceConfig[] = [
     path: "map",
     title: "Bản đồ liên hệ",
     singular: "Bản đồ liên hệ",
-    description: "Quản lý section Bản đồ liên hệ gồm nội dung mô tả hỗ trợ truy cập và liên kết Google Maps của văn phòng BMT Decor.",
+    description: "Quản lý nội dung mô tả hỗ trợ truy cập của section Bản đồ liên hệ.",
     priority: "P2",
     kind: "singleton",
     titleField: "title",
@@ -1963,45 +2028,6 @@ const remainingResources: AdminResourceConfig[] = [
   }),
   resource({
     module: "news",
-    path: "featured",
-    title: "Tin nổi bật",
-    singular: "Tin nổi bật",
-    description: "Quản lý trọn section Tin tức nổi bật gồm tiêu đề section và các bài nổi bật với tiêu đề, mô tả, hình ảnh và liên kết riêng.",
-    priority: "P2",
-    kind: "collection",
-    titleField: "title",
-    previewField: "desktopImage",
-    orderField: "order",
-    editorLayout: {
-      mediaSide: "left",
-      mediaWidth: "twoFifths",
-      mediaPreview: "wide",
-      mediaAltPlacement: "text",
-    },
-    sections: [
-      section("content", "Nội dung", [
-        text("title", "Tiêu đề", { required: true, span: 12 }),
-        textarea("excerpt", "Mô tả", { span: 12 }),
-        siteLink("href", "Liên kết", { span: 12 }),
-      ]),
-      section("media", "Hình ảnh", [
-        image("desktopImage", "Ảnh tin nổi bật", { altKey: "imageAlt", ratio: "1.38:1" }),
-      ]),
-      section("display", "Thứ tự", [orderField]),
-    ],
-    initialRecords: featuredNews.map((item, index) =>
-      record(item.id, {
-        title: item.title,
-        excerpt: item.excerpt,
-        desktopImage: item.desktopImage,
-        imageAlt: item.imageAlt,
-        href: item.href,
-        order: index + 1,
-      }),
-    ),
-  }),
-  resource({
-    module: "news",
     path: "featured-section-content",
     title: "Giới thiệu section Tin tức nổi bật",
     singular: "Giới thiệu Tin tức nổi bật",
@@ -2040,6 +2066,7 @@ const remainingResources: AdminResourceConfig[] = [
         imageAlt: item.imageAlt,
         href: item.href,
         body: item.body,
+        featured: item.featured,
         order: index + 1,
       }),
     ),
@@ -2185,7 +2212,7 @@ const remainingResources: AdminResourceConfig[] = [
     path: "form",
     title: "Biểu mẫu liên hệ",
     singular: "Biểu mẫu liên hệ",
-    description: "Chỉ chỉnh tiêu đề, placeholder, nút gửi và thông báo của biểu mẫu. Label, nội dung cố định và hình ảnh không cho thay đổi.",
+    description: "Chỉ chỉnh tiêu đề, placeholder và thông báo của biểu mẫu. Label, nội dung cố định và hình ảnh không cho thay đổi.",
     priority: "P1",
     kind: "singleton",
     titleField: "title",
@@ -2215,24 +2242,10 @@ const remainingResources: AdminResourceConfig[] = [
   }),
   resource({
     module: "settings",
-    path: "navigation",
-    title: "Danh mục đầu trang",
-    singular: "Mục trong danh mục",
-    description: "Quản lý tên, liên kết và thứ tự của danh mục đầu trang.",
-    priority: "P2",
-    kind: "collection",
-    titleField: "label",
-    orderField: "order",
-    editorLayout: { recordsPerRow: 2, hideFixedItemHint: true },
-    sections: [section("menu", "Mục trong danh mục", [text("label", "Tên hiển thị", { required: true }), siteLink("href", "Liên kết", { required: true }), orderField])],
-    initialRecords: navigation.map((item, index) => record(`navigation-${index + 1}`, { label: item.label, href: item.href, order: index + 1 })),
-  }),
-  resource({
-    module: "settings",
     path: "footer",
     title: "Cấu hình Footer",
     singular: "Footer website",
-    description: "Toàn bộ nội dung được phép chỉnh ở footer được gom tại đây: logo, 4 dịch vụ, liên hệ, chi nhánh & nhà xưởng, mạng xã hội và ảnh fanpage.",
+    description: "Toàn bộ nội dung được phép chỉnh ở footer được gom tại đây: logo, 4 dịch vụ và đường dẫn tương ứng, liên hệ, chi nhánh & nhà xưởng và ảnh fanpage.",
     priority: "P1",
     kind: "singleton",
     titleField: "contactHeading",
@@ -2294,7 +2307,7 @@ const remainingResources: AdminResourceConfig[] = [
           placeholder: "Xưởng sản xuất: Nguyễn Thị Tự, Phường Bình Tân, TP.HCM",
         }),
       ]),
-      section("social", "Mạng xã hội", [
+      section("social", "Ảnh fanpage", [
         url("facebookUrl", "Đường dẫn Facebook", { span: 6 }),
         url("tiktokUrl", "Đường dẫn TikTok", { span: 6 }),
         url("instagramUrl", "Đường dẫn Instagram", { span: 6 }),

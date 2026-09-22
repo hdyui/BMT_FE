@@ -23,6 +23,7 @@ export interface AdminProjectCard {
   thumbnail: string;
   imageAlt: string;
   category: string;
+  highlight: boolean;
   href: string;
   status: ContentStatus;
   order: number;

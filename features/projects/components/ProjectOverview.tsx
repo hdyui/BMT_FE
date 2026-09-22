@@ -52,10 +52,10 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
             <div className="relative z-10 flex flex-col justify-center px-6 py-9 sm:px-10 lg:py-11 lg:pr-12 lg:pl-[calc(3rem+2rem)]">
               <Reveal delay={220} distance="long" duration={950}>
                 <Image
-                  src="/images/projects/detail/moc-mien-wordmark.png"
-                  alt={project.displayName}
-                  width={2075}
-                  height={491}
+                  src={project.wordmarkImage.src}
+                  alt={project.wordmarkImage.alt}
+                  width={project.wordmarkImage.width}
+                  height={project.wordmarkImage.height}
                   className="mb-7 h-auto w-full max-w-[520px]"
                 />
                 <h2

@@ -36,6 +36,7 @@ export function EditorField({
   lockItemCount = false,
   hideAlt = false,
   imageSize = "thumb",
+  imageFit = "contain",
   imageActionsLayout = "row",
   onChange,
   onAltChange,
@@ -64,7 +65,8 @@ export function EditorField({
    * Cỡ ảnh xem trước. `fill` cho ô ảnh cao hết cột chứa nó — dùng ở bố cục ảnh
    * một bên, chữ một bên để cột ảnh không còn là một mẩu nhỏ trên vùng trống.
    */
-  imageSize?: "thumb" | "large" | "wide" | "row" | "fill";
+  imageSize?: "thumb" | "large" | "wide" | "row" | "fill" | "portrait" | "banner";
+  imageFit?: "contain" | "cover";
   imageActionsLayout?: "row" | "column";
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;
@@ -81,6 +83,7 @@ export function EditorField({
           dirty={dirty}
           streamlined={contentEditorStyle}
           size={imageSize}
+          fit={imageFit}
           actionsLayout={imageActionsLayout}
           onChange={onChange}
         />
