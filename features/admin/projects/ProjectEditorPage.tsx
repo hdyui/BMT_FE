@@ -265,19 +265,9 @@ function ProjectEditorForm({ entries }: { entries: Array<{ config: AdminResource
                               value={record[field.key]}
                               error={errors[identity]}
                               dirty={dirtyKeys.has(identity)}
-                              altValue={field.altKey ? record[field.altKey] : undefined}
-                              altDirty={Boolean(
-                                field.altKey &&
-                                  dirtyKeys.has(
-                                    fieldIdentity(
-                                      group.config.key,
-                                      record.id,
-                                      field.altKey,
-                                    ),
-                                  ),
-                              )}
                               contentEditorStyle
                               imageSize="thumb"
+                              hideAlt={group.config.key === "projects/details"}
                               onChange={(value) =>
                                 updateField(
                                   group.config.key,
@@ -285,17 +275,6 @@ function ProjectEditorForm({ entries }: { entries: Array<{ config: AdminResource
                                   field.key,
                                   value,
                                 )
-                              }
-                              onAltChange={
-                                field.altKey
-                                  ? (value) =>
-                                      updateField(
-                                        group.config.key,
-                                        record.id,
-                                        field.altKey!,
-                                        value,
-                                      )
-                                  : undefined
                               }
                             />
                           </div>
@@ -356,21 +335,11 @@ function ProjectSolutionEditor({
         value={record[field.key]}
         error={errors[identity]}
         dirty={dirtyKeys.has(identity)}
-        altValue={field.altKey ? record[field.altKey] : undefined}
-        altDirty={Boolean(
-          field.altKey &&
-            dirtyKeys.has(fieldIdentity(configKey, record.id, field.altKey)),
-        )}
         contentEditorStyle
         imageSize={options?.imageSize ?? "thumb"}
         imageFit={options?.imageFit ?? "contain"}
-        hideAlt={options?.hideAlt}
+        hideAlt
         onChange={(value) => onChange(configKey, record.id, field.key, value)}
-        onAltChange={
-          field.altKey
-            ? (value) => onChange(configKey, record.id, field.altKey!, value)
-            : undefined
-        }
       />
     );
   }
@@ -386,23 +355,6 @@ function ProjectSolutionEditor({
                 hideAlt: true,
               })
             : null}
-          {drawing?.altKey ? (
-            <label className="grid gap-2 text-sm">
-              <span className="font-semibold">Văn bản thay thế</span>
-              <input
-                className="h-10 rounded-md border bg-background px-3 text-sm outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring"
-                value={String(record[drawing.altKey] ?? "")}
-                onChange={(event) =>
-                  onChange(
-                    configKey,
-                    record.id,
-                    drawing.altKey!,
-                    event.target.value,
-                  )
-                }
-              />
-            </label>
-          ) : null}
         </div>
 
         <div className="grid min-w-0 content-start gap-6">
@@ -497,23 +449,6 @@ function ProjectListEditor({
         <div className="grid min-w-0 gap-5">
           {title ? renderField(title) : null}
           {category ? renderField(category) : null}
-          {thumbnail?.altKey ? (
-            <label className="grid gap-2 text-sm">
-              <span className="font-semibold">Văn bản thay thế</span>
-              <input
-                className="h-10 rounded-md border bg-background px-3 text-sm outline-none transition-shadow focus-visible:ring-2 focus-visible:ring-ring"
-                value={String(record[thumbnail.altKey] ?? "")}
-                onChange={(event) =>
-                  onChange(
-                    configKey,
-                    record.id,
-                    thumbnail.altKey!,
-                    event.target.value,
-                  )
-                }
-              />
-            </label>
-          ) : null}
         </div>
       </div>
     </div>
@@ -568,21 +503,11 @@ function ProjectOverviewEditor({
         value={record[field.key]}
         error={errors[identity]}
         dirty={dirtyKeys.has(identity)}
-        altValue={field.altKey ? record[field.altKey] : undefined}
-        altDirty={Boolean(
-          field.altKey &&
-            dirtyKeys.has(fieldIdentity(configKey, record.id, field.altKey)),
-        )}
         contentEditorStyle
         imageSize={options?.imageSize ?? "thumb"}
         imageFit={options?.imageFit ?? "contain"}
-        hideAlt={options?.hideAlt}
+        hideAlt
         onChange={(value) => onChange(configKey, record.id, field.key, value)}
-        onAltChange={
-          field.altKey
-            ? (value) => onChange(configKey, record.id, field.altKey!, value)
-            : undefined
-        }
       />
     );
   }

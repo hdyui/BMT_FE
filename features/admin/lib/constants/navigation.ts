@@ -57,6 +57,10 @@ export const adminPageMeta: Record<
     title: "Tổng quan",
     description: "Tổng quan nội dung website BMT Decor",
   },
+  "/admin/contact-submissions": {
+    title: "Khách hàng liên hệ",
+    description: "Quản lý thông tin khách hàng gửi từ các biểu mẫu liên hệ",
+  },
   "/admin/home": {
     title: "Trang chủ",
     description: "Quản lý nội dung riêng của Trang chủ",

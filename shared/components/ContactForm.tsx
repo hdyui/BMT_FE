@@ -6,6 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
+import { saveContactSubmission } from "@/shared/lib/contact-submissions";
 
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
@@ -83,14 +84,21 @@ export function ContactForm({
     const form = new FormData(formElement);
     const nextErrors: Errors = {};
 
-    if (!String(form.get("name") ?? "").trim())
+    const name = String(form.get("name") ?? "").trim();
+    const phone = String(form.get("phone") ?? "").trim();
+
+    if (!name)
       nextErrors.name = requiredMessage;
-    if (!String(form.get("phone") ?? "").trim())
+    if (!phone)
       nextErrors.phone = requiredMessage;
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    saveContactSubmission({
+      name,
+      phone,
+    });
     toast.success(successMessage);
     formElement.reset();
     setErrors({});

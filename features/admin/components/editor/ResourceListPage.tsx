@@ -22,6 +22,13 @@ import { Badge } from "@/features/admin/components/ui/badge";
 import { Button } from "@/features/admin/components/ui/button";
 import { Checkbox } from "@/features/admin/components/ui/checkbox";
 import { Input } from "@/features/admin/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/features/admin/components/ui/select";
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
 import { DeleteContentDialog } from "@/features/admin/components/editor/DeleteContentDialog";
@@ -34,6 +41,8 @@ import type { AdminCrudRecord, AdminResourceConfig } from "@/features/admin/lib/
 const MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY = 8;
 const MAX_HOME_HIGHLIGHTED_NEWS = 4;
 const MAX_FEATURED_NEWS = 5;
+
+type BooleanListFilter = "all" | "yes" | "no";
 
 export function ResourceListPage({
   config,
@@ -71,6 +80,11 @@ function ResourceListPageContent({
   const searchParams = useSearchParams();
   const urlQuery = searchParams.get("q") ?? "";
   const [query, setQuery] = useState(urlQuery);
+  const [projectCategoryFilter, setProjectCategoryFilter] = useState("all");
+  const [projectHighlightFilter, setProjectHighlightFilter] =
+    useState<BooleanListFilter>("all");
+  const [newsFeaturedFilter, setNewsFeaturedFilter] =
+    useState<BooleanListFilter>("all");
   const debouncedQuery = useDebounce(query, 350);
   const syncingFromUrlRef = useRef(false);
   const previousUrlQueryRef = useRef(urlQuery);
@@ -79,6 +93,57 @@ function ResourceListPageContent({
   const imageManager = config.listMode === "image-manager";
   const mutableCollection = config.collectionMode === "dynamic";
   const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
+  const projectCategories = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          records
+            .map((record) => String(record.category ?? "").trim())
+            .filter(Boolean),
+        ),
+      ),
+    [records],
+  );
+  const filteredRecords = useMemo(() => {
+    return records.filter((record) => {
+      if (config.key === "projects/list") {
+        if (
+          projectCategoryFilter !== "all" &&
+          String(record.category ?? "") !== projectCategoryFilter
+        ) {
+          return false;
+        }
+
+        if (
+          projectHighlightFilter !== "all" &&
+          Boolean(record.highlight) !== (projectHighlightFilter === "yes")
+        ) {
+          return false;
+        }
+      }
+
+      if (
+        config.key === "news/list" &&
+        newsFeaturedFilter !== "all" &&
+        Boolean(record.featured) !== (newsFeaturedFilter === "yes")
+      ) {
+        return false;
+      }
+
+      return true;
+    });
+  }, [
+    config.key,
+    newsFeaturedFilter,
+    projectCategoryFilter,
+    projectHighlightFilter,
+    records,
+  ]);
+  const hasResourceFilter =
+    (config.key === "projects/list" &&
+      (projectCategoryFilter !== "all" ||
+        projectHighlightFilter !== "all")) ||
+    (config.key === "news/list" && newsFeaturedFilter !== "all");
 
   useEffect(() => {
     if (previousUrlQueryRef.current === urlQuery) return;
@@ -512,7 +577,7 @@ function ResourceListPageContent({
   // TanStack Table intentionally returns mutable table methods.
   // eslint-disable-next-line react-hooks/incompatible-library
   const table = useReactTable({
-    data: records,
+    data: filteredRecords,
     columns,
     state: { globalFilter: debouncedQuery },
     globalFilterFn: (row, _columnId, value) =>
@@ -547,20 +612,112 @@ function ResourceListPageContent({
           table={table}
           emptyState={
             <ListMessage
-              title={debouncedQuery ? "Không tìm thấy nội dung" : `Chưa có ${config.singular.toLocaleLowerCase("vi")}`}
-              description={debouncedQuery ? "Thử từ khóa khác hoặc xóa bộ lọc hiện tại." : mutableCollection ? "Thêm nội dung đầu tiên cho danh sách này." : "Danh sách cố định hiện chưa có dữ liệu để chỉnh sửa."}
-              actionLabel={debouncedQuery ? "Xóa tìm kiếm" : mutableCollection ? `Thêm ${config.singular.toLocaleLowerCase("vi")}` : undefined}
-              href={debouncedQuery || !mutableCollection ? undefined : `${baseHref}/new`}
-              onAction={debouncedQuery ? () => setQuery("") : undefined}
+              title={debouncedQuery || hasResourceFilter ? "Không tìm thấy nội dung" : `Chưa có ${config.singular.toLocaleLowerCase("vi")}`}
+              description={debouncedQuery || hasResourceFilter ? "Thử từ khóa khác hoặc xóa bộ lọc hiện tại." : mutableCollection ? "Thêm nội dung đầu tiên cho danh sách này." : "Danh sách cố định hiện chưa có dữ liệu để chỉnh sửa."}
+              actionLabel={debouncedQuery || hasResourceFilter ? "Xóa bộ lọc" : mutableCollection ? `Thêm ${config.singular.toLocaleLowerCase("vi")}` : undefined}
+              href={debouncedQuery || hasResourceFilter || !mutableCollection ? undefined : `${baseHref}/new`}
+              onAction={
+                debouncedQuery || hasResourceFilter
+                  ? () => {
+                      setQuery("");
+                      setProjectCategoryFilter("all");
+                      setProjectHighlightFilter("all");
+                      setNewsFeaturedFilter("all");
+                    }
+                  : undefined
+              }
             />
           }
         >
-          <div role="toolbar" className="flex w-full flex-col items-start justify-between gap-2 p-1 sm:flex-row sm:items-center">
+          <div role="toolbar" className="flex w-full flex-col items-start justify-between gap-2 p-1 lg:flex-row lg:items-center">
             {!imageManager ? (
-              <label className="relative block w-full sm:min-w-72 sm:max-w-md">
-                <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
-                <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Tìm ${config.singular.toLocaleLowerCase("vi")}...`} className="h-8 pl-9" />
-              </label>
+              <div className="flex w-full flex-1 flex-col gap-2 sm:flex-row sm:flex-wrap">
+                <label className="relative block w-full sm:min-w-72 sm:max-w-md sm:flex-1">
+                  <Search className="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input value={query} onChange={(event) => setQuery(event.target.value)} placeholder={`Tìm ${config.singular.toLocaleLowerCase("vi")}...`} className="h-8 pl-9" />
+                </label>
+
+                {config.key === "news/list" ? (
+                  <Select
+                    value={newsFeaturedFilter}
+                    onValueChange={(value) =>
+                      setNewsFeaturedFilter(
+                        (value ?? "all") as BooleanListFilter,
+                      )
+                    }
+                  >
+                    <SelectTrigger className="w-full sm:w-56">
+                      <SelectValue>
+                        {(selectedValue) =>
+                          `Tin nổi bật: ${formatBooleanFilterLabel(
+                            String(selectedValue ?? "all"),
+                          )}`
+                        }
+                      </SelectValue>
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="all">Tất cả tin</SelectItem>
+                      <SelectItem value="yes">Tin nổi bật</SelectItem>
+                      <SelectItem value="no">Không nổi bật</SelectItem>
+                    </SelectContent>
+                  </Select>
+                ) : null}
+
+                {config.key === "projects/list" ? (
+                  <>
+                    <Select
+                      value={projectCategoryFilter}
+                      onValueChange={(value) =>
+                        setProjectCategoryFilter(value ?? "all")
+                      }
+                    >
+                      <SelectTrigger className="w-full sm:w-64">
+                        <SelectValue>
+                          {(selectedValue) =>
+                            `Danh mục: ${
+                              String(selectedValue ?? "all") === "all"
+                                ? "Tất cả"
+                                : String(selectedValue)
+                            }`
+                          }
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Tất cả danh mục</SelectItem>
+                        {projectCategories.map((category) => (
+                          <SelectItem key={category} value={category}>
+                            {category}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <Select
+                      value={projectHighlightFilter}
+                      onValueChange={(value) =>
+                        setProjectHighlightFilter(
+                          (value ?? "all") as BooleanListFilter,
+                        )
+                      }
+                    >
+                      <SelectTrigger className="w-full sm:w-52">
+                        <SelectValue>
+                          {(selectedValue) =>
+                            `Tiêu biểu: ${formatBooleanFilterLabel(
+                              String(selectedValue ?? "all"),
+                            )}`
+                          }
+                        </SelectValue>
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="all">Tất cả dự án</SelectItem>
+                        <SelectItem value="yes">Dự án tiêu biểu</SelectItem>
+                        <SelectItem value="no">Không tiêu biểu</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </>
+                ) : null}
+              </div>
             ) : <span className="text-sm font-medium">{records.length} ảnh</span>}
             <DataTableViewOptions table={table} />
           </div>
@@ -587,6 +744,12 @@ function ResourceListPageFallback() {
       <div className="mt-8 h-96 animate-pulse rounded-2xl border bg-card" />
     </div>
   );
+}
+
+function formatBooleanFilterLabel(value: string) {
+  if (value === "yes") return "Có";
+  if (value === "no") return "Không";
+  return "Tất cả";
 }
 
 function ReplaceImageButton({ label, onSelect }: { label: string; onSelect: (dataUrl: string) => void }) {
