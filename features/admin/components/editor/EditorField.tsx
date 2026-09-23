@@ -235,7 +235,23 @@ export function EditorField({
       ) : field.type === "select" ? (
         <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
           <SelectTrigger className="w-full min-w-0 max-w-full font-normal" aria-invalid={Boolean(error)}>
-            <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"} />
+            <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"}>
+              {(selectedValue) => {
+                const normalizedValue =
+                  selectedValue === null || selectedValue === undefined
+                    ? ""
+                    : String(selectedValue);
+                const selectedOption = getSelectOptions(
+                  field,
+                  currentValue,
+                ).find((option) => option.value === normalizedValue);
+
+                return (
+                  selectedOption?.label ??
+                  (normalizedValue || field.placeholder || "Chọn giá trị")
+                );
+              }}
+            </SelectValue>
           </SelectTrigger>
           {/* `alignItemWithTrigger={false}`: mặc định base-ui đặt mục đang chọn
               chồng lên nút bấm kiểu select của macOS, che mất cả nhãn lẫn giá
