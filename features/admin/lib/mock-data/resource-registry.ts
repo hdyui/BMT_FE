@@ -2068,9 +2068,9 @@ const remainingResources: AdminResourceConfig[] = [
     previewField: "desktopImage",
     orderField: "order",
     sections: [
-      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn hệ thống", { required: true, editable: false }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), siteLink("href", "Liên kết"), text("imageAlt", "Văn bản thay thế")]),
+      section("identity", "Thông tin bài viết", [text("slug", "Đường dẫn hệ thống", { required: true, editable: false }), text("title", "Tiêu đề", { required: true }), textarea("excerpt", "Mô tả ngắn"), siteLink("href", "Liên kết")]),
       section("media", "Hình ảnh", [
-        image("desktopImage", "Ảnh bài viết", { ratio: "1.38:1" }),
+        image("desktopImage", "Ảnh bài viết", { altKey: "imageAlt", ratio: "1.38:1" }),
       ]),
       section("body", "Nội dung bài viết", [richtext("body", "Nội dung", { required: true }), orderField]),
     ],
