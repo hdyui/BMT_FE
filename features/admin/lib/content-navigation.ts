@@ -9,7 +9,10 @@ const servicePageBySlug: Record<string, { label: string; href: string }> = {
 };
 
 export function getResourceBreadcrumb(config: AdminResourceConfig) {
-  if (config.key === "settings/capability-profile") {
+  if (
+    config.key === "settings/capability-profile" ||
+    config.key === "settings/capability-profile-pages"
+  ) {
     return [{ label: "Hồ sơ năng lực", href: "/admin/content/capability-profile" }];
   }
 

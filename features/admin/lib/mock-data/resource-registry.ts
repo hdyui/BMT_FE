@@ -18,6 +18,7 @@ import {
   quotationAreaInput,
   quotationBudgetInput,
   quotationBuildingTypes,
+  quotationMarketRanges,
   quotationNavLabels,
   quotationResultIncludeLabel,
   quotationServiceTypes,
@@ -1960,6 +1961,47 @@ const remainingResources: AdminResourceConfig[] = [
     })],
   }),
   resource({
+    module: "settings",
+    path: "capability-profile-pages",
+    title: "Ảnh các trang Hồ sơ năng lực",
+    singular: "Trang hồ sơ năng lực",
+    description: "Quản lý ảnh từng trang trong cuốn hồ sơ năng lực dạng sách lật, gồm bìa trước, các trang nội dung và bìa sau. Thêm, xóa hoặc đổi thứ tự trang tại đây.",
+    priority: "P2",
+    kind: "collection",
+    collectionMode: "dynamic",
+    titleField: "title",
+    previewField: "image",
+    orderField: "order",
+    sections: [
+      section("content", "Nội dung trang", [
+        text("title", "Tên trang", { required: true, span: 12 }),
+        image("image", "Ảnh trang", {
+          altKey: "imageAlt",
+          ratio: "1:1.414",
+          recommendedSize: "1240 x 1754px",
+          required: true,
+        }),
+        orderField,
+      ]),
+    ],
+    initialRecords: Array.from({ length: 20 }, (_, index) => {
+      const pageNumber = index + 1;
+      const paddedNumber = String(pageNumber).padStart(2, "0");
+      const title =
+        pageNumber === 1
+          ? "Bìa trước hồ sơ năng lực BMT Decor"
+          : pageNumber === 20
+            ? "Bìa sau hồ sơ năng lực BMT Decor"
+            : `Trang ${pageNumber} hồ sơ năng lực BMT Decor`;
+      return record(`capability-profile-page-${paddedNumber}`, {
+        title,
+        image: `/images/capability-profile/profile-page-${paddedNumber}.webp`,
+        imageAlt: title,
+        order: pageNumber,
+      });
+    }),
+  }),
+  resource({
     module: "news",
     path: "featured",
     title: "Tin nổi bật",
@@ -2152,12 +2194,34 @@ const remainingResources: AdminResourceConfig[] = [
       section(`step-05`, `Bước 05 · ${quotationSteps[4]}`, [
         text("resultIncludeLabel", "Chữ đứng trước tên gói ở dòng kết quả"),
       ]),
+      ...quotationBuildingTypes.map((building, buildingIndex) =>
+        section(
+          `market-${buildingIndex}`,
+          `Khoảng thị trường · ${building} (đ/m² sàn)`,
+          quotationServiceTypes.flatMap((service, serviceIndex) => [
+            number(`market_${buildingIndex}_${serviceIndex}_min`, `${service} · Từ`, { span: 6, required: true }),
+            number(`market_${buildingIndex}_${serviceIndex}_max`, `${service} · Đến`, { span: 6, required: true }),
+          ]),
+          "Đơn giá hiển thị ở bước 05 được hệ thống tính từ khoảng này theo loại hình và gói khách chọn.",
+        ),
+      ),
       section("nav", "Nút chuyển bước", [
         text("backLabel", "Chữ trên nút lùi lại", { required: true }),
         text("nextLabel", "Chữ trên nút đi tiếp", { required: true }),
       ]),
     ],
     initialRecords: [record("quotation-estimator", {
+      ...Object.fromEntries(
+        quotationBuildingTypes.flatMap((building, buildingIndex) =>
+          quotationServiceTypes.flatMap((_, serviceIndex) => {
+            const [min, max] = quotationMarketRanges[building][serviceIndex];
+            return [
+              [`market_${buildingIndex}_${serviceIndex}_min`, min],
+              [`market_${buildingIndex}_${serviceIndex}_max`, max],
+            ];
+          }),
+        ),
+      ),
       stepLabels: [...quotationSteps],
       heading1: quotationStepCopy[0][0],
       instruction1: quotationStepCopy[0][1],

@@ -59,7 +59,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "capability-profile",
     label: "Hồ sơ năng lực",
     publicRoute: "/capability-profile",
-    resourceKeys: ["settings/capability-profile", "settings/capability-profile/contact-form"],
+    resourceKeys: ["settings/capability-profile", "settings/capability-profile-pages", "settings/capability-profile/contact-form"],
     sourceFiles: ["features/capability-profile/components/CapabilityHero.tsx", "features/capability-profile/components/ProfileDocumentSection.tsx"],
   },
   {
