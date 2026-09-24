@@ -19,22 +19,35 @@ function toSentenceCase(label: string) {
 }
 
 function option(href: string, name: string): AdminFieldOption {
-  return { value: href, label: `${name} (${href})` };
+  return { value: href, label: name };
 }
 
 const pageLinks: AdminFieldOption[] = navigation.flatMap((item) => {
-  const parent = option(item.href, toSentenceCase(item.label));
+  const friendlyPageNames: Record<string, string> = {
+    "/": "Trang chủ",
+    "/about": "Trang giới thiệu",
+    "/services": "Trang dịch vụ",
+    "/projects": "Trang dự án",
+    "/capability-profile": "Hồ sơ năng lực",
+    "/quotation": "Trang báo giá",
+    "/news": "Trang tin tức",
+    "/careers": "Trang tuyển dụng",
+  };
+  const parent = option(
+    item.href,
+    friendlyPageNames[item.href] ?? toSentenceCase(item.label),
+  );
   if (!item.href.startsWith("/services")) return [parent];
   return [
     parent,
     ...services.map((service) =>
-      option(service.href, `Dịch vụ · ${service.label}`),
+      option(service.href, `Dịch vụ - ${service.label}`),
     ),
   ];
 });
 
 const projectLinks: AdminFieldOption[] = Object.values(projects).map((project) =>
-  option(`/projects/${project.slug}`, `Dự án · ${project.displayName}`),
+  option(`/projects/${project.slug}`, `Dự án - ${project.displayName}`),
 );
 
 /**
@@ -43,14 +56,14 @@ const projectLinks: AdminFieldOption[] = Object.values(projects).map((project) =
  * `#career-openings-title` là danh sách vị trí ở trang Tuyển dụng.
  */
 const anchorLinks: AdminFieldOption[] = [
-  option("#contact-form", "Trong trang · Biểu mẫu liên hệ"),
-  option("#career-openings-title", "Trong trang · Danh sách vị trí tuyển dụng"),
+  option("#contact-form", "Trong trang - Biểu mẫu liên hệ"),
+  option("#career-openings-title", "Trong trang - Danh sách vị trí tuyển dụng"),
 ];
 
 export const siteLinkOptions: AdminFieldOption[] = [
   ...pageLinks,
   // Trang Liên hệ không nằm trên thanh header nên phải thêm tay.
-  option("/contact", "Liên hệ"),
+  option("/contact", "Trang liên hệ"),
   ...projectLinks,
   ...anchorLinks,
 ].filter(

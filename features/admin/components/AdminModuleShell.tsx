@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { ArrowRight, Layers3 } from "lucide-react";
 
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
@@ -8,18 +9,27 @@ export function AdminModuleShell({
   title,
   description,
   items,
+  beforeItems,
   footnote,
+  singleColumn = false,
+  showPageHeader = true,
+  showItemsHeader = true,
   singleColumnOrange = false,
 }: {
   title: string;
   description: string;
   items: AdminModuleScopeItem[];
+  beforeItems?: ReactNode;
   footnote?: string;
+  singleColumn?: boolean;
+  showPageHeader?: boolean;
+  showItemsHeader?: boolean;
   singleColumnOrange?: boolean;
 }) {
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">
-      <AdminPageHeader title={title} description={description} />
+      {showPageHeader && <AdminPageHeader title={title} description={description} />}
+      {beforeItems}
       <section
         className={
           singleColumnOrange
@@ -27,7 +37,7 @@ export function AdminModuleShell({
             : "mt-6 overflow-hidden rounded-2xl border bg-card"
         }
       >
-        {!singleColumnOrange && (
+        {showItemsHeader && !singleColumnOrange && (
           <div className="flex items-center gap-3 border-b px-5 py-4 sm:px-6">
             <span className="grid size-9 place-items-center rounded-xl bg-muted text-brand">
               <Layers3 className="size-4" />
@@ -44,12 +54,16 @@ export function AdminModuleShell({
           className={
             singleColumnOrange
               ? "space-y-4"
+              : singleColumn
+                ? "divide-y"
               : "grid divide-y md:grid-cols-2 md:divide-x md:divide-y-0"
           }
         >
           {items.map((item, index) => {
             const className = singleColumnOrange
               ? "group flex min-h-32 items-start gap-4 rounded-2xl border border-brand/25 bg-brand/[0.035] p-5 shadow-[0_10px_28px_rgb(244_122_42/.06)] outline-none transition-[border-color,background-color,box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:border-brand/40 hover:bg-brand/[0.055] hover:shadow-[0_14px_34px_rgb(244_122_42/.1)] focus-visible:ring-3 focus-visible:ring-brand/25 sm:p-6"
+              : singleColumn
+                ? "group flex min-h-28 items-start gap-4 p-5 transition-colors hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6"
               : `group flex min-h-36 items-start gap-4 p-5 transition-colors hover:bg-muted/55 focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-inset focus-visible:ring-ring/30 sm:p-6 ${
                   index >= 2 ? "md:border-t" : ""
                 }`;

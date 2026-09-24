@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { CircleAlert } from "lucide-react";
 
 import { AdminModuleShell } from "@/features/admin/components/AdminModuleShell";
+import { EmbeddedResourceEditor } from "@/features/admin/components/editor/EmbeddedResourceEditor";
 import { ResourceEditorPage } from "@/features/admin/components/editor/ResourceEditorPage";
 import { ResourceListPage } from "@/features/admin/components/editor/ResourceListPage";
 import { UnifiedResourceEditorPage } from "@/features/admin/components/editor/UnifiedResourceEditorPage";
@@ -24,11 +25,28 @@ export function AdminCrudRoute({
   const group = getAdminResourceGroup(fullKey);
 
   if (group) {
+    const companionConfig = group.companionResourceKey
+      ? getAdminResource(group.companionResourceKey)
+      : undefined;
+    const featuredProjectsGroup = fullKey === "home/featured-projects";
     return (
       <AdminModuleShell
         title={group.title}
         description={group.description}
         items={group.items}
+        singleColumn={featuredProjectsGroup}
+        showPageHeader={!featuredProjectsGroup}
+        showItemsHeader={!featuredProjectsGroup}
+        beforeItems={
+          companionConfig ? (
+            <EmbeddedResourceEditor
+              config={companionConfig}
+              flatFieldsOnly={featuredProjectsGroup}
+              pageHeaderTitle={featuredProjectsGroup ? group.title : undefined}
+              contentTitle={featuredProjectsGroup ? companionConfig.singular : undefined}
+            />
+          ) : undefined
+        }
       />
     );
   }
@@ -37,7 +55,8 @@ export function AdminCrudRoute({
   if (exactResource) {
     const directCollectionEditor =
       exactResource.kind === "collection" &&
-      exactResource.collectionMode !== "dynamic";
+      exactResource.collectionMode !== "dynamic" &&
+      exactResource.collectionView !== "table";
     const mediaLayoutSingletonEditor =
       exactResource.kind === "singleton" && Boolean(exactResource.editorLayout?.mediaSide);
 

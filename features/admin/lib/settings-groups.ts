@@ -20,14 +20,8 @@ export const adminSettingsGroups: AdminSettingsGroup[] = [
     href: "/admin/settings/branding",
   },
   {
-    title: "Danh mục đầu trang",
-    description: "Tên hiển thị, liên kết và thứ tự của các mục trong danh mục.",
-    resourceKey: "settings/navigation",
-    href: "/admin/settings/navigation",
-  },
-  {
     title: "Đối tác dùng chung",
-    description: "6 đối tác dùng chung: tên, logo và liên kết hiển thị tại Trang chủ và Giới thiệu.",
+    description: "6 đối tác dùng chung hiển thị tại Trang chủ và Giới thiệu.",
     resourceKey: "settings/partners",
     href: "/admin/settings/partners",
   },

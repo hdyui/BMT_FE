@@ -28,7 +28,8 @@ interface ImageFieldProps {
    * nó — dùng cho bố cục ảnh một bên, chữ một bên, nơi cột ảnh chỉ có một ô nên
    * để tem nhỏ là cả cột toàn khoảng trắng.
    */
-  size?: "thumb" | "large" | "wide" | "row" | "fill";
+  size?: "thumb" | "large" | "wide" | "row" | "fill" | "portrait" | "banner";
+  fit?: "contain" | "cover";
   /** Chỉ Partners cần hai nút xếp dọc; các editor khác giữ hàng ngang. */
   actionsLayout?: "row" | "column";
   onChange: (value: string) => void;
@@ -43,6 +44,7 @@ export function ImageField({
   dirty = false,
   streamlined = false,
   size = "thumb",
+  fit = "contain",
   actionsLayout = "row",
   onChange,
 }: ImageFieldProps) {
@@ -116,6 +118,10 @@ export function ImageField({
                 "min-h-48 w-full flex-1 rounded-xl bg-muted/25 sm:max-h-[22rem]"
               : size === "row"
                 ? "h-44 w-full shrink-0 rounded-xl bg-muted/25 sm:h-52"
+              : size === "portrait"
+                ? "aspect-[1.02/1] w-full shrink-0 overflow-hidden rounded-2xl bg-muted/25"
+              : size === "banner"
+                ? "h-24 w-full max-w-[30rem] shrink-0 rounded-xl bg-white/70 sm:h-28"
               : size === "large"
                 ? "h-40 w-full max-w-[18rem] shrink-0 rounded-xl bg-muted/25 sm:h-48"
                 : size === "wide"
@@ -131,7 +137,7 @@ export function ImageField({
               alt={alt || "Ảnh xem trước"}
               fill
               unoptimized={value.startsWith("blob:") || value.startsWith("data:")}
-              className="object-contain"
+              className={fit === "cover" ? "object-cover" : "object-contain"}
               sizes={size === "thumb" ? "128px" : "(max-width: 1024px) 90vw, 36rem"}
             />
           ) : (

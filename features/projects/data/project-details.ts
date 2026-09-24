@@ -23,15 +23,19 @@ export type ProjectDetail = {
   solutionDescription: string;
   galleryDescription: string;
   processDescription: string;
+  ctaTitle: string;
   ctaDescription: string;
+  ctaSubmitLabel: string;
+  ctaSuccessMessage: string;
   heroImage: ProjectImage;
+  wordmarkImage: ProjectImage;
   survey: ProjectImage[];
   drawing: ProjectImage;
   renders: ProjectImage[];
   process: Array<ProjectImage & { label: string }>;
   comparisons: Array<{
-    before: ProjectImage & { label: string; badge?: string };
-    after: ProjectImage & { label: string; badge?: string };
+    before: ProjectImage & { label: string };
+    after: ProjectImage & { label: string };
   }>;
 };
 
@@ -62,13 +66,23 @@ export const projects: Record<string, ProjectDetail> = {
       "Đội ngũ BMT Decor lựa chọn phong cách Wabi Sabi, kết hợp gam kem ấm, đường cong mềm mại và ánh sáng dịu nhẹ, tạo nên không gian sang trọng, thư thái và đầy cảm giác muốn trở về.",
     processDescription:
       "Từ khảo sát hiện trạng đến hoàn thiện từng hạng mục, đội ngũ BMT Decor triển khai thi công theo đúng quy trình, kiểm soát chặt chẽ chất lượng ở từng giai đoạn. Các công tác cải tạo, xử lý bề mặt, thi công trần – vách, lắp đặt nội thất và hoàn thiện chi tiết được thực hiện đồng bộ, đảm bảo tiến độ, tính thẩm mỹ và độ bền của công trình, từng bước hiện thực hóa phương án thiết kế thành không gian sống hoàn chỉnh.",
+    ctaTitle: "BẠN YÊU THÍCH KHÔNG GIAN NÀY?",
     ctaDescription:
       "Liên hệ ngay BMT Decor hoặc để lại thông tin để được đội ngũ tư vấn giải pháp thiết kế – thi công phù hợp nhất cho ngôi nhà của bạn.",
+    ctaSubmitLabel: "Gửi ngay",
+    ctaSuccessMessage:
+      "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
     heroImage: {
       src: `${detailRoot}/project-cover.png`,
       alt: "Mặt tiền hoàn thiện của Mộc Miên House về đêm",
       width: 2560,
       height: 2500,
+    },
+    wordmarkImage: {
+      src: `${detailRoot}/moc-mien-wordmark.png`,
+      alt: "Mộc Miên House",
+      width: 2075,
+      height: 491,
     },
     survey: [
       {
@@ -172,7 +186,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 3046,
           height: 2281,
           label: "Hiện trạng",
-          badge: "Trước",
         },
         after: {
           src: `${detailRoot}/after-facade.png`,
@@ -180,7 +193,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 2566,
           height: 3400,
           label: "Hoàn thiện",
-          badge: "Sau",
         },
       },
       {
@@ -190,7 +202,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 3864,
           height: 2898,
           label: "3D",
-          badge: "Trước",
         },
         after: {
           src: `${detailRoot}/after-stair-built.png`,
@@ -198,7 +209,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 2986,
           height: 4003,
           label: "Thực tế",
-          badge: "Sau",
         },
       },
       {
@@ -208,7 +218,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 3396,
           height: 2532,
           label: "Hiện trạng",
-          badge: "Trước",
         },
         after: {
           src: `${detailRoot}/after-living.png`,
@@ -216,7 +225,6 @@ export const projects: Record<string, ProjectDetail> = {
           width: 3300,
           height: 2307,
           label: "Hoàn thiện",
-          badge: "Sau",
         },
       },
     ],

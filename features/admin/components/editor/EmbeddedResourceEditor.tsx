@@ -6,9 +6,11 @@ import { toast } from "sonner";
 
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import {
+  EditorTopActions,
   StickyEditorActions,
   useEditorActionsVisibility,
 } from "@/features/admin/components/editor/EditorTopActions";
+import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { EditorSection } from "@/features/admin/components/editor/EditorLayout";
 import {
   confirmEditorSave,
@@ -29,8 +31,14 @@ import { cn } from "@/shared/lib/utils";
 
 export function EmbeddedResourceEditor({
   config,
+  flatFieldsOnly = false,
+  pageHeaderTitle,
+  contentTitle,
 }: {
   config: AdminResourceConfig;
+  flatFieldsOnly?: boolean;
+  pageHeaderTitle?: string;
+  contentTitle?: string;
 }) {
   const { getRecords, updateRecord } = useAdminCrud();
   const record = getRecords(config.key)[0];
@@ -93,6 +101,79 @@ export function EmbeddedResourceEditor({
   useUnsavedChangesGuard({ dirty, dirtyCount: dirtyKeys.size, save });
   const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
 
+  const actionButtons = (
+    <>
+      {dirty && (
+        <>
+          <Button type="button" variant="outline" onClick={undoLast}>
+            <RotateCcw /> Hoàn tác
+          </Button>
+          <Button type="button" variant="ghost" onClick={undoAll}>Hoàn tác tất cả</Button>
+        </>
+      )}
+      <Button
+        type="button"
+        disabled={!dirty || saving}
+        onClick={() => confirmEditorSave(dirtyKeys.size, save)}
+      >
+        <Save /> {saving ? "Đang lưu..." : "Lưu thay đổi"}
+      </Button>
+    </>
+  );
+
+  if (flatFieldsOnly) {
+    return (
+      <>
+        <AdminPageHeader
+          title={pageHeaderTitle ?? config.title}
+          actions={
+            <EditorTopActions
+              ref={topActionsRef}
+              dirty={dirty}
+              dirtyCount={dirtyKeys.size}
+              saving={saving}
+              onUndo={undoLast}
+              onUndoAll={undoAll}
+              onSave={() => confirmEditorSave(dirtyKeys.size, save)}
+            />
+          }
+        />
+
+        <section className="mt-6 overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
+          <div className="p-5 sm:p-6">
+            <h2 className="text-lg font-bold">
+              {contentTitle ?? config.singular}
+            </h2>
+            <div className="mt-4 space-y-5">
+            {editableSections.flatMap((editorSection) =>
+              editorSection.fields.map((field) => (
+                <EditorField
+                  field={field}
+                  value={draft[field.key]}
+                  dirty={dirtyKeys.has(field.key) || (field.altKey ? dirtyKeys.has(field.altKey) : false)}
+                  contentEditorStyle={requestedContentEditor}
+                  onChange={(value) => updateField(field.key, value)}
+                  key={field.key}
+                />
+              )),
+            )}
+            </div>
+          </div>
+        </section>
+
+        <StickyEditorActions
+          hidden={topActionsVisible}
+          dirty={dirty}
+          dirtyCount={dirtyKeys.size}
+          saving={saving}
+          onUndo={undoLast}
+          onUndoAll={undoAll}
+          onSave={() => confirmEditorSave(dirtyKeys.size, save)}
+        />
+      </>
+    );
+  }
+
   return (
     <>
       <section className="mt-6 overflow-hidden rounded-2xl border bg-card">
@@ -111,21 +192,7 @@ export function EmbeddedResourceEditor({
             {dirty && <p className="mt-2 text-xs font-medium text-brand">{dirtyKeys.size} thay đổi chưa lưu</p>}
           </div>
           <div className="flex flex-wrap justify-end gap-2" ref={topActionsRef}>
-            {dirty && (
-              <>
-                <Button type="button" variant="outline" onClick={undoLast}>
-                  <RotateCcw /> Hoàn tác
-                </Button>
-                <Button type="button" variant="ghost" onClick={undoAll}>Hoàn tác tất cả</Button>
-              </>
-            )}
-            <Button
-              type="button"
-              disabled={!dirty || saving}
-              onClick={() => confirmEditorSave(dirtyKeys.size, save)}
-            >
-              <Save /> {saving ? "Đang lưu..." : "Lưu thay đổi"}
-            </Button>
+            {actionButtons}
           </div>
         </div>
         <div

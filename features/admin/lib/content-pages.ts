@@ -24,7 +24,7 @@ export const adminContentPages: AdminContentPageDefinition[] = [
     id: "home",
     label: "Trang chủ",
     publicRoute: "/",
-    resourceKeys: ["home/hero", "home/why-bmt", "home/statistics", "home/featured-projects", "home/featured-services", "home/profile-section-content", "home/featured-news", "home/contact-form"],
+    resourceKeys: ["home/hero", "home/why-bmt", "home/statistics", "home/featured-services", "home/profile-section-content", "home/contact-form"],
     sourceFiles: ["features/home/data/home-content.ts", "features/home/pages/HomePage.tsx"],
   },
   {

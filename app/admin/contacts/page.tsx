@@ -13,20 +13,19 @@ export default function AdminContactsPage() {
       items={[
         {
           title: "Mở đầu trang Liên hệ",
-          description: "Tiêu đề, mô tả, CTA và ảnh tư vấn viên.",
+          description: "Tiêu đề, mô tả và ảnh tư vấn viên.",
           priority: "P1",
           href: "/admin/contacts/hero",
         },
         {
           title: "Biểu mẫu liên hệ",
-          description:
-            "Tiêu đề, mô tả, tên các ô nhập, chữ gợi ý, nút gửi và thông báo thành công.",
+          description: "Tiêu đề, tiêu đề phụ và thông báo thành công.",
           priority: "P1",
           href: "/admin/contacts/form",
         },
         {
           title: "Bản đồ liên hệ",
-          description: "Tiêu đề hỗ trợ truy cập và liên kết Google Maps.",
+          description: "Tiêu đề hỗ trợ truy cập của khu vực bản đồ.",
           priority: "P2",
           href: "/admin/contacts/map",
         },

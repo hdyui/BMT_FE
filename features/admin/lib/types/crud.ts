@@ -175,6 +175,12 @@ export interface AdminResourceConfig {
   priority: Priority;
   kind: "collection" | "singleton";
   collectionMode?: "fixed" | "dynamic";
+  /**
+   * Cách mở một collection trong admin.
+   * - `inline`: chỉnh các bản ghi ngay trên cùng một màn hình (mặc định cho collection cố định).
+   * - `table`: mở danh sách dạng bảng rồi đi vào từng bản ghi để chỉnh sửa.
+   */
+  collectionView?: "inline" | "table";
   titleField: string;
   previewField?: string;
   orderField?: string;
@@ -191,6 +197,8 @@ export interface AdminResourceGroupConfig {
   key: string;
   title: string;
   description: string;
+  /** Nội dung dùng chung hiển thị phía trên các lựa chọn của group. */
+  companionResourceKey?: string;
   items: Array<{
     title: string;
     description: string;
