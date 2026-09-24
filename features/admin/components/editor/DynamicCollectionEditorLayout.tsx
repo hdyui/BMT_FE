@@ -36,7 +36,11 @@ export function DynamicCollectionEditorLayout({
 
   function renderField(
     key: string,
-    options: { imageSize?: "large" | "wide" | "fill"; label?: string } = {},
+    options: {
+      imageSize?: "large" | "wide" | "fill";
+      label?: string;
+      hideAlt?: boolean;
+    } = {},
   ) {
     const field = fieldMap.get(key);
     if (!field) return null;
@@ -54,6 +58,7 @@ export function DynamicCollectionEditorLayout({
         altValue={field.altKey ? draft[field.altKey] : undefined}
         altDirty={Boolean(field.altKey && dirtyKeys.has(field.altKey))}
         contentEditorStyle
+        hideAlt={options.hideAlt}
         onChange={(value) => onChange(field.key, value)}
         onAltChange={
           field.altKey ? (value) => onChange(field.altKey!, value) : undefined
@@ -93,13 +98,16 @@ export function DynamicCollectionEditorLayout({
       <div className="grid gap-6">
         <div className="grid items-start gap-6 rounded-2xl border bg-card p-5 shadow-[0_12px_38px_rgb(36_33_34/.035)] sm:p-6 lg:grid-cols-[minmax(300px,.78fr)_minmax(0,1.22fr)] lg:gap-8">
           <div>
-            {renderField("desktopImage", { imageSize: "wide", label: "Ảnh bài viết" })}
+            {renderField("desktopImage", {
+              imageSize: "wide",
+              label: "Ảnh bài viết",
+              hideAlt: true,
+            })}
           </div>
           <div className="grid content-start gap-5">
             {renderField("title", { label: "Tiêu đề bài viết" })}
             {renderField("excerpt", { label: "Mô tả ngắn" })}
             {renderField("href", { label: "Liên kết bài viết" })}
-            {renderField("imageAlt", { label: "Văn bản thay thế" })}
           </div>
         </div>
 
@@ -113,7 +121,13 @@ export function DynamicCollectionEditorLayout({
   return (
     <div className="overflow-hidden rounded-2xl border bg-card shadow-[0_12px_38px_rgb(36_33_34/.035)]">
       <div className="grid items-start gap-6 p-5 sm:p-6 md:grid-cols-[34%_minmax(0,1fr)] lg:gap-8">
-        <div>{renderField("image", { imageSize: "wide", label: "Ảnh vị trí tuyển dụng" })}</div>
+        <div>
+          {renderField("image", {
+            imageSize: "wide",
+            label: "Ảnh vị trí tuyển dụng",
+            hideAlt: true,
+          })}
+        </div>
         <div className="grid content-start gap-5">
           {renderField("title", { label: "Tên vị trí" })}
           <div className="grid gap-4 sm:grid-cols-2">

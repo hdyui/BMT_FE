@@ -557,6 +557,15 @@ function createEmptyRecord(config: AdminResourceConfig, order: number) {
     if (field.altKey) draft[field.altKey] = "";
   }
 
+  if (config.key === "projects/list") {
+    draft.highlight = false;
+  }
+
+  if (config.key === "news/list") {
+    draft.featured = false;
+    draft.highlightHome = false;
+  }
+
   return draft;
 }
 

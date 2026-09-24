@@ -15,10 +15,10 @@ import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
 import { MobileTrustAccordion } from "@/features/home/components/MobileTrustAccordion";
 import {
-  homeNews as news,
   homeSectionContent,
   homeTrustReasons as trustReasons,
 } from "@/features/home/data/home-content";
+import { homeHighlightedNews } from "@/features/news/data/news-page";
 
 function SectionHeading({ title, copy }: { title: string; copy?: string }) {
   return (
@@ -54,6 +54,8 @@ function ProjectSectionHeading() {
 }
 
 export function HomePage() {
+  const [mainNews, ...secondaryNews] = homeHighlightedNews;
+
   return (
     <div
       className="min-h-screen overflow-x-clip pt-[60px] xl:pt-[var(--site-header-desktop-height)]"
@@ -192,41 +194,42 @@ export function HomePage() {
         <div className="relative mx-auto w-[min(1100px,calc(100%-2.25rem))]">
           <SectionHeading title={homeSectionContent.featuredNews.title} />
           <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
+            {mainNews ? (
             <Reveal className="self-start">
-              <Link className="group block" href="/news">
+              <Link className="group block" href={mainNews.href}>
                 <div
                   className="relative overflow-hidden rounded-3xl"
                   style={{ aspectRatio: "1.65 / 1" }}
                 >
                   <Image
                     className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    src="/images/home/news-featured.png"
-                    alt="Không gian nội thất do BMT Decor thực hiện"
+                    src={mainNews.desktopImage}
+                    alt={mainNews.imageAlt}
                     fill
                     sizes="(max-width:1024px) 100vw, 55vw"
                   />
                 </div>
                 <h3 className="mt-5 text-xl font-bold transition-colors group-hover:text-brand">
-                  Bí quyết kiến tạo không gian sống hiện đại và bền vững
+                  {mainNews.title}
                 </h3>
                 <p className="mt-2 text-justify text-sm leading-relaxed text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:line-clamp-2 max-sm:text-left max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
-                  Cập nhật xu hướng thiết kế, kinh nghiệm thi công và các giải
-                  pháp hữu ích từ đội ngũ BMT Decor.
+                  {mainNews.excerpt}
                 </p>
               </Link>
             </Reveal>
+            ) : null}
             <div className="grid gap-4">
-              {news.map((item, index) => (
+              {secondaryNews.map((item, index) => (
                 <Reveal delay={index * 100} key={item.title}>
                   <Link
                     className="group grid grid-cols-[132px_1fr] items-center gap-5 max-sm:grid-cols-[46%_1fr] max-sm:gap-4"
-                    href="/news"
+                    href={item.href}
                   >
                     <div className="relative aspect-square overflow-hidden rounded-2xl max-sm:aspect-[1.75/1]">
                       <Image
                         className="object-cover transition-transform duration-500 group-hover:scale-105"
-                        src={item.image}
-                        alt=""
+                        src={item.desktopImage}
+                        alt={item.imageAlt}
                         fill
                         sizes="132px"
                       />
@@ -236,7 +239,7 @@ export function HomePage() {
                         {item.title}
                       </h3>
                       <p className="mt-2 line-clamp-3 text-justify text-sm leading-[1.45] text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:mt-1.5 max-sm:line-clamp-2 max-sm:text-left max-sm:text-[13px] max-sm:font-normal max-sm:leading-[1.3] max-sm:text-charcoal/80">
-                        {item.copy}
+                        {item.excerpt}
                       </p>
                     </div>
                   </Link>

@@ -8,6 +8,8 @@ export interface NewsArticle {
   imageAlt: string;
   href: string;
   body: string;
+  featured: boolean;
+  highlightHome: boolean;
 }
 
 const desktopImage = "/images/news/article-model.jpg";
@@ -21,7 +23,7 @@ const featuredCopy = [
   ["Lựa chọn vật liệu phù hợp với khí hậu Việt Nam", "Những tiêu chí thực tế để vật liệu giữ được vẻ đẹp, độ bền và khả năng bảo trì thuận tiện theo thời gian."],
 ] as const;
 
-export const featuredNews: NewsArticle[] = featuredCopy.map(([title, excerpt], index) => ({
+const featuredArticles: NewsArticle[] = featuredCopy.map(([title, excerpt], index) => ({
   id: `featured-news-${index + 1}`,
   slug: `tin-noi-bat-${index + 1}`,
   title,
@@ -31,6 +33,8 @@ export const featuredNews: NewsArticle[] = featuredCopy.map(([title, excerpt], i
   imageAlt: `Minh họa bài viết ${title}`,
   href: `/news#tin-noi-bat-${index + 1}`,
   body: `<p>${excerpt}</p>`,
+  featured: true,
+  highlightHome: index < 4,
 }));
 
 const articleTitles = [
@@ -53,7 +57,7 @@ const articleTitles = [
 
 const defaultExcerpt = "BMT Decor chia sẻ góc nhìn thực tế từ quá trình thiết kế và thi công, giúp gia chủ chủ động hơn trong từng quyết định về công năng, vật liệu và ngân sách.";
 
-export const articles: NewsArticle[] = articleTitles.map((title, index) => ({
+const regularArticles: NewsArticle[] = articleTitles.map((title, index) => ({
   id: `news-${index + 1}`,
   slug: `bai-viet-${index + 1}`,
   title,
@@ -63,4 +67,16 @@ export const articles: NewsArticle[] = articleTitles.map((title, index) => ({
   imageAlt: `Mô hình kiến trúc minh họa cho bài viết ${title}`,
   href: `/news#bai-viet-${index + 1}`,
   body: `<p>${defaultExcerpt}</p>`,
+  featured: false,
+  highlightHome: false,
 }));
+
+export const articles: NewsArticle[] = [...featuredArticles, ...regularArticles];
+
+export const featuredNews: NewsArticle[] = articles.filter(
+  (article) => article.featured,
+);
+
+export const homeHighlightedNews: NewsArticle[] = articles
+  .filter((article) => article.highlightHome)
+  .slice(0, 4);

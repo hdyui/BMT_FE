@@ -48,7 +48,7 @@ export function BeforeAfterSlider({ comparison }: { comparison: Comparison }) {
             className={styles.beforeAfterBadgeImage}
             aria-hidden="true"
           />
-          <span className={styles.beforeAfterBadgeText}>{before.badge ?? "Trước"}</span>
+          <span className={styles.beforeAfterBadgeText}>Trước</span>
         </span>
         <span className={`${styles.beforeAfterBadge} ${styles.beforeAfterBadgeAfter}`}>
           <Image
@@ -59,7 +59,7 @@ export function BeforeAfterSlider({ comparison }: { comparison: Comparison }) {
             className={styles.beforeAfterBadgeImage}
             aria-hidden="true"
           />
-          <span className={styles.beforeAfterBadgeText}>{after.badge ?? "Sau"}</span>
+          <span className={styles.beforeAfterBadgeText}>Sau</span>
         </span>
 
         <span

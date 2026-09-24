@@ -31,7 +31,7 @@ export interface AdminSidebarModel {
 }
 
 /** Những đường dẫn thuộc mục Tổng quan. */
-const OVERVIEW_PREFIXES = ["/admin/dashboard"];
+const OVERVIEW_PREFIXES = ["/admin/dashboard", "/admin/contact-submissions"];
 
 /**
  * Tất cả resource được khai báo trong `adminContentPages` đều thuộc mục
@@ -105,7 +105,17 @@ export function getAdminSectionKey(pathname: string): AdminSectionKey {
 function getOverviewSidebar(): AdminSidebarModel {
   return {
     title: "Tổng quan",
-    groups: [{ items: [{ label: "Bảng điều khiển", href: "/admin/dashboard" }] }],
+    groups: [
+      {
+        items: [
+          { label: "Bảng điều khiển", href: "/admin/dashboard" },
+          {
+            label: "Khách hàng liên hệ",
+            href: "/admin/contact-submissions",
+          },
+        ],
+      },
+    ],
   };
 }
 

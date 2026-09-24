@@ -59,5 +59,37 @@ export const quotationRates: Record<string, [number, number]> = {
   "Cải tạo & sửa chữa": [2100000, 3800000],
 };
 
+/**
+ * Khoảng giá thị trường (đ/m² sàn) theo từng cặp loại hình × gói, thứ tự gói
+ * như `quotationServiceTypes`. Admin chỉnh khoảng này mỗi năm; backend lấy
+ * khoảng đó (cùng lựa chọn của khách) để tính đơn giá hiển thị ở bước 05.
+ */
+export const quotationMarketRanges: Record<string, [number, number][]> = {
+  "Nhà ở": [
+    [5200000, 6500000],
+    [270000, 300000],
+    [3350000, 4300000],
+    [2000000, 5000000],
+  ],
+  "Văn phòng": [
+    [6750000, 7150000],
+    [100000, 260000],
+    [3000000, 4000000],
+    [2000000, 6000000],
+  ],
+  "Thẩm mỹ viện, showroom": [
+    [5000000, 10000000],
+    [140000, 350000],
+    [3000000, 4000000],
+    [2000000, 6000000],
+  ],
+  "Nhà hàng, khách sạn": [
+    [5200000, 7500000],
+    [250000, 300000],
+    [3400000, 4200000],
+    [5000000, 8000000],
+  ],
+};
+
 /** Ảnh mở đầu vẽ riêng cho khổ điện thoại (QuotationHero, ẩn từ md trở lên). */
 export const quotationMobileHeroImage = "/images/bao-gia/mobile/quotation-hero.png";

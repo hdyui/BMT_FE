@@ -36,6 +36,7 @@ export function EditorField({
   lockItemCount = false,
   hideAlt = false,
   imageSize = "thumb",
+  imageFit = "contain",
   imageActionsLayout = "row",
   onChange,
   onAltChange,
@@ -64,7 +65,8 @@ export function EditorField({
    * Cỡ ảnh xem trước. `fill` cho ô ảnh cao hết cột chứa nó — dùng ở bố cục ảnh
    * một bên, chữ một bên để cột ảnh không còn là một mẩu nhỏ trên vùng trống.
    */
-  imageSize?: "thumb" | "large" | "wide" | "row" | "fill";
+  imageSize?: "thumb" | "large" | "wide" | "row" | "fill" | "portrait" | "banner";
+  imageFit?: "contain" | "cover";
   imageActionsLayout?: "row" | "column";
   onChange: (value: AdminFieldValue) => void;
   onAltChange?: (value: AdminFieldValue) => void;
@@ -81,6 +83,7 @@ export function EditorField({
           dirty={dirty}
           streamlined={contentEditorStyle}
           size={imageSize}
+          fit={imageFit}
           actionsLayout={imageActionsLayout}
           onChange={onChange}
         />
@@ -232,7 +235,23 @@ export function EditorField({
       ) : field.type === "select" ? (
         <Select value={currentValue || null} onValueChange={(nextValue) => onChange(nextValue ?? "")}>
           <SelectTrigger className="w-full min-w-0 max-w-full font-normal" aria-invalid={Boolean(error)}>
-            <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"} />
+            <SelectValue placeholder={field.placeholder ?? "Chọn giá trị"}>
+              {(selectedValue) => {
+                const normalizedValue =
+                  selectedValue === null || selectedValue === undefined
+                    ? ""
+                    : String(selectedValue);
+                const selectedOption = getSelectOptions(
+                  field,
+                  currentValue,
+                ).find((option) => option.value === normalizedValue);
+
+                return (
+                  selectedOption?.label ??
+                  (normalizedValue || field.placeholder || "Chọn giá trị")
+                );
+              }}
+            </SelectValue>
           </SelectTrigger>
           {/* `alignItemWithTrigger={false}`: mặc định base-ui đặt mục đang chọn
               chồng lên nút bấm kiểu select của macOS, che mất cả nhãn lẫn giá

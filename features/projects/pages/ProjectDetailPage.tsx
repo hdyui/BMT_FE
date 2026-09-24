@@ -26,14 +26,10 @@ export function ProjectDetailPage({ project }: { project: ProjectDetail }) {
       </main>
       <ContactForm
         showTopNotch
-        title="BẠN YÊU THÍCH KHÔNG GIAN NÀY?"
-        description={
-          <>
-            Liên hệ ngay <strong>BMT Decor</strong> hoặc để lại thông tin để được
-            đội ngũ tư vấn giải pháp <strong>thiết kế - thi công</strong> phù hợp
-            nhất cho ngôi nhà của bạn.
-          </>
-        }
+        title={project.ctaTitle}
+        description={project.ctaDescription}
+        submitLabel={project.ctaSubmitLabel}
+        successMessage={project.ctaSuccessMessage}
       />
       <SiteFooter />
     </>
