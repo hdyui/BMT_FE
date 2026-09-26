@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import { saveContactSubmission } from "@/shared/lib/contact-submissions";
+import { submitFormSubmission } from "@/shared/lib/form-submissions";
 
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
@@ -78,7 +79,7 @@ export function ContactForm({
     });
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
@@ -95,10 +96,11 @@ export function ContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    saveContactSubmission({
-      name,
-      phone,
-    });
+    try {
+      await submitFormSubmission({ customerName: name, phone });
+    } catch {
+      saveContactSubmission({ name, phone });
+    }
     toast.success(successMessage);
     formElement.reset();
     setErrors({});

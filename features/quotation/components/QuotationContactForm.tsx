@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import type { ContactFormContent } from "@/shared/components/contact-form-content";
+import { submitFormSubmission } from "@/shared/lib/form-submissions";
 
 /**
  * Contact form riêng cho trang báo giá — cùng style/font/size/bold với
@@ -72,7 +73,7 @@ export function QuotationContactForm({
     });
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
@@ -85,6 +86,13 @@ export function QuotationContactForm({
 
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
+
+    try {
+      await submitFormSubmission({ customerName: String(form.get("name") ?? "").trim(), phone: String(form.get("phone") ?? "").trim() });
+    } catch {
+      toast.error("Không thể gửi thông tin lúc này.");
+      return;
+    }
 
     toast.success(successMessage);
     formElement.reset();

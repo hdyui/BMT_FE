@@ -4,18 +4,40 @@ import { ContactForm } from "@/shared/components/ContactForm";
 import { contactFormContent } from "../data/contact-form";
 import { CapabilityHero } from "../components/CapabilityHero";
 import { ProfileDocumentSection } from "../components/ProfileDocumentSection";
+import {
+  getCapabilityProfileContent,
+  getCapabilityProfilePages,
+} from "../services/capability-profile.service";
 
-export function CapabilityProfilePage() {
+export async function CapabilityProfilePage() {
+  const [contentResult, pagesResult] = await Promise.allSettled([
+    getCapabilityProfileContent(),
+    getCapabilityProfilePages(),
+  ]);
+  const content = contentResult.status === "fulfilled" ? contentResult.value : undefined;
+  const pages = pagesResult.status === "fulfilled" ? pagesResult.value : undefined;
+
+  const contact = content?.content.contactForm;
+
   return (
     <div className="min-h-[100dvh] overflow-x-clip bg-[#f7f7f7] pt-[60px]">
       <SiteHeader />
       <main>
-        <CapabilityHero />
-        <ProfileDocumentSection />
+        <CapabilityHero content={content?.content.hero} />
+        <ProfileDocumentSection
+          pages={pages}
+          heading={content?.content.hero.documentHeading}
+        />
         {/* Phần khuyết phía trên ContactForm trong suốt, nên bọc nền trùng màu
             section ngay trên (#fdfdfd) để không lộ vệt xám của nền trang. */}
         <div className="bg-[#fdfdfd]">
-          <ContactForm showTopNotch {...contactFormContent} />
+          <ContactForm
+            showTopNotch
+            {...contactFormContent}
+            title={contact?.title || contactFormContent.title}
+            description={contact?.subtitle}
+            successMessage={contact?.successMessage || contactFormContent.successMessage}
+          />
         </div>
       </main>
       {/* Nền form đã là cam nên bỏ vạch cam 10px mặc định ở đầu footer,

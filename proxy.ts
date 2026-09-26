@@ -3,8 +3,8 @@ import { NextResponse } from "next/server";
 
 import {
   ADMIN_AUTH_COOKIE,
+  ADMIN_AUTH_MARKER,
   ADMIN_LOCATION_COOKIE,
-  ADMIN_MOCK_SESSION,
   sanitizeAdminLocation,
 } from "@/features/admin/lib/auth-config";
 
@@ -12,7 +12,7 @@ export function proxy(request: NextRequest) {
   const { pathname, search } = request.nextUrl;
   const isLoginPage = pathname === "/admin/login";
   const isAuthenticated =
-    request.cookies.get(ADMIN_AUTH_COOKIE)?.value === ADMIN_MOCK_SESSION;
+    request.cookies.get(ADMIN_AUTH_COOKIE)?.value === ADMIN_AUTH_MARKER;
 
   if (isLoginPage) {
     if (!isAuthenticated) return NextResponse.next();

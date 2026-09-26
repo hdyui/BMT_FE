@@ -1,4 +1,5 @@
 export const ADMIN_AUTH_COOKIE = "bmt_admin_session";
+export const ADMIN_AUTH_MARKER = "authenticated";
 export const ADMIN_LOCATION_COOKIE = "bmt_admin_location";
 export const ADMIN_MOCK_SESSION = "bmt-mock-admin-session-v1";
 

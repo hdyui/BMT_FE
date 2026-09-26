@@ -14,6 +14,10 @@ import {
   quotationStepCopy as stepCopy,
   quotationSteps as steps,
 } from "@/features/quotation/data/quotation-estimator";
+import {
+  calculateQuotation,
+  type QuotationPageContent,
+} from "@/features/quotation/services/quotation.service";
 
 /**
  * Khung ước tính báo giá + dải liên hệ.
@@ -34,21 +38,41 @@ function formatNumber(value: number) {
   return new Intl.NumberFormat("vi-VN").format(Math.round(value));
 }
 
-export function QuotationEstimator() {
+export function QuotationEstimator({
+  content,
+}: {
+  content?: QuotationPageContent["estimator"];
+}) {
+  const currentSteps = content?.stepLabels ?? steps;
+  const currentBuildingTypes = content?.buildingType.options ?? buildingTypes;
+  const currentServiceTypes = content?.service.options ?? serviceTypes;
+  const currentStepCopy = content
+    ? [
+        [content.buildingType.heading, content.buildingType.instruction],
+        [content.area.heading, content.area.instruction],
+        [content.budget.heading, content.budget.instruction],
+        [content.service.heading, content.service.instruction],
+      ]
+    : stepCopy;
   const sectionRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const mobileTrackRef = useRef<HTMLSpanElement>(null);
   const stepButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [inView, setInView] = useState(false);
   const [step, setStep] = useState(0);
-  const [building, setBuilding] = useState(buildingTypes[0]);
-  const [service, setService] = useState(serviceTypes[0]);
+  const [building, setBuilding] = useState(currentBuildingTypes[0] ?? buildingTypes[0]);
+  const [service, setService] = useState(currentServiceTypes[0] ?? serviceTypes[0]);
   const [area, setArea] = useState("");
   const [budget, setBudget] = useState("");
   const [areaError, setAreaError] = useState("");
   const [budgetError, setBudgetError] = useState("");
   const [areaTouched, setAreaTouched] = useState(false);
   const [budgetTouched, setBudgetTouched] = useState(false);
+  const [apiEstimate, setApiEstimate] = useState<{
+    low: number;
+    high: number;
+    rate: number;
+  } | null>(null);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -91,7 +115,7 @@ export function QuotationEstimator() {
     return () => resizeObserver.disconnect();
   }, [step]);
 
-  const estimate = useMemo(() => {
+  const localEstimate = useMemo(() => {
     const squareMeters = digitsOnly(area) ? Number(area) : 80;
     const [lowRate, highRate] = quotationRates[service];
     return {
@@ -101,6 +125,50 @@ export function QuotationEstimator() {
       squareMeters,
     };
   }, [area, service]);
+
+  useEffect(() => {
+    if (step !== 4 || !digitsOnly(area) || !digitsOnly(budget.replaceAll(".", ""))) {
+      return;
+    }
+
+    let cancelled = false;
+    void calculateQuotation({
+      buildingType: building,
+      areaM2: Number(area),
+      budget: Number(budget.replaceAll(".", "")),
+      serviceType: service,
+    })
+      .then((response) => {
+        const payload =
+          response && typeof response === "object" && "value" in response
+            ? response.value
+            : response;
+        if (!payload || typeof payload !== "object") return;
+
+        const result = payload as Record<string, unknown>;
+        const low = Number(result.low ?? result.min ?? result.unitPriceMin);
+        const high = Number(result.high ?? result.max ?? result.unitPriceMax);
+        if (!Number.isFinite(low) || !Number.isFinite(high) || cancelled) return;
+
+        setApiEstimate({
+          low: result.unitPriceMin ? low * Number(area) : low,
+          high: result.unitPriceMax ? high * Number(area) : high,
+          rate: Math.round(((low + high) / 2) / 50000) * 50000,
+        });
+      })
+      .catch(() => {
+        if (!cancelled) setApiEstimate(null);
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [area, budget, building, service, step]);
+
+  const estimate = {
+    ...localEstimate,
+    ...(apiEstimate ?? {}),
+  };
 
   function validateArea() {
     setAreaTouched(true);
@@ -179,7 +247,7 @@ export function QuotationEstimator() {
             ref={mobileTrackRef}
             aria-hidden="true"
           />
-          {steps.map((label, index) => (
+          {currentSteps.map((label, index) => (
             <div
               className={`contents md:relative md:z-[1] md:flex md:min-w-0 md:items-center md:justify-start md:self-stretch ${styles.progressItem}`}
               style={{
@@ -233,10 +301,10 @@ export function QuotationEstimator() {
                 id="estimator-title"
                 className="m-0 text-[1.5rem] leading-[1.08] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)] md:leading-[1.1]"
               >
-                {stepCopy[step][0]}
+                {currentStepCopy[step][0]}
               </h2>
               <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[26rem] text-[0.72rem] leading-[1.35] text-balance md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
-                {stepCopy[step][1]}
+                {currentStepCopy[step][1]}
               </p>
               <HeadingRule />
             </>
@@ -254,7 +322,7 @@ export function QuotationEstimator() {
 
           {step === 0 && (
             <OptionGrid
-              options={buildingTypes}
+              options={currentBuildingTypes}
               selected={building}
               onSelect={setBuilding}
             />
@@ -263,9 +331,9 @@ export function QuotationEstimator() {
           {step === 1 && (
             <UnitInput
               id="area"
-              placeholder={quotationAreaInput.placeholder}
+              placeholder={content?.area.placeholder ?? quotationAreaInput.placeholder}
               value={area}
-              unit={quotationAreaInput.unit}
+              unit={content?.area.unit ?? quotationAreaInput.unit}
               error={areaError}
               valid={areaTouched && !areaError && digitsOnly(area)}
               onBlur={validateArea}
@@ -276,9 +344,9 @@ export function QuotationEstimator() {
           {step === 2 && (
             <UnitInput
               id="budget"
-              placeholder={quotationBudgetInput.placeholder}
+              placeholder={content?.budget.placeholder ?? quotationBudgetInput.placeholder}
               value={budget}
-              unit={quotationBudgetInput.unit}
+              unit={content?.budget.unit ?? quotationBudgetInput.unit}
               error={budgetError}
               valid={
                 budgetTouched &&
@@ -292,7 +360,7 @@ export function QuotationEstimator() {
 
           {step === 3 && (
             <OptionGrid
-              options={serviceTypes}
+              options={currentServiceTypes}
               selected={service}
               onSelect={setService}
             />
@@ -319,7 +387,7 @@ export function QuotationEstimator() {
                 className={`mt-5 mb-0 text-[0.8125rem] leading-[1.45] md:text-[0.9375rem] md:leading-normal ${styles.animResultCaption}`}
               >
                 ~ {formatNumber(estimate.rate)} đ/m² - {building}{" "}
-                {estimate.squareMeters} {quotationAreaInput.unit} - {quotationResultIncludeLabel}{" "}
+                {estimate.squareMeters} {content?.area.unit ?? quotationAreaInput.unit} - {content?.resultIncludeLabel ?? quotationResultIncludeLabel}{" "}
                 {service.toLocaleLowerCase("vi")}
               </p>
             </div>

@@ -2,19 +2,38 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useState, type FormEvent } from "react";
 import { ArrowLeft, Eye, EyeOff, LoaderCircle } from "lucide-react";
 
-import { Button } from "@/features/admin/components/ui/button";
 import { Input } from "@/features/admin/components/ui/input";
-import { loginAdmin, type AdminLoginState } from "@/features/admin/auth/actions";
-import { MOCK_ADMIN_ACCOUNT } from "@/features/admin/lib/auth-config";
-
-const initialState: AdminLoginState = { error: null };
+import { loginAdmin } from "@/features/admin/auth/service";
 
 export function AdminLoginForm({ location = "" }: { location?: string }) {
   const [showPassword, setShowPassword] = useState(false);
-  const [state, formAction, pending] = useActionState(loginAdmin, initialState);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setPending(true);
+
+    const form = new FormData(event.currentTarget);
+    try {
+      await loginAdmin({
+        email: String(form.get("email") ?? "").trim(),
+        password: String(form.get("password") ?? ""),
+      });
+      const next = location.startsWith("/") && !location.startsWith("//")
+        ? location
+        : "/admin/dashboard";
+      window.location.assign(next);
+    } catch (loginError) {
+      setError(loginError instanceof Error ? loginError.message : "Đăng nhập thất bại.");
+    } finally {
+      setPending(false);
+    }
+  }
 
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-5 py-8 text-foreground sm:px-8">
@@ -47,8 +66,7 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
               </p>
             </div>
 
-            <form action={formAction} className="space-y-5">
-              <input type="hidden" name="location" value={location} />
+            <form method="post" onSubmit={handleSubmit} className="space-y-5">
 
               <div className="space-y-2">
                 <label htmlFor="admin-email" className="text-sm font-semibold">
@@ -90,35 +108,25 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
                 </div>
               </div>
 
-              {state.error && (
+              {error && (
                 <p
                   role="alert"
                   className="rounded-lg border border-destructive/25 bg-destructive/5 px-3.5 py-3 text-sm font-medium text-destructive"
                 >
-                  {state.error}
+                  {error}
                 </p>
               )}
 
-              <Button type="submit" className="h-11 w-full" disabled={pending}>
+              <button
+                type="submit"
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:pointer-events-none disabled:opacity-50"
+                disabled={pending}
+              >
                 {pending && <LoaderCircle className="animate-spin" />}
                 {pending ? "Đang đăng nhập..." : "Đăng nhập"}
-              </Button>
+              </button>
             </form>
 
-            <div className="mt-6 rounded-xl border bg-muted/35 p-4 text-sm">
-              <p className="font-semibold">Tài khoản demo hiện tại</p>
-              <div className="mt-2 grid gap-1 text-muted-foreground">
-                <p>
-                  Email: <span className="font-medium text-foreground">{MOCK_ADMIN_ACCOUNT.email}</span>
-                </p>
-                <p>
-                  Mật khẩu: <span className="font-medium text-foreground">{MOCK_ADMIN_ACCOUNT.password}</span>
-                </p>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                Đây là tài khoản giả lập cho giai đoạn chưa kết nối backend.
-              </p>
-            </div>
           </div>
       </section>
     </main>

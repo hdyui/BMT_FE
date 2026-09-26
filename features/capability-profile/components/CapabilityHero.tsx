@@ -1,14 +1,20 @@
 "use client";
 
 import Image from "next/image";
-import { motion, useReducedMotion } from "motion/react";
+import { motion } from "motion/react";
+import type { CapabilityProfileContent } from "../services/capability-profile.service";
 
 const ease = [0.16, 1, 0.3, 1] as const;
 
-export function CapabilityHero() {
-  const reduceMotion = useReducedMotion();
-  const initialUp = reduceMotion ? false : { opacity: 0, y: 28 };
-  const initialLeft = reduceMotion ? false : { opacity: 0, x: -34 };
+export function CapabilityHero({
+  content,
+}: {
+  content?: CapabilityProfileContent["hero"];
+}) {
+  // Do not emit an SSR-only initial style. Motion can finish this animation
+  // before React hydrates on the client, which makes the server markup differ.
+  const initialUp = false;
+  const initialLeft = false;
 
   /* Mọi ảnh và hoa văn trong banner đều đặt theo % của khung, nên bố cục chỉ
      khớp khi khung giữ đúng tỉ lệ. Trước đây chiều cao desktop khoá cứng
@@ -22,14 +28,14 @@ export function CapabilityHero() {
       <div className="pointer-events-none absolute inset-0 hidden lg:block" aria-hidden="true">
         <motion.div
           className="absolute inset-y-0 right-0 z-0 w-[20%] rounded-l-[4rem] bg-[#eeeeee]"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.65, delay: 0.08 }}
         />
 
         <motion.div
           className="absolute -top-[8%] left-[33.5%] z-[1] w-[14.7%] max-w-[17.5rem]"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.55, delay: 0.12 }}
         >
@@ -38,7 +44,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute top-[5.5%] left-[7.1%] z-[1] w-[4.2%] max-w-[4.5rem] opacity-55"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 0.55 }}
           transition={{ duration: 0.5, delay: 0.2 }}
         >
@@ -47,16 +53,16 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute bottom-[-9%] left-0 z-[1] w-[46%] opacity-45"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 0.45 }}
           transition={{ duration: 0.72, delay: 0.35 }}
         >
-          <Image className="h-auto w-full" src="/images/capability-profile/decor-08.webp" alt="" width={3690} height={2774} sizes="46vw" />
+          <Image className="h-auto w-full" src={content?.decor08 || "/images/capability-profile/decor-08.webp"} alt="" width={3690} height={2774} sizes="46vw" unoptimized={Boolean(content?.decor08)} />
         </motion.div>
 
         <motion.div
           className="absolute top-[77.7%] left-[42.4%] z-[1] aspect-square w-[8.7%] origin-top-right -rotate-[5deg] rounded-tl-full border-t-[clamp(25px,2.05vw,34px)] border-l-[clamp(25px,2.05vw,34px)] border-[#dedede] opacity-55"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 0.55 }}
           transition={{ duration: 0.62, delay: 0.42 }}
         >
@@ -64,7 +70,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute top-[11%] left-[69.8%] z-[1] w-[24%] max-w-[27rem] opacity-95"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 0.95 }}
           transition={{ duration: 0.58, delay: 0.28 }}
         >
@@ -73,7 +79,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute bottom-[6.5%] left-[37.1%] z-[4] w-[8.5%] max-w-[10rem]"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.62 }}
         >
@@ -82,7 +88,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute bottom-[4.5%] left-[48.4%] z-[4] w-[21.7%] max-w-[26rem]"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.58, delay: 0.54 }}
         >
@@ -91,7 +97,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute right-[4%] bottom-[4.2%] z-[2] w-[6.3%] max-w-[7.5rem]"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.48, delay: 0.76 }}
         >
@@ -100,7 +106,7 @@ export function CapabilityHero() {
 
         <motion.div
           className="absolute right-[6.9%] bottom-[7.2%] z-[6] w-[8.2%] opacity-55"
-          initial={reduceMotion ? false : { opacity: 0 }}
+          initial={false}
           animate={{ opacity: 0.55 }}
           transition={{ duration: 0.45, delay: 0.84 }}
         >
@@ -110,12 +116,12 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute -bottom-12 left-0 -z-10 w-[130%] max-w-none opacity-55 lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 0.55 }}
         transition={{ duration: 0.7, delay: 0.35 }}
         aria-hidden="true"
       >
-        <Image className="h-auto w-full" src="/images/capability-profile/decor-08.webp" alt="" width={3690} height={2774} sizes="100vw" />
+        <Image className="h-auto w-full" src={content?.decor08 || "/images/capability-profile/decor-08.webp"} alt="" width={3690} height={2774} sizes="100vw" unoptimized={Boolean(content?.decor08)} />
       </motion.div>
 
       {/* Chấm bi góc trên trái + vòng cam góc trên phải: bản mobile tách riêng
@@ -124,7 +130,7 @@ export function CapabilityHero() {
           với banner mobile cao cố định. */}
       <motion.div
         className="pointer-events-none absolute top-4 left-6 z-[1] w-8 opacity-55 lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 0.55 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         aria-hidden="true"
@@ -134,7 +140,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute -top-12 right-[4%] z-[1] w-[56%] lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.55, delay: 0.12 }}
         aria-hidden="true"
@@ -144,7 +150,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute top-14 right-0 z-[1] w-[4.75rem] lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.48, delay: 0.32 }}
         aria-hidden="true"
@@ -154,7 +160,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute top-50 -right-8 z-[1] aspect-square w-32 rounded-tl-full border-t-[2rem] border-l-[2rem] border-[#d4d4d4] opacity-65 lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 0.65 }}
         transition={{ duration: 0.58, delay: 0.44 }}
         aria-hidden="true"
@@ -162,7 +168,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute top-[19rem] right-5 z-[2] w-[3.75rem] lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.48, delay: 0.56 }}
         aria-hidden="true"
@@ -172,7 +178,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute right-[-2rem] bottom-12 z-[1] w-36 opacity-40 lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 0.4 }}
         transition={{ duration: 0.55, delay: 0.62 }}
         aria-hidden="true"
@@ -182,7 +188,7 @@ export function CapabilityHero() {
 
       <motion.div
         className="pointer-events-none absolute bottom-7 left-4 z-[4] w-[12.5rem] lg:hidden"
-        initial={reduceMotion ? false : { opacity: 0 }}
+        initial={false}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.58, delay: 0.68 }}
         aria-hidden="true"
@@ -197,7 +203,7 @@ export function CapabilityHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.08 }}
         >
-          Hồ sơ năng lực
+          {content?.title || "Hồ sơ năng lực"}
           <span className="mt-0.5 block">BMT Decor</span>
         </motion.h1>
 
@@ -207,8 +213,7 @@ export function CapabilityHero() {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.28 }}
         >
-          Khẳng định năng lực - Đồng hành
-          <br className="lg:hidden" /> kiến tạo giá trị bền vững
+          {content?.subtitle || "Khẳng định năng lực - Đồng hành kiến tạo giá trị bền vững"}
         </motion.p>
 
         <motion.div
@@ -231,41 +236,59 @@ export function CapabilityHero() {
               Khối dùng w-max nên bề ngang bám sát dòng dài nhất (dòng 3); hai
               dòng trên justify tới đúng bề ngang đó nên ba dòng thẳng đều hai
               lề mà phần dãn chữ thêm là nhỏ nhất có thể. */}
-          <span className="lg:block lg:[text-align-last:justify]">
-            <Image
-              className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
-              src="/images/capability-profile/intro-logo.png"
-              alt=""
-              width={90}
-              height={95}
-              sizes="1em"
-              aria-hidden="true"
-            />
-            Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ{" "}
-          </span>
-          <span className="lg:block lg:[text-align-last:justify]">
-            chuyên môn, quy trình triển khai và các dự án tiêu biểu, phản ánh năng lực{" "}
-          </span>
-          <span className="lg:block">
-            thiết kế, thi công và cải tạo công trình một cách chuyên nghiệp và đồng bộ.
-          </span>
+          {content?.description ? (
+            <>
+              <Image
+                className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
+                src="/images/capability-profile/intro-logo.png"
+                alt=""
+                width={90}
+                height={95}
+                sizes="1em"
+                aria-hidden="true"
+              />
+              {content.description}
+            </>
+          ) : (
+            <>
+              <span className="lg:block lg:[text-align-last:justify]">
+                <Image
+                  className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
+                  src="/images/capability-profile/intro-logo.png"
+                  alt=""
+                  width={90}
+                  height={95}
+                  sizes="1em"
+                  aria-hidden="true"
+                />
+                Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ{" "}
+              </span>
+              <span className="lg:block lg:[text-align-last:justify]">
+                chuyên môn, quy trình triển khai và các dự án tiêu biểu, phản ánh năng lực{" "}
+              </span>
+              <span className="lg:block">
+                thiết kế, thi công và cải tạo công trình một cách chuyên nghiệp và đồng bộ.
+              </span>
+            </>
+          )}
         </motion.p>
       </div>
 
       <motion.div
         className="group relative z-[3] mx-auto mt-8 w-[calc(100%-4rem)] max-w-[45rem] overflow-hidden rounded-[2rem] shadow-[0_18px_45px_rgb(65_57_51/.15)] lg:absolute lg:top-[13.9%] lg:left-[51%] lg:mt-0 lg:w-[41.8%] lg:max-w-[44rem] lg:rounded-[1.9rem]"
-        initial={reduceMotion ? false : { opacity: 0, scale: 1.05 }}
+        initial={false}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.9, ease, delay: 0.18 }}
       >
         <Image
           className="h-auto w-full scale-[1.025] transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none group-hover:scale-[1.055]"
-          src="/images/capability-profile/hero-profile.webp"
-          alt="Bộ hồ sơ năng lực BMT Decor được trưng bày trên bàn gỗ"
+          src={content?.heroImage || "/images/capability-profile/hero-profile.webp"}
+          alt={content?.heroImageAlt || "Bộ hồ sơ năng lực BMT Decor được trưng bày trên bàn gỗ"}
           width={1800}
           height={1200}
           priority
           sizes="(max-width: 1023px) calc(100vw - 64px), 42vw"
+          unoptimized={Boolean(content?.heroImage)}
         />
       </motion.div>
     </section>

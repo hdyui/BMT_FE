@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import styles from "@/features/quotation/quotation.module.css";
 import { quotationMobileHeroImage } from "@/features/quotation/data/quotation-estimator";
+import type { QuotationPageContent } from "@/features/quotation/services/quotation.service";
 
 /**
  * Banner trang báo giá.
@@ -61,7 +62,15 @@ const decorativeLayers = [
 const DECORATION_CLASS =
   "absolute z-[1] object-contain mix-blend-multiply";
 
-export function QuotationHero() {
+export function QuotationHero({
+  content,
+}: {
+  content?: QuotationPageContent["hero"];
+}) {
+  const title = content?.title ?? "MINH BẠCH VÀ\nTỐI ƯU CHI PHÍ";
+  const description =
+    content?.description ??
+    "Tham khảo báo giá các dịch vụ thiết kế kiến trúc & nội thất, thiết kế thi công, xây nhà trọn gói, thi công nội & ngoại thất, cải tạo và sửa chữa nhà. Mỗi phương án được tư vấn và báo giá chi tiết theo nhu cầu thực tế, giúp khách hàng tối ưu ngân sách.";
   return (
     <section
       className="relative h-[calc(154vw+1rem)] max-h-[50.375rem] min-h-[35.625rem] overflow-hidden bg-[#f5f5f5] md:mt-[var(--site-header-desktop-height)] md:h-auto md:max-h-none md:min-h-[35.125rem] md:bg-[#f6f6f6]"
@@ -145,9 +154,11 @@ export function QuotationHero() {
           className={`m-0 max-w-full text-[clamp(1.5rem,6vw,1.9375rem)] leading-[1.03] font-extrabold tracking-[-0.04em] md:text-[clamp(2.375rem,5.2vw,3.25rem)] md:leading-[1.06] md:tracking-[-0.035em] min-[75rem]:text-[clamp(2.625rem,4.2vw,4.125rem)] ${styles.animUp}`}
           style={{ animationDelay: "390ms" }}
         >
-          MINH BẠCH VÀ
-          <br />
-          TỐI ƯU CHI PHÍ
+          {title.split("\n").map((line, index) => (
+            <span className="block" key={`${line}-${index}`}>
+              {line}
+            </span>
+          ))}
         </h1>
         <p
           className={`m-0 mt-2 max-w-[36.875rem] text-justify text-[clamp(0.6875rem,2.7vw,0.875rem)] leading-[1.25] mix-blend-multiply md:mt-5 md:text-xs md:leading-[1.55] min-[75rem]:text-sm ${styles.animFromRight}`}
@@ -159,10 +170,7 @@ export function QuotationHero() {
             width={86}
             height={90}
           />
-          Tham khảo báo giá các dịch vụ thiết kế kiến trúc &amp; nội thất,
-          thiết kế thi công, xây nhà trọn gói, thi công nội &amp; ngoại thất,
-          cải tạo và sửa chữa nhà. Mỗi phương án được tư vấn và báo giá chi
-          tiết theo nhu cầu thực tế, giúp khách hàng tối ưu ngân sách.
+          {description}
         </p>
         <Link
           className={`relative mt-3 hidden h-10 w-[11.25rem] place-items-center overflow-hidden rounded-full text-white transition-[transform,translate,scale,filter] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:brightness-[1.08] hover:drop-shadow-[0_12px_15px_rgb(159_77_24/.24)] active:translate-y-[2px] active:scale-[0.99] md:mt-5 md:grid md:h-13 md:w-59 ${styles.animCtaFade}`}
