@@ -53,8 +53,12 @@ export function createCapabilityProfileBinding(): RemoteResourceBinding {
 
   return {
     pageKey: "settings/capability-profile",
+    // Khớp cả các đường dẫn con (vd `settings/capability-profile-pages/new`): trang thêm
+    // mục mới cũng phải được bọc để tải dữ liệu và bật upload ảnh lên backend.
     handles: (resourceKey) =>
-      resourceKey === CONTENT || resourceKey === PAGES || resourceKey === CONTACT_FORM,
+      [CONTENT, PAGES, CONTACT_FORM].some(
+        (key) => resourceKey === key || resourceKey.startsWith(`${key}/`),
+      ),
 
     async load() {
       const [page, pages] = await Promise.all([
