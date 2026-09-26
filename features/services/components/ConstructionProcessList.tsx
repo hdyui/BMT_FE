@@ -2,7 +2,14 @@
 
 import Image from "next/image";
 import { Reveal } from "@/shared/components/Reveal";
-import { processSteps } from "../data/construction";
+
+export type ConstructionProcessStep = {
+  number: string;
+  title: string;
+  subtitle: string;
+  icon: string;
+  description: string;
+};
 
 /**
  * Khối nội dung màu cam trong mockup là một hình chữ nhật bo góc có "tai" lồi
@@ -38,7 +45,11 @@ function ProcessBlockShape() {
   );
 }
 
-export function ConstructionProcessList() {
+export function ConstructionProcessList({
+  steps,
+}: {
+  steps: readonly ConstructionProcessStep[];
+}) {
   return (
     <div className="relative mx-auto w-[min(58rem,calc(100%-2.25rem))]">
       {/* Thanh dọc màu xám chạy suốt danh sách, canh theo cột thứ hai */}
@@ -50,7 +61,7 @@ export function ConstructionProcessList() {
       </span>
 
       <div className="flex flex-col gap-6 md:gap-8">
-        {processSteps.map((step, index) => {
+        {steps.map((step, index) => {
           const base = index * 220;
 
           return (
@@ -111,13 +122,15 @@ export function ConstructionProcessList() {
                 delay={base + 240}
                 from="bottom"
               >
-                <Image
-                  className="size-14 object-contain sm:size-20 md:size-full"
-                  src={step.icon}
-                  alt={step.title}
-                  width={300}
-                  height={298}
-                />
+                {step.icon ? (
+                  <Image
+                    className="size-14 object-contain sm:size-20 md:size-full"
+                    src={step.icon}
+                    alt=""
+                    width={300}
+                    height={298}
+                  />
+                ) : null}
               </Reveal>
 
               <span className="hidden md:block" aria-hidden="true" />

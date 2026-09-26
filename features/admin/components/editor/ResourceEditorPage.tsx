@@ -26,6 +26,7 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { describeSaveError } from "@/features/admin/lib/save-error";
 import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import { getDynamicCollectionUiKind } from "@/features/admin/lib/dynamic-collection-ui";
 import {
@@ -202,6 +203,9 @@ export function ResourceEditorPage({
         toast.success("Đã cập nhật nội dung");
       }
       return true;
+    } catch (error) {
+      toast.error("Không lưu được thay đổi", { description: describeSaveError(error) });
+      return false;
     } finally {
       setSaving(false);
     }

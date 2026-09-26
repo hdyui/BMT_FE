@@ -6,12 +6,12 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { ContactForm } from "@/shared/components/ContactForm";
 import { FaqAccordion } from "@/features/services/components/FaqAccordion";
 import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
+import { RichText } from "@/features/services/components/RichText";
 import { ServiceTabs } from "@/features/services/components/ServiceTabs";
-import {
-  contactFormContent,
-  heroCards,
-  servicesOverviewSectionContent,
-} from "@/features/services/data/overview";
+import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
+import { getServicesOverviewContent } from "@/features/services/api/content";
+import { buildContactForm } from "@/features/services/api/build";
+import { FAQ_VISIBLE_QUESTIONS } from "@/features/services/api/spec";
 import { SERVICE_HERO_CLASS_NAME } from "@/features/services/config/layout";
 
 const cardPositions = [
@@ -21,7 +21,33 @@ const cardPositions = [
   "top-0 left-[70.5%] z-10",
 ] as const;
 
-export function ServicesOverviewPage() {
+export async function ServicesOverviewPage() {
+  // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
+  const content = await getServicesOverviewContent();
+  if (!content) return <ServiceUnavailable />;
+
+  const { hero, process: processSection, faq } = content;
+  const heroTitleLines = hero.title
+    .replace(/\r\n/g, "\n")
+    .trim()
+    .split("\n")
+    .map((line) => line.trim());
+  const heroBreaksAtVa = /\s+VÀ$/.test(heroTitleLines[0]);
+
+  const heroCards = hero.cards.flatMap((card) => (card.image ? [card.image] : []));
+  const tabs = content.serviceList.map((service) => ({
+    tabLabel: service.tabLabel,
+    label: service.title,
+    tagline: service.tagline ?? "",
+    copy: service.description ?? "",
+    image: service.image,
+  }));
+  const processSteps = processSection.items.map((step) => ({
+    title: step.title,
+    copy: step.description,
+    imageOpen: step.imageOpen,
+  }));
+
   return (
     <div className="min-h-screen overflow-x-clip bg-white pt-16 text-charcoal xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
@@ -32,14 +58,16 @@ export function ServicesOverviewPage() {
           theo chiều cao banner (lg: 38,9vw). Chỉ áp dụng từ md trở lên — bản
           mobile xếp dọc theo luồng thường, không đụng tới. */}
       <section className={`${SERVICE_HERO_CLASS_NAME} [--hero-lift:3.5vw]`}>
-        <Image
-          className="-z-30 object-cover max-md:hidden"
-          src="/images/services/hero-background.webp"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-        />
+        {hero.backgroundImage ? (
+          <Image
+            className="-z-30 object-cover max-md:hidden"
+            src={hero.backgroundImage}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+          />
+        ) : null}
         <Image
           className="hidden -z-30 object-cover max-md:block"
           src="/images/services/bg-mobile-dichvu-default.png"
@@ -61,17 +89,17 @@ export function ServicesOverviewPage() {
             khoảng thở, không lặp lại toàn bộ chiều cao header lần nữa. */}
         <div className="relative h-full w-full max-md:mx-auto max-md:h-auto max-md:w-[calc(100%-2.25rem)] max-md:pb-10">
           <div className="absolute top-[16.4%] right-[7.2%] aspect-1387/1000 w-[45%] md:translate-y-[calc(var(--hero-lift)*-1)] max-md:relative max-md:top-auto max-md:right-auto max-md:mt-8 max-md:w-full max-md:translate-y-0">
-            {heroCards.map((card, index) => (
+            {heroCards.map((image, index) => (
               <Reveal
                 className={`group/card absolute w-[31.5%] hover:z-50 active:z-50 ${cardPositions[index]}`}
                 delay={(heroCards.length - 1 - index) * 130}
                 from="right"
-                key={card.image}
+                key={image}
               >
                 <Image
                   className="h-auto w-full transition-transform duration-500 ease-out group-hover/card:scale-105 group-active/card:scale-105"
-                  src={card.image}
-                  alt={card.alt}
+                  src={image}
+                  alt=""
                   width={800}
                   height={1501}
                   sizes="280px"
@@ -87,7 +115,7 @@ export function ServicesOverviewPage() {
                   Đổi sang cùng kiểu gạch chân như bản PC — 1px, nhưng offset 4px
                   thay vì 8px để sát chữ hơn. Giá trị md/lg giữ nguyên. */}
               <p className="mb-4 inline-block text-base max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] max-md:underline max-md:decoration-1 max-md:underline-offset-4 sm:text-lg md:underline md:decoration-1 md:underline-offset-8">
-                {servicesOverviewSectionContent.hero.eyebrow}
+                {hero.eyebrow}
               </p>
               {/* Dưới md: cỡ chữ 5,6vw cho ngang các trang dịch vụ con (5,9vw),
                   kèm ngắt dòng theo mockup — "VÀ" xuống dòng 2. Ngắt cũ để "VÀ"
@@ -96,16 +124,19 @@ export function ServicesOverviewPage() {
                   Hai span "VÀ" ẩn/hiện theo breakpoint để md trở lên giữ nguyên
                   ngắt dòng cũ của bản desktop. */}
               <h1 className="font-heading max-w-120 text-[clamp(1.25rem,4.6vw,2.35rem)] leading-[1.18] font-extrabold text-brand max-md:text-[clamp(1.1rem,5.6vw,1.75rem)] lg:text-[clamp(1.5rem,1.9vw,2.35rem)]">
+                {/* Chữ "VÀ" ở cuối dòng 1 được tách ra để mobile đẩy nó xuống dòng 2;
+                    chỉ làm vậy khi tiêu đề thật sự kết thúc dòng 1 bằng "VÀ" — không
+                    được tự chèn "VÀ" khi admin đã sửa tiêu đề. */}
                 <span className="block lg:whitespace-nowrap">
-                  {servicesOverviewSectionContent.hero.title
-                    .split("\n")[0]
-                    .replace(/\s+VÀ$/, "")}
-                  <span className="max-md:hidden"> VÀ</span>
+                  {heroBreaksAtVa
+                    ? heroTitleLines[0].replace(/\s+VÀ$/, "")
+                    : heroTitleLines[0]}
+                  {heroBreaksAtVa && <span className="max-md:hidden"> VÀ</span>}
                 </span>
 
                 <span className="block lg:whitespace-nowrap">
-                  <span className="md:hidden">VÀ </span>
-                  {servicesOverviewSectionContent.hero.title.split("\n")[1]}
+                  {heroBreaksAtVa && <span className="md:hidden">VÀ </span>}
+                  {heroTitleLines.slice(1).join(" ")}
                 </span>
               </h1>
             </Reveal>
@@ -126,7 +157,7 @@ export function ServicesOverviewPage() {
                   Chặn dưới hạ 0,5625rem -> 0,5rem vì 9px cố định sẽ tràn 108%
                   khung ở màn 320px. */}
               <h2 className="font-heading mt-5 mb-4 max-w-160 text-[clamp(0.5625rem,2.5vw,0.875rem)] max-md:whitespace-nowrap max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base lg:whitespace-nowrap">
-                {servicesOverviewSectionContent.hero.supportingTitle}
+                {hero.subtitle}
               </h2>
               <span className="flex max-w-160 items-start gap-1.5 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-2.25rem)*0.029))] sm:text-base">
                 {/* Căn đều 2 lề cả ở mobile/tablet chứ không chỉ từ lg. Cần
@@ -140,7 +171,7 @@ export function ServicesOverviewPage() {
                     width={86}
                     height={91}
                   />
-                  {servicesOverviewSectionContent.hero.description}
+                  {hero.description}
                 </p>
               </span>
             </Reveal>
@@ -157,7 +188,7 @@ export function ServicesOverviewPage() {
 
       <section className="bg-neutral-100 py-10 sm:py-14 lg:py-16">
         <div className="mx-auto w-[min(75rem,calc(100%-2.25rem))]">
-          <ServiceTabs />
+          <ServiceTabs tabs={tabs} />
         </div>
       </section>
 
@@ -168,7 +199,7 @@ export function ServicesOverviewPage() {
         <div className="mx-auto mb-8 w-[min(49.375rem,calc(100%-2.25rem))] text-center max-md:w-[calc(100%-1.5rem)] lg:mb-10">
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-4xl md:text-[clamp(2.25rem,3.36vw,2.6875rem)]">
-              {servicesOverviewSectionContent.process.title}
+              {processSection.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
@@ -184,12 +215,15 @@ export function ServicesOverviewPage() {
                 và chỗ ngắt greedy hiện tại đã đúng là chỗ cân nhất, nên không
                 thể moi thêm bằng cách ngắt lại. Dòng 1 lấp 98,6% khung. */}
             <p className="mx-auto mt-3 max-w-180 text-sm leading-relaxed max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] sm:text-base">
-              <HighlightedCopy
-                copy={servicesOverviewSectionContent.process.descriptionLineOne}
-                highlights={["BMT Decor", "quy trình 6 bước"]}
+              <RichText
+                text={processSection.description}
+                mode="desktopBreaks"
+                breakFrom="md"
+                bold={{
+                  phrases: ["BMT Decor", "quy trình 6 bước"],
+                  className: "font-bold max-md:font-normal",
+                }}
               />
-              <br className="hidden md:inline" />{" "}
-              {servicesOverviewSectionContent.process.descriptionLineTwo}
             </p>
           </Reveal>
           {/* Cùng lý do với đường kẻ ở phần FAQ: ảnh 1388×128 rất dẹt, khoá
@@ -201,7 +235,7 @@ export function ServicesOverviewPage() {
             delay={320}
           />
         </div>
-        <ProcessAccordion />
+        <ProcessAccordion steps={processSteps} />
       </section>
 
       {/* Ảnh trái chạm đáy section, panel xám lệch xuống 30px và thò qua phần
@@ -216,13 +250,15 @@ export function ServicesOverviewPage() {
           className="group/photo relative z-20 max-lg:aspect-[1400/1207] overflow-hidden rounded-t-3xl lg:mr-0 lg:min-h-120 lg:rounded-none lg:rounded-tr-[4.5rem]"
           from="left"
         >
-          <Image
-            className="object-cover transition-transform duration-700 ease-out group-hover/photo:scale-105 group-active/photo:scale-105"
-            src="/images/services/faq-photo.webp"
-            alt="Góc thư giãn trong công trình do BMT Decor thực hiện"
-            fill
-            sizes="(max-width: 1024px) 100vw, 50vw"
-          />
+          {faq.photo ? (
+            <Image
+              className="object-cover transition-transform duration-700 ease-out group-hover/photo:scale-105 group-active/photo:scale-105"
+              src={faq.photo}
+              alt=""
+              fill
+              sizes="(max-width: 1024px) 100vw, 50vw"
+            />
+          ) : null}
         </Reveal>
 
         {/* Đã xóa lg:-ml-[14px] ở div chứa panel */}
@@ -235,14 +271,12 @@ export function ServicesOverviewPage() {
 
           <Reveal>
             <h2 className="font-heading text-2xl font-bold max-lg:text-center max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] max-md:leading-[1.08] max-md:font-extrabold sm:text-3xl lg:text-4xl">
-              {servicesOverviewSectionContent.faq.title}
+              {faq.title}
             </h2>
           </Reveal>
           <Reveal delay={160}>
             <p className="mt-4 max-w-110 text-sm leading-relaxed text-pretty max-md:text-[min(0.875rem,calc((100vw-1.5rem)*0.0295))] max-lg:mx-auto max-lg:text-center">
-              {servicesOverviewSectionContent.faq.descriptionLineOne}
-              <br className="hidden md:inline" />{" "}
-              {servicesOverviewSectionContent.faq.descriptionLineTwo}
+              <RichText text={faq.description} mode="desktopBreaks" breakFrom="md" />
             </p>
           </Reveal>
           {/* Ảnh gốc rule-orange.png tỉ lệ 1388×128 (~10.8:1) rất dẹt: khoá
@@ -255,7 +289,7 @@ export function ServicesOverviewPage() {
             src="/images/services/rule-orange.png"
             delay={320}
           />
-          <FaqAccordion />
+          <FaqAccordion faqs={faq.items.slice(0, FAQ_VISIBLE_QUESTIONS)} />
         </div>
       </section>
 
@@ -264,36 +298,10 @@ export function ServicesOverviewPage() {
           FAQ không đảm bảo khớp pixel ở mọi khổ màn hình, nên thêm nền chắc
           chắn ở đây để phần khuyết luôn lộ đúng màu xám thay vì trắng. */}
       <div className="bg-neutral-100">
-        <ContactForm showTopNotch {...contactFormContent} />
+        <ContactForm showTopNotch {...buildContactForm(content.contactForm)} />
       </div>
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>
   );
-}
-
-function HighlightedCopy({
-  copy,
-  highlights,
-}: {
-  copy: string;
-  highlights: string[];
-}) {
-  const parts: React.ReactNode[] = [];
-  let remainder = copy;
-
-  highlights.forEach((highlight) => {
-    const index = remainder.indexOf(highlight);
-    if (index < 0) return;
-    parts.push(remainder.slice(0, index));
-    parts.push(
-      <strong className="font-bold max-md:font-normal" key={highlight}>
-        {highlight}
-      </strong>,
-    );
-    remainder = remainder.slice(index + highlight.length);
-  });
-  parts.push(remainder);
-
-  return <>{parts}</>;
 }

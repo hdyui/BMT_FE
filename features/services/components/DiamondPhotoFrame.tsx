@@ -5,7 +5,6 @@ import { Reveal } from "@/shared/components/Reveal";
 
 type DiamondPhotoFrameProps = {
   src: string;
-  alt: string;
   left: string;
   top: string;
   size: string;
@@ -15,7 +14,6 @@ type DiamondPhotoFrameProps = {
 
 export function DiamondPhotoFrame({
   src,
-  alt,
   left,
   top,
   size,
@@ -47,7 +45,7 @@ export function DiamondPhotoFrame({
             <Image
               className="object-cover transition-transform duration-500 ease-out group-hover/frame:scale-105"
               src={src}
-              alt={alt}
+              alt=""
               fill
               sizes="(max-width: 1024px) 64vw, 43vw"
               priority

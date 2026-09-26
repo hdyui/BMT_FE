@@ -2,19 +2,56 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useActionState, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState, type FormEvent } from "react";
 import { ArrowLeft, Eye, EyeOff, LoaderCircle } from "lucide-react";
 
 import { Button } from "@/features/admin/components/ui/button";
 import { Input } from "@/features/admin/components/ui/input";
-import { loginAdmin, type AdminLoginState } from "@/features/admin/auth/actions";
-import { MOCK_ADMIN_ACCOUNT } from "@/features/admin/lib/auth-config";
+import { sanitizeAdminLocation } from "@/features/admin/lib/auth-config";
+import { api } from "@/shared/lib/api/client";
+import { ApiError } from "@/shared/lib/api/errors";
 
-const initialState: AdminLoginState = { error: null };
+function describeLoginError(error: unknown) {
+  if (error instanceof ApiError) {
+    if (error.status === 401 || error.status === 422) return "Email hoặc mật khẩu không đúng.";
+    if (error.status === 429) {
+      return `Bạn đăng nhập quá nhiều lần. Vui lòng đợi ${error.retryAfter ?? 60} giây rồi thử lại.`;
+    }
+    return "Đăng nhập không thành công. Vui lòng thử lại sau.";
+  }
+  return "Không kết nối được máy chủ. Vui lòng thử lại.";
+}
 
 export function AdminLoginForm({ location = "" }: { location?: string }) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
-  const [state, formAction, pending] = useActionState(loginAdmin, initialState);
+  const [error, setError] = useState<string | null>(null);
+  const [pending, setPending] = useState(false);
+
+  // Gọi thẳng POST /api/v1/auth/login (Next chuyển tiếp sang backend). Backend
+  // trả cookie phiên HttpOnly nên trình duyệt tự lưu, không cần xử lý token.
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
+
+    if (!email || !password) {
+      setError("Vui lòng nhập email và mật khẩu.");
+      return;
+    }
+
+    setPending(true);
+    setError(null);
+    try {
+      await api.post("/auth/login", { email, password });
+      router.replace(sanitizeAdminLocation(location));
+    } catch (loginError) {
+      setError(describeLoginError(loginError));
+      setPending(false);
+    }
+  }
 
   return (
     <main className="flex min-h-dvh items-center justify-center bg-background px-5 py-8 text-foreground sm:px-8">
@@ -47,8 +84,7 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
               </p>
             </div>
 
-            <form action={formAction} className="space-y-5">
-              <input type="hidden" name="location" value={location} />
+            <form onSubmit={handleSubmit} className="space-y-5">
 
               <div className="space-y-2">
                 <label htmlFor="admin-email" className="text-sm font-semibold">
@@ -90,12 +126,12 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
                 </div>
               </div>
 
-              {state.error && (
+              {error && (
                 <p
                   role="alert"
                   className="rounded-lg border border-destructive/25 bg-destructive/5 px-3.5 py-3 text-sm font-medium text-destructive"
                 >
-                  {state.error}
+                  {error}
                 </p>
               )}
 
@@ -104,21 +140,6 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
                 {pending ? "Đang đăng nhập..." : "Đăng nhập"}
               </Button>
             </form>
-
-            <div className="mt-6 rounded-xl border bg-muted/35 p-4 text-sm">
-              <p className="font-semibold">Tài khoản demo hiện tại</p>
-              <div className="mt-2 grid gap-1 text-muted-foreground">
-                <p>
-                  Email: <span className="font-medium text-foreground">{MOCK_ADMIN_ACCOUNT.email}</span>
-                </p>
-                <p>
-                  Mật khẩu: <span className="font-medium text-foreground">{MOCK_ADMIN_ACCOUNT.password}</span>
-                </p>
-              </div>
-              <p className="mt-3 text-xs leading-relaxed text-muted-foreground">
-                Đây là tài khoản giả lập cho giai đoạn chưa kết nối backend.
-              </p>
-            </div>
           </div>
       </section>
     </main>

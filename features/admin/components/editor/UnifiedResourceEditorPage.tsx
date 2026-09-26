@@ -18,6 +18,7 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { describeSaveError } from "@/features/admin/lib/save-error";
 import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import {
   EDITOR_GRID_CLASS,
@@ -155,6 +156,9 @@ export function UnifiedResourceEditorPage({
       setHistory([]);
       toast.success("Đã lưu toàn bộ thay đổi");
       return true;
+    } catch (error) {
+      toast.error("Không lưu được thay đổi", { description: describeSaveError(error) });
+      return false;
     } finally {
       setSaving(false);
     }
