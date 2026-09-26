@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { saveContactSubmission } from "@/shared/lib/contact-submissions";
+import { describeSubmitError, submitFormSubmission } from "@/shared/lib/form-submissions";
 
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
@@ -23,7 +23,6 @@ export function ContactForm({
   requiredMessage = "Vui lòng nhập thông tin.",
   successMessage = "Cảm ơn bạn đã gửi thông tin. BMT Decor sẽ liên hệ với bạn trong thời gian sớm nhất.",
   backgroundImage = "/images/contact/mobile/form-background.png",
-  submitToApi = false,
 }: {
   showTopNotch?: boolean;
   title?: ReactNode;
@@ -36,6 +35,7 @@ export function ContactForm({
   requiredMessage?: string;
   successMessage?: string;
   backgroundImage?: string | null;
+  /** @deprecated Các form hiện luôn gửi qua route handler an toàn cùng origin. */
   submitToApi?: boolean;
 }) {
   const [errors, setErrors] = useState<Errors>({});
@@ -100,39 +100,14 @@ export function ContactForm({
 
     if (submitting) return;
 
-    if (submitToApi) {
-      setSubmitting(true);
-      try {
-        const response = await fetch("/api/form-submissions", {
-          method: "POST",
-          credentials: "same-origin",
-          cache: "no-store",
-          signal: AbortSignal.timeout(20_000),
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            customerName: name,
-            phone,
-          }),
-        });
-
-        const result = await response.json().catch(() => null);
-        if (!response.ok || result?.isSuccess === false || result?.isFailed === true) {
-          toast.error("Gửi thông tin chưa thành công. Vui lòng thử lại.");
-          return;
-        }
-      } catch {
-        toast.error("Không thể kết nối tới máy chủ. Vui lòng thử lại.");
-        return;
-      } finally {
-        setSubmitting(false);
-      }
-    } else {
-      saveContactSubmission({
-        name,
-        phone,
-      });
+    setSubmitting(true);
+    try {
+      await submitFormSubmission({ customerName: name, phone });
+    } catch (error) {
+      toast.error(describeSubmitError(error));
+      return;
+    } finally {
+      setSubmitting(false);
     }
 
     toast.success(successMessage);

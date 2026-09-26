@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Reveal } from "@/shared/components/Reveal";
 
+// Hình mẫu (mask) giữ viền bo tròn của cụm, là đồ trang trí chứ không phải ảnh nội dung.
 const CLUSTER = "/images/xay-dung-tron-goi/hero-cluster.png";
 
 /**
@@ -11,7 +12,6 @@ const CLUSTER = "/images/xay-dung-tron-goi/hero-cluster.png";
 const clusterLayers = [
   {
     key: "left",
-    alt: "Không gian nhà hàng do BMT Decor thiết kế thi công",
     clipPath:
       "polygon(0% 28%, 20.2% 20%, 40.5% 30%, 40.5% 52.5%, 20.2% 64%, 0% 55%)",
     transformOrigin: "20.2% 43%",
@@ -19,14 +19,12 @@ const clusterLayers = [
   },
   {
     key: "top",
-    alt: "Phòng họp văn phòng do BMT Decor thiết kế thi công",
     clipPath: "polygon(40.5% 0%, 83% 0%, 83% 50%, 60.2% 61.7%, 40.5% 52.5%)",
     transformOrigin: "60.6% 30%",
     order: 2,
   },
   {
     key: "bottom",
-    alt: "Phòng ăn căn hộ do BMT Decor thiết kế thi công",
     clipPath:
       "polygon(20.2% 64%, 40.5% 52.5%, 60.2% 61.7%, 60.2% 100%, 20.2% 100%)",
     transformOrigin: "40.4% 77%",
@@ -34,14 +32,13 @@ const clusterLayers = [
   },
   {
     key: "right",
-    alt: "Phòng khách kết hợp góc làm việc do BMT Decor thiết kế thi công",
     clipPath: "polygon(60.2% 61.7%, 83% 50%, 100% 50%, 100% 95%, 60.2% 95%)",
     transformOrigin: "79.8% 71%",
     order: 3,
   },
 ] as const;
 
-export function HexagonShowcase() {
+export function HexagonShowcase({ src }: { src: string }) {
   return (
     <div className="relative aspect-[3467/4070] w-full">
       {/* 1. Hình lục giác xám góc trái trên cùng */}
@@ -151,8 +148,8 @@ export function HexagonShowcase() {
             <Image
               className="object-contain transition-transform duration-500 ease-out group-hover/hex:scale-105 group-active/hex:scale-105 will-change-transform"
               style={{ transformOrigin: layer.transformOrigin }}
-              src={CLUSTER}
-              alt={layer.alt}
+              src={src}
+              alt=""
               fill
               sizes="(max-width: 1024px) 92vw, 44vw"
               priority

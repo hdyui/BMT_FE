@@ -7,13 +7,12 @@ import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 export type SolutionCard = {
   number: string;
   titlePrefix: string;
-  /** Phần đuôi của dòng tiền tố được tô cam (vd "SHOWROOM &"), vẫn nằm cùng
-   *  dòng 1 với `titlePrefix`. */
-  titlePrefixAccent?: string;
   titleCategory: string;
   tagline: string;
   description: string;
   checklist: readonly string[];
+  /** Dòng chữ đứng trên danh sách checklist; mặc định "BMT Decor cung cấp:". */
+  checklistLabel?: string;
   cta: string;
   ctaImage: string;
   ctaImageWidth: number;
@@ -30,17 +29,28 @@ type SolutionCardsProps = {
   checkIcon?: string;
   /** Ảnh gạch ngang cam ngắn nằm dưới tagline. */
   ruleImage?: string;
+  /**
+   * Tách nhóm công trình có dạng "SHOWROOM & THẨM MỸ VIỆN" thành hai dòng: phần
+   * "SHOWROOM &" đứng cuối dòng tiền tố (tô cam ở mobile), phần còn lại xuống dòng 2.
+   */
+  splitCategoryAtAmpersand?: boolean;
 };
 
 export function SolutionCards({
   cards: solutionCards,
   checkIcon = "/images/services/icon-house.png",
   ruleImage,
+  splitCategoryAtAmpersand = false,
 }: SolutionCardsProps) {
   return (
     <div className="grid gap-4 md:gap-5">
       {solutionCards.map((card, index) => {
         const imageFirst = index % 2 === 0;
+        const split = splitCategoryAtAmpersand
+          ? card.titleCategory.match(/^(.+?&)\s+(.+)$/)
+          : null;
+        const titleAccent = split?.[1];
+        const titleCategory = split?.[2] ?? card.titleCategory;
 
         return (
           <Reveal
@@ -60,7 +70,7 @@ export function SolutionCards({
                 <Image
                   className="object-cover object-top md:object-center transition-transform duration-500 ease-out md:group-hover/card:scale-105 md:group-active/card:scale-105"
                   src={card.image}
-                  alt={card.titleCategory}
+                  alt=""
                   fill
                   sizes="(max-width: 1024px) 100vw, 33vw"
                 />
@@ -87,15 +97,15 @@ export function SolutionCards({
                       trên mobile. Nhánh md/lg giữ nguyên. */}
                   <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(0.8rem,3.7vw,1.45rem)] leading-[1.3] font-extrabold uppercase md:mt-1 md:pt-0 md:text-2xl md:leading-tight md:whitespace-nowrap lg:text-[1.75rem]">
                     <span className="text-charcoal">{card.titlePrefix} </span>
-                    {card.titlePrefixAccent ? (
+                    {titleAccent ? (
                       // Chỉ tô cam ở MOBILE; desktop giữ nguyên màu chữ như cũ.
                       <span className="text-brand md:text-charcoal">
-                        {card.titlePrefixAccent}
+                        {titleAccent}
                       </span>
                     ) : null}
                     <br />
                     <span className="text-brand whitespace-nowrap">
-                      {card.titleCategory}
+                      {titleCategory}
                     </span>
                   </h3>
                 </div>
@@ -121,7 +131,7 @@ export function SolutionCards({
                 </p>
 
                 <p className="mt-2 text-[clamp(0.7rem,2.85vw,0.84rem)] font-extrabold md:mt-5 md:text-sm">
-                  BMT Decor cung cấp:
+                  {card.checklistLabel ?? "BMT Decor cung cấp:"}
                 </p>
                 <ul className="mt-1 grid gap-0.5 md:mt-2 md:gap-1.5">
                   {card.checklist.map((item) => (

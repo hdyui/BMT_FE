@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { Inbox, Loader2, Trash2 } from "lucide-react";
+import { useCallback, useEffect, useState } from "react";
+import { ChevronLeft, ChevronRight, Inbox, LoaderCircle, Trash2, TriangleAlert } from "lucide-react";
 import { toast } from "sonner";
 
 import { Button } from "@/features/admin/components/ui/button";
@@ -15,49 +15,71 @@ import {
   TableRow,
 } from "@/features/admin/components/ui/table";
 import { formSubmissionsApiClient } from "@/features/admin/services/form-submissions-api.client";
-import type { FormSubmissionItem } from "@/features/admin/services/catalog-api.types";
+import type {
+  FormSubmissionsPage,
+  FormSubmissionStatus,
+} from "@/features/admin/services/catalog-api.types";
 
 type ReviewFilter = "all" | "reviewed" | "pending";
 
+const PAGE_SIZE = 20;
+
+const statusByFilter: Record<ReviewFilter, FormSubmissionStatus | undefined> = {
+  all: undefined,
+  reviewed: "done",
+  pending: "pending",
+};
+
+function describeError(error: unknown) {
+  return error instanceof Error ? error.message : "Không tải được danh sách liên hệ.";
+}
+
+/**
+ * Danh sách khách đã gửi form "Liên hệ tư vấn" trên toàn website, lấy từ backend
+ * (`GET /admin/form-submissions`). "Đã duyệt" là trạng thái `done` trên backend.
+ */
 export function ContactSubmissionsPanel() {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
-  const [submissions, setSubmissions] = useState<FormSubmissionItem[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+  const [pageIndex, setPageIndex] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+  // Kết quả của lượt tải gần nhất kèm khóa của lượt đó: khóa khác với lượt đang cần
+  // nghĩa là đang tải (không phải đặt state đồng bộ trong effect).
+  const [loaded, setLoaded] = useState<{
+    key: string;
+    page?: FormSubmissionsPage;
+    error?: string;
+  } | null>(null);
+
+  const requestKey = `${reviewFilter}|${pageIndex}|${reloadKey}`;
 
   useEffect(() => {
     let active = true;
-    void formSubmissionsApiClient
-      .getList()
-      .then((page) => {
+    formSubmissionsApiClient.getList({
+      pageIndex,
+      pageSize: PAGE_SIZE,
+      status: statusByFilter[reviewFilter],
+    })
+      .then((result) => {
         if (!active) return;
-        setSubmissions(page.items);
-        setError(null);
+        // Xóa hết mục cuối của trang cuối thì lùi về trang trước.
+        if (result.items.length === 0 && pageIndex > 1) setPageIndex(pageIndex - 1);
+        else setLoaded({ key: requestKey, page: result });
       })
-      .catch((err: unknown) => {
-        if (!active) return;
-        setError(
-          err instanceof Error
-            ? err.message
-            : "Không thể tải danh sách liên hệ.",
-        );
-      })
-      .finally(() => {
-        if (active) setLoading(false);
+      .catch((loadError) => {
+        if (active) setLoaded({ key: requestKey, error: describeError(loadError) });
       });
-
     return () => {
       active = false;
     };
-  }, [reloadKey]);
+  }, [pageIndex, reviewFilter, reloadKey, requestKey]);
 
-  function retryLoadSubmissions() {
-    setLoading(true);
-    setError(null);
-    setReloadKey((key) => key + 1);
-  }
+  const loading = loaded?.key !== requestKey;
+  const page = loaded?.page ?? null;
+  const error = loading ? null : (loaded?.error ?? null);
+
+  const reload = useCallback(() => setReloadKey((key) => key + 1), []);
+  const submissions = page?.items ?? [];
 
   function markPending(id: string, value: boolean) {
     setPendingIds((current) => {
@@ -68,47 +90,34 @@ export function ContactSubmissionsPanel() {
     });
   }
 
-  const filteredSubmissions = submissions.filter((submission) => {
-    if (reviewFilter === "reviewed") return submission.status === "done";
-    if (reviewFilter === "pending") return submission.status === "pending";
-    return true;
-  });
-
-  async function removeSubmission(id: string) {
+  async function updateReviewed(id: string, reviewed: boolean) {
     markPending(id, true);
     try {
-      await formSubmissionsApiClient.remove(id);
-      setSubmissions((current) => current.filter((item) => item.id !== id));
-      toast.success("Đã xóa thông tin liên hệ.");
-    } catch (err) {
-      toast.error(
-        err instanceof Error ? err.message : "Xóa liên hệ chưa thành công.",
-      );
+      await formSubmissionsApiClient.updateStatus(id, reviewed ? "done" : "pending");
+      reload();
+    } catch (updateError) {
+      toast.error(describeError(updateError));
     } finally {
       markPending(id, false);
     }
   }
 
-  async function updateReviewed(id: string, reviewed: boolean) {
-    const nextStatus = reviewed ? "done" : "pending";
+  async function removeSubmission(id: string) {
     markPending(id, true);
     try {
-      const updated = await formSubmissionsApiClient.updateStatus(
-        id,
-        nextStatus,
-      );
-      setSubmissions((current) =>
-        current.map((item) => (item.id === id ? updated : item)),
-      );
-    } catch (err) {
-      toast.error(
-        err instanceof Error
-          ? err.message
-          : "Cập nhật trạng thái chưa thành công.",
-      );
+      await formSubmissionsApiClient.remove(id);
+      toast.success("Đã xóa thông tin liên hệ.");
+      reload();
+    } catch (deleteError) {
+      toast.error(describeError(deleteError));
     } finally {
       markPending(id, false);
     }
+  }
+
+  function changeFilter(value: ReviewFilter) {
+    setReviewFilter(value);
+    setPageIndex(1);
   }
 
   return (
@@ -121,28 +130,50 @@ export function ContactSubmissionsPanel() {
           </p>
         </div>
         <span className="rounded-full border px-3 py-1 text-xs font-semibold tabular-nums">
-          {submissions.length} liên hệ
+          {page?.totalCount ?? 0} liên hệ
         </span>
       </div>
 
-      {loading ? (
-        <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
-          <Loader2 className="size-5 animate-spin text-muted-foreground" />
-        </div>
-      ) : error ? (
+      <div className="flex flex-wrap items-center gap-2 border-b px-5 py-3 sm:px-6">
+        <span className="mr-1 text-xs font-medium text-muted-foreground">Lọc:</span>
+        {(
+          [
+            ["all", "Tất cả"],
+            ["reviewed", "Đã duyệt"],
+            ["pending", "Chưa duyệt"],
+          ] as const
+        ).map(([value, label]) => (
+          <Button
+            key={value}
+            type="button"
+            size="sm"
+            variant={reviewFilter === value ? "default" : "outline"}
+            className="h-8 rounded-full px-3 text-xs"
+            onClick={() => changeFilter(value)}
+          >
+            {label}
+          </Button>
+        ))}
+      </div>
+
+      {error ? (
         <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
           <div>
-            <p className="text-sm font-medium text-destructive">{error}</p>
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              className="mt-3"
-              onClick={retryLoadSubmissions}
-            >
+            <TriangleAlert className="mx-auto size-6 text-destructive" />
+            <p className="mt-3 text-sm font-medium">Không tải được danh sách liên hệ</p>
+            <p className="mt-1 text-xs text-muted-foreground">{error}</p>
+            <Button type="button" variant="outline" size="sm" className="mt-4" onClick={reload}>
               Thử lại
             </Button>
           </div>
+        </div>
+      ) : loading && !page ? (
+        <div
+          role="status"
+          className="flex min-h-44 items-center justify-center gap-2 text-sm text-muted-foreground"
+        >
+          <LoaderCircle className="size-4 animate-spin" />
+          Đang tải...
         </div>
       ) : submissions.length === 0 ? (
         <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
@@ -158,109 +189,93 @@ export function ContactSubmissionsPanel() {
         </div>
       ) : (
         <>
-          <div className="flex flex-wrap items-center gap-2 border-b px-5 py-3 sm:px-6">
-            <span className="mr-1 text-xs font-medium text-muted-foreground">
-              Lọc:
-            </span>
-            {(
-              [
-                ["all", "Tất cả"],
-                ["reviewed", "Đã duyệt"],
-                ["pending", "Chưa duyệt"],
-              ] as const
-            ).map(([value, label]) => (
-              <Button
-                key={value}
-                type="button"
-                size="sm"
-                variant={reviewFilter === value ? "default" : "outline"}
-                className="h-8 rounded-full px-3 text-xs"
-                onClick={() => setReviewFilter(value)}
-              >
-                {label}
-              </Button>
-            ))}
+          <div className="overflow-x-auto">
+            <Table className="min-w-[780px]">
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="px-5 sm:px-6">Họ tên</TableHead>
+                  <TableHead>Số điện thoại</TableHead>
+                  <TableHead>Đã duyệt</TableHead>
+                  <TableHead>Thời gian gửi</TableHead>
+                  <TableHead className="px-5 text-right sm:px-6">Thao tác</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {submissions.map((submission) => {
+                  const isPending = pendingIds.has(submission.id);
+                  const reviewed = submission.status === "done";
+                  return (
+                    <TableRow key={submission.id}>
+                      <TableCell className="px-5 font-medium sm:px-6">
+                        {submission.customerName}
+                      </TableCell>
+                      <TableCell className="font-medium tabular-nums">{submission.phone}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            checked={reviewed}
+                            disabled={isPending}
+                            onCheckedChange={(value) =>
+                              void updateReviewed(submission.id, Boolean(value))
+                            }
+                            aria-label={reviewed ? "Bỏ đánh dấu đã duyệt" : "Đánh dấu đã duyệt"}
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {reviewed ? "Đã duyệt" : "Chưa duyệt"}
+                          </span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="whitespace-nowrap text-muted-foreground">
+                        {formatSubmittedAt(submission.createdAt)}
+                      </TableCell>
+                      <TableCell className="px-5 text-right sm:px-6">
+                        <Button
+                          type="button"
+                          variant="ghost"
+                          size="sm"
+                          disabled={isPending}
+                          className="text-destructive hover:bg-destructive/10 hover:text-destructive"
+                          onClick={() => void removeSubmission(submission.id)}
+                        >
+                          <Trash2 className="size-4" />
+                          Xóa
+                        </Button>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+              </TableBody>
+            </Table>
           </div>
 
-          {filteredSubmissions.length === 0 ? (
-            <div className="grid min-h-36 place-items-center px-5 py-8 text-center sm:px-6">
-              <div>
-                <Inbox className="mx-auto size-5 text-muted-foreground" />
-                <p className="mt-2 text-sm font-medium">
-                  Không có liên hệ phù hợp
-                </p>
-                <p className="mt-1 text-xs text-muted-foreground">
-                  Thử chọn bộ lọc khác để xem danh sách.
-                </p>
+          {page && (page.hasPreviousPage || page.hasNextPage) && (
+            <div className="flex items-center justify-between gap-3 border-t px-5 py-3 sm:px-6">
+              <span className="text-xs text-muted-foreground tabular-nums">
+                Trang {page.pageIndex} / {Math.max(1, Math.ceil(page.totalCount / page.pageSize))}
+              </span>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={!page.hasPreviousPage || loading}
+                  onClick={() => setPageIndex((current) => Math.max(1, current - 1))}
+                >
+                  <ChevronLeft className="size-4" />
+                  Trước
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="sm"
+                  disabled={!page.hasNextPage || loading}
+                  onClick={() => setPageIndex((current) => current + 1)}
+                >
+                  Sau
+                  <ChevronRight className="size-4" />
+                </Button>
               </div>
             </div>
-          ) : (
-          <div className="overflow-x-auto">
-          <Table className="min-w-[780px]">
-            <TableHeader>
-              <TableRow>
-                <TableHead className="px-5 sm:px-6">Họ tên</TableHead>
-                <TableHead>Số điện thoại</TableHead>
-                <TableHead>Đã duyệt</TableHead>
-                <TableHead>Thời gian gửi</TableHead>
-                <TableHead className="px-5 text-right sm:px-6">
-                  Thao tác
-                </TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredSubmissions.map((submission) => {
-                const isPending = pendingIds.has(submission.id);
-                const reviewed = submission.status === "done";
-                return (
-                <TableRow key={submission.id}>
-                  <TableCell className="px-5 font-medium sm:px-6">
-                    {submission.customerName}
-                  </TableCell>
-                  <TableCell className="font-medium tabular-nums">
-                    {submission.phone}
-                  </TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Checkbox
-                        checked={reviewed}
-                        disabled={isPending}
-                        onCheckedChange={(value) =>
-                          void updateReviewed(submission.id, Boolean(value))
-                        }
-                        aria-label={
-                          reviewed
-                            ? "Bỏ đánh dấu đã duyệt"
-                            : "Đánh dấu đã duyệt"
-                        }
-                      />
-                      <span className="text-xs text-muted-foreground">
-                        {reviewed ? "Đã duyệt" : "Chưa duyệt"}
-                      </span>
-                    </div>
-                  </TableCell>
-                  <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {formatSubmittedAt(submission.createdAt)}
-                  </TableCell>
-                  <TableCell className="px-5 text-right sm:px-6">
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="sm"
-                      disabled={isPending}
-                      className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => void removeSubmission(submission.id)}
-                    >
-                      <Trash2 className="size-4" />
-                      Xóa
-                    </Button>
-                  </TableCell>
-                </TableRow>
-                );
-              })}
-            </TableBody>
-          </Table>
-        </div>
           )}
         </>
       )}

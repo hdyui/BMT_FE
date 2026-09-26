@@ -8,13 +8,14 @@ import {
   AccordionTrigger,
 } from "@/shared/components/ui/accordion";
 import { Reveal } from "@/shared/components/Reveal";
-import { frequentlyAskedQuestions } from "@/features/services/data/overview";
 
-// Bản thiết kế chỉ hiển thị 4 câu đầu; dữ liệu vẫn giữ đủ 10 câu trong
-// data/overview.ts, tăng số này lên là hiện thêm.
-const VISIBLE_QUESTIONS = 4;
+export type FaqItem = { question: string; answer: string };
 
-export function FaqAccordion() {
+export function FaqAccordion({
+  faqs: frequentlyAskedQuestions,
+}: {
+  faqs: readonly FaqItem[];
+}) {
   // Accordion mặc định multiple=false (chỉ 1 câu mở tại 1 thời điểm) nên
   // chuyển câu hỏi có thể set value thẳng, không cần tự đóng hết rồi mới mở
   // lại (cách cũ gây khoảng "sập về 0" giữa 2 lần đổi câu, làm khung bị nhảy).
@@ -26,7 +27,7 @@ export function FaqAccordion() {
       value={value}
       onValueChange={setValue}
     >
-      {frequentlyAskedQuestions.slice(0, VISIBLE_QUESTIONS).map((faq, index) => (
+      {frequentlyAskedQuestions.map((faq, index) => (
         <Reveal delay={Math.min(index * 70, 420)} key={faq.question}>
           <AccordionItem
             className="border-b border-neutral-300"

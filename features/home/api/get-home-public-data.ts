@@ -486,4 +486,3 @@ export function buildHomePublicData({
       : fallback.contactForm,
   };
 }
-
