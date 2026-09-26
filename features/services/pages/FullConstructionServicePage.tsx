@@ -4,11 +4,16 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { ContactForm } from "@/shared/components/ContactForm";
+import { RichText } from "@/features/services/components/RichText";
+import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
 import { HexagonShowcase } from "@/features/services/components/HexagonShowcase";
 import { MobileHeroArtwork } from "@/features/services/components/MobileHeroArtwork";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
-import { ProcessStepsGrid } from "@/features/services/components/ProcessStepsGrid";
+import {
+  ProcessStepsGrid,
+  type TurnkeyProcessStep,
+} from "@/features/services/components/ProcessStepsGrid";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
 import {
   SERVICE_HERO_CLASS_NAME,
@@ -20,14 +25,32 @@ import {
   SERVICE_SOLUTION_HEADING_CLASS_NAME,
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
 } from "@/features/services/config/layout";
+import { getServiceDetailContent } from "@/features/services/api/content";
 import {
-  contactFormContent,
-  featuredProjectCtaLabel,
-  featuredProjects,
-  solutionCards,
+  buildContactForm,
+  buildProjects,
+  buildSolutionCards,
+} from "@/features/services/api/build";
+import {
+  featuredProjectLayout,
+  solutionCardLayout,
 } from "@/features/services/data/turnkey";
 
-export function FullConstructionServicePage() {
+export async function FullConstructionServicePage() {
+  // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
+  const content = await getServiceDetailContent("serviceTurnkey");
+  if (!content) return <ServiceUnavailable />;
+  const heroImages = content.hero.images ?? {};
+
+  const projects = buildProjects(content.featuredProjects.items, featuredProjectLayout);
+  const cards = buildSolutionCards(content.solutions.items, solutionCardLayout);
+  const processSteps: TurnkeyProcessStep[] = content.process.items.map((step, index) => ({
+    number: String(index + 1),
+    icon: step.image ?? "",
+    title: step.title,
+    copy: step.description ?? "",
+  }));
+
   return (
     <div className="min-h-screen bg-white text-charcoal max-md:overflow-x-clip md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader mobileServiceMockup />
@@ -35,7 +58,9 @@ export function FullConstructionServicePage() {
       <section
         className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-auto max-md:!min-h-0 max-md:pt-[60px] md:h-[55vw] md:min-h-0`}
       >
-        <MobileHeroArtwork variant="full-construction" />
+        {heroImages.mobileArtwork ? (
+          <MobileHeroArtwork variant="full-construction" src={heroImages.mobileArtwork} />
+        ) : null}
 
         {/* CHỮ XUỐNG DƯỚI: nối ngay sau artwork theo luồng thường (trước đây
             `absolute inset-x-0 top-[85px]` + con `absolute top-[3.6%]`). */}
@@ -47,8 +72,7 @@ export function FullConstructionServicePage() {
                   nên thừa chỗ bên phải. Thang thuần vw giữ đều ~95-97% khung ở
                   mọi bề ngang — chữ to hơn và ăn sang phải hơn mà vẫn 2 dòng. */}
               <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
-                DỊCH VỤ THIẾT KẾ THI CÔNG
-                <br />&amp; XÂY DỰNG TRỌN GÓI
+                <RichText text={content.hero.title} />
               </h1>
             </Reveal>
             <BuildingRule
@@ -66,20 +90,24 @@ export function FullConstructionServicePage() {
                   height={95}
                   aria-hidden="true"
                 />
-                <span>Kiến tạo công trình bền vững từ thiết kế đến thi công</span>
+                <span>
+                  <RichText text={content.hero.subtitle} mode="inline" />
+                </span>
               </p>
             </Reveal>
           </div>
         </div>
 
-        <Image
-          className="absolute top-[9%] right-0 -z-10 hidden h-[91%] w-[18%] object-contain object-right-bottom opacity-90 md:block"
-          src="/images/xay-dung-tron-goi/dong%20goi%20trang%20dich%20vu%20-%20xay%20dung%20tron%20goi%20web%20BMT%20decor-01.png"
-          alt=""
-          width={1680}
-          height={3105}
-          priority
-        />
+        {heroImages.sideDecoration ? (
+          <Image
+            className="absolute top-[9%] right-0 -z-10 hidden h-[91%] w-[18%] object-contain object-right-bottom opacity-90 md:block"
+            src={heroImages.sideDecoration}
+            alt=""
+            width={1680}
+            height={3105}
+            priority
+          />
+        ) : null}
 
         <div className="mx-auto hidden w-[min(92%,47.5rem)] items-center gap-10 py-12 md:block md:h-full md:w-full md:max-w-none md:py-0">
           {/* BƯỚC 1 — scale giảm đều các cạnh.
@@ -106,7 +134,7 @@ export function FullConstructionServicePage() {
                             đứng của ảnh bottom NGẮN lại, đồng thời cả cụm to lên.
                             Tăng số = cạnh ảnh bottom ngắn thêm. */}
           <div className="[--hex-bleed:2.75rem] [--hex-top:-4.5rem] md:absolute md:top-(--hex-top) md:left-0 md:aspect-3467/4070 md:h-[calc(100%-var(--hex-top)+var(--hex-bleed))] lg:left-[7.3%]">
-            <HexagonShowcase />
+            {heroImages.desktopArtwork ? <HexagonShowcase src={heroImages.desktopArtwork} /> : null}
           </div>
 
           {/* Thu nhỏ width phần content: md:w-[39%] -> md:w-[34%], lg:w-[32%] -> lg:w-[27%] để không đè lên hình phải */}
@@ -129,8 +157,7 @@ export function FullConstructionServicePage() {
 
               <Reveal>
                 <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
-                  DỊCH VỤ THIẾT KẾ THI CÔNG
-                  <br />& XÂY DỰNG TRỌN GÓI
+                  <RichText text={content.hero.title} />
                 </h1>
               </Reveal>
               <Reveal
@@ -149,8 +176,7 @@ export function FullConstructionServicePage() {
               </Reveal>
               <Reveal delay={320} from="left">
                 <p className="mt-2 max-w-[19.375rem] text-pretty text-sm font-normal leading-relaxed sm:text-base">
-                  Kiến tạo công trình bền vững từ
-                  <br className="hidden sm:inline" /> thiết kế đến thi công
+                  <RichText text={content.hero.subtitle} mode="desktopBreaks" breakFrom="sm" />
                 </p>
               </Reveal>
             </div>
@@ -199,9 +225,11 @@ export function FullConstructionServicePage() {
                 Vẫn giữ nowrap để chốt đúng 2 dòng — thẻ <br> ngắt được kể cả
                 khi nowrap. */}
             <h2 className="whitespace-nowrap font-heading text-[clamp(0.72rem,3.4vw,1.55rem)] font-extrabold leading-[1.08] max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] sm:text-3xl lg:text-[2rem] text-center">
-              TỐI ƯU MÔ HÌNH THIẾT KẾ{" "}
-              <br className="md:hidden" />
-              THI CÔNG TRỌN GÓI
+              <RichText
+                text={content.featuredProjects.title}
+                mode="inline"
+                breakAfter={{ phrase: "THIẾT KẾ", mobileOnly: true }}
+              />
             </h2>
           </Reveal>
           <Reveal delay={140}>
@@ -209,15 +237,16 @@ export function FullConstructionServicePage() {
                 thất (size + justify 2 lề, dòng cuối canh giữa). Desktop giữ
                 nguyên: text-center, text-sm. */}
             <p className="mx-auto mt-4 max-w-3xl text-pretty text-center text-sm leading-relaxed max-md:text-justify max-md:[text-align-last:center] max-md:text-[0.82rem] max-md:leading-[1.3]">
-              Dịch vụ <span className="font-normal md:font-bold">thiết kế thi công</span> và{" "}
-              <span className="font-normal md:font-bold">xây dựng trọn gói</span> giúp chủ đầu
-              tư triển khai công trình một cách đồng bộ, từ ý tưởng,
-              <br className="hidden lg:inline" /> thiết kế đến thi công hoàn
-              thiện. Thay vì làm việc với nhiều đơn vị, khách hàng chỉ cần một
-              đầu mối duy nhất để quản
-              <br className="hidden lg:inline" /> lý toàn bộ dự án, giúp tiết
-              kiệm thời gian, kiểm soát ngân sách và hạn chế phát sinh trong quá
-              trình xây dựng.
+              <RichText
+                text={content.featuredProjects.description}
+                mode="desktopBreaks"
+                breakFrom="lg"
+                bold={{
+                  phrases: ["thiết kế thi công", "xây dựng trọn gói"],
+                  className: "font-normal md:font-bold",
+                  tag: "span",
+                }}
+              />
             </p>
           </Reveal>
           <BuildingRule
@@ -232,7 +261,7 @@ export function FullConstructionServicePage() {
           delay={120}
         >
           <ProjectCarousel
-            projects={featuredProjects}
+            projects={projects}
             prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
             nextIcon="/images/cai-tao-sua-chua/nav-next.png"
             mobileMockup
@@ -246,7 +275,7 @@ export function FullConstructionServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label={featuredProjectCtaLabel}
+            label={content.featuredProjects.ctaLabel ?? ""}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -267,16 +296,12 @@ export function FullConstructionServicePage() {
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
               <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
-                <span className="font-normal">GIẢI PHÁP THIẾT KẾ THI CÔNG</span>
-                <br />
-                <span className="font-extrabold">
-                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
-                </span>
+                <RichText text={content.solutions.title} mode="twoWeights" />
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Giải pháp toàn diện, tối ưu công năng
+                <RichText text={content.solutions.description} mode="inline" />
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -290,7 +315,7 @@ export function FullConstructionServicePage() {
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
-            cards={solutionCards}
+            cards={cards}
             checkIcon="/images/cai-tao-sua-chua/icon-house.png"
             ruleImage="/images/cai-tao-sua-chua/rule-short.png"
           />
@@ -301,13 +326,12 @@ export function FullConstructionServicePage() {
         <div className="mx-auto mb-8 w-[min(790px,calc(100%-2.25rem))] text-center">
           <Reveal>
             <h2 className="font-heading text-[clamp(0.95rem,4.75vw,1.55rem)] font-extrabold leading-[1.12] sm:text-[1.75rem]">
-              <span className="block whitespace-nowrap">QUY TRÌNH THIẾT KẾ THI CÔNG &amp;</span>
-              <span className="block whitespace-nowrap">XÂY NHÀ TRỌN GÓI</span>
+              <RichText text={content.process.title} mode="blocks" />
             </h2>
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
-              Triển khai đồng bộ, kiểm soát chất lượng trong từng giai đoạn
+              <RichText text={content.process.description} mode="inline" />
             </p>
           </Reveal>
           <BuildingRule
@@ -317,10 +341,10 @@ export function FullConstructionServicePage() {
           />
         </div>
 
-        <ProcessStepsGrid mobileMockup />
+        <ProcessStepsGrid mobileMockup steps={processSteps} />
       </section>
 
-      <ContactForm showTopNotch {...contactFormContent} />
+      <ContactForm showTopNotch {...buildContactForm(content.contactForm)} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

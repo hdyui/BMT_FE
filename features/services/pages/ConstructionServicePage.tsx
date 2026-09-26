@@ -8,7 +8,12 @@ import { ContactForm } from "@/shared/components/ContactForm";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
-import { ConstructionProcessList } from "@/features/services/components/ConstructionProcessList";
+import {
+  ConstructionProcessList,
+  type ConstructionProcessStep,
+} from "@/features/services/components/ConstructionProcessList";
+import { RichText } from "@/features/services/components/RichText";
+import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
 import {
   ConstructionMobileHero,
@@ -25,11 +30,17 @@ import {
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
 } from "@/features/services/config/layout";
 
+import { getServiceDetailContent } from "@/features/services/api/content";
 import {
-  contactFormContent,
-  featuredProjectCtaLabel,
-  featuredProjects,
-  solutionCards,
+  buildContactForm,
+  buildProjects,
+  buildSolutionCards,
+  splitStepTitle,
+  stepNumber,
+} from "@/features/services/api/build";
+import {
+  featuredProjectLayout,
+  solutionCardLayout,
 } from "@/features/services/data/construction";
 
 // TOẠ ĐỘ ĐO TRỰC TIẾP TỪ MOCKUP `pic_thicong/banner-chuan.png` (1254 x 530).
@@ -71,8 +82,6 @@ import {
 const HERO_DIAMONDS = [
   {
     key: "top",
-    src: "/images/thi-cong-xay-dung/hero-frame-top.webp",
-    alt: "Thi công nhà hàng",
     // Hình lớn nhất cụm, cắm lên quá cạnh trên banner. `top` đã hạ 9,2% -> 15,8%
     // (xuống 40px) để hình hiện ra nhiều hơn: phần thấy được dưới header đi từ
     // 44,6% lên 52,1% chiều cao hình. Ba hình kia đã được giải lại theo, vì hạ
@@ -84,8 +93,6 @@ const HERO_DIAMONDS = [
   },
   {
     key: "right",
-    src: "/images/thi-cong-xay-dung/hero-frame-right.webp",
-    alt: "Thi công thẩm mỹ viện",
     // Mép phải hình này là mép phải của cả cụm: 48,9% + 0.7071 x 37,9% x 0.423
     // = 60,2% bề rộng banner, dừng đúng ở thanh cam của khối chữ bên phải.
     left: "48.9%",
@@ -95,8 +102,6 @@ const HERO_DIAMONDS = [
   },
   {
     key: "bottom",
-    src: "/images/thi-cong-xay-dung/hero-frame-bottom.webp",
-    alt: "Thi công nhà ở",
     // To hơn mockup (38,4% -> 44,6%) để chìm 6,5% dưới cạnh đáy banner:
     // đỉnh dưới ở 72,6% + 0.7071 x 44,6% = 104,1% chiều cao banner.
     left: "35.4%",
@@ -106,8 +111,6 @@ const HERO_DIAMONDS = [
   },
   {
     key: "left",
-    src: "/images/thi-cong-xay-dung/hero-frame-left.webp",
-    alt: "Thi công văn phòng",
     // Thò ra ngoài cạnh trái banner đúng 10% bề ngang hình (mockup là 18,5%, đã
     // giảm theo yêu cầu): tâm 9,4% bề rộng, nửa đường chéo quy ra bề rộng 11,8%.
     left: "9.4%",
@@ -231,12 +234,39 @@ const DIAMOND_BY_KEY = Object.fromEntries(
   HERO_DIAMONDS.map((diamond) => [diamond.key, diamond]),
 );
 
-export function ConstructionServicePage() {
+export async function ConstructionServicePage() {
+  // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
+  const content = await getServiceDetailContent("serviceConstruction");
+  if (!content) return <ServiceUnavailable />;
+  const heroImages = content.hero.images ?? {};
+
+  const diamonds = HERO_DIAMONDS.flatMap((diamond) => {
+    const src = heroImages[`${diamond.key}Image`];
+    return src ? [{ ...diamond, src }] : [];
+  });
+  const projects = buildProjects(content.featuredProjects.items, featuredProjectLayout);
+  const cards = buildSolutionCards(content.solutions.items, solutionCardLayout);
+  const processSteps: ConstructionProcessStep[] = content.process.items.map((step, index) => ({
+    number: stepNumber(index),
+    ...splitStepTitle(step.title),
+    description: step.description ?? "",
+    icon: step.image ?? "",
+  }));
+
   return (
     <div className="min-h-screen bg-white text-charcoal ">
       <SiteHeader />
 
-      <ConstructionMobileHero />
+      <ConstructionMobileHero
+        images={{
+          top: heroImages?.topImage,
+          right: heroImages?.rightImage,
+          bottom: heroImages?.bottomImage,
+          left: heroImages?.leftImage,
+        }}
+        title={content.hero.title}
+        subtitle={content.hero.subtitle}
+      />
 
       {/* SECTION 1: BANNER
           Tỉ lệ banner lấy đúng mockup `pic_thicong/banner-chuan.png`: 530/1254 =
@@ -246,20 +276,22 @@ export function ConstructionServicePage() {
       <section
         className={`${SERVICE_HERO_CLASS_NAME} max-md:hidden lg:!h-[clamp(38rem,42.3vw,51.5rem)]`}
       >
-        <Reveal
-          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[38%] lg:block"
-          from="fade"
-        >
-          <Image
-            className="object-cover object-right opacity-80"
-            src="/images/thi-cong-xay-dung/hero-wireframe.png"
-            alt=""
-            fill
-            sizes="38vw"
-            priority
-            aria-hidden="true"
-          />
-        </Reveal>
+        {heroImages.wireframeImage ? (
+          <Reveal
+            className="pointer-events-none absolute inset-y-0 right-0 hidden w-[38%] lg:block"
+            from="fade"
+          >
+            <Image
+              className="object-cover object-right opacity-80"
+              src={heroImages.wireframeImage}
+              alt=""
+              fill
+              sizes="38vw"
+              priority
+              aria-hidden="true"
+            />
+          </Reveal>
+        ) : null}
 
         {/* Từ lg khối này TRÙNG KHÍT banner (`inset-0`), không còn bị nhốt trong
             `w-[63.94%]` như trước — vì toạ độ trong HERO_DIAMONDS là % của cả
@@ -476,11 +508,10 @@ export function ConstructionServicePage() {
             );
           })}
 
-          {HERO_DIAMONDS.map((diamond, index) => (
+          {diamonds.map((diamond, index) => (
             <DiamondPhotoFrame
               key={diamond.key}
               src={diamond.src}
-              alt={diamond.alt}
               left={diamond.left}
               top={diamond.top}
               size={diamond.size}
@@ -507,9 +538,7 @@ export function ConstructionServicePage() {
               <Reveal from="bottom">
                 {/* Đã cập nhật class font giống với DesignServicePage và giảm kích thước */}
                 <h1 className="font-heading text-xl font-extrabold leading-[1.05] text-brand uppercase tracking-wide sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
-                  Dịch Vụ Thi Công
-                  <br />
-                  Xây Dựng
+                  <RichText text={content.hero.title} />
                 </h1>
               </Reveal>
 
@@ -536,9 +565,7 @@ export function ConstructionServicePage() {
 
               <Reveal delay={380} from="left">
                 <p className="mt-1 max-w-[19.375rem] text-pretty text-sm font-normal leading-snug text-charcoal sm:text-base">
-                  Đồng Hành Kiến Tạo Công Trình
-                  <br />
-                  Bền Vững
+                  <RichText text={content.hero.subtitle} />
                 </p>
               </Reveal>
             </div>
@@ -579,7 +606,7 @@ export function ConstructionServicePage() {
         >
           <Reveal from="bottom">
             <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase md:text-3xl lg:text-4xl text-center">
-              THI CÔNG XÂY DỰNG TỪ PHẦN THÔ ĐẾN HOÀN THIỆN
+              <RichText text={content.featuredProjects.title} mode="inline" />
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
@@ -587,21 +614,15 @@ export function ConstructionServicePage() {
                 thất (size + justify 2 lề, dòng cuối canh giữa). Desktop giữ
                 nguyên: max-w-[73.75rem], text-center, text-sm. */}
             <p className="mx-auto mt-4 max-w-[73.75rem] text-pretty text-center text-sm leading-relaxed max-md:max-w-3xl max-md:text-justify max-md:[text-align-last:center] max-md:text-[0.82rem] max-md:leading-[1.3]">
-              Thi công xây dựng là giai đoạn quyết định chất lượng và tuổi thọ
-              của công trình. BMT Decor triển khai{" "}
-              <strong className="font-normal lg:font-bold">
-                xây dựng phần thô
-              </strong>
-              ,{" "}
-              <strong className="font-normal lg:font-bold">
-                thi công hoàn
-                <br className="hidden lg:inline" /> thiện
-              </strong>{" "}
-              và các hạng mục xây dựng theo đúng hồ sơ kỹ thuật, đảm bảo quy
-              trình thi công đồng bộ, kiểm soát chặt chẽ chất lượng vật liệu,
-              <br className="hidden lg:inline" /> tiến độ và an toàn lao động.
-              Mỗi công trình đều được giám sát xuyên suốt nhằm hạn chế phát sinh
-              và đảm bảo chất lượng khi bàn giao.
+              <RichText
+                text={content.featuredProjects.description}
+                mode="desktopBreaks"
+                breakFrom="lg"
+                bold={{
+                  phrases: ["xây dựng phần thô", "thi công hoàn thiện"],
+                  className: "font-normal lg:font-bold",
+                }}
+              />
             </p>
           </Reveal>
           <BuildingRule
@@ -619,7 +640,7 @@ export function ConstructionServicePage() {
           from="bottom"
         >
           <ProjectCarousel
-            projects={featuredProjects}
+            projects={projects}
             prevIcon="/images/thi-cong-xay-dung/nav-prev.png"
             nextIcon="/images/thi-cong-xay-dung/nav-next.png"
             mobileMockup
@@ -636,7 +657,7 @@ export function ConstructionServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label={featuredProjectCtaLabel}
+            label={content.featuredProjects.ctaLabel ?? ""}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -658,16 +679,12 @@ export function ConstructionServicePage() {
           <div className="text-center md:mb-12">
             <Reveal from="bottom">
               <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl md:leading-normal">
-                <span className="font-normal">THI CÔNG XÂY DỰNG</span>
-                <br />
-                <span className="font-extrabold">
-                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
-                </span>
+                <RichText text={content.solutions.title} mode="twoWeights" />
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Thi công đồng bộ, đảm bảo chất lượng và tiến độ
+                <RichText text={content.solutions.description} mode="inline" />
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -682,9 +699,10 @@ export function ConstructionServicePage() {
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
-            cards={solutionCards}
+            cards={cards}
             checkIcon="/images/cai-tao-sua-chua/icon-house.png"
             ruleImage="/images/cai-tao-sua-chua/rule-short.png"
+            splitCategoryAtAmpersand
           />
         </div>
       </section>
@@ -713,12 +731,12 @@ export function ConstructionServicePage() {
         <div className="mx-auto mb-4 w-[calc(100%-2rem)] text-center md:hidden">
           <Reveal from="bottom">
             <h2 className="font-heading text-[clamp(0.95rem,4.75vw,1.55rem)] leading-none font-extrabold uppercase">
-              QUY TRÌNH THI CÔNG XÂY DỰNG
+              <RichText text={content.process.title} mode="inline" />
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
             <p className="mx-auto mt-3 text-[clamp(0.78rem,2.72vw,1rem)] leading-relaxed">
-              Triển khai bài bản, giám sát chặt chẽ trong từng giai đoạn
+              <RichText text={content.process.description} mode="inline" />
             </p>
           </Reveal>
           <Reveal delay={250} from="left">
@@ -732,7 +750,7 @@ export function ConstructionServicePage() {
           </Reveal>
         </div>
 
-        <ConstructionMobileProcess />
+        <ConstructionMobileProcess steps={processSteps} />
 
         <div className="hidden md:block">
           <div className="mx-auto mb-12 w-[min(790px,calc(100%-2.25rem))] text-center">
@@ -742,12 +760,12 @@ export function ConstructionServicePage() {
                   trang đó đều extrabold, riêng trang này còn ở bold nên nét chữ
                   mảnh hơn hẳn. */}
               <h2 className="font-heading text-3xl font-extrabold uppercase sm:text-4xl">
-                QUY TRÌNH THI CÔNG XÂY DỰNG
+                <RichText text={content.process.title} mode="inline" />
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
-                Triển khai bài bản, giám sát chặt chẽ trong từng giai đoạn
+                <RichText text={content.process.description} mode="inline" />
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -765,11 +783,11 @@ export function ConstructionServicePage() {
             </Reveal>
           </div>
 
-          <ConstructionProcessList />
+          <ConstructionProcessList steps={processSteps} />
         </div>
       </section>
 
-      <ContactForm {...contactFormContent} />
+      <ContactForm {...buildContactForm(content.contactForm)} />
       <SiteFooter />
     </div>
   );

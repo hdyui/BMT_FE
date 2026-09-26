@@ -19,15 +19,13 @@ type RenovationProcessStepsProps = {
    */
   heading: string;
   /** Logo đứng ngay sau tiêu đề. */
-  logo: string;
-  logoAlt: string;
+  logo?: string;
 };
 
 export function RenovationProcessSteps({
   steps,
   heading,
   logo,
-  logoAlt,
 }: RenovationProcessStepsProps) {
   return (
     // Đã thu hẹp max-width xuống còn khoảng 1024px để lọt lòng vừa đường viền đỏ
@@ -49,13 +47,15 @@ export function RenovationProcessSteps({
         </h2>
 
         {/* Logo: To ra khoảng 310px để nối tiếp ngay sau chữ và chạm mép phải */}
-        <Image
-          src={logo}
-          alt={logoAlt}
-          width={310}
-          height={85}
-          className="h-auto w-32 max-w-full -translate-y-1 shrink-0 object-contain sm:w-48 lg:w-56 xl:w-60"
-        />
+        {logo ? (
+          <Image
+            src={logo}
+            alt=""
+            width={310}
+            height={85}
+            className="h-auto w-32 max-w-full -translate-y-1 shrink-0 object-contain sm:w-48 lg:w-56 xl:w-60"
+          />
+        ) : null}
       </Reveal>
 
       {/* Grid 5 cột */}
@@ -84,7 +84,7 @@ export function RenovationProcessSteps({
                   này — số như bị lệch trái, icon như bị tụt xuống quá thấp. */}
               <Image
                 src="/images/cai-tao-sua-chua/frame.png" // BẠN ĐỔI URL ẢNH KHUNG SỐ 49 VÀO ĐÂY
-                alt="Khung background"
+                alt=""
                 width={1016}
                 height={1214}
                 className="h-auto w-full object-contain"
@@ -135,7 +135,7 @@ export function RenovationProcessSteps({
                 <Image
                   className="size-[17cqw] max-w-10 object-contain transition-transform duration-300 group-hover/step:scale-110 lg:size-9 xl:size-10"
                   src={step.icon}
-                  alt={step.title}
+                  alt=""
                   width={48}
                   height={48}
                 />

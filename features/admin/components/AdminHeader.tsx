@@ -13,13 +13,13 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/features/admin/components/ui/dropdown-menu";
-import { logoutAdmin } from "@/features/admin/auth/actions";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
 import { getAdminSectionKey } from "@/features/admin/lib/admin-sidebar";
 import {
   adminHeaderNavigation,
   type AdminHeaderNavItem,
 } from "@/features/admin/lib/constants/navigation";
+import { api } from "@/shared/lib/api/client";
 import { cn } from "@/shared/lib/utils";
 
 export function AdminHeader() {
@@ -31,7 +31,11 @@ export function AdminHeader() {
     const location = `${window.location.pathname}${window.location.search}`;
 
     startLogout(async () => {
-      await logoutAdmin(location);
+      // POST /api/v1/auth/logout thu hồi phiên ở backend (backend xóa cookie phiên).
+      // Lỗi mạng không được chặn đăng xuất: `expired=1` bắt proxy xóa cookie phiên
+      // còn sót ở website, và `next` giúp quay lại đúng trang sau khi đăng nhập lại.
+      await api.post("/auth/logout").catch(() => undefined);
+      window.location.assign(`/admin/login?expired=1&next=${encodeURIComponent(location)}`);
     });
   }
 

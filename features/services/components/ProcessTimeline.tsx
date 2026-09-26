@@ -3,7 +3,6 @@
 import Image from "next/image";
 import type { CSSProperties } from "react";
 import { Reveal } from "@/shared/components/Reveal";
-import { processSteps } from "@/features/services/data/design";
 
 const STEP_DELAY = 150;
 const SECOND_GROUP_DELAY = 560;
@@ -23,15 +22,21 @@ const TIMELINE_STYLE = {
   "--step-h": "calc(var(--frame-h) + 1.25rem)",
 } as CSSProperties;
 
-type ProcessStep = (typeof processSteps)[number];
+export type ProcessStep = {
+  number: string;
+  icon: string;
+  circle: string;
+  title: string;
+  copy: string;
+};
 
-const MOBILE_ROWS = [
-  [processSteps[0], processSteps[3]],
-  [processSteps[1], processSteps[4]],
-  [processSteps[2], processSteps[5]],
-] as const;
+function MobileProcessTimeline({ steps }: { steps: readonly ProcessStep[] }) {
+  const mobileRows = [
+    [steps[0], steps[3]],
+    [steps[1], steps[4]],
+    [steps[2], steps[5]],
+  ] as const;
 
-function MobileProcessTimeline() {
   /* `scale` không đổi ô layout: khối vẫn chiếm đủ chiều cao chưa thu nhỏ
      nhưng chỉ vẽ 95% từ mép trên, chừa ra 5% chiều cao khoảng chết ở đáy
      (~24px ở màn 390px). Margin âm bù đúng lượng đó: chiều cao = bề rộng x
@@ -47,7 +52,7 @@ function MobileProcessTimeline() {
         aria-hidden="true"
       />
 
-      {MOBILE_ROWS.map((row, rowIndex) =>
+      {mobileRows.map((row, rowIndex) =>
         row.map((step, columnIndex) => {
           const isLeft = columnIndex === 0;
 
@@ -218,13 +223,17 @@ function TimelineStep({
   );
 }
 
-export function ProcessTimeline() {
-  const firstGroup = processSteps.slice(0, 3);
-  const secondGroup = processSteps.slice(3, 6);
+export function ProcessTimeline({
+  steps,
+}: {
+  steps: readonly ProcessStep[];
+}) {
+  const firstGroup = steps.slice(0, 3);
+  const secondGroup = steps.slice(3, 6);
 
   return (
     <>
-      <MobileProcessTimeline />
+      <MobileProcessTimeline steps={steps} />
       <div
         className="relative mx-auto hidden w-[min(51.25rem,calc(100%-2.25rem))] justify-center md:flex"
         style={TIMELINE_STYLE}

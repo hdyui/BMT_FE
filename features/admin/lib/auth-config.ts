@@ -1,13 +1,9 @@
-export const ADMIN_AUTH_COOKIE = "bmt_admin_session";
-export const ADMIN_AUTH_MARKER = "authenticated";
+// Tên cookie phiên do backend cấp khi đăng nhập (HttpOnly). FE chỉ dùng để
+// biết "đã có phiên hay chưa" khi điều hướng; quyền thật do backend kiểm tra ở
+// mọi API admin.
+export const ADMIN_ACCESS_COOKIE = "accessToken";
+export const ADMIN_REFRESH_COOKIE = "refreshToken";
 export const ADMIN_LOCATION_COOKIE = "bmt_admin_location";
-export const ADMIN_MOCK_SESSION = "bmt-mock-admin-session-v1";
-
-export const MOCK_ADMIN_ACCOUNT = {
-  email: "admin@bmtdecor.vn",
-  password: "BMT@123456",
-  displayName: "BMT Admin",
-} as const;
 
 export const DEFAULT_ADMIN_LOCATION = "/admin/dashboard";
 

@@ -29,14 +29,10 @@ import { Reveal } from "@/shared/components/Reveal";
  * bị méo. `hitArea` là vùng bắt chuột hình bình hành (theo % khung ảnh chính).
  */
 
-const IMAGE_DIR = "/images/thiet-ke-kien-truc-noi-that";
-
 /** Độ nghiêng của 3 tấm ảnh: lệch ngang 0.3825 đơn vị trên mỗi đơn vị chiều cao. */
 const SKEW_DEG = -20.94;
 
 type Layer = {
-  /** Đường dẫn ảnh — THAY URL THẬT TẠI ĐÂY. */
-  src: string;
   /** Tỉ lệ rộng/cao của file ảnh gốc. */
   aspect: string;
   /** Chiều cao lớp, % chiều cao banner. */
@@ -48,11 +44,10 @@ type Layer = {
 };
 
 /** Tấm bìa tạo bóng: hình chữ nhật CHƯA skew, cùng hệ toạ độ với `Layer`. */
-type Backing = Omit<Layer, "src" | "aspect"> & { width: number };
+type Backing = Omit<Layer, "aspect"> & { width: number };
 
 type HeroFrame = {
-  id: string;
-  alt: string;
+  id: "yensao" | "cau-thang" | "zena-spa";
   photo: Layer;
   backing: Backing;
   /** Vùng bắt hover đúng theo hình bình hành của ảnh, % khung ảnh chính. */
@@ -62,10 +57,8 @@ type HeroFrame = {
 const heroFrames: readonly HeroFrame[] = [
   {
     id: "yensao",
-    alt: "Showroom Yến Sào do BMT Decor thiết kế nội thất",
     // ← ẢNH CHÍNH TRÁI
     photo: {
-      src: `${IMAGE_DIR}/left-corner.png`,
       aspect: "2133 / 2691",
       height: 86.96,
       right: 46.25,
@@ -78,10 +71,8 @@ const heroFrames: readonly HeroFrame[] = [
   },
   {
     id: "cau-thang",
-    alt: "Nhà phố do BMT Decor thiết kế nội thất",
     // ← ẢNH CHÍNH GIỮA
     photo: {
-      src: `${IMAGE_DIR}/between.png`,
       aspect: "2153 / 2622",
       height: 84.73,
       right: 19.43,
@@ -93,10 +84,8 @@ const heroFrames: readonly HeroFrame[] = [
   },
   {
     id: "zena-spa",
-    alt: "Zena Spa do BMT Decor thiết kế nội thất",
     // ← ẢNH CHÍNH PHẢI (khung to nhất, dính sát mép phải banner)
     photo: {
-      src: `${IMAGE_DIR}/right-corner.png`,
       aspect: "1957 / 3033",
       height: 98,
       // Âm để phần lề trong suốt của file ảnh nằm ngoài khung -> cạnh phải của
@@ -121,7 +110,19 @@ function boxStyle(box: { height: number; right: number; bottom: number }) {
   };
 }
 
-export function DesignHeroGallery() {
+const FRAME_IMAGE_KEY = { yensao: "left", "cau-thang": "center", "zena-spa": "right" } as const;
+
+export function DesignHeroGallery({
+  images,
+}: {
+  /** Ảnh ba khung từ API. */
+  images: Partial<Record<"left" | "center" | "right", string>>;
+}) {
+  const frames = heroFrames.flatMap((frame) => {
+    const src = images[FRAME_IMAGE_KEY[frame.id]];
+    return src ? [{ ...frame, photo: { ...frame.photo, src } }] : [];
+  });
+
   return (
     // Màn nhỏ: thu nhỏ cụm và neo góc dưới phải để không đè lên khối chữ.
     //
@@ -151,7 +152,7 @@ export function DesignHeroGallery() {
       {/* CẢ 3 TẤM BÌA vẽ trước để nằm DƯỚI cả 3 ảnh chính. Nhờ vậy bìa của
           khung sau bị ảnh của khung trước che, chỉ ló ra đúng ở khe hở và ở
           những chỗ không có ảnh nào phía trước — giống hệt bản thiết kế. */}
-      {heroFrames.map((frame, index) => (
+      {frames.map((frame, index) => (
         <Reveal
           className="absolute"
           style={{
@@ -169,7 +170,7 @@ export function DesignHeroGallery() {
         </Reveal>
       ))}
 
-      {heroFrames.map((frame, index) => (
+      {frames.map((frame, index) => (
         <div className="group/frame contents" key={frame.id}>
           {/* ẢNH CHÍNH — nằm trên, xuất hiện ngay sau tấm bìa */}
           <Reveal
@@ -189,7 +190,7 @@ export function DesignHeroGallery() {
               <Image
                 className="size-full object-fill"
                 src={frame.photo.src}
-                alt={frame.alt}
+                alt=""
                 fill
                 sizes="(max-width: 1024px) 34vw, 28vw"
                 priority

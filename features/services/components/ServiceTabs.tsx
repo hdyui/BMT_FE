@@ -3,43 +3,74 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { Reveal } from "@/shared/components/Reveal";
-import { serviceTabs } from "@/features/services/data/overview";
+
+export type ServiceTab = {
+  tabLabel: string;
+  label: string;
+  tagline: string;
+  copy: string;
+  image?: string;
+};
 import { cn } from "@/shared/lib/utils";
 
 const FADE_DURATION = 240;
 
-// Điểm ngắt dòng cố định cho nhãn tab ở mobile, đúng theo mockup (không phụ
-// thuộc browser tự xuống dòng theo bề rộng cột, vốn không ra đúng điểm ngắt
-// mong muốn). Từ lg trở lên vẫn hiện nhãn gốc trên một dòng như cũ.
-const MOBILE_TAB_LINES = [
-  ["XÂY DỰNG", "TRỌN GÓI"],
-  ["THIẾT KẾ KIẾN TRÚC &", "NỘI THẤT"],
-  ["THI CÔNG", "XÂY DỰNG"],
-  ["CẢI TẠO &", "SỬA CHỮA"],
-] as const;
+/** Chia dãy từ thành hai dòng có độ dài gần bằng nhau nhất. */
+function balancedSplit(words: readonly string[]): string[] {
+  if (words.length < 2) return [words.join(" ")];
+  let best = 1;
+  let bestWidth = Infinity;
+  for (let split = 1; split < words.length; split += 1) {
+    const width = Math.max(words.slice(0, split).join(" ").length, words.slice(split).join(" ").length);
+    if (width < bestWidth) {
+      best = split;
+      bestWidth = width;
+    }
+  }
+  return [words.slice(0, best).join(" "), words.slice(best).join(" ")];
+}
 
-// Điện thoại hẹp cần thêm một điểm ngắt ở nhãn dài nhất để bốn tab vẫn nằm
-// trọn trong viewport. Từ 481px trở lên dùng đúng bản hai dòng của mockup.
-const NARROW_MOBILE_TAB_LINES = [
-  ["XÂY DỰNG", "TRỌN GÓI"],
-  ["THIẾT KẾ", "KIẾN TRÚC &", "NỘI THẤT"],
-  ["THI CÔNG", "XÂY DỰNG"],
-  ["CẢI TẠO &", "SỬA CHỮA"],
-] as const;
+const NARROW_LINE_LIMIT = 14;
 
-// Điểm ngắt dòng cố định cho TIÊU ĐỀ bên cạnh số 01/02/03/04 (khác với nhãn
-// tab phía trên): cả 4 tiêu đề đều nằm gọn 1 dòng (vd "GÓI"/"NỘI THẤT" không
-// được rớt xuống dòng riêng) — "Thiết kế kiến trúc & nội thất" dài nhất nên
-// dùng cỡ chữ nhỏ hơn riêng, xem NOWRAP_TITLE_INDEXES bên dưới.
-const DETAIL_TITLE_LINES = [
-  ["XÂY DỰNG TRỌN GÓI"],
-  ["THIẾT KẾ KIẾN TRÚC & NỘI THẤT"],
-  ["THI CÔNG XÂY DỰNG"],
-  ["CẢI TẠO & SỬA CHỮA"],
-] as const;
+/**
+ * Ngắt dòng nhãn tab ở mobile từ CHÍNH nhãn lấy từ DB, nên admin sửa nhãn thế
+ * nào thì ngắt dòng theo đúng quy tắc đó: nhãn có "&" thì ngắt ngay sau "&",
+ * không có thì chia đôi cho cân. Điện thoại hẹp (`narrow`) cần thêm điểm ngắt ở
+ * dòng dài để bốn tab vẫn nằm trọn trong viewport. Từ lg trở lên hiện nhãn một dòng.
+ */
+function tabLines(tabLabel: string, narrow: boolean): string[] {
+  // "&" luôn đi liền từ đứng trước, không bao giờ mở đầu một dòng.
+  const words = tabLabel
+    .toUpperCase()
+    .trim()
+    .split(/\s+/)
+    .reduce<string[]>((acc, word) => {
+      if (word === "&" && acc.length > 0) acc[acc.length - 1] += " &";
+      else acc.push(word);
+      return acc;
+    }, []);
 
-// Tiêu đề dài nhất trong 4 tiêu đề trên cần thu nhỏ cỡ chữ ở mobile/tablet để
-// vẫn nằm gọn 1 dòng thay vì tự động ngắt dòng theo bề rộng cột.
+  const ampersandAt = words.findIndex((word) => word.endsWith("&"));
+  let lines =
+    ampersandAt >= 0 && ampersandAt < words.length - 1
+      ? [words.slice(0, ampersandAt + 1).join(" "), words.slice(ampersandAt + 1).join(" ")]
+      : balancedSplit(words);
+
+  if (narrow) {
+    lines = lines.flatMap((line) =>
+      line.length > NARROW_LINE_LIMIT ? balancedSplit(line.split(" ").reduce<string[]>((acc, word) => {
+        if (word === "&" && acc.length > 0) acc[acc.length - 1] += " &";
+        else acc.push(word);
+        return acc;
+      }, [])) : [line],
+    );
+  }
+  return lines;
+}
+
+// Tiêu đề bên cạnh số 01/02/03/04 luôn nằm gọn 1 dòng ở mobile/tablet (vd
+// "GÓI"/"NỘI THẤT" không được rớt xuống dòng riêng). "Thiết kế kiến trúc & nội
+// thất" dài nhất nên dùng cỡ chữ nhỏ hơn riêng ở mobile/tablet để vẫn gọn 1 dòng.
 const NOWRAP_SMALL_TITLE_INDEXES = new Set([1]);
 
 /**
@@ -59,7 +90,11 @@ function offsetLeftWithin(node: HTMLElement, container: HTMLElement) {
   return left;
 }
 
-export function ServiceTabs() {
+export function ServiceTabs({
+  tabs: serviceTabs,
+}: {
+  tabs: readonly ServiceTab[];
+}) {
   const [active, setActive] = useState(0);
   const [shown, setShown] = useState(0);
   const [faded, setFaded] = useState(false);
@@ -116,7 +151,7 @@ export function ServiceTabs() {
       cancelAnimationFrame(frame);
       resizeObserver.disconnect();
     };
-  }, [active]);
+  }, [active, serviceTabs.length]);
 
   function select(index: number) {
     if (index === active) return;
@@ -181,7 +216,7 @@ export function ServiceTabs() {
                 }}
               >
                 <span className="max-[480px]:hidden lg:hidden">
-                  {MOBILE_TAB_LINES[index].map((line, lineIndex) => (
+                  {tabLines(service.tabLabel, false).map((line, lineIndex) => (
                     <span key={line}>
                       {lineIndex > 0 && <br />}
                       {line}
@@ -189,7 +224,7 @@ export function ServiceTabs() {
                   ))}
                 </span>
                 <span className="hidden max-[480px]:inline">
-                  {NARROW_MOBILE_TAB_LINES[index].map((line, lineIndex) => (
+                  {tabLines(service.tabLabel, true).map((line, lineIndex) => (
                     <span key={line}>
                       {lineIndex > 0 && <br />}
                       {line}
@@ -250,22 +285,16 @@ export function ServiceTabs() {
           from="left"
           style={{ "--tab1-inset": `${rule.left}px` } as React.CSSProperties}
         >
-          <Image
-            className="object-cover transition-transform duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:hidden"
-            src={detail.mobileImage}
-            alt={detail.label}
-            fill
-            sizes="(max-width: 1024px) calc(100vw - 2.25rem), 1px"
-            priority
-          />
-          <Image
-            className="hidden object-cover transition-[transform,translate,scale,filter] duration-300 ease-out lg:block lg:drop-shadow-md lg:group-hover:-translate-y-[5px] lg:group-hover:scale-[1.02] lg:group-hover:drop-shadow-2xl lg:group-active:-translate-y-[5px] lg:group-active:scale-[1.02] lg:group-active:drop-shadow-2xl"
-            src={detail.image}
-            alt={detail.label}
-            fill
-            sizes="(min-width: 1024px) 46vw, 1px"
-            priority
-          />
+          {detail.image ? (
+            <Image
+              className="object-cover transition-[transform,translate,scale,filter] duration-300 ease-out group-hover:scale-[1.02] group-active:scale-[1.02] lg:drop-shadow-md lg:group-hover:-translate-y-[5px] lg:group-hover:scale-[1.02] lg:group-hover:drop-shadow-2xl lg:group-active:-translate-y-[5px] lg:group-active:scale-[1.02] lg:group-active:drop-shadow-2xl"
+              src={detail.image}
+              alt=""
+              fill
+              sizes="(min-width: 1024px) 46vw, calc(100vw - 2.25rem)"
+              priority
+            />
+          ) : null}
         </Reveal>
 
         <div className="mt-7 grid max-w-[31.875rem] grid-cols-[clamp(4rem,11vw,5rem)_minmax(0,1fr)] gap-x-3 sm:gap-x-4 lg:mt-0 lg:block">
@@ -288,12 +317,7 @@ export function ServiceTabs() {
               )}
             >
               <span className="whitespace-nowrap lg:hidden lg:whitespace-normal">
-                {DETAIL_TITLE_LINES[shown].map((line, lineIndex) => (
-                  <span key={line}>
-                    {lineIndex > 0 && <br />}
-                    {line}
-                  </span>
-                ))}
+                {detail.label}
               </span>
               <span className="hidden lg:inline">{detail.label}</span>
             </h2>

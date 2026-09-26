@@ -6,7 +6,12 @@ import {
   AccordionTrigger,
 } from "@/shared/components/ui/accordion";
 import { Reveal } from "@/shared/components/Reveal";
-import { processSteps } from "@/features/services/data/overview";
+
+export type OverviewProcessStep = {
+  title: string;
+  copy: string;
+  imageOpen?: string;
+};
 
 const arrowMask = {
   maskImage: "url(/images/services/arrow.png)",
@@ -19,7 +24,11 @@ const arrowMask = {
   WebkitMaskSize: "contain",
 } as const;
 
-export function ProcessAccordion() {
+export function ProcessAccordion({
+  steps: processSteps,
+}: {
+  steps: readonly OverviewProcessStep[];
+}) {
   return (
     <>
       <div className="mx-auto flex w-[calc(100%-2.25rem)] flex-col gap-8 md:hidden">
@@ -27,14 +36,16 @@ export function ProcessAccordion() {
           <Reveal delay={index * 90} from="bottom" key={step.title}>
             <div>
               <div className="relative aspect-[3/2] w-full overflow-hidden rounded-[0.875rem]">
-                <Image
-                  className="object-cover"
-                  src={step.imageOpen}
-                  alt=""
-                  fill
-                  sizes="100vw"
-                  aria-hidden="true"
-                />
+                {step.imageOpen ? (
+                  <Image
+                    className="object-cover"
+                    src={step.imageOpen}
+                    alt=""
+                    fill
+                    sizes="100vw"
+                    aria-hidden="true"
+                  />
+                ) : null}
               </div>
               <span className="mt-4 block text-sm text-charcoal">
                 {String(index + 1).padStart(2, "0")}.
@@ -71,14 +82,16 @@ export function ProcessAccordion() {
                   Chiều cao = bề rộng cột × 320/1420 (thu gọn) và × 639/1420 (mở);
                   bo góc bằng CSS vì lúc thu gọn phần bo sẵn trong ảnh bị cắt mất. */}
               <AccordionTrigger className="relative block h-8 w-full overflow-hidden rounded-[0.375rem] transition-[height] duration-300 ease-out group-data-open/step:h-20 sm:h-[3.125rem] sm:rounded-[0.5625rem] sm:group-data-open/step:h-[6.1875rem] lg:h-[4.8125rem] lg:rounded-[0.875rem] lg:group-data-open/step:h-[9.5625rem]">
-                <Image
-                  className="object-cover"
-                  src={step.imageOpen}
-                  alt=""
-                  fill
-                  sizes="340px"
-                  loading="eager"
-                />
+                {step.imageOpen ? (
+                  <Image
+                    className="object-cover"
+                    src={step.imageOpen}
+                    alt=""
+                    fill
+                    sizes="340px"
+                    loading="eager"
+                  />
+                ) : null}
               </AccordionTrigger>
 
               <div>

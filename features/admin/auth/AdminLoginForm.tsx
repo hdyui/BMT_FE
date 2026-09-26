@@ -2,35 +2,53 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { ArrowLeft, Eye, EyeOff, LoaderCircle } from "lucide-react";
 
+import { Button } from "@/features/admin/components/ui/button";
 import { Input } from "@/features/admin/components/ui/input";
-import { loginAdmin } from "@/features/admin/auth/service";
+import { sanitizeAdminLocation } from "@/features/admin/lib/auth-config";
+import { api } from "@/shared/lib/api/client";
+import { ApiError } from "@/shared/lib/api/errors";
+
+function describeLoginError(error: unknown) {
+  if (error instanceof ApiError) {
+    if (error.status === 401 || error.status === 422) return "Email hoặc mật khẩu không đúng.";
+    if (error.status === 429) {
+      return `Bạn đăng nhập quá nhiều lần. Vui lòng đợi ${error.retryAfter ?? 60} giây rồi thử lại.`;
+    }
+    return "Đăng nhập không thành công. Vui lòng thử lại sau.";
+  }
+  return "Không kết nối được máy chủ. Vui lòng thử lại.";
+}
 
 export function AdminLoginForm({ location = "" }: { location?: string }) {
+  const router = useRouter();
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
+  // Gọi thẳng POST /api/v1/auth/login (Next chuyển tiếp sang backend). Backend
+  // trả cookie phiên HttpOnly nên trình duyệt tự lưu, không cần xử lý token.
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setError(null);
-    setPending(true);
-
     const form = new FormData(event.currentTarget);
+    const email = String(form.get("email") ?? "").trim();
+    const password = String(form.get("password") ?? "");
+
+    if (!email || !password) {
+      setError("Vui lòng nhập email và mật khẩu.");
+      return;
+    }
+
+    setPending(true);
+    setError(null);
     try {
-      await loginAdmin({
-        email: String(form.get("email") ?? "").trim(),
-        password: String(form.get("password") ?? ""),
-      });
-      const next = location.startsWith("/") && !location.startsWith("//")
-        ? location
-        : "/admin/dashboard";
-      window.location.assign(next);
+      await api.post("/auth/login", { email, password });
+      router.replace(sanitizeAdminLocation(location));
     } catch (loginError) {
-      setError(loginError instanceof Error ? loginError.message : "Đăng nhập thất bại.");
-    } finally {
+      setError(describeLoginError(loginError));
       setPending(false);
     }
   }
@@ -66,7 +84,7 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
               </p>
             </div>
 
-            <form method="post" onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5">
 
               <div className="space-y-2">
                 <label htmlFor="admin-email" className="text-sm font-semibold">
@@ -117,16 +135,11 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
                 </p>
               )}
 
-              <button
-                type="submit"
-                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-2.5 text-sm font-medium text-primary-foreground transition-colors hover:bg-primary/80 disabled:pointer-events-none disabled:opacity-50"
-                disabled={pending}
-              >
+              <Button type="submit" className="h-11 w-full" disabled={pending}>
                 {pending && <LoaderCircle className="animate-spin" />}
                 {pending ? "Đang đăng nhập..." : "Đăng nhập"}
-              </button>
+              </Button>
             </form>
-
           </div>
       </section>
     </main>

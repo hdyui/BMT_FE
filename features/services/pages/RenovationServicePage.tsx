@@ -6,6 +6,8 @@ import { Reveal } from "@/shared/components/Reveal";
 import { ContactForm } from "@/shared/components/ContactForm";
 
 // Tái sử dụng components dùng chung
+import { RichText } from "@/features/services/components/RichText";
+import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
@@ -25,16 +27,15 @@ import {
 } from "@/features/services/config/layout";
 
 // Import Data
+import { getServiceDetailContent } from "@/features/services/api/content";
 import {
-  contactFormContent,
-  featuredProjectCtaLabel,
-  processHeading,
-  processLogo,
-  processLogoAlt,
-  featuredProjects,
-  solutionCards,
-  processSteps,
-} from "@/features/services/data/renovation";
+  buildContactForm,
+  buildProjects,
+  buildSolutionCards,
+  splitStepTitle,
+  stepNumber,
+} from "@/features/services/api/build";
+import { solutionCardLayout } from "@/features/services/data/renovation";
 
 /**
  * Hai vệt bóng ở mép phải banner. Ảnh nền `hero-background.png` (file -06) không
@@ -58,11 +59,46 @@ const EDGE_SHADOWS = [
   },
 ] as const;
 
-export function RenovationServicePage() {
+export async function RenovationServicePage() {
+  // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
+  const content = await getServiceDetailContent("serviceRenovation");
+  if (!content) return <ServiceUnavailable />;
+  const heroImages = content.hero.images ?? {};
+
+  const projects = buildProjects(content.featuredProjects.items);
+  const cards = buildSolutionCards(content.solutions.items, solutionCardLayout);
+  const processSteps = content.process.items.map((step, index) => ({
+    number: stepNumber(index),
+    ...splitStepTitle(step.title),
+    description: step.description ?? "",
+    icon: step.image ?? "",
+  }));
+
   return (
     <div className="min-h-screen bg-white text-charcoal md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
-      <RenovationMobileContent />
+      <RenovationMobileContent
+        hero={{
+          title: content.hero.title,
+          subtitle: content.hero.subtitle,
+          images: {
+            large: heroImages.largeImage,
+            top: heroImages.topImage,
+            bottom: heroImages.bottomImage,
+            wireframe: heroImages.wireframeImage,
+          },
+        }}
+        featured={{
+          title: content.featuredProjects.title,
+          description: content.featuredProjects.description ?? "",
+          ctaLabel: content.featuredProjects.ctaLabel ?? "",
+        }}
+        projects={projects}
+        solutions={{ title: content.solutions.title, description: content.solutions.description ?? "" }}
+        cards={cards}
+        process={{ title: content.process.title, logo: content.process.brandLogo }}
+        steps={processSteps}
+      />
       {/* SECTION 1: BANNER */}
       <section className={`${SERVICE_HERO_CLASS_NAME} max-md:hidden`}>
         {/* Ảnh nền do thiết kế cung cấp, đã có sẵn các vệt xám loang — dùng thẳng
@@ -100,20 +136,22 @@ export function RenovationServicePage() {
         ))}
 
         {/* Bản phác thảo nhà, nền bên trái */}
-        <Reveal
-          className="pointer-events-none absolute inset-y-0 left-0 hidden w-[42%] lg:block"
-          from="fade"
-        >
-          <Image
-            className="object-contain object-left opacity-80"
-            src="/images/cai-tao-sua-chua/hero-wireframe.png"
-            alt=""
-            fill
-            sizes="42vw"
-            priority
-            aria-hidden="true"
-          />
-        </Reveal>
+        {heroImages.wireframeImage ? (
+          <Reveal
+            className="pointer-events-none absolute inset-y-0 left-0 hidden w-[42%] lg:block"
+            from="fade"
+          >
+            <Image
+              className="object-contain object-left opacity-80"
+              src={heroImages.wireframeImage}
+              alt=""
+              fill
+              sizes="42vw"
+              priority
+              aria-hidden="true"
+            />
+          </Reveal>
+        ) : null}
 
         {/* Lưới 45/55 */}
         <div className="mx-auto grid h-full w-[min(75rem,calc(100%-2.25rem))] items-center gap-8 py-10 sm:gap-10 sm:py-16 lg:grid-cols-[45%_55%] lg:gap-6 lg:py-10 xl:gap-8">
@@ -181,9 +219,7 @@ export function RenovationServicePage() {
                     đây chỉ là lưới an toàn cho đúng 2 dòng như mockup. */}
                 <Reveal from="bottom">
                   <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand uppercase whitespace-nowrap sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
-                    DỊCH VỤ CẢI TẠO &
-                    <br />
-                    SỬA CHỮA TRỌN GÓI
+                    <RichText text={content.hero.title} />
                   </h1>
                 </Reveal>
 
@@ -207,9 +243,7 @@ export function RenovationServicePage() {
                 {/* Đoạn mô tả */}
                 <Reveal delay={380} from="left">
                   <p className="mt-2 max-w-[19.375rem] text-pretty text-sm font-normal leading-relaxed sm:text-base">
-                    Cải Tạo Không Gian – Nâng Tầm
-                    <br className="hidden sm:block" />
-                    Giá Trị Công Trình
+                    <RichText text={content.hero.subtitle} mode="desktopBreaks" breakFrom="sm-block" />
                   </p>
                 </Reveal>
               </div>
@@ -232,22 +266,15 @@ export function RenovationServicePage() {
               cụm tới đáy banner) vẫn GIỮ NGUYÊN 28px như cũ — không đụng, xem
               RenovationHeroGallery. */}
           <div className="relative lg:self-start">
-            <Reveal from="right">
-              <RenovationHeroGallery
-                large={{
-                  image: "/images/cai-tao-sua-chua/hero-correct-large.png",
-                  alt: "Mặt tiền nhà cải tạo với kiến trúc vòm",
-                }}
-                top={{
-                  image: "/images/cai-tao-sua-chua/hero-correct-top.png",
-                  alt: "Phòng khách cải tạo với nội thất hiện đại",
-                }}
-                bottom={{
-                  image: "/images/cai-tao-sua-chua/hero-correct-bottom.png",
-                  alt: "Không gian phòng khách sau cải tạo",
-                }}
-              />
-            </Reveal>
+            {heroImages.largeImage && heroImages.topImage && heroImages.bottomImage ? (
+              <Reveal from="right">
+                <RenovationHeroGallery
+                  large={{ image: heroImages.largeImage }}
+                  top={{ image: heroImages.topImage }}
+                  bottom={{ image: heroImages.bottomImage }}
+                />
+              </Reveal>
+            ) : null}
           </div>
         </div>
       </section>
@@ -272,24 +299,26 @@ export function RenovationServicePage() {
         <div className={SERVICE_PROJECT_HEADING_CLASS_NAME}>
           <Reveal from="bottom">
             <h2 className="font-heading text-3xl font-extrabold leading-[1.08] uppercase sm:text-4xl">
-              Giải Pháp Cải Tạo Phù Hợp Cho Mọi Công Trình
+              <RichText text={content.featuredProjects.title} mode="inline" />
             </h2>
           </Reveal>
           <Reveal delay={140} from="bottom">
             <p className="mx-auto mt-6 max-w-[73.75rem] text-sm leading-relaxed text-pretty text-justify [text-align-last:center]">
-              BMT Decor cung cấp dịch vụ{" "}
-              <strong className="font-bold">cải tạo nhà ở</strong>,{" "}
-              <strong className="font-bold">cải tạo văn phòng</strong>,{" "}
-              <strong className="font-bold">cải tạo showroom</strong>,{" "}
-              <strong className="font-bold">cải tạo nhà hàng</strong>,{" "}
-              <strong className="font-bold">
-                sửa chữa
-                <br className="hidden lg:inline" /> nhà
-              </strong>{" "}
-              và nâng cấp không gian theo nhu cầu thực tế, giúp khắc phục các
-              hạng mục xuống cấp, tối ưu công năng và nâng
-              <br className="hidden lg:inline" /> cao giá trị sử dụng với chi
-              phí hợp lý.
+              <RichText
+                text={content.featuredProjects.description}
+                mode="desktopBreaks"
+                breakFrom="lg"
+                bold={{
+                  phrases: [
+                    "cải tạo nhà ở",
+                    "cải tạo văn phòng",
+                    "cải tạo showroom",
+                    "cải tạo nhà hàng",
+                    "sửa chữa nhà",
+                  ],
+                  className: "font-bold",
+                }}
+              />
             </p>
           </Reveal>
           <BuildingRule
@@ -301,7 +330,7 @@ export function RenovationServicePage() {
 
         <Reveal className={SERVICE_PROJECT_CAROUSEL_CLASS_NAME} delay={120}>
           <ProjectCarousel
-            projects={featuredProjects}
+            projects={projects}
             prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
             nextIcon="/images/cai-tao-sua-chua/nav-next.png"
           />
@@ -311,7 +340,7 @@ export function RenovationServicePage() {
           <PillCtaButton
             className="h-full"
             href="#contact-form"
-            label={featuredProjectCtaLabel}
+            label={content.featuredProjects.ctaLabel ?? ""}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -334,16 +363,12 @@ export function RenovationServicePage() {
           <div className="mb-12 text-center">
             <Reveal from="bottom">
               <h2 className="font-heading text-3xl uppercase sm:text-4xl">
-                <span className="font-normal">CẢI TẠO & SỬA CHỮA</span>
-                <br />
-                <span className="font-extrabold">
-                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
-                </span>
+                <RichText text={content.solutions.title} mode="twoWeights" />
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-4 max-w-xl text-sm leading-relaxed">
-                Giải pháp cải tạo tối ưu cho từng không gian
+                <RichText text={content.solutions.description} mode="inline" />
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -357,7 +382,7 @@ export function RenovationServicePage() {
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
-            cards={solutionCards}
+            cards={cards}
             checkIcon="/images/cai-tao-sua-chua/icon-house.png"
             ruleImage="/images/cai-tao-sua-chua/rule-short.png"
           />
@@ -378,13 +403,12 @@ export function RenovationServicePage() {
 
         <RenovationProcessSteps
           steps={processSteps}
-          heading={processHeading}
-          logo={processLogo}
-          logoAlt={processLogoAlt}
+          heading={content.process.title}
+          logo={content.process.brandLogo}
         />
       </section>
 
-      <ContactForm showTopNotch {...contactFormContent} />
+      <ContactForm showTopNotch {...buildContactForm(content.contactForm)} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>
