@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ProjectDetail, ProjectImage } from "../data/project-details";
+import type { ProjectDetail, ProjectImage } from "@/features/projects/types/projects-public";
 import { Reveal } from "@/shared/components/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { ProjectRichText } from "./ProjectRichText";

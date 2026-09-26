@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useMemo, useState } from "react";
+import { Fragment, useEffect, useMemo, useState } from "react";
 import { Trash2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -39,6 +39,7 @@ import type {
 } from "@/features/admin/lib/types/crud";
 import { Button } from "@/features/admin/components/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { isFixedPageAdminApiResourceKey } from "@/features/admin/services/catalog-api.types";
 
 type DraftMap = Record<string, AdminCrudRecord[]>;
 
@@ -56,7 +57,7 @@ export function UnifiedResourceEditorPage({
   config: AdminResourceConfig;
   companionConfig?: AdminResourceConfig;
 }) {
-  const { getRecords, reorderRecords } = useAdminCrud();
+  const { getRecords, loadRecords, reorderRecords } = useAdminCrud();
   const editableConfigs = useMemo(
     () => (companionConfig ? [companionConfig, config] : [config]),
     [companionConfig, config],
@@ -73,6 +74,57 @@ export function UnifiedResourceEditorPage({
   const [history, setHistory] = useState<HistoryEntry[]>([]);
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [saving, setSaving] = useState(false);
+  const shouldLoadApiRecords = editableConfigs.some((item) =>
+    isFixedPageAdminApiResourceKey(item.key),
+  );
+  const [loadingApiRecords, setLoadingApiRecords] =
+    useState(shouldLoadApiRecords);
+  const [apiLoadError, setApiLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!shouldLoadApiRecords) return;
+
+    let active = true;
+    void Promise.all(
+      editableConfigs.map(async (item) => [
+        item.key,
+        isFixedPageAdminApiResourceKey(item.key)
+          ? await loadRecords(item.key)
+          : getRecords(item.key),
+      ] as const),
+    )
+      .then((entries) => {
+        if (!active) return;
+        const next = Object.fromEntries(
+          entries.map(([key, records]) => [key, structuredClone(records)]),
+        ) as DraftMap;
+        setDrafts(next);
+        setSavedSnapshot(structuredClone(next));
+        setHistory([]);
+        setErrors({});
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Không thể tải nội dung từ API.";
+        setApiLoadError(message);
+        toast.error("Không thể tải nội dung", { description: message });
+      })
+      .finally(() => {
+        if (active) setLoadingApiRecords(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [
+    editableConfigs,
+    getRecords,
+    loadRecords,
+    shouldLoadApiRecords,
+  ]);
 
   const dirtyKeys = useMemo(() => {
     const keys = new Set<string>();
@@ -169,6 +221,30 @@ export function UnifiedResourceEditorPage({
   const homeFeaturedServicesEditor =
     config.key === "home/featured-services" &&
     companionConfig?.key === "home/services-section-content";
+
+  if (loadingApiRecords) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <div className="mx-auto size-8 animate-spin rounded-full border-2 border-muted border-t-brand" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            Đang tải nội dung Trang chủ từ API...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (apiLoadError) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <h2 className="text-lg font-semibold">Không thể tải nội dung</h2>
+          <p className="mt-2 text-sm text-muted-foreground">{apiLoadError}</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 pb-8 sm:p-6 lg:p-8">

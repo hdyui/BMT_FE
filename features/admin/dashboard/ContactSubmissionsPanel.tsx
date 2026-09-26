@@ -14,29 +14,23 @@ import {
   TableHeader,
   TableRow,
 } from "@/features/admin/components/ui/table";
-import {
-  deleteFormSubmission,
-  listFormSubmissions,
-  updateFormSubmissionStatus,
-  type FormSubmissionPage,
-  type SubmissionStatus,
-} from "@/features/admin/services/form-submissions.service";
-import { ApiError } from "@/shared/lib/api/errors";
+import { formSubmissionsApiClient } from "@/features/admin/services/form-submissions-api.client";
+import type {
+  FormSubmissionsPage,
+  FormSubmissionStatus,
+} from "@/features/admin/services/catalog-api.types";
 
 type ReviewFilter = "all" | "reviewed" | "pending";
 
 const PAGE_SIZE = 20;
 
-const statusByFilter: Record<ReviewFilter, SubmissionStatus | undefined> = {
+const statusByFilter: Record<ReviewFilter, FormSubmissionStatus | undefined> = {
   all: undefined,
   reviewed: "done",
   pending: "pending",
 };
 
 function describeError(error: unknown) {
-  if (error instanceof ApiError && error.status === 429) {
-    return "Thao tác quá nhanh, vui lòng thử lại sau ít phút.";
-  }
   return error instanceof Error ? error.message : "Không tải được danh sách liên hệ.";
 }
 
@@ -48,11 +42,12 @@ export function ContactSubmissionsPanel() {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
   const [pageIndex, setPageIndex] = useState(1);
   const [reloadKey, setReloadKey] = useState(0);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
   // Kết quả của lượt tải gần nhất kèm khóa của lượt đó: khóa khác với lượt đang cần
   // nghĩa là đang tải (không phải đặt state đồng bộ trong effect).
   const [loaded, setLoaded] = useState<{
     key: string;
-    page?: FormSubmissionPage;
+    page?: FormSubmissionsPage;
     error?: string;
   } | null>(null);
 
@@ -60,7 +55,7 @@ export function ContactSubmissionsPanel() {
 
   useEffect(() => {
     let active = true;
-    listFormSubmissions({
+    formSubmissionsApiClient.getList({
       pageIndex,
       pageSize: PAGE_SIZE,
       status: statusByFilter[reviewFilter],
@@ -86,21 +81,37 @@ export function ContactSubmissionsPanel() {
   const reload = useCallback(() => setReloadKey((key) => key + 1), []);
   const submissions = page?.items ?? [];
 
+  function markPending(id: string, value: boolean) {
+    setPendingIds((current) => {
+      const next = new Set(current);
+      if (value) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
   async function updateReviewed(id: string, reviewed: boolean) {
+    markPending(id, true);
     try {
-      await updateFormSubmissionStatus(id, reviewed ? "done" : "pending");
+      await formSubmissionsApiClient.updateStatus(id, reviewed ? "done" : "pending");
       reload();
     } catch (updateError) {
       toast.error(describeError(updateError));
+    } finally {
+      markPending(id, false);
     }
   }
 
   async function removeSubmission(id: string) {
+    markPending(id, true);
     try {
-      await deleteFormSubmission(id);
+      await formSubmissionsApiClient.remove(id);
+      toast.success("Đã xóa thông tin liên hệ.");
       reload();
     } catch (deleteError) {
       toast.error(describeError(deleteError));
+    } finally {
+      markPending(id, false);
     }
   }
 
@@ -191,6 +202,7 @@ export function ContactSubmissionsPanel() {
               </TableHeader>
               <TableBody>
                 {submissions.map((submission) => {
+                  const isPending = pendingIds.has(submission.id);
                   const reviewed = submission.status === "done";
                   return (
                     <TableRow key={submission.id}>
@@ -202,6 +214,7 @@ export function ContactSubmissionsPanel() {
                         <div className="flex items-center gap-2">
                           <Checkbox
                             checked={reviewed}
+                            disabled={isPending}
                             onCheckedChange={(value) =>
                               void updateReviewed(submission.id, Boolean(value))
                             }
@@ -220,6 +233,7 @@ export function ContactSubmissionsPanel() {
                           type="button"
                           variant="ghost"
                           size="sm"
+                          disabled={isPending}
                           className="text-destructive hover:bg-destructive/10 hover:text-destructive"
                           onClick={() => void removeSubmission(submission.id)}
                         >

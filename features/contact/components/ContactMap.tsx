@@ -1,17 +1,15 @@
+"use client";
+
 import { Reveal } from "@/shared/components/Reveal";
+import { useSiteSettings } from "@/shared/site-settings/SiteSettingsProvider";
+import type { ContactMapContent } from "@/features/contact/types/contact-public";
 
-export const defaultContactMapContent = {
-  title: "Bản đồ văn phòng BMT Decor tại 7/92 Thành Thái, TP.HCM",
-  googleMapsUrl:
-    "https://www.google.com/maps?q=10.7690413%2C106.6658361&z=18&iwloc=0&output=embed",
-};
+export function ContactMap({ content }: { content: ContactMapContent }) {
+  const { settings } = useSiteSettings();
+  const officeAddress = settings?.footer.officeAddress ?? "";
 
-const contactMapAddress = {
-  short: "7/92 Thành Thái",
-  full: "7/92 Thành Thái, Diên Hồng, Hồ Chí Minh, Việt Nam",
-} as const;
+  if (!content.googleMapsUrl) return null;
 
-export function ContactMap({ content = defaultContactMapContent }: { content?: typeof defaultContactMapContent }) {
   return (
     <Reveal className="w-full overflow-hidden bg-[#e9e5dc]" from="left">
       <section
@@ -29,14 +27,13 @@ export function ContactMap({ content = defaultContactMapContent }: { content?: t
           referrerPolicy="no-referrer-when-downgrade"
           allowFullScreen
         />
-        <div className="pointer-events-none absolute top-4 left-4 z-10 max-w-[calc(100%-2rem)] bg-white px-4 py-3 text-charcoal shadow-[0_2px_8px_rgb(0_0_0/.2)] sm:top-6 sm:left-6 sm:max-w-md sm:px-5 sm:py-4">
-          <p className="text-base font-bold sm:text-lg">
-            {contactMapAddress.short}
-          </p>
-          <p className="mt-0.5 text-xs leading-relaxed text-neutral-600 sm:text-sm">
-            {contactMapAddress.full}
-          </p>
-        </div>
+        {officeAddress && (
+          <div className="pointer-events-none absolute top-4 left-4 z-10 max-w-[calc(100%-2rem)] bg-white px-4 py-3 text-charcoal shadow-[0_2px_8px_rgb(0_0_0/.2)] sm:top-6 sm:left-6 sm:max-w-md sm:px-5 sm:py-4">
+            <p className="text-xs leading-relaxed text-neutral-600 sm:text-sm">
+              {officeAddress}
+            </p>
+          </div>
+        )}
       </section>
     </Reveal>
   );

@@ -17,6 +17,7 @@ import {
 import { MAX_IMAGE_UPLOAD_BYTES } from "@/features/admin/lib/upload-image";
 import { ApiError } from "@/shared/lib/api/errors";
 import { cn } from "@/shared/lib/utils";
+import { isSafeAdminImageSrc } from "@/features/admin/lib/safe-admin-image";
 
 interface ImageFieldProps {
   label: string;
@@ -53,6 +54,7 @@ export function ImageField({
   onChange,
 }: ImageFieldProps) {
   const fill = size === "fill";
+  const safeValue = isSafeAdminImageSrc(value);
   const inputRef = useRef<HTMLInputElement>(null);
   const uploader = useImageUploader();
   const [localPreview, setLocalPreview] = useState<string | null>(null);
@@ -60,6 +62,7 @@ export function ImageField({
   const [viewerOpen, setViewerOpen] = useState(false);
   // Trong lúc upload hiện ảnh vừa chọn; xong thì hiện ảnh thật từ `value`.
   const shownValue = uploading && localPreview ? localPreview : value;
+  const safeShownValue = isSafeAdminImageSrc(shownValue);
 
   useEffect(() => {
     return () => {
@@ -141,9 +144,9 @@ export function ImageField({
             đủ trong hộp thoại. */}
         <button
           type="button"
-          disabled={!value}
+          disabled={!safeValue}
           onClick={() => setViewerOpen(true)}
-          aria-label={value ? `Xem ảnh ${label}` : undefined}
+          aria-label={safeValue ? `Xem ảnh ${label}` : undefined}
           className={cn(
             "relative rounded-md outline-none focus-visible:ring-3 focus-visible:ring-ring/30 enabled:cursor-zoom-in disabled:cursor-default",
             fill
@@ -163,7 +166,7 @@ export function ImageField({
                   : "h-20 w-28 shrink-0 sm:h-24 sm:w-32",
           )}
         >
-          {shownValue ? (
+          {safeShownValue ? (
             /* Chỉ hiện ảnh — không viền, không nền, không lớp phủ khi rê chuột
                — để nhìn đúng như ảnh thật, nhất là ảnh PNG nền trong suốt. */
             <Image
@@ -175,8 +178,15 @@ export function ImageField({
               sizes={size === "thumb" ? "128px" : "(max-width: 1024px) 90vw, 36rem"}
             />
           ) : (
-            <div className="grid size-full place-items-center rounded-[inherit] border border-dashed text-muted-foreground">
-              <ImageIcon className="size-6" />
+            <div className="grid size-full place-items-center rounded-[inherit] border border-dashed px-2 text-center text-muted-foreground">
+              <div>
+                <ImageIcon className="mx-auto size-6" />
+                {value && (
+                  <span className="mt-1 block text-[10px] leading-tight">
+                    Ảnh không hợp lệ
+                  </span>
+                )}
+              </div>
             </div>
           )}
         </button>
@@ -188,7 +198,7 @@ export function ImageField({
             actionsLayout === "column" ? "flex-col" : "flex-row flex-wrap",
           )}
         >
-          {value && (
+          {safeValue && (
             <Button type="button" variant="outline" size="sm" onClick={() => setViewerOpen(true)}>
               <Expand /> Xem ảnh
             </Button>
@@ -224,7 +234,7 @@ export function ImageField({
           </DialogHeader>
           {/* Nền xám nhạt để thấy được rìa của ảnh PNG nền trong suốt. */}
           <div className="mt-3 grid max-h-[68vh] place-items-center overflow-auto rounded-lg bg-muted/40 p-2">
-            {value && (
+            {safeValue && (
               <Image
                 src={value}
                 alt={alt || "Ảnh xem trước"}

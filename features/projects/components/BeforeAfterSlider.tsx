@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useId, useState } from "react";
-import type { ProjectDetail } from "../data/project-details";
+import type { ProjectDetail } from "@/features/projects/types/projects-public";
 import styles from "./ProjectDetail.module.css";
 
 type Comparison = ProjectDetail["comparisons"][number];

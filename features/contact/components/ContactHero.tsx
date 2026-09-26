@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { BmtCta } from "@/shared/components/BmtCta";
+import type { ContactHeroContent } from "@/features/contact/types/contact-public";
 import styles from "./ContactHero.module.css";
 
 const heroDecorations = [
@@ -13,16 +14,7 @@ const heroDecorations = [
   { src: "/images/contact/decorations/transparent/decor-11.png", className: styles.bottomComposite, delay: "640ms" },
 ] as const;
 
-export const defaultContactHeroContent = {
-  title: "LIÊN HỆ NGAY",
-  description: "Hãy chia sẻ nhu cầu về thiết kế kiến trúc, thiết kế nội thất, xây dựng, cải tạo hoặc sửa chữa nhà để đội ngũ BMT Decor tư vấn giải pháp phù hợp với không gian và ngân sách của bạn.",
-  ctaLabel: "LIÊN HỆ NGAY",
-  ctaHref: "#contact-form",
-  photo: "/images/contact/contact-consultant.jpg",
-  photoAlt: "Tư vấn viên BMT Decor hỗ trợ khách hàng về thiết kế và thi công",
-};
-
-export function ContactHero({ content = defaultContactHeroContent }: { content?: typeof defaultContactHeroContent }) {
+export function ContactHero({ content }: { content: ContactHeroContent }) {
   return (
     <section className={styles.hero} aria-labelledby="contact-hero-title">
       <div className={styles.heroCanvas}>
@@ -74,6 +66,7 @@ export function ContactHero({ content = defaultContactHeroContent }: { content?:
               <Image className={styles.mobileTitleDivider} src="/images/contact/mobile/hero-title-divider.png" alt="" width={1388} height={128} sizes="(max-width: 880px) 240px, 1px" aria-hidden="true" />
             </h1>
 
+            {content.description && (
             <p className={styles.description}>
               <Image
                 className={styles.descriptionIcon}
@@ -87,17 +80,23 @@ export function ContactHero({ content = defaultContactHeroContent }: { content?:
               <Image className={styles.mobileDescriptionIcon} src="/images/contact/mobile/description-icon.png" alt="" width={86} height={91} sizes="14px" aria-hidden="true" />
               {content.description}
             </p>
+            )}
 
+            {content.ctaLabel && content.ctaHref && (
             <div className={styles.ctaSlot}>
               <BmtCta href={content.ctaHref}>{content.ctaLabel}</BmtCta>
             </div>
+            )}
           </div>
 
         </div>
       </div>
 
-      <div className={styles.photoBackdrop} aria-hidden="true" />
+      {content.photo && (
+        <div className={styles.photoBackdrop} aria-hidden="true" />
+      )}
 
+      {content.photo && (
       <div className={styles.photoEntrance}>
         <div className={styles.photoFrame}>
           <Image
@@ -111,6 +110,7 @@ export function ContactHero({ content = defaultContactHeroContent }: { content?:
           />
         </div>
       </div>
+      )}
     </section>
   );
 }

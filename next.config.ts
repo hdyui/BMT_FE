@@ -3,10 +3,16 @@ import type { NextConfig } from "next";
 import { API_BASE_PATH, API_ORIGIN } from "./shared/lib/api/config";
 
 const nextConfig: NextConfig = {
+  // Bound prerender concurrency to avoid exhausting memory on development/CI hosts.
+  experimental: { cpus: 2 },
   images: {
     qualities: [70, 75],
-    // Ảnh admin upload qua backend được lưu trên Cloudinary.
-    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+    // Ảnh admin upload qua backend được lưu trên Cloudinary; API cũ có thể trả
+    // URL ảnh trực tiếp từ host triển khai backend.
+    remotePatterns: [
+      { protocol: "https", hostname: "res.cloudinary.com" },
+      { protocol: "https", hostname: "bmt-deploy-latest.onrender.com" },
+    ],
   },
   // Chỉ có tác dụng khi chạy `next dev`: in ra terminal mọi lời gọi API mà server
   // component thực hiện (trang public gọi backend ở server nên không hiện trong

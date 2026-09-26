@@ -36,11 +36,17 @@ import { EmbeddedResourceEditor } from "@/features/admin/components/editor/Embed
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
 import { useDebounce } from "@/shared/hooks/use-debounce";
 import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
+import { isSafeAdminImageSrc } from "@/features/admin/lib/safe-admin-image";
 import type { AdminCrudRecord, AdminResourceConfig } from "@/features/admin/lib/types/crud";
 
 const MAX_HIGHLIGHTED_PROJECTS_PER_CATEGORY = 8;
 const MAX_HOME_HIGHLIGHTED_NEWS = 4;
 const MAX_FEATURED_NEWS = 5;
+const API_LIST_RESOURCE_KEYS = new Set([
+  "projects/list",
+  "news/list",
+  "recruitment/jobs",
+]);
 
 type BooleanListFilter = "all" | "yes" | "no";
 
@@ -73,7 +79,7 @@ function ResourceListPageContent({
   companionConfig?: AdminResourceConfig;
   baseHref?: string;
 }) {
-  const { getRecords, removeRecord, updateRecord } = useAdminCrud();
+  const { getRecords, loadRecords, removeRecord, updateRecord } = useAdminCrud();
   const records = getRecords(config.key);
   const pathname = usePathname();
   const router = useRouter();
@@ -90,9 +96,35 @@ function ResourceListPageContent({
   const previousUrlQueryRef = useRef(urlQuery);
   const [deleteTarget, setDeleteTarget] = useState<AdminCrudRecord | null>(null);
   const [deleting, setDeleting] = useState(false);
+  const shouldLoadApiList = API_LIST_RESOURCE_KEYS.has(config.key);
+  const [loadingApiList, setLoadingApiList] = useState(shouldLoadApiList);
+  const [apiListError, setApiListError] = useState<string | null>(null);
   const imageManager = config.listMode === "image-manager";
   const mutableCollection = config.collectionMode === "dynamic";
   const baseHref = baseHrefOverride ?? `/admin/${config.module}/${config.path}`;
+
+  useEffect(() => {
+    if (!shouldLoadApiList) return;
+
+    let active = true;
+    void loadRecords(config.key)
+      .catch((error: unknown) => {
+        if (!active) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Không thể tải danh sách từ API.";
+        setApiListError(message);
+        toast.error("Không thể tải danh sách", { description: message });
+      })
+      .finally(() => {
+        if (active) setLoadingApiList(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [config.key, loadRecords, shouldLoadApiList]);
   const projectCategories = useMemo(
     () =>
       Array.from(
@@ -245,9 +277,10 @@ function ResourceListPageContent({
             ? `${config.itemLabel ?? "Ảnh"} ${sourceIndex + 1}`
             : String(row.original[config.titleField] ?? config.singular);
           const preview = String(row.original[config.previewField!] ?? "");
+          const safePreview = isSafeAdminImageSrc(preview);
           return (
             <div className="relative size-12 overflow-hidden rounded-lg border bg-muted">
-              {preview ? (
+              {safePreview ? (
                 <Image
                   src={preview}
                   alt={title}
@@ -257,7 +290,9 @@ function ResourceListPageContent({
                   sizes="48px"
                 />
               ) : (
-                <span className="grid size-full place-items-center text-[10px] text-muted-foreground">Chưa có ảnh</span>
+                <span className="grid size-full place-items-center px-1 text-center text-[9px] leading-tight text-muted-foreground">
+                  {preview ? "Ảnh lỗi" : "Chưa có ảnh"}
+                </span>
               )}
             </div>
           );
@@ -589,6 +624,26 @@ function ResourceListPageContent({
     getPaginationRowModel: getPaginationRowModel(),
     initialState: { pagination: { pageIndex: 0, pageSize: config.key === "news/list" ? 5 : 10 } },
   });
+
+  if (loadingApiList) {
+    return <ResourceListPageFallback />;
+  }
+
+  if (apiListError) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <span className="mx-auto grid size-12 place-items-center rounded-xl bg-muted text-brand">
+            <FolderOpen className="size-5" />
+          </span>
+          <h2 className="mt-4 text-lg font-semibold">Không thể tải danh sách</h2>
+          <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
+            {apiListError}
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="mx-auto w-full max-w-[1480px] p-4 sm:p-6 lg:p-8">

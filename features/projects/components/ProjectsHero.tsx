@@ -1,9 +1,13 @@
 import Image from "next/image";
-import { projectsPageHeroContent } from "@/features/projects/data/projects-page";
+import type { ProjectsPageContent } from "@/features/projects/types/projects-public";
 
-const projectHeroTitleLines = projectsPageHeroContent.title.split("\n");
-
-export function ProjectsHero() {
+export function ProjectsHero({
+  hero,
+}: {
+  hero: ProjectsPageContent["hero"];
+}) {
+  const projectHeroTitleLines = hero.title.split("\n").filter(Boolean);
+  const heroImage = hero.desktopImage;
   return (
     <section
       className="relative z-[1] isolate h-[570px] overflow-hidden bg-[#f2f2f4] [--outline-dot-size:clamp(22px,1.9vw,38px)] [--outline-radius:3vw] max-sm:h-auto max-sm:aspect-[3884/5972] sm:min-h-[650px] lg:h-[max(500px,calc(39.0625vw+40px))] lg:min-h-0"
@@ -44,14 +48,14 @@ export function ProjectsHero() {
       />
 
       <div className="pointer-events-none absolute top-[9%] left-[9.2%] z-10 hidden aspect-[2000/1700] w-[37.7%] overflow-hidden rounded-tl-[5.4rem] rounded-br-[5.4rem] lg:block">
-        <Image
-          src="/images/projects/hero-plans.png"
-          alt="Kiến trúc sư làm việc trên bản vẽ công trình"
+        {heroImage && <Image
+          src={heroImage}
+          alt={hero.imageAlt}
           fill
           priority
           sizes="38vw"
           className="object-cover origin-center animate-[projects-hero-arrive_1.15s_.12s_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none"
-        />
+        />}
       </div>
 
       <div
@@ -77,23 +81,26 @@ export function ProjectsHero() {
         <div
           className="pointer-events-none hidden origin-[28%_50%] animate-[projects-hero-arrive_1.15s_.12s_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none sm:relative sm:block sm:aspect-[1.12/1] sm:w-auto sm:overflow-hidden sm:rounded-tl-[4.5rem] sm:rounded-br-[4.5rem] lg:hidden"
         >
-          <Image
-            src="/images/projects/hero-plans.png"
-            alt="Kiến trúc sư làm việc trên bản vẽ công trình"
+          {heroImage && <Image
+            src={heroImage}
+            alt={hero.imageAlt}
             fill
             priority
             sizes="100vw"
             className="object-cover"
-          />
+          />}
         </div>
 
         <div className="absolute top-[97px] right-[7%] left-[8%] z-30 text-left text-charcoal sm:relative sm:top-auto sm:right-auto sm:left-auto sm:text-right lg:absolute lg:top-[28.7%] lg:left-[56.2%] lg:w-[42%]">
           <h1
             className="text-[clamp(21px,5.75vw,24px)] leading-[1.02] font-extrabold tracking-[-0.045em] animate-[projects-rise-in_.8s_.55s_cubic-bezier(.22,1,.36,1)_both] motion-reduce:animate-none sm:text-[clamp(34px,2.8vw,68px)] sm:leading-[1.12] sm:font-bold"
           >
-            {projectHeroTitleLines[0]}
-            <br />
-            {projectHeroTitleLines[1]}
+            {projectHeroTitleLines.map((line, index) => (
+              <span key={`${line}-${index}`}>
+                {index > 0 && <br />}
+                {line}
+              </span>
+            ))}
           </h1>
           <Image
             src="/images/projects/section-rule.png"
@@ -115,7 +122,7 @@ export function ProjectsHero() {
               aria-hidden="true"
             />
             <HighlightedCopy
-              copy={projectsPageHeroContent.description}
+              copy={hero.description}
               highlights={[
                 "thiết kế thi công",
                 "BMT Decor.",

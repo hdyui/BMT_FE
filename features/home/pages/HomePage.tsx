@@ -1,3 +1,5 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
@@ -14,11 +16,7 @@ import { CapabilityProfileSection } from "@/features/home/components/CapabilityP
 import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
 import { TrustIntro } from "@/features/home/components/TrustIntro";
 import { MobileTrustAccordion } from "@/features/home/components/MobileTrustAccordion";
-import {
-  homeSectionContent,
-  homeTrustReasons as trustReasons,
-} from "@/features/home/data/home-content";
-import { homeHighlightedNews } from "@/features/news/data/news-page";
+import type { HomePublicData } from "@/features/home/types/home-public";
 
 function SectionHeading({ title, copy }: { title: string; copy?: string }) {
   return (
@@ -36,25 +34,33 @@ function SectionHeading({ title, copy }: { title: string; copy?: string }) {
   );
 }
 
-function ProjectSectionHeading() {
+function ProjectSectionHeading({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
   return (
     <div className="text-center">
       <Reveal>
         <h2 className="text-4xl font-extrabold tracking-[-0.035em] uppercase sm:text-5xl max-sm:text-[26px] max-sm:leading-none">
-          {homeSectionContent.featuredProjects.title}
+          {title}
         </h2>
       </Reveal>
       <Reveal delay={140}>
         <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
-          {homeSectionContent.featuredProjects.description}
+          {description}
         </p>
       </Reveal>
     </div>
   );
 }
 
-export function HomePage() {
-  const [mainNews, ...secondaryNews] = homeHighlightedNews;
+export function HomePage({ data }: { data: HomePublicData }) {
+
+
+  const [mainNews, ...secondaryNews] = data.highlightedNews;
 
   return (
     <div
@@ -62,22 +68,22 @@ export function HomePage() {
       data-scroll-snap-page
     >
       <SiteHeader />
-      <HomeHero />
+      <HomeHero slides={data.heroSlides} />
 
       <section className="bg-white">
         <div className="relative overflow-hidden bg-white pt-16 text-charcoal">
           <div className="relative mx-auto w-[min(1360px,calc(100%-2rem))]">
-            <TrustIntro />
+            <TrustIntro content={data.trustIntro} />
 
             <div className="mt-9 hidden h-44 lg:block" aria-hidden="true" />
             <div className="mt-7 pb-10 lg:hidden">
-              <MobileTrustAccordion />
+              <MobileTrustAccordion trustReasons={data.trustReasons} />
             </div>
           </div>
         </div>
 
         <div className="mx-auto -mt-44 hidden w-[min(1360px,calc(100%-2rem))] grid-cols-4 gap-5 lg:grid">
-          {trustReasons.map((reason, index) => (
+          {data.trustReasons.map((reason, index) => (
             <TrustCardReveal
               className="relative"
               delay={index * 110}
@@ -135,7 +141,7 @@ export function HomePage() {
 
       <section className="bg-white py-12">
         <Reveal>
-          <CountUpStats />
+          <CountUpStats stats={data.stats} />
         </Reveal>
       </section>
 
@@ -148,8 +154,19 @@ export function HomePage() {
           sizes="100vw"
         />
         <div className="relative mx-auto w-[min(1320px,calc(100%-2.25rem))]">
-          <ProjectSectionHeading />
-          <ProjectShowcase />
+          <ProjectSectionHeading
+            title={data.featuredProjects.title}
+            description={data.featuredProjects.description}
+          />
+          {data.projectCategories.some(
+            (category) => category.projects.length > 0,
+          ) && (
+            <ProjectShowcase
+              categories={data.projectCategories.filter(
+                (category) => category.projects.length > 0,
+              )}
+            />
+          )}
         </div>
       </section>
 
@@ -174,11 +191,15 @@ export function HomePage() {
         />
 
         <div className="relative">
-          <FeaturedServicesSection />
+          <FeaturedServicesSection
+            title={data.featuredServices.title}
+            description={data.featuredServices.description}
+            services={data.services}
+          />
 
           <PartnerSection />
 
-          <CapabilityProfileSection />
+          <CapabilityProfileSection content={data.profileSection} />
         </div>
       </div>
 
@@ -192,7 +213,7 @@ export function HomePage() {
           aria-hidden="true"
         />
         <div className="relative mx-auto w-[min(1100px,calc(100%-2.25rem))]">
-          <SectionHeading title={homeSectionContent.featuredNews.title} />
+          <SectionHeading title={data.featuredNewsTitle} />
           <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
             {mainNews ? (
             <Reveal className="self-start">
@@ -265,7 +286,13 @@ export function HomePage() {
         </div>
       </section>
 
-      <ContactForm showTopNotch />
+      <ContactForm
+        showTopNotch
+        title={data.contactForm.title}
+        description={data.contactForm.subtitle}
+        successMessage={data.contactForm.successMessage}
+        submitToApi
+      />
       <SiteFooter showTopBorder={false} />
     </div>
   );

@@ -1,4 +1,4 @@
-import type { ProjectDetail } from "../data/project-details";
+import type { ProjectDetail } from "@/features/projects/types/projects-public";
 import { Reveal } from "@/shared/components/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { BeforeAfterSlider } from "./BeforeAfterSlider";

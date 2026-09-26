@@ -4,12 +4,14 @@ import type { PointerEvent } from "react";
 import { useEffect, useRef, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Image from "next/image";
-import {
-  aboutJourneyMilestones as milestones,
-  aboutJourneySection,
-} from "@/features/about/data/about-content";
+import type { AboutJourneyContent } from "@/features/about/types/about-public";
 
-export function JourneyTimeline() {
+export function JourneyTimeline({
+  content,
+}: {
+  content: AboutJourneyContent;
+}) {
+  const milestones = content.items;
   const sectionRef = useRef<HTMLElement>(null);
   const scrollerRef = useRef<HTMLDivElement>(null);
   const mobileMilestoneRefs = useRef<Array<HTMLLIElement | null>>([]);
@@ -155,7 +157,7 @@ export function JourneyTimeline() {
                 : "translate-y-20 opacity-0"
             }`}
           >
-            {aboutJourneySection.title}
+            {content.title}
           </h2>
           <div
             className={`relative mt-5 h-7 w-full max-w-[390px] origin-left transition-[opacity,scale] delay-[420ms] duration-800 ease-out motion-reduce:scale-x-100 motion-reduce:opacity-100 max-sm:mt-2 max-sm:h-5 max-sm:max-w-[140px] ${

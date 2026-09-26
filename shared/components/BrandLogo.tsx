@@ -3,20 +3,20 @@ import Link from "next/link";
 import { cn } from "@/shared/lib/utils";
 
 type BrandLogoProps = {
+  src: string;
+  alt?: string | null;
   className?: string;
   inverted?: boolean;
   large?: boolean;
 };
 
 export function BrandLogo({
+  src,
+  alt,
   className,
   inverted = false,
   large = false,
 }: BrandLogoProps) {
-  const src = large
-    ? "/images/home/logo-footer.png"
-    : "/images/home/logo-header.png";
-
   return (
     <Link
       className={cn("relative block shrink-0", className)}
@@ -29,7 +29,7 @@ export function BrandLogo({
           inverted && !large ? "brightness-100" : "",
         )}
         src={src}
-        alt="BMT Decor"
+        alt={alt ?? ""}
         width={large ? 856 : 965}
         height={large ? 923 : 168}
         priority={!large}

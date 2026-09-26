@@ -1,10 +1,15 @@
-﻿import { ContactForm } from "@/shared/components/ContactForm";
+"use client";
+
+import { ContactForm } from "@/shared/components/ContactForm";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { ContactHero } from "@/features/contact/components/ContactHero";
 import { ContactMap } from "@/features/contact/components/ContactMap";
+import type { ContactPublicData } from "@/features/contact/types/contact-public";
 
-export function ContactPage() {
+export function ContactPage({ data }: { data: ContactPublicData }) {
+
+
   return (
     <>
       <SiteHeader />
@@ -19,14 +24,23 @@ export function ContactPage() {
           <span className="absolute inset-y-0 left-[43.4%] w-[calc(8.12%+1px)] bg-[#ef7b30]" />
           <span className="absolute inset-y-0 left-[51.52%] w-[4.28%] bg-[#dfddde]" />
         </div>
+
         <div className="relative z-20 max-[55rem]:z-0">
-          <ContactHero />
+          <ContactHero content={data.hero} />
         </div>
-        <ContactForm showTopNotch />
-        <ContactMap />
+
+        <ContactForm
+          showTopNotch
+          title={data.contactForm.title}
+          description={data.contactForm.description}
+          submitLabel={data.contactForm.submitLabel}
+          successMessage={data.contactForm.successMessage}
+          submitToApi
+        />
+
+        <ContactMap content={data.map} />
       </main>
       <SiteFooter showTopBorder={false} />
     </>
   );
 }
-

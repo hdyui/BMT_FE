@@ -1,4 +1,3 @@
-import { api } from "@/shared/lib/api/client";
 import { ApiError } from "@/shared/lib/api/errors";
 
 export interface FormSubmissionInput {
@@ -12,8 +11,26 @@ export interface FormSubmissionInput {
  * tạm ở trình duyệt: gửi lỗi thì ném lỗi để form báo cho khách thử lại, không
  * bao giờ báo thành công khi backend chưa nhận được.
  */
-export function submitFormSubmission(input: FormSubmissionInput) {
-  return api.post("/form-submissions", input, { public: true });
+export async function submitFormSubmission(input: FormSubmissionInput) {
+  const response = await fetch("/api/form-submissions", {
+    method: "POST",
+    credentials: "same-origin",
+    cache: "no-store",
+    signal: AbortSignal.timeout(20_000),
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+  const result = await response.json().catch(() => null);
+  if (!response.ok || result?.isSuccess === false || result?.isFailed === true) {
+    throw new ApiError({
+      status: response.status,
+      message:
+        typeof result?.message === "string"
+          ? result.message
+          : "Form submission failed.",
+    });
+  }
+  return result;
 }
 
 /** Câu báo lỗi cho khách khi gửi form không thành công. */

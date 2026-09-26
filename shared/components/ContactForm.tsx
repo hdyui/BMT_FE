@@ -34,7 +34,9 @@ export function ContactForm({
   submitLabel?: string;
   requiredMessage?: string;
   successMessage?: string;
-  backgroundImage?: string;
+  backgroundImage?: string | null;
+  /** @deprecated Các form hiện luôn gửi qua route handler an toàn cùng origin. */
+  submitToApi?: boolean;
 }) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
@@ -96,6 +98,8 @@ export function ContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    if (submitting) return;
+
     setSubmitting(true);
     try {
       await submitFormSubmission({ customerName: name, phone });
@@ -132,23 +136,25 @@ export function ContactForm({
         className={`pointer-events-none absolute inset-x-0 bottom-0 top-[2.342945vw] z-[1] bg-[#ee7b30] lg:top-[2.57vw] ${showTopNotch ? "block" : "hidden max-lg:block"}`}
         aria-hidden="true"
       />
-      <Image
-        className={`absolute left-0 top-0 z-[1] h-auto w-full ${showTopNotch ? "block lg:left-[calc(49.96%-54.308901vw)] lg:w-[109.690989vw] lg:max-w-none" : "hidden max-lg:block"}`}
-        src={backgroundImage}
-        alt=""
-        width={3884}
-        height={2109}
-        decoding="sync"
-        loading="eager"
-        sizes={
-          showTopNotch
-            ? "(max-width: 1023px) 100vw, 110vw"
-            : "(max-width: 1023px) 100vw, 1px"
-        }
-        unoptimized
-        data-contact-form-notch={showTopNotch ? "asset" : undefined}
-        aria-hidden="true"
-      />
+      {backgroundImage && (
+        <Image
+          className={`absolute left-0 top-0 z-[1] h-auto w-full ${showTopNotch ? "block lg:left-[calc(49.96%-54.308901vw)] lg:w-[109.690989vw] lg:max-w-none" : "hidden max-lg:block"}`}
+          src={backgroundImage}
+          alt=""
+          width={3884}
+          height={2109}
+          decoding="sync"
+          loading="eager"
+          sizes={
+            showTopNotch
+              ? "(max-width: 1023px) 100vw, 110vw"
+              : "(max-width: 1023px) 100vw, 1px"
+          }
+          unoptimized
+          data-contact-form-notch={showTopNotch ? "asset" : undefined}
+          aria-hidden="true"
+        />
+      )}
 
       <div className="relative z-10 mx-auto w-[min(1200px,calc(100%-2.25rem))] max-lg:w-[calc(100%-2rem)]">
         <div className="block w-full">
@@ -250,7 +256,7 @@ export function ContactForm({
               type="submit"
               disabled={submitting}
             >
-              {submitLabel}
+              {submitting ? "Đang gửi..." : submitLabel}
             </Button>
           </div>
         </form>
