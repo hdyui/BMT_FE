@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AdminPageHeader } from "@/features/admin/components/AdminPageHeader";
 import { AdminBreadcrumb } from "@/features/admin/components/editor/AdminBreadcrumb";
@@ -15,16 +15,72 @@ import type { AdminCrudRecord, AdminFieldConfig, AdminFieldValue, AdminResourceC
 import { cn } from "@/shared/lib/utils";
 
 export function ProjectEditorPage({ recordId, detailRoute = false }: { recordId: string; detailRoute?: boolean }) {
-  const { getRecords } = useAdminCrud();
+  const { getRecords, loadRecord } = useAdminCrud();
+  const [loading, setLoading] = useState(true);
+  const [loadError, setLoadError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let active = true;
+
+    void Promise.all([
+      loadRecord("projects/list", recordId),
+      loadRecord("projects/details", recordId),
+    ])
+      .catch((error: unknown) => {
+        if (!active) return;
+        setLoadError(
+          error instanceof Error
+            ? error.message
+            : "Không thể tải đầy đủ nội dung dự án từ API.",
+        );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [loadRecord, recordId]);
+
   const selected = getRecords(detailRoute ? "projects/details" : "projects/list").find((record) => record.id === recordId);
   const list = detailRoute
-    ? getRecords("projects/list").find((record) => selected && record.slug === selected.slug)
+    ? getRecords("projects/list").find((record) => record.id === recordId)
     : selected;
-  const detail = detailRoute ? selected : getRecords("projects/details").find((record) => list && record.slug === list.slug);
-  if (!selected) return <div className="p-6"><p>Không tìm thấy dự án.</p><Link className="mt-4 inline-block underline" href="/admin/projects">Quay lại danh sách</Link></div>;
+  const detail = detailRoute
+    ? selected
+    : getRecords("projects/details").find((record) => record.id === recordId);
+
+  if (loading) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <div className="mx-auto size-8 animate-spin rounded-full border-2 border-muted border-t-brand" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            Đang tải toàn bộ nội dung chi tiết dự án từ API...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (loadError || !list || !detail) {
+    return (
+      <div className="p-6">
+        <p>
+          {loadError ??
+            "Không tìm thấy đầy đủ dữ liệu danh sách và chi tiết của dự án."}
+        </p>
+        <Link className="mt-4 inline-block underline" href="/admin/projects">
+          Quay lại danh sách
+        </Link>
+      </div>
+    );
+  }
+
   const entries = [
-    ...(list ? [{ config: getAdminResource("projects/list"), record: list }] : []),
-    ...(detail ? [{ config: getAdminResource("projects/details"), record: detail }] : []),
+    { config: getAdminResource("projects/list"), record: list },
+    { config: getAdminResource("projects/details"), record: detail },
   ];
   return <ProjectEditorForm key={entries.map(({ record }) => record.id).join(":")} entries={entries} />;
 }
@@ -485,6 +541,8 @@ function ProjectOverviewEditor({
     "location",
     "client",
     "area",
+    "style",
+    "year",
     "scale",
   ];
 

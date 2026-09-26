@@ -1,14 +1,16 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { homeStats as stats } from "@/features/home/data/home-content";
+import type { HomeStat } from "@/features/home/types/home-public";
 
 function CountUpNumber({
   value,
   delay,
+  suffix,
 }: {
   value: number;
   delay: number;
+  suffix?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const [display, setDisplay] = useState(0);
@@ -52,12 +54,14 @@ function CountUpNumber({
 
   return (
     <span ref={ref} className="tabular-nums">
-      +{display}
+      {suffix === "+" ? "+" : ""}
+      {display}
+      {suffix && suffix !== "+" ? suffix : ""}
     </span>
   );
 }
 
-export function CountUpStats() {
+export function CountUpStats({ stats }: { stats: HomeStat[] }) {
   return (
     <div className="mx-auto grid w-[min(1050px,calc(100%-2.25rem))] grid-cols-3 gap-2 text-center sm:grid-cols-3 sm:gap-16">
       {stats.map((stat, index) => (
@@ -66,7 +70,11 @@ export function CountUpStats() {
           key={stat.label}
         >
           <strong className="block text-[clamp(2.3rem,11vw,3.4rem)] font-extrabold leading-none tracking-[-0.06em] transition-colors group-hover:text-brand sm:text-[88px] lg:text-[96px]">
-            <CountUpNumber value={stat.value} delay={index * 140} />
+            <CountUpNumber
+              value={stat.value}
+              delay={index * 140}
+              suffix={stat.suffix}
+            />
           </strong>
           <span
             aria-hidden="true"

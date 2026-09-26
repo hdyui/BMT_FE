@@ -3,10 +3,11 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
+import type { AboutHeroContent } from "@/features/about/types/about-public";
 
 const imageRoot = "/images/about/source";
 
-export function AboutHero() {
+export function AboutHero({ content }: { content: AboutHeroContent }) {
   const [isReady, setIsReady] = useState(false);
   const [isImageReady, setIsImageReady] = useState(false);
 
@@ -28,8 +29,8 @@ export function AboutHero() {
               ? "scale-100 opacity-100 group-hover:scale-[1.02]"
               : "scale-105 opacity-0"
           }`}
-          src={`${imageRoot}/hero-interior-mobile.png`}
-          alt="Không gian nội thất phòng ăn hiện đại do BMT Decor thiết kế"
+          src={content.desktopImage || `${imageRoot}/hero-interior-mobile.png`}
+          alt={content.desktopAlt ?? ""}
           fill
           priority
           sizes="100vw"
@@ -42,8 +43,8 @@ export function AboutHero() {
             ? "scale-100 opacity-100 group-hover:scale-[1.02]"
             : "scale-105 opacity-0"
         }`}
-        src={`${imageRoot}/hero-interior.png`}
-        alt="Không gian nội thất phòng ăn hiện đại do BMT Decor thiết kế"
+        src={content.desktopImage}
+        alt={content.desktopAlt ?? ""}
         fill
         priority
         sizes="100vw"
@@ -74,15 +75,14 @@ export function AboutHero() {
               isReady ? "translate-y-0 opacity-100" : "translate-y-20 opacity-0"
             }`}
           >
-            Về chúng tôi
+            {content.eyebrow}
           </p>
           <h1
             className={`mt-8 max-w-[610px] text-[36px] sm:text-[40px] font-extrabold uppercase leading-[1.06] tracking-[-0.03em] text-brand transition-[opacity,translate] delay-[360ms] duration-1000 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 max-sm:mt-5 max-sm:text-[27px] max-sm:leading-[1.04] max-sm:tracking-[-0.045em] ${
               isReady ? "translate-y-0 opacity-100" : "translate-y-24 opacity-0"
             }`}
           >
-            <span className="max-sm:block">Kiến tạo giá trị từ mỗi</span>{" "}
-            <span className="max-sm:block">không gian</span>
+            {content.heading}
           </h1>
           <div
             className={`transition-[opacity,translate] delay-[620ms] duration-800 ease-out motion-reduce:translate-x-0 motion-reduce:opacity-100 ${
@@ -109,12 +109,7 @@ export function AboutHero() {
               sizes="24px"
               aria-hidden="true"
             />
-            BMT Decor là đơn vị thiết kế kiến trúc, thiết kế nội thất, thi công
-            xây dựng và cải tạo trọn gói, mang đến giải pháp toàn diện cho nhà
-            ở, văn phòng và công trình thương mại. Với hơn 15 năm kinh nghiệm
-            cùng quy trình triển khai chuyên nghiệp, chúng tôi cam kết kiến tạo
-            những không gian hài hòa giữa công năng, thẩm mỹ và chất lượng, tối
-            ưu giá trị đầu tư và bền vững theo thời gian.
+            {content.description}
           </p>
         </div>
       </div>

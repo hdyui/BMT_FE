@@ -3,7 +3,10 @@
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
 import { BuildingRule } from "@/shared/components/BuildingRule";
-import { aboutCoreValues as coreValues } from "@/features/about/data/about-content";
+import type {
+  AboutCoreValuesContent,
+  AboutVisionMissionContent,
+} from "@/features/about/types/about-public";
 
 const imageRoot = "/images/about/source";
 
@@ -52,11 +55,13 @@ function AnimatedHeading({
 }
 
 function CoreValuesList({
+  coreValues,
   activeValue,
   isVisible,
   mobile,
   onChange,
 }: {
+  coreValues: AboutCoreValuesContent["items"];
   activeValue: number;
   isVisible: boolean;
   mobile: boolean;
@@ -143,9 +148,11 @@ function CoreValuesList({
 }
 
 function CoreValueIllustration({
+  coreValues,
   activeValue,
   mobile,
 }: {
+  coreValues: AboutCoreValuesContent["items"];
   activeValue: number;
   mobile: boolean;
 }) {
@@ -180,7 +187,13 @@ function CoreValueIllustration({
   );
 }
 
-export function VisionMissionValues() {
+export function VisionMissionValues({
+  visionMission,
+  coreValues,
+}: {
+  visionMission: AboutVisionMissionContent;
+  coreValues: AboutCoreValuesContent;
+}) {
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [activeMobileValue, setActiveMobileValue] = useState(0);
@@ -221,7 +234,7 @@ export function VisionMissionValues() {
         <div className="space-y-14 max-sm:order-3 max-sm:space-y-8 lg:space-y-16">
           <div className="max-w-[330px] max-sm:max-w-none">
             <AnimatedHeading isVisible={isVisible} delay={100}>
-              Tầm nhìn
+              {visionMission.visionHeading}
             </AnimatedHeading>
             <p
               className={`mt-5 max-w-full text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[13px] ${
@@ -231,16 +244,13 @@ export function VisionMissionValues() {
               }`}
               style={{ transitionDelay: "500ms" }}
             >
-              Trở thành đơn vị thiết kế và thi công được khách hàng tin tưởng
-              lựa chọn nhờ năng lực chuyên môn, quy trình chuyên nghiệp và chất
-              lượng công trình, không ngừng nâng cao giá trị cho từng không gian
-              sống và làm việc.
+              {visionMission.visionDescription}
             </p>
           </div>
 
           <div className="max-w-[330px] max-sm:max-w-none">
             <AnimatedHeading isVisible={isVisible} delay={650}>
-              Sứ mệnh
+              {visionMission.missionHeading}
             </AnimatedHeading>
             <p
               className={`mt-5 max-w-full text-justify text-[15px] leading-[1.45] text-neutral-700 [text-align-last:left] [text-justify:inter-character] transition-[opacity,translate] duration-900 ease-[cubic-bezier(.22,1,.36,1)] motion-reduce:translate-x-0 motion-reduce:opacity-100 max-sm:mt-3 max-sm:text-[13px] ${
@@ -250,10 +260,7 @@ export function VisionMissionValues() {
               }`}
               style={{ transitionDelay: "1050ms" }}
             >
-              Mang đến những giải pháp thiết kế và thi công trọn gói chuyên
-              nghiệp, giúp khách hàng sở hữu không gian tối ưu về công năng, hài
-              hòa về thẩm mỹ và bền vững về chất lượng, đồng hành trong suốt quá
-              trình kiến tạo công trình.
+              {visionMission.missionDescription}
             </p>
           </div>
         </div>
@@ -265,8 +272,13 @@ export function VisionMissionValues() {
           style={{ transitionDelay: "430ms" }}
         >
           <div className="animate-[illustration-float_4.8s_ease-in-out_1.5s_infinite] motion-reduce:animate-none">
-            <CoreValueIllustration activeValue={activeMobileValue} mobile />
             <CoreValueIllustration
+              coreValues={coreValues.items}
+              activeValue={activeMobileValue}
+              mobile
+            />
+            <CoreValueIllustration
+              coreValues={coreValues.items}
               activeValue={activeDesktopValue}
               mobile={false}
             />
@@ -275,16 +287,18 @@ export function VisionMissionValues() {
 
         <div className="max-sm:order-2 lg:pt-0">
           <AnimatedHeading isVisible={isVisible} delay={260} fullWidthRule>
-            Giá trị cốt lõi
+            {coreValues.title}
           </AnimatedHeading>
 
           <CoreValuesList
+            coreValues={coreValues.items}
             activeValue={activeMobileValue}
             isVisible={isVisible}
             mobile
             onChange={setActiveMobileValue}
           />
           <CoreValuesList
+            coreValues={coreValues.items}
             activeValue={activeDesktopValue}
             isVisible={isVisible}
             mobile={false}

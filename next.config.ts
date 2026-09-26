@@ -1,8 +1,20 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Bound prerender concurrency to avoid exhausting memory on development/CI hosts.
+  experimental: { cpus: 2 },
   images: {
     qualities: [70, 75],
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "bmt-deploy-latest.onrender.com",
+      },
+    ],
   },
   async redirects() {
     return [

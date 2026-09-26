@@ -9,10 +9,11 @@ import {
   MapPin,
   WalletCards,
 } from "lucide-react";
-import { careerJobs, type CareerJob } from "@/features/careers/data/jobs";
+import type { CareerJob } from "@/features/careers/types/careers-public";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { ListDivider } from "@/shared/components/ListDivider";
 import { Reveal } from "@/shared/components/Reveal";
+import { useReloadScrollRestoration } from "@/shared/hooks/use-reload-scroll-restoration";
 
 const pageSize = 3;
 
@@ -131,19 +132,65 @@ function JobRow({
   );
 }
 
-export function CareerOpenings() {
+export function CareerOpenings({
+  jobs,
+  title,
+  dataReady,
+}: {
+  jobs: CareerJob[];
+  title: string;
+  dataReady: boolean;
+}) {
   const [isMobile, setIsMobile] = useState(true);
   const [page, setPage] = useState(0);
   const [visibleCount, setVisibleCount] = useState(pageSize);
   const [openJob, setOpenJob] = useState<string | null>(null);
   const [leaving, setLeaving] = useState(false);
-  const pageCount = Math.ceil(careerJobs.length / pageSize);
+
+  useReloadScrollRestoration({
+    storageKey: "bmt:careers:reload-scroll",
+    ready: dataReady,
+    getState: () => ({
+      page,
+      visibleCount,
+      openJob,
+    }),
+    restoreState: (state) => {
+      if (
+        state &&
+        typeof state === "object" &&
+        "page" in state &&
+        typeof state.page === "number"
+      ) {
+        setPage(Math.max(0, Math.trunc(state.page)));
+      }
+      if (
+        state &&
+        typeof state === "object" &&
+        "visibleCount" in state &&
+        typeof state.visibleCount === "number"
+      ) {
+        setVisibleCount(
+          Math.max(pageSize, Math.trunc(state.visibleCount)),
+        );
+      }
+      if (
+        state &&
+        typeof state === "object" &&
+        "openJob" in state &&
+        (typeof state.openJob === "string" || state.openJob === null)
+      ) {
+        setOpenJob(state.openJob);
+      }
+    },
+  });
+  const pageCount = Math.ceil(jobs.length / pageSize);
   const visibleJobs = useMemo(
     () =>
       isMobile
-        ? careerJobs.slice(0, visibleCount)
-        : careerJobs.slice(page * pageSize, page * pageSize + pageSize),
-    [isMobile, page, visibleCount],
+        ? jobs.slice(0, visibleCount)
+        : jobs.slice(page * pageSize, page * pageSize + pageSize),
+    [isMobile, jobs, page, visibleCount],
   );
 
   useEffect(() => {
@@ -179,7 +226,7 @@ export function CareerOpenings() {
               id="career-openings-title"
               className="text-[clamp(2.25rem,3.5vw,3.3rem)] leading-[.96] font-extrabold uppercase tracking-[-.045em] text-charcoal lg:whitespace-nowrap max-sm:text-[clamp(26px,7.18vw,30px)] max-sm:leading-[1.02] max-sm:tracking-[-.035em] max-sm:text-balance"
             >
-              Khám phá các vị trí đang tuyển dụng
+              {title}
             </h2>
             <BuildingRule className="mt-5 h-8 max-w-[430px] max-sm:mt-3 max-sm:h-auto max-sm:aspect-[1388/128] max-sm:w-[36vw] max-sm:max-w-none" delay={260} />
           </div>
@@ -204,11 +251,11 @@ export function CareerOpenings() {
           ))}
         </div>
 
-        {visibleCount < careerJobs.length ? (
+        {visibleCount < jobs.length ? (
           <button
             className="mx-auto mt-[22px] hidden w-fit items-center gap-2.5 text-[clamp(15px,4vw,18px)] font-normal leading-none text-charcoal transition-[color,translate] duration-400 ease-in-out hover:-translate-y-1 hover:text-brand motion-reduce:translate-none motion-reduce:transition-none focus-visible:rounded-[3px] focus-visible:text-brand focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand active:translate-y-px max-sm:flex"
             type="button"
-            onClick={() => setVisibleCount((current) => Math.min(current + pageSize, careerJobs.length))}
+            onClick={() => setVisibleCount((current) => Math.min(current + pageSize, jobs.length))}
             aria-label="Hiển thị thêm vị trí tuyển dụng"
           >
             <span>Xem thêm</span>
@@ -216,7 +263,7 @@ export function CareerOpenings() {
           </button>
         ) : null}
 
-        {!isMobile ? (
+        {!isMobile && pageCount > 0 ? (
           <nav className="mt-[clamp(18px,2.2vw,30px)] grid grid-cols-3 items-center text-sm font-medium uppercase text-[#262626]" aria-label="Phân trang tuyển dụng">
             <button className="inline-flex w-fit items-center gap-1.5 text-[#262626] underline decoration-transparent underline-offset-4 transition-[color,text-decoration-color] duration-300 ease-out enabled:hover:text-brand enabled:hover:decoration-brand enabled:focus-visible:text-brand enabled:focus-visible:decoration-brand disabled:cursor-not-allowed focus-visible:rounded focus-visible:outline-2 focus-visible:outline-offset-[5px] focus-visible:outline-brand [&:enabled:hover_img]:-translate-x-[3px]" type="button" onClick={() => changePage(page - 1)} disabled={page === 0 || leaving}>
               <Image className="size-[18px] shrink-0 rounded-full transition-transform duration-300 ease-[cubic-bezier(.22,1,.36,1)]" src="/images/careers/page-previous.jpg" alt="" width={104} height={104} aria-hidden="true" />

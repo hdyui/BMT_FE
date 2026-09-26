@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import { Toaster } from "@/features/admin/components/ui/sonner";
+import { SiteSettingsProvider } from "@/shared/site-settings/SiteSettingsProvider";
+import { getPublicApiValue } from "@/shared/lib/api/server";
+import type { SiteSettings } from "@/shared/site-settings/types";
 import "./globals.css";
 
 const font = localFont({
@@ -23,11 +26,16 @@ export const metadata: Metadata = {
     "BMT Decor cung cấp dịch vụ thiết kế nội thất, thi công xây dựng và cải tạo trọn gói tại TP.HCM.",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const settings = await getPublicApiValue("/site-settings").catch((error: unknown) => {
+    console.error("Unable to load site settings", error);
+    return null;
+  }) as SiteSettings | null;
+
   return (
     <html
       lang="vi"
@@ -36,7 +44,9 @@ export default function RootLayout({
       suppressHydrationWarning
     >
       <body suppressHydrationWarning>
-        {children}
+        <SiteSettingsProvider settings={settings}>
+          {children}
+        </SiteSettingsProvider>
         <Toaster position="top-center" richColors />
       </body>
     </html>

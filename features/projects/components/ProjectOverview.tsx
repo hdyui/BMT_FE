@@ -1,5 +1,5 @@
 import Image from "next/image";
-import type { ProjectDetail } from "../data/project-details";
+import type { ProjectDetail } from "@/features/projects/types/projects-public";
 import { Reveal } from "@/shared/components/Reveal";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 import { ProjectRichText } from "./ProjectRichText";
@@ -10,6 +10,8 @@ const overviewLabels: Array<[keyof ProjectDetail, string]> = [
   ["location", "Khu vực"],
   ["client", "Chủ đầu tư"],
   ["area", "Diện tích"],
+  ["style", "Phong cách"],
+  ["year", "Năm hoàn thành"],
   ["scale", "Quy mô"],
 ];
 
@@ -51,13 +53,15 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
 
             <div className="relative z-10 flex flex-col justify-center px-6 py-9 sm:px-10 lg:py-11 lg:pr-12 lg:pl-[calc(3rem+2rem)]">
               <Reveal delay={220} distance="long" duration={950}>
-                <Image
-                  src={project.wordmarkImage.src}
-                  alt={project.wordmarkImage.alt}
-                  width={project.wordmarkImage.width}
-                  height={project.wordmarkImage.height}
-                  className="mb-7 h-auto w-full max-w-[520px]"
-                />
+                {project.wordmarkImage && (
+                  <Image
+                    src={project.wordmarkImage.src}
+                    alt={project.wordmarkImage.alt}
+                    width={project.wordmarkImage.width}
+                    height={project.wordmarkImage.height}
+                    className="mb-7 h-auto w-full max-w-[520px]"
+                  />
+                )}
                 <h2
                   className="flex items-center gap-3 text-[clamp(23px,2vw,36px)] leading-tight font-bold tracking-[-0.045em] uppercase"
                   id="project-overview-title"
@@ -79,12 +83,16 @@ export function ProjectOverview({ project }: { project: ProjectDetail }) {
                     <dt className="font-bold">Tên dự án:</dt>
                     <dd>{project.projectName}</dd>
                   </div>
-                  {overviewLabels.map(([key, label]) => (
-                    <div className="grid grid-cols-[112px_1fr] gap-2" key={key}>
-                      <dt className="font-bold">{label}:</dt>
-                      <dd>{String(project[key])}</dd>
-                    </div>
-                  ))}
+                  {overviewLabels.map(([key, label]) => {
+                    const value = project[key];
+                    if (value === null || value === "") return null;
+                    return (
+                      <div className="grid grid-cols-[112px_1fr] gap-2" key={key}>
+                        <dt className="font-bold">{label}:</dt>
+                        <dd>{String(value)}</dd>
+                      </div>
+                    );
+                  })}
                 </dl>
               </Reveal>
               <Reveal from="left" delay={420} distance="long" duration={950}>

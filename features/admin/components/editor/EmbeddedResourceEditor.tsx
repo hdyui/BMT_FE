@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { RotateCcw, Save } from "lucide-react";
 import { toast } from "sonner";
 
@@ -28,6 +28,7 @@ import type {
 } from "@/features/admin/lib/types/crud";
 import { Button } from "@/features/admin/components/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { isFixedPageAdminApiResourceKey } from "@/features/admin/services/catalog-api.types";
 
 export function EmbeddedResourceEditor({
   config,
@@ -40,7 +41,7 @@ export function EmbeddedResourceEditor({
   pageHeaderTitle?: string;
   contentTitle?: string;
 }) {
-  const { getRecords, updateRecord } = useAdminCrud();
+  const { getRecords, loadRecords, updateRecord } = useAdminCrud();
   const record = getRecords(config.key)[0];
   const initialDraft = useMemo(
     () => structuredClone(record ?? ({ id: config.path } as AdminCrudRecord)),
@@ -49,6 +50,9 @@ export function EmbeddedResourceEditor({
   const [draft, setDraft] = useState(initialDraft);
   const [savedDraft, setSavedDraft] = useState(initialDraft);
   const [saving, setSaving] = useState(false);
+  const [loading, setLoading] = useState(
+    isFixedPageAdminApiResourceKey(config.key),
+  );
   const [history, setHistory] = useState<Array<{ key: string; previous: AdminFieldValue }>>([]);
   const editableSections = useMemo(
     () => getEditableAdminSections(config.sections),
@@ -62,6 +66,32 @@ export function EmbeddedResourceEditor({
     );
     return new Set(keys.filter((key) => JSON.stringify(draft[key]) !== JSON.stringify(savedDraft[key])));
   }, [draft, editableSections, savedDraft]);
+
+  useEffect(() => {
+    if (!isFixedPageAdminApiResourceKey(config.key)) return;
+    let active = true;
+    void loadRecords(config.key)
+      .then((records) => {
+        if (!active || !records[0]) return;
+        const next = structuredClone(records[0]);
+        setDraft(next);
+        setSavedDraft(structuredClone(next));
+        setHistory([]);
+      })
+      .catch((error: unknown) => {
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Không thể tải nội dung từ API.";
+        toast.error("Không thể tải nội dung", { description: message });
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, [config.key, loadRecords]);
 
   function updateField(key: string, value: AdminFieldValue) {
     const previous = draft[key] ?? "";
@@ -100,6 +130,14 @@ export function EmbeddedResourceEditor({
 
   useUnsavedChangesGuard({ dirty, dirtyCount: dirtyKeys.size, save });
   const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
+
+  if (loading) {
+    return (
+      <div className="grid min-h-40 place-items-center text-sm text-muted-foreground">
+        Đang tải nội dung từ API...
+      </div>
+    );
+  }
 
   const actionButtons = (
     <>
