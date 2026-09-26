@@ -22,7 +22,11 @@ import { ContactForm } from "@/shared/components/ContactForm";
 import { ListDivider } from "@/shared/components/ListDivider";
 import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
-import { articles, featuredNews, type NewsArticle } from "@/features/news/data/news-page";
+import type {
+  NewsPublicData,
+  PublicNewsArticle,
+} from "@/features/news/types/news-public";
+import { useReloadScrollRestoration } from "@/shared/hooks/use-reload-scroll-restoration";
 import styles from "./NewsPage.module.css";
 
 const desktopPageSize = 5;
@@ -143,7 +147,7 @@ function ArticleCard({
   article,
   showDivider,
 }: {
-  article: NewsArticle;
+  article: PublicNewsArticle;
   showDivider: boolean;
 }) {
   return (
@@ -151,18 +155,21 @@ function ArticleCard({
       {showDivider && (
         <ListDivider />
       )}
-      <article className={`group ${styles.articleCard}`}>
+      <article
+        className={`group ${styles.articleCard}`}
+        id={article.slug}
+      >
         <div className={styles.articleImageWrap}>
           <Image
             className={`${styles.articleImage} ${styles.articleImageDesktop}`}
-            src={article.desktopImage}
+            src={article.imageUrl}
             alt={article.imageAlt}
             fill
             sizes="300px"
           />
           <Image
             className={`${styles.articleImage} ${styles.articleImageMobile}`}
-            src={article.mobileImage}
+            src={article.imageUrl}
             alt={article.imageAlt}
             width={3600}
             height={2160}
@@ -183,7 +190,7 @@ function ArticleCard({
   );
 }
 
-export function NewsPage() {
+export function NewsPage({ data }: { data: NewsPublicData }) {
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   const [selectedSlide, setSelectedSlide] = useState(0);
   const [mobileVisibleCount, setMobileVisibleCount] =
@@ -191,6 +198,37 @@ export function NewsPage() {
   const [page, setPage] = useState(0);
   const [pendingPage, setPendingPage] = useState<number | null>(null);
   const [isPageLeaving, setIsPageLeaving] = useState(false);
+  const { articles, featuredArticles, page: pageContent } = data;
+
+  useReloadScrollRestoration({
+    storageKey: "bmt:news:reload-scroll",
+    ready: true,
+    getState: () => ({
+      page,
+      mobileVisibleCount,
+    }),
+    restoreState: (state) => {
+      if (
+        state &&
+        typeof state === "object" &&
+        "page" in state &&
+        typeof state.page === "number"
+      ) {
+        setPage(Math.max(0, Math.trunc(state.page)));
+      }
+      if (
+        state &&
+        typeof state === "object" &&
+        "mobileVisibleCount" in state &&
+        typeof state.mobileVisibleCount === "number"
+      ) {
+        setMobileVisibleCount(
+          Math.max(mobileBatchSize, Math.trunc(state.mobileVisibleCount)),
+        );
+      }
+    },
+  });
+
 
   const syncSelectedSlide = useCallback((api: NonNullable<CarouselApi>) => {
     setSelectedSlide(api.selectedScrollSnap());
@@ -218,13 +256,14 @@ export function NewsPage() {
         page * desktopPageSize,
         page * desktopPageSize + desktopPageSize,
       ),
-    [page],
+    [articles, page],
   );
   const mobileVisibleArticles = useMemo(
     () => articles.slice(0, mobileVisibleCount),
-    [mobileVisibleCount],
+    [articles, mobileVisibleCount],
   );
   const pageCount = Math.ceil(articles.length / desktopPageSize);
+  const heroTitleParts = pageContent.hero.title.split("&");
 
   useEffect(() => {
     if (!isPageLeaving || pendingPage === null) return;
@@ -391,10 +430,20 @@ export function NewsPage() {
               height={1008}
               aria-hidden="true"
             />
-            <p className={styles.newsHeroEyebrow}>KIẾN THỨC</p>
+            <p className={styles.newsHeroEyebrow}>
+              {pageContent.hero.eyebrow}
+            </p>
             <h1 className={styles.newsHeroTitle}>
-              <span className={styles.newsHeroTitleLine}>THIẾT KẾ &amp;</span>
-              <span className={styles.newsHeroTitleLine}> THI CÔNG</span>
+              <span className={styles.newsHeroTitleLine}>
+                {heroTitleParts[0]}
+                {heroTitleParts.length > 1 ? " &" : ""}
+              </span>
+              {heroTitleParts.length > 1 && (
+                <span className={styles.newsHeroTitleLine}>
+                  {" "}
+                  {heroTitleParts.slice(1).join("&").trim()}
+                </span>
+              )}
             </h1>
             <p className={styles.newsHeroDescription}>
               <Image
@@ -414,35 +463,39 @@ export function NewsPage() {
                 height={91}
                 aria-hidden="true"
               />
-              Cập nhật những xu hướng thiết kế nội thất, kinh nghiệm thi công
-              xây dựng, cải tạo nhà ở và giải pháp tối ưu không gian từ đội ngũ
-              BMT Decor.
+              {pageContent.hero.description}
             </p>
             <div className={styles.newsHeroCtaSlot}>
-              <BmtCta href="/contact">
-                LIÊN HỆ NGAY
-              </BmtCta>
+              {pageContent.hero.ctaLabel && pageContent.hero.ctaHref && (
+                <BmtCta href={pageContent.hero.ctaHref}>
+                  {pageContent.hero.ctaLabel}
+                </BmtCta>
+              )}
             </div>
           </div>
 
           <div className={styles.newsHeroPhoto}>
-            <Image
-              className={`${styles.newsHeroPhotoImage} ${styles.newsHeroPhotoImageDesktop}`}
-              src="/images/news/hero-house.jpg"
-              alt="Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế"
-              fill
-              priority
-              sizes="(min-width: 1024px) 50vw, calc(100vw - 36px)"
-            />
-            <Image
-              className={styles.newsHeroPhotoImageMobile}
-              src="/images/news/mobile/hero-photo.png"
-              alt="Mô hình kiến trúc ngôi nhà trên bản vẽ thiết kế"
-              width={3483}
-              height={3037}
-              priority
-              sizes="calc(100vw - 64px)"
-            />
+            {pageContent.hero.desktopImage && (
+              <>
+                <Image
+                  className={`${styles.newsHeroPhotoImage} ${styles.newsHeroPhotoImageDesktop}`}
+                  src={pageContent.hero.desktopImage}
+                  alt={pageContent.hero.imageAlt}
+                  fill
+                  priority
+                  sizes="(min-width: 1024px) 50vw, calc(100vw - 36px)"
+                />
+                <Image
+                  className={styles.newsHeroPhotoImageMobile}
+                  src={pageContent.hero.desktopImage}
+                  alt={pageContent.hero.imageAlt}
+                  width={3483}
+                  height={3037}
+                  priority
+                  sizes="calc(100vw - 64px)"
+                />
+              </>
+            )}
           </div>
         </section>
 
@@ -470,7 +523,7 @@ export function NewsPage() {
           <div className={styles.featuredInner}>
             <div className={styles.featuredHeadingWrap}>
               <h2 id="featured-news-title" className={styles.featuredHeading}>
-                TIN TỨC NỔI BẬT
+                {pageContent.featuredSection.title}
               </h2>
             </div>
 
@@ -481,7 +534,7 @@ export function NewsPage() {
                 aria-label="Tin tức nổi bật"
               >
                 <CarouselContent className={styles.featuredCarouselContent}>
-                  {featuredNews.map((item, index) => (
+                  {featuredArticles.map((item, index) => (
                     <CarouselItem
                       className={styles.featuredCarouselItem}
                       key={item.title}
@@ -492,7 +545,7 @@ export function NewsPage() {
                         <div className={styles.featuredImageWrap}>
                           <Image
                             className={`${styles.featuredCardImage} ${styles.featuredCardImageDesktop}`}
-                            src={item.desktopImage}
+                            src={item.imageUrl}
                             alt={item.imageAlt}
                             fill
                             loading="eager"
@@ -500,7 +553,7 @@ export function NewsPage() {
                           />
                           <Image
                             className={styles.featuredCardImageMobile}
-                            src={item.mobileImage}
+                            src={item.imageUrl}
                             alt={item.imageAlt}
                             width={3165}
                             height={1625}
@@ -593,7 +646,7 @@ export function NewsPage() {
                   className={styles.featuredDots}
                   aria-label="Chọn tin nổi bật"
                 >
-                  {featuredNews.map((item, index) => (
+                  {featuredArticles.map((item, index) => (
                     <button
                       className={`${styles.featuredDot} ${selectedSlide === index ? styles.featuredDotActive : ""}`}
                       type="button"
@@ -671,6 +724,7 @@ export function NewsPage() {
               ))}
             </div>
 
+            {pageCount > 0 && (
             <nav
               className={styles.articlePagination}
               aria-label="Phân trang tin tức"
@@ -713,6 +767,7 @@ export function NewsPage() {
                 />
               </button>
             </nav>
+            )}
 
             {mobileVisibleCount < articles.length && (
               <button
@@ -739,7 +794,14 @@ export function NewsPage() {
           </div>
         </section>
       </main>
-      <ContactForm showTopNotch />
+      <ContactForm
+        showTopNotch
+        title={pageContent.contactForm.title}
+        description={pageContent.contactForm.description}
+        submitLabel={pageContent.contactForm.submitLabel}
+        successMessage={pageContent.contactForm.successMessage}
+        submitToApi
+      />
       <SiteFooter showTopBorder={false} />
     </>
   );

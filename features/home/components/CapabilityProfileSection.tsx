@@ -1,7 +1,7 @@
 import Image from "next/image";
-import portfolioBook from "@/features/home/assets/portfolio-book.png";
 import { BmtCta } from "@/shared/components/BmtCta";
 import { Reveal } from "@/shared/components/Reveal";
+import type { HomeProfileSection } from "@/features/home/types/home-public";
 
 const portfolioBooks = [
   {
@@ -21,7 +21,7 @@ const portfolioBooks = [
   },
 ] as const;
 
-function PortfolioBooks() {
+function PortfolioBooks({ image }: { image: string }) {
   return (
     <div
       className="group relative mx-auto aspect-[1453/1256] w-full max-w-[560px] transition-transform duration-500 ease-[cubic-bezier(0.22,1,0.36,1)] hover:-translate-y-2 hover:scale-[1.025] motion-reduce:transform-none motion-reduce:transition-none max-sm:max-w-[300px]"
@@ -40,7 +40,7 @@ function PortfolioBooks() {
           <div className="relative h-full w-full">
             <Image
               className="object-contain"
-              src={portfolioBook}
+              src={image}
               alt=""
               fill
               sizes="(max-width: 639px) 48vw, (max-width: 1023px) 36vw, 26vw"
@@ -52,21 +52,27 @@ function PortfolioBooks() {
   );
 }
 
-export function CapabilityProfileSection() {
+export function CapabilityProfileSection({
+  content,
+}: {
+  content: HomeProfileSection;
+}) {
+  const oneBookImage =
+    content.oneBookImage || "/images/home/portfolio-book.png";
+
   return (
     <section className="py-16 max-sm:pt-12 lg:py-20">
       <div className="mx-auto grid w-[min(1200px,calc(100%-2.25rem))] items-center gap-10 lg:grid-cols-[1.12fr_0.88fr] lg:gap-6 max-sm:w-[calc(100%-2rem)] max-sm:gap-4">
         <div>
           <Reveal>
             <h2 className="text-[clamp(2rem,3.6vw,3.25rem)] font-extrabold uppercase leading-none tracking-[-0.035em] text-charcoal max-sm:text-[26px]">
-              Hồ sơ năng lực
+              {content.title}
             </h2>
           </Reveal>
 
           <Reveal delay={130}>
             <p className="mt-3 text-justify text-base leading-relaxed text-charcoal/80 [text-align-last:left] [text-justify:inter-word] sm:text-lg lg:text-xl max-sm:text-[15px] max-sm:leading-[1.25]">
-              Đơn vị thiết kế thi công kiến trúc và nội thất, ngoại thất chuyên
-              nghiệp tại Việt Nam
+              {content.subtitle}
             </p>
           </Reveal>
 
@@ -79,10 +85,7 @@ export function CapabilityProfileSection() {
                 width={28}
                 height={28}
               />
-              Với đội ngũ kiến trúc sư trẻ – năng động đầy sáng tạo, BMT Decor
-              luôn mong muốn phát triển và mang đến những thiết kế ấn tượng và
-              độc đáo. Là đối tác độc quyền của nhiều thương hiệu lớn. Thiết kế
-              và thi công nhiều trung tâm thương mại tại TP.HCM.
+              {content.description}
             </p>
           </Reveal>
 
@@ -98,7 +101,7 @@ export function CapabilityProfileSection() {
           </Reveal>
         </div>
 
-        <PortfolioBooks />
+        <PortfolioBooks image={oneBookImage} />
       </div>
     </section>
   );

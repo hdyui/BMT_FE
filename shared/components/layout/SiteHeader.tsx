@@ -16,6 +16,7 @@ import {
 } from "@/shared/components/ui/sheet";
 import { navigation } from "@/shared/constants/site";
 import { cn } from "@/shared/lib/utils";
+import { useSiteSettings } from "@/shared/site-settings/SiteSettingsProvider";
 
 const mobileNavigation = [
   ...navigation,
@@ -29,6 +30,9 @@ export function SiteHeader({
 } = {}) {
   const pathname = usePathname();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { settings } = useSiteSettings();
+  const headerLogo = settings?.header.logo;
+  const headerLogoAlt = settings?.header.logoAlt ?? "";
   const isRouteActive = (href: string, isServiceGroup = false) =>
     isServiceGroup && pathname.startsWith("/services")
       ? true
@@ -39,28 +43,33 @@ export function SiteHeader({
   return (
     <header className="fixed inset-x-0 top-0 z-50 h-[60px] bg-charcoal text-white max-xl:bg-charcoal/90 max-xl:shadow-md max-xl:backdrop-blur-[2px] xl:h-[var(--site-header-desktop-height)]">
       <div className="relative mx-auto flex h-full w-[min(1510px,calc(100%-3.5rem))] items-center max-xl:w-[calc(100%-1.5rem)]">
-        <BrandLogo
-          className="hidden w-[172px] shrink-0 xl:block 2xl:w-[186px]"
-          inverted
-        />
-        <Link
-          className={cn(
-            "relative block w-[112px] shrink-0 sm:w-[126px] xl:hidden",
-            mobileServiceMockup && "max-md:w-[116px]",
-          )}
-          href="/"
-          aria-label="BMT Decor - Trang chủ"
-        >
-          <Image
-            className="h-auto w-full object-contain"
-            src="/images/contact/mobile/header-logo.png"
-            alt="BMT Decor"
-            width={1066}
-            height={186}
-            preload
-            sizes="(max-width: 639px) 112px, 126px"
+        {headerLogo ? (
+          <>
+            <BrandLogo
+              className="hidden w-[172px] shrink-0 xl:block 2xl:w-[186px]"
+              src={headerLogo}
+              alt={headerLogoAlt}
+              inverted
+            />
+            <BrandLogo
+              className={cn(
+                "relative block w-[112px] shrink-0 sm:w-[126px] xl:hidden",
+                mobileServiceMockup && "max-md:w-[116px]",
+              )}
+              src={headerLogo}
+              alt={headerLogoAlt}
+              inverted
+            />
+          </>
+        ) : (
+          <span
+            className={cn(
+              "block w-[112px] shrink-0 sm:w-[126px] xl:w-[172px] 2xl:w-[186px]",
+              mobileServiceMockup && "max-md:w-[116px]",
+            )}
+            aria-hidden="true"
           />
-        </Link>
+        )}
 
         <div className="ml-auto hidden h-full items-center gap-5 xl:flex 2xl:gap-6">
           <nav

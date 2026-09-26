@@ -7,7 +7,7 @@ import { BmtCta } from "@/shared/components/BmtCta";
 import { CardMoreLink } from "@/shared/components/CardMoreLink";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
-import { homeProjectCategories as categories } from "@/features/home/data/home-content";
+import type { HomeProjectCategory } from "@/features/home/types/home-public";
 
 const cardContainerVariants: Variants = {
   hidden: {},
@@ -32,7 +32,11 @@ const cardItemVariants: Variants = {
 const PROJECTS_PER_PAGE = 4;
 const FADE_DURATION = 220;
 
-export function ProjectShowcase() {
+export function ProjectShowcase({
+  categories,
+}: {
+  categories: HomeProjectCategory[];
+}) {
   const [activeCategory, setActiveCategory] = useState(0);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [page, setPage] = useState(0);
@@ -259,23 +263,37 @@ export function ProjectShowcase() {
                     light
                     fullWidth
                   />
-                  <div className="mt-3 space-y-0.5 text-xs leading-relaxed text-white sm:mt-6 sm:space-y-1 sm:text-[18px] sm:leading-[1.35]">
-                    <p>
-                      <strong className="font-extrabold">Diện tích:</strong>{" "}
-                      <span className="font-normal">{mobileProject.area}</span>
-                    </p>
-                    <p>
-                      <strong className="font-extrabold">Phong cách thiết kế:</strong>{" "}
-                      <span className="font-normal">{mobileProject.style}</span>
-                    </p>
-                    <p>
-                      <strong className="font-extrabold">Năm thực hiện:</strong>{" "}
-                      <span className="font-normal">{mobileProject.year}</span>
-                    </p>
-                  </div>
+                  {(mobileProject.area ||
+                    mobileProject.style ||
+                    mobileProject.year) && (
+                    <div className="mt-3 space-y-0.5 text-xs leading-relaxed text-white sm:mt-6 sm:space-y-1 sm:text-[18px] sm:leading-[1.35]">
+                      {mobileProject.area && (
+                        <p>
+                          <strong className="font-extrabold">Diện tích:</strong>{" "}
+                          <span className="font-normal">{mobileProject.area}</span>
+                        </p>
+                      )}
+                      {mobileProject.style && (
+                        <p>
+                          <strong className="font-extrabold">
+                            Phong cách thiết kế:
+                          </strong>{" "}
+                          <span className="font-normal">{mobileProject.style}</span>
+                        </p>
+                      )}
+                      {mobileProject.year && (
+                        <p>
+                          <strong className="font-extrabold">
+                            Năm thực hiện:
+                          </strong>{" "}
+                          <span className="font-normal">{mobileProject.year}</span>
+                        </p>
+                      )}
+                    </div>
+                  )}
                   <CardMoreLink
                     className="mt-3 text-white hover:text-white focus-visible:text-white sm:mt-4 sm:text-[17px]"
-                    href="/projects"
+                    href={mobileProject.href}
                   />
                 </div>
               </div>
@@ -361,14 +379,28 @@ export function ProjectShowcase() {
                       light
                       fullWidth
                     />
-                    <p className="mt-2 text-sm leading-relaxed text-white/95">
-                      <strong>Diện tích:</strong> {project.area}
-                      <br />
-                      <strong>Phong cách thiết kế:</strong> {project.style}
-                      <br />
-                      <strong>Năm thực hiện:</strong> {project.year}
-                    </p>
-                    <CardMoreLink className="mt-5" href="/projects" />
+                    {(project.area || project.style || project.year) && (
+                      <p className="mt-2 text-sm leading-relaxed text-white/95">
+                        {project.area && (
+                          <>
+                            <strong>Diện tích:</strong> {project.area}
+                            <br />
+                          </>
+                        )}
+                        {project.style && (
+                          <>
+                            <strong>Phong cách thiết kế:</strong> {project.style}
+                            <br />
+                          </>
+                        )}
+                        {project.year && (
+                          <>
+                            <strong>Năm thực hiện:</strong> {project.year}
+                          </>
+                        )}
+                      </p>
+                    )}
+                    <CardMoreLink className="mt-5" href={project.href} />
                   </div>
                 </motion.article>
               );

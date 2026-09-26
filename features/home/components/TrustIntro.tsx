@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { motion, type Variants } from "framer-motion";
+import type { HomeTrustIntroContent } from "@/features/home/types/home-public";
 
 const introContainerVariants: Variants = {
   hidden: {},
@@ -23,7 +24,7 @@ const introItemVariants: Variants = {
   },
 };
 
-export function TrustIntro() {
+export function TrustIntro({ content }: { content: HomeTrustIntroContent }) {
   const ref = useRef<HTMLDivElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -56,18 +57,18 @@ export function TrustIntro() {
         className="text-3xl font-extrabold tracking-[-0.035em] uppercase motion-reduce:transform-none sm:text-4xl"
         variants={introItemVariants}
       >
-        <span className="sm:hidden">Vì sao khách hàng tin chọn</span>
-        <span className="hidden sm:inline">Vì sao khách hàng tin chọn BMT Decor?</span>
+        <span className="sm:hidden">{content.titleMobile}</span>
+        <span className="hidden sm:inline">{content.titleDesktop}</span>
       </motion.h2>
       <motion.p
         className="mx-auto mt-3 max-w-3xl text-xl leading-relaxed text-muted-foreground motion-reduce:transform-none max-sm:text-[14px] max-sm:leading-[1.42]"
         variants={introItemVariants}
       >
         <span className="sm:hidden">
-          Với tư duy thiết kế luôn đổi mới trong sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo nên những không gian có giá trị thẩm mỹ cao cấp, tối ưu công năng một cách tuyệt đối và có độ bền vững theo thời gian cho không gian sống.
+          {content.descriptionMobile}
         </span>
         <span className="hidden sm:inline">
-          Với tư duy thiết kế sáng tạo và quy trình thi công bài bản, chúng tôi kiến tạo những không gian hài hòa giữa thẩm mỹ, công năng và giá trị sử dụng bền vững.
+          {content.descriptionDesktop}
         </span>
       </motion.p>
       <div className="relative mx-auto mt-4 h-10 w-full max-w-72 overflow-hidden">

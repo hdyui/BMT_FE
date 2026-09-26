@@ -3,26 +3,21 @@
 import { useState } from "react";
 import Image from "next/image";
 
-const partners = [
-  { name: "GO!", image: "/images/home/partner-go.png" },
-  { name: "LKC", image: "/images/home/partner-lck.png" },
-  { name: "Zena Spa", image: "/images/home/partner-zena.png" },
-  { name: "YumYum Thái", image: "/images/home/partner-yumyum.png" },
-  { name: "Satra Mall", image: "/images/home/partner-satra.png" },
-  {
-    name: "Cafe Control",
-    image: "/images/home/partner-cafe-control.png",
-  },
-] as const;
+export type PartnerDisplayItem = {
+  name: string;
+  image: string;
+};
 
 function PartnerSequence({
   hidden = false,
   hovered,
   onHover,
+  partners,
 }: {
   hidden?: boolean;
   hovered: string | null;
   onHover: (name: string | null) => void;
+  partners: PartnerDisplayItem[];
 }) {
   return (
     <div className="flex w-1/2 shrink-0" aria-hidden={hidden}>
@@ -51,9 +46,15 @@ function PartnerSequence({
   );
 }
 
-export function PartnerMarquee() {
+export function PartnerMarquee({
+  partners,
+}: {
+  partners: PartnerDisplayItem[];
+}) {
   const [paused, setPaused] = useState(false);
   const [hovered, setHovered] = useState<string | null>(null);
+
+  if (partners.length === 0) return null;
 
   return (
     <div
@@ -68,8 +69,17 @@ export function PartnerMarquee() {
         className="flex w-[300%] [animation:partner-marquee_22s_linear_infinite] motion-reduce:animate-none max-sm:w-[400%]"
         style={{ animationPlayState: paused ? "paused" : "running" }}
       >
-        <PartnerSequence hovered={hovered} onHover={setHovered} />
-        <PartnerSequence hidden hovered={hovered} onHover={setHovered} />
+        <PartnerSequence
+          partners={partners}
+          hovered={hovered}
+          onHover={setHovered}
+        />
+        <PartnerSequence
+          partners={partners}
+          hidden
+          hovered={hovered}
+          onHover={setHovered}
+        />
       </div>
     </div>
   );

@@ -3,9 +3,14 @@
 import { ChevronRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useRef, useState } from "react";
-import { aboutCapabilities as capabilities } from "@/features/about/data/about-content";
+import type { AboutCapabilitiesContent } from "@/features/about/types/about-public";
 
-export function CapabilitiesSection() {
+export function CapabilitiesSection({
+  content,
+}: {
+  content: AboutCapabilitiesContent;
+}) {
+  const capabilities = content.items;
   const sectionRef = useRef<HTMLElement>(null);
   const [isVisible, setIsVisible] = useState(false);
   const [hoveredCapability, setHoveredCapability] = useState<number | null>(
@@ -62,7 +67,7 @@ export function CapabilitiesSection() {
             }`}
             style={{ transitionDelay: "100ms" }}
           >
-            Năng lực nổi bật
+            {content.title}
           </h2>
 
           <div

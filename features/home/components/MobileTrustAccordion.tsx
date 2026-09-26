@@ -2,8 +2,8 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { homeTrustReasons as trustReasons } from "@/features/home/data/home-content";
 import { TrustCardReveal } from "@/features/home/components/TrustCardReveal";
+import type { HomeTrustReason } from "@/features/home/types/home-public";
 
 const mobileTrustImages = [
   {
@@ -49,7 +49,11 @@ function TrustControl() {
   );
 }
 
-export function MobileTrustAccordion() {
+export function MobileTrustAccordion({
+  trustReasons,
+}: {
+  trustReasons: HomeTrustReason[];
+}) {
   const [active, setActive] = useState<number | null>(null);
 
   return (
@@ -58,7 +62,11 @@ export function MobileTrustAccordion() {
         const isActive = active === index;
         const panelId = `mobile-trust-panel-${index}`;
         const buttonId = `mobile-trust-button-${index}`;
-        const images = mobileTrustImages[index];
+        const fallbackImages = mobileTrustImages[index] ?? mobileTrustImages[0];
+        const images = {
+          normal: reason.mobileImage ?? fallbackImages.normal,
+          active: reason.mobileActiveImage ?? fallbackImages.active,
+        };
 
         return (
           <TrustCardReveal delay={index * 120} key={reason.title}>

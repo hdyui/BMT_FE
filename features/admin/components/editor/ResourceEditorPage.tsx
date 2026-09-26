@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, CircleAlert, FileText, Hash } from "lucide-react";
 import { toast } from "sonner";
@@ -50,6 +50,13 @@ import type {
 import { Badge } from "@/features/admin/components/ui/badge";
 import { Button } from "@/features/admin/components/ui/button";
 import { cn } from "@/shared/lib/utils";
+import { isFixedPageAdminApiResourceKey } from "@/features/admin/services/catalog-api.types";
+
+const apiDetailResourceKeys = new Set([
+  "projects/list",
+  "news/list",
+  "recruitment/jobs",
+]);
 
 export function ResourceEditorPage({
   config,
@@ -63,7 +70,7 @@ export function ResourceEditorPage({
   baseHref?: string;
 }) {
   const router = useRouter();
-  const { getRecords, createRecord, updateRecord } = useAdminCrud();
+  const { getRecords, loadRecords, loadRecord, createRecord, updateRecord } = useAdminCrud();
   const records = getRecords(config.key);
   const existing =
     mode === "create"
@@ -87,6 +94,16 @@ export function ResourceEditorPage({
   const [saving, setSaving] = useState(false);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [history, setHistory] = useState<FieldHistoryEntry[]>([]);
+  const shouldLoadApiDetail =
+    mode === "edit" &&
+    Boolean(recordId) &&
+    apiDetailResourceKeys.has(config.key);
+  const shouldLoadApiSingleton =
+    mode === "singleton" && isFixedPageAdminApiResourceKey(config.key);
+  const [loadingApiDetail, setLoadingApiDetail] = useState(
+    shouldLoadApiDetail || shouldLoadApiSingleton,
+  );
+  const [apiDetailError, setApiDetailError] = useState<string | null>(null);
   const editableSections = useMemo(
     () => getEditableAdminSections(config.sections),
     [config.sections],
@@ -112,8 +129,92 @@ export function ResourceEditorPage({
   const stackedFields = singleColumnContentEditor;
   const dynamicUiKind = getDynamicCollectionUiKind(config.key);
 
+  useEffect(() => {
+    if (!shouldLoadApiDetail && !shouldLoadApiSingleton) return;
+
+    let active = true;
+
+    const request =
+      shouldLoadApiSingleton
+        ? loadRecords(config.key).then((records) => records[0] ?? null)
+        : loadRecord(config.key, recordId!);
+
+    void request
+      .then((record) => {
+        if (!active) return;
+        if (!record) {
+          setApiDetailError("Không tìm thấy dữ liệu chi tiết từ API.");
+          return;
+        }
+        const next = structuredClone(record);
+        setDraft(next);
+        setSavedSnapshot(structuredClone(next));
+        setHistory([]);
+        setErrors({});
+      })
+      .catch((error: unknown) => {
+        if (!active) return;
+        const message =
+          error instanceof Error
+            ? error.message
+            : "Không thể tải dữ liệu chi tiết từ API.";
+        setApiDetailError(message);
+        toast.error("Không thể tải nội dung", { description: message });
+      })
+      .finally(() => {
+        if (active) setLoadingApiDetail(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [
+    config.key,
+    loadRecord,
+    loadRecords,
+    recordId,
+    shouldLoadApiDetail,
+    shouldLoadApiSingleton,
+  ]);
+
   useUnsavedChangesGuard({ dirty, dirtyCount, save: saveDraft });
   const { topActionsRef, topActionsVisible } = useEditorActionsVisibility();
+
+  if (loadingApiDetail) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <div className="mx-auto size-8 animate-spin rounded-full border-2 border-muted border-t-brand" />
+          <p className="mt-4 text-sm text-muted-foreground">
+            Đang tải dữ liệu mới nhất từ API...
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (apiDetailError) {
+    return (
+      <div className="mx-auto grid min-h-[70vh] max-w-xl place-items-center p-6 text-center">
+        <div>
+          <span className="mx-auto grid size-12 place-items-center rounded-2xl bg-muted text-brand">
+            <CircleAlert className="size-5" />
+          </span>
+          <h1 className="mt-4 text-xl font-bold">Không thể tải nội dung</h1>
+          <p className="mt-2 text-sm text-muted-foreground">
+            {apiDetailError}
+          </p>
+          <Button
+            className="mt-5"
+            nativeButton={false}
+            render={<Link href={baseHref} />}
+          >
+            Quay lại danh sách
+          </Button>
+        </div>
+      </div>
+    );
+  }
 
   if (mode !== "create" && !existing) {
     return (
@@ -202,6 +303,11 @@ export function ResourceEditorPage({
         toast.success("Đã cập nhật nội dung");
       }
       return true;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : "Không thể lưu nội dung.";
+      toast.error("Lưu nội dung thất bại", { description: message });
+      return false;
     } finally {
       setSaving(false);
     }

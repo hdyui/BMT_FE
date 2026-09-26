@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { BmtCta } from "@/shared/components/BmtCta";
 import { Reveal } from "@/shared/components/Reveal";
+import type { CareersPageContent } from "@/features/careers/types/careers-public";
 
 const heroParts = [
   {
@@ -99,7 +100,13 @@ function CareersHeroBackdrop() {
   );
 }
 
-function HeroVisual() {
+function HeroVisual({
+  image,
+  alt,
+}: {
+  image: string;
+  alt: string;
+}) {
   return (
     <Reveal
       className="relative z-10 mx-auto w-full max-w-[680px] lg:absolute lg:left-[6.4%] lg:top-[22.5%] lg:max-w-none lg:w-[43.6%]"
@@ -107,51 +114,74 @@ function HeroVisual() {
       from="left"
     >
       <div className="group relative aspect-[1.486] w-full overflow-hidden shadow-none transition-shadow duration-500 ease-out hover:shadow-[0_22px_45px_rgba(36,33,34,.24)] [border-top-left-radius:6%_13%] [border-top-right-radius:35%_50%] [border-bottom-right-radius:9%_13%] [border-bottom-left-radius:11%_20%]">
-        <Image
-          className="animate-[careers-hero-image-enter_1s_cubic-bezier(.22,1,.36,1)_.2s_backwards] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045] motion-reduce:animate-none motion-reduce:transition-none"
-          src="/images/careers/hero.png"
-          alt="Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor"
-          fill
-          priority
-          sizes="(min-width: 1024px) 46.1vw, calc(100vw - 36px)"
-        />
+        {image && (
+          <Image
+            className="animate-[careers-hero-image-enter_1s_cubic-bezier(.22,1,.36,1)_.2s_backwards] object-cover transition-transform duration-700 ease-out group-hover:scale-[1.045] motion-reduce:animate-none motion-reduce:transition-none"
+            src={image}
+            alt={alt}
+            fill
+            priority
+            sizes="(min-width: 1024px) 46.1vw, calc(100vw - 36px)"
+          />
+        )}
       </div>
     </Reveal>
   );
 }
 
-function MobileCareersHero() {
+function MobileCareersHero({
+  hero,
+}: {
+  hero: CareersPageContent["hero"];
+}) {
+  const title = hero.title.replace(/\s*BMT Decor\s*$/i, "").trim();
+
   return (
     <div className="absolute inset-0 hidden max-sm:block">
       <div className="absolute left-[10.84%] top-[17.72%] z-[1] w-[77.68%] text-charcoal">
         <h1 className="m-0 whitespace-nowrap text-[clamp(19px,5.84cqw,32px)] font-extrabold uppercase leading-[.88] tracking-[-.045em] [&>span]:block">
-          <span>Gia nhập đội ngũ</span>
+          <span>{title}</span>
           <Image className="mt-[.9cqw] block h-auto w-[31.44cqw]" src="/images/careers/mobile/hero-wordmark.png" alt="BMT Decor" width={1230} height={214} sizes="32vw" />
         </h1>
         <Image className="mt-[2.5cqw] block h-auto w-[35.62cqw]" src="/images/careers/mobile/hero-divider.png" alt="" width={1388} height={128} sizes="36vw" aria-hidden="true" />
         <p className="mt-[1.9cqw] max-w-[77.68cqw] text-justify text-[clamp(9.5px,2.58cqw,14px)] font-normal leading-[1.16] tracking-[-.018em] [text-align-last:left] [text-justify:inter-character]">
           <Image className="mr-[.38em] inline-block h-[2.1cqw] w-auto align-[-.16em]" src="/images/careers/mobile/hero-building-mark.png" alt="" width={86} height={91} sizes="10px" aria-hidden="true" />
-          Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm. Nếu bạn yêu thích lĩnh vực thiết kế, kiến trúc và thi công, BMT Decor luôn sẵn sàng chào đón bạn đồng hành trên hành trình phát triển lâu dài.
+          {hero.description}
         </p>
       </div>
-      <Image className="z-0 object-contain object-top" src="/images/careers/mobile/hero-artwork.png" alt="Cái bắt tay trên bản vẽ kiến trúc tại BMT Decor" fill fetchPriority="high" sizes="100vw" />
+      {hero.desktopImage && (
+        <Image
+          className="z-0 object-cover object-center"
+          src={hero.desktopImage}
+          alt={hero.desktopAlt}
+          fill
+          fetchPriority="high"
+          sizes="100vw"
+        />
+      )}
     </div>
   );
 }
 
-export function CareersHero() {
+export function CareersHero({
+  hero,
+}: {
+  hero: CareersPageContent["hero"];
+}) {
+  const title = hero.title.replace(/\s*BMT Decor\s*$/i, "").trim();
+
   return (
     <section className="relative isolate overflow-hidden bg-[#f7f7f7] max-sm:aspect-[3884/5972] max-sm:[container-type:inline-size] lg:aspect-[8000/3468]">
       <CareersHeroBackdrop />
-      <MobileCareersHero />
+      <MobileCareersHero hero={hero} />
 
       <div className="relative z-10 mx-auto hidden w-[min(1460px,calc(100%-2.25rem))] gap-12 py-16 sm:grid lg:absolute lg:inset-0 lg:block lg:w-full lg:py-0">
-        <HeroVisual />
+        <HeroVisual image={hero.desktopImage} alt={hero.desktopAlt} />
 
         <div className="relative mt-10 z-20 max-w-[640px] lg:absolute lg:left-[55%] lg:top-[24%] lg:w-[42%] lg:max-w-none">
           <Reveal delay={120}>
             <h1 className="text-[clamp(2.8rem,4.6vw,5.1rem)] leading-[.9] font-bold uppercase tracking-[-.045em] text-charcoal">
-              Gia nhập đội ngũ
+              {title}
               <Image
                 className="mt-3 h-auto w-[clamp(300px,28vw,560px)] max-w-full"
                 src="/images/projects/bmt-decor-wordmark.png"
@@ -173,14 +203,13 @@ export function CareersHero() {
                 sizes="24px"
                 aria-hidden="true"
               />
-              Mỗi công trình chất lượng đều bắt đầu từ một đội ngũ tận tâm. Nếu
-              bạn yêu thích lĩnh vực thiết kế, kiến trúc và thi công, BMT Decor
-              luôn sẵn sàng chào đón bạn đồng hành trên hành trình phát triển
-              lâu dài.
+              {hero.description}
             </p>
           </Reveal>
           <div>
-            <BmtCta href="/contact">LIÊN HỆ NGAY</BmtCta>
+            {hero.ctaLabel && hero.ctaHref && (
+              <BmtCta href={hero.ctaHref}>{hero.ctaLabel}</BmtCta>
+            )}
           </div>
         </div>
       </div>
