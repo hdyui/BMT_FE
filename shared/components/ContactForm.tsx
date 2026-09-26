@@ -6,7 +6,7 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
-import { saveContactSubmission } from "@/shared/lib/contact-submissions";
+import { describeSubmitError, submitFormSubmission } from "@/shared/lib/form-submissions";
 
 type FieldName = "name" | "phone";
 type Errors = Partial<Record<FieldName, string>>;
@@ -38,6 +38,7 @@ export function ContactForm({
 }) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -78,7 +79,7 @@ export function ContactForm({
     });
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const formElement = event.currentTarget;
     const form = new FormData(formElement);
@@ -95,10 +96,16 @@ export function ContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
-    saveContactSubmission({
-      name,
-      phone,
-    });
+    setSubmitting(true);
+    try {
+      await submitFormSubmission({ customerName: name, phone });
+    } catch (error) {
+      toast.error(describeSubmitError(error));
+      return;
+    } finally {
+      setSubmitting(false);
+    }
+
     toast.success(successMessage);
     formElement.reset();
     setErrors({});
@@ -241,6 +248,7 @@ export function ContactForm({
             <Button
               className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,translate] duration-400 ease-in-out hover:-translate-y-1 motion-reduce:translate-none motion-reduce:transition-none hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:translate-y-0 active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
+              disabled={submitting}
             >
               {submitLabel}
             </Button>

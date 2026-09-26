@@ -1,8 +1,17 @@
 import Image from "next/image";
 import { Reveal } from "@/shared/components/Reveal";
-import { processSteps } from "@/features/services/data/turnkey";
+
+export type TurnkeyProcessStep = {
+  number: string;
+  icon: string;
+  title: string;
+  copy: string;
+};
 
 const CARD_ASPECT = "1486/1048";
+
+// Chữ số lớn của từng bước là hình vẽ sẵn (đồ trang trí), đánh theo thứ tự bước.
+const numeralImage = (index: number) => `/images/xay-dung-tron-goi/numeral-${index + 1}.png`;
 
 const mobileStepFrames = [
   "/images/xay-dung-tron-goi/mobile/process-step-1.png",
@@ -15,9 +24,11 @@ const mobileStepFrames = [
 
 export function ProcessStepsGrid({
   mobileMockup = false,
+  steps: processSteps,
 }: {
   mobileMockup?: boolean;
-} = {}) {
+  steps: readonly TurnkeyProcessStep[];
+}) {
   return (
     <>
       {mobileMockup && (
@@ -55,11 +66,11 @@ export function ProcessStepsGrid({
                                 index === 1 ? "scale-[0.8]" : "scale-[1.12]"
                               }`}
                               style={{
-                                maskImage: `url(${step.numeralImage})`,
+                                maskImage: `url(${numeralImage(index)})`,
                                 maskPosition: "center",
                                 maskRepeat: "no-repeat",
                                 maskSize: "contain",
-                                WebkitMaskImage: `url(${step.numeralImage})`,
+                                WebkitMaskImage: `url(${numeralImage(index)})`,
                                 WebkitMaskPosition: "center",
                                 WebkitMaskRepeat: "no-repeat",
                                 WebkitMaskSize: "contain",
@@ -169,11 +180,11 @@ export function ProcessStepsGrid({
                       <span
                         className="block size-full bg-charcoal transition-colors duration-300 group-hover/step:bg-brand"
                         style={{
-                          maskImage: `url(${step.numeralImage})`,
+                          maskImage: `url(${numeralImage(index)})`,
                           maskPosition: "center",
                           maskRepeat: "no-repeat",
                           maskSize: "contain",
-                          WebkitMaskImage: `url(${step.numeralImage})`,
+                          WebkitMaskImage: `url(${numeralImage(index)})`,
                           WebkitMaskPosition: "center",
                           WebkitMaskRepeat: "no-repeat",
                           WebkitMaskSize: "contain",

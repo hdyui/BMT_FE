@@ -17,6 +17,7 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { describeSaveError } from "@/features/admin/lib/save-error";
 import {
   getEditableAdminSections,
   isHomeStyleEditor,
@@ -93,6 +94,9 @@ export function EmbeddedResourceEditor({
       setHistory([]);
       toast.success("Đã cập nhật nội dung phần mở đầu");
       return true;
+    } catch (error) {
+      toast.error("Không lưu được thay đổi", { description: describeSaveError(error) });
+      return false;
     } finally {
       setSaving(false);
     }

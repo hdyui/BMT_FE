@@ -1,8 +1,28 @@
 import type { NextConfig } from "next";
 
+import { API_BASE_PATH, API_ORIGIN } from "./shared/lib/api/config";
+
 const nextConfig: NextConfig = {
   images: {
     qualities: [70, 75],
+    // Ảnh admin upload qua backend được lưu trên Cloudinary.
+    remotePatterns: [{ protocol: "https", hostname: "res.cloudinary.com" }],
+  },
+  // Chỉ có tác dụng khi chạy `next dev`: in ra terminal mọi lời gọi API mà server
+  // component thực hiện (trang public gọi backend ở server nên không hiện trong
+  // tab Network của trình duyệt), kèm trạng thái cache.
+  logging: {
+    fetches: { fullUrl: true, hmrRefreshes: true },
+  },
+  // Trình duyệt gọi API cùng origin để cookie đăng nhập của backend là cookie
+  // first-party (backend đặt SameSite=Lax, gọi thẳng khác site sẽ không mang cookie).
+  async rewrites() {
+    return [
+      {
+        source: `${API_BASE_PATH}/:path*`,
+        destination: `${API_ORIGIN}${API_BASE_PATH}/:path*`,
+      },
+    ];
   },
   async redirects() {
     return [
