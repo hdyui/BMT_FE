@@ -2,12 +2,8 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { services } from "@/shared/constants/site";
 import { Reveal } from "@/shared/components/Reveal";
-import {
-  homeMobileServiceLabels as mobileServiceLabels,
-  homeServiceDetails as serviceDetails,
-} from "@/features/home/data/home-content";
+import type { HomeServiceItem } from "@/features/home/types/home-public";
 
 const SERVICE_CLOSE_DURATION = 320;
 const SERVICE_OPEN_DURATION = 460;
@@ -57,7 +53,17 @@ function AccordionControl({ active }: { active: boolean }) {
   );
 }
 
-export function ServiceShowcase() {
+export function ServiceShowcase({
+  serviceItems,
+}: {
+  serviceItems: HomeServiceItem[];
+}) {
+  const serviceDetails = serviceItems;
+  const services = serviceItems.map((item) => ({
+    label: item.label,
+    href: item.href,
+  }));
+  const mobileServiceLabels = serviceItems.map((item) => [item.label, ""] as const);
   const [active, setActive] = useState(0);
   const [phase, setPhase] = useState<TransitionPhase>("idle");
   const [showcaseVisible, setShowcaseVisible] = useState(false);
@@ -74,7 +80,7 @@ export function ServiceShowcase() {
   const secondRevealFrame = useRef<number | null>(null);
   const desktopImageRefs = useRef<Array<HTMLImageElement | null>>([]);
   const mobileImageRefs = useRef<Array<HTMLImageElement | null>>([]);
-  const detail = serviceDetails[active];
+  const detail = serviceDetails[active] ?? serviceDetails[0];
   const isTransitioning = phase !== "idle";
   const isOpeningOrIdle = phase === "opening" || phase === "idle";
   const motionVisible = showcaseVisible && isOpeningOrIdle;

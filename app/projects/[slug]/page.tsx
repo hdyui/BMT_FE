@@ -1,48 +1,19 @@
-import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProjectDetailPage } from "@/features/projects/pages/ProjectDetailPage";
-import {
-  getProjectDetail,
-  projectSlugs,
-} from "@/features/projects/data/project-details";
+import { mapProjectDetail, buildProjectsPublicData } from "@/features/projects/api/get-projects-public-data";
+import { getPublicApiValue, PublicApiError } from "@/shared/lib/api/server";
 
-type ProjectDetailRouteProps = {
-  params: Promise<{ slug: string }>;
-};
-
-export function generateStaticParams() {
-  return projectSlugs.map((slug) => ({ slug }));
-}
-
-export async function generateMetadata({
-  params,
-}: ProjectDetailRouteProps): Promise<Metadata> {
+export default async function Page({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const project = getProjectDetail(slug);
-
-  if (!project) {
-    return { title: "Dự án không tồn tại | BMT Decor" };
-  }
-
-  return {
-    title: {
-      absolute: `${project.displayName} – ${project.title} | BMT Decor`,
-    },
-    description: `${project.scope} tại ${project.location}, phong cách ${project.style}. Khám phá bản vẽ, phối cảnh 3D và quá trình thi công của BMT Decor.`,
-    openGraph: {
-      title: `${project.displayName} | BMT Decor`,
-      description: `${project.scope} tại ${project.location}.`,
-    },
-  };
-}
-
-export default async function ProjectDetailRoute({
-  params,
-}: ProjectDetailRouteProps) {
-  const { slug } = await params;
-  const project = getProjectDetail(slug);
-
+  const detail = getPublicApiValue(`/projects/${encodeURIComponent(slug)}`).catch((error: unknown) => {
+    if (error instanceof PublicApiError && error.status === 404) notFound();
+    throw error;
+  });
+  const [detailValue, projectsApiValue, pageApiValue] = await Promise.all([
+    detail, getPublicApiValue("/projects"), getPublicApiValue("/pages/projects"),
+  ]);
+  const project = mapProjectDetail(detailValue);
   if (!project) notFound();
-
-  return <ProjectDetailPage project={project} />;
+  const sharedData = buildProjectsPublicData({ projectsApiValue, pageApiValue });
+  return <ProjectDetailPage key={slug} slug={slug} project={project} sharedData={sharedData} />;
 }

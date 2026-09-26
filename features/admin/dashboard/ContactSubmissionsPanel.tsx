@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useSyncExternalStore } from "react";
-import { Inbox, Trash2 } from "lucide-react";
+import { useEffect, useState } from "react";
+import { Inbox, Loader2, Trash2 } from "lucide-react";
+import { toast } from "sonner";
 
 import { Button } from "@/features/admin/components/ui/button";
 import { Checkbox } from "@/features/admin/components/ui/checkbox";
@@ -13,36 +14,101 @@ import {
   TableHeader,
   TableRow,
 } from "@/features/admin/components/ui/table";
-import {
-  CONTACT_SUBMISSIONS_CHANGED_EVENT,
-  CONTACT_SUBMISSIONS_STORAGE_KEY,
-  deleteContactSubmission,
-  readContactSubmissions,
-  type ContactSubmission,
-  updateContactSubmissionReviewed,
-} from "@/shared/lib/contact-submissions";
+import { formSubmissionsApiClient } from "@/features/admin/services/form-submissions-api.client";
+import type { FormSubmissionItem } from "@/features/admin/services/catalog-api.types";
 
 type ReviewFilter = "all" | "reviewed" | "pending";
 
 export function ContactSubmissionsPanel() {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("all");
-  const submissions = useSyncExternalStore(
-    subscribeToContactSubmissions,
-    getContactSubmissionsSnapshot,
-    getServerContactSubmissionsSnapshot,
-  );
+  const [submissions, setSubmissions] = useState<FormSubmissionItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [pendingIds, setPendingIds] = useState<Set<string>>(new Set());
+  const [reloadKey, setReloadKey] = useState(0);
+
+  useEffect(() => {
+    let active = true;
+    void formSubmissionsApiClient
+      .getList()
+      .then((page) => {
+        if (!active) return;
+        setSubmissions(page.items);
+        setError(null);
+      })
+      .catch((err: unknown) => {
+        if (!active) return;
+        setError(
+          err instanceof Error
+            ? err.message
+            : "Không thể tải danh sách liên hệ.",
+        );
+      })
+      .finally(() => {
+        if (active) setLoading(false);
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [reloadKey]);
+
+  function retryLoadSubmissions() {
+    setLoading(true);
+    setError(null);
+    setReloadKey((key) => key + 1);
+  }
+
+  function markPending(id: string, value: boolean) {
+    setPendingIds((current) => {
+      const next = new Set(current);
+      if (value) next.add(id);
+      else next.delete(id);
+      return next;
+    });
+  }
+
   const filteredSubmissions = submissions.filter((submission) => {
-    if (reviewFilter === "reviewed") return submission.reviewed;
-    if (reviewFilter === "pending") return !submission.reviewed;
+    if (reviewFilter === "reviewed") return submission.status === "done";
+    if (reviewFilter === "pending") return submission.status === "pending";
     return true;
   });
 
-  function removeSubmission(id: string) {
-    deleteContactSubmission(id);
+  async function removeSubmission(id: string) {
+    markPending(id, true);
+    try {
+      await formSubmissionsApiClient.remove(id);
+      setSubmissions((current) => current.filter((item) => item.id !== id));
+      toast.success("Đã xóa thông tin liên hệ.");
+    } catch (err) {
+      toast.error(
+        err instanceof Error ? err.message : "Xóa liên hệ chưa thành công.",
+      );
+    } finally {
+      markPending(id, false);
+    }
   }
 
-  function updateReviewed(id: string, reviewed: boolean) {
-    updateContactSubmissionReviewed(id, reviewed);
+  async function updateReviewed(id: string, reviewed: boolean) {
+    const nextStatus = reviewed ? "done" : "pending";
+    markPending(id, true);
+    try {
+      const updated = await formSubmissionsApiClient.updateStatus(
+        id,
+        nextStatus,
+      );
+      setSubmissions((current) =>
+        current.map((item) => (item.id === id ? updated : item)),
+      );
+    } catch (err) {
+      toast.error(
+        err instanceof Error
+          ? err.message
+          : "Cập nhật trạng thái chưa thành công.",
+      );
+    } finally {
+      markPending(id, false);
+    }
   }
 
   return (
@@ -59,7 +125,26 @@ export function ContactSubmissionsPanel() {
         </span>
       </div>
 
-      {submissions.length === 0 ? (
+      {loading ? (
+        <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
+          <Loader2 className="size-5 animate-spin text-muted-foreground" />
+        </div>
+      ) : error ? (
+        <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
+          <div>
+            <p className="text-sm font-medium text-destructive">{error}</p>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              className="mt-3"
+              onClick={retryLoadSubmissions}
+            >
+              Thử lại
+            </Button>
+          </div>
+        </div>
+      ) : submissions.length === 0 ? (
         <div className="grid min-h-44 place-items-center px-5 py-10 text-center sm:px-6">
           <div>
             <span className="mx-auto grid size-10 place-items-center rounded-xl bg-muted text-muted-foreground">
@@ -124,10 +209,13 @@ export function ContactSubmissionsPanel() {
               </TableRow>
             </TableHeader>
             <TableBody>
-              {filteredSubmissions.map((submission) => (
+              {filteredSubmissions.map((submission) => {
+                const isPending = pendingIds.has(submission.id);
+                const reviewed = submission.status === "done";
+                return (
                 <TableRow key={submission.id}>
                   <TableCell className="px-5 font-medium sm:px-6">
-                    {submission.name}
+                    {submission.customerName}
                   </TableCell>
                   <TableCell className="font-medium tabular-nums">
                     {submission.phone}
@@ -135,38 +223,41 @@ export function ContactSubmissionsPanel() {
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <Checkbox
-                        checked={submission.reviewed}
+                        checked={reviewed}
+                        disabled={isPending}
                         onCheckedChange={(value) =>
-                          updateReviewed(submission.id, Boolean(value))
+                          void updateReviewed(submission.id, Boolean(value))
                         }
                         aria-label={
-                          submission.reviewed
+                          reviewed
                             ? "Bỏ đánh dấu đã duyệt"
                             : "Đánh dấu đã duyệt"
                         }
                       />
                       <span className="text-xs text-muted-foreground">
-                        {submission.reviewed ? "Đã duyệt" : "Chưa duyệt"}
+                        {reviewed ? "Đã duyệt" : "Chưa duyệt"}
                       </span>
                     </div>
                   </TableCell>
                   <TableCell className="whitespace-nowrap text-muted-foreground">
-                    {formatSubmittedAt(submission.submittedAt)}
+                    {formatSubmittedAt(submission.createdAt)}
                   </TableCell>
                   <TableCell className="px-5 text-right sm:px-6">
                     <Button
                       type="button"
                       variant="ghost"
                       size="sm"
+                      disabled={isPending}
                       className="text-destructive hover:bg-destructive/10 hover:text-destructive"
-                      onClick={() => removeSubmission(submission.id)}
+                      onClick={() => void removeSubmission(submission.id)}
                     >
                       <Trash2 className="size-4" />
                       Xóa
                     </Button>
                   </TableCell>
                 </TableRow>
-              ))}
+                );
+              })}
             </TableBody>
           </Table>
         </div>
@@ -175,41 +266,6 @@ export function ContactSubmissionsPanel() {
       )}
     </section>
   );
-}
-
-function subscribeToContactSubmissions(onStoreChange: () => void) {
-  const handleStorage = (event: StorageEvent) => {
-    if (
-      event.key === null ||
-      event.key === CONTACT_SUBMISSIONS_STORAGE_KEY
-    ) {
-      onStoreChange();
-    }
-  };
-
-  window.addEventListener("storage", handleStorage);
-  window.addEventListener(CONTACT_SUBMISSIONS_CHANGED_EVENT, onStoreChange);
-
-  return () => {
-    window.removeEventListener("storage", handleStorage);
-    window.removeEventListener(CONTACT_SUBMISSIONS_CHANGED_EVENT, onStoreChange);
-  };
-}
-
-let cachedRaw: string | null | undefined;
-let cachedSubmissions: ContactSubmission[] = [];
-
-function getContactSubmissionsSnapshot() {
-  const raw = window.localStorage.getItem(CONTACT_SUBMISSIONS_STORAGE_KEY);
-  if (raw === cachedRaw) return cachedSubmissions;
-
-  cachedRaw = raw;
-  cachedSubmissions = readContactSubmissions();
-  return cachedSubmissions;
-}
-
-function getServerContactSubmissionsSnapshot(): ContactSubmission[] {
-  return [];
 }
 
 function formatSubmittedAt(value: string) {

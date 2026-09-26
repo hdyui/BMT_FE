@@ -1,19 +1,25 @@
 import { ServiceShowcase } from "@/features/home/components/ServiceShowcase";
-import { homeSectionContent } from "@/features/home/data/home-content";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
+import type { HomeServiceItem } from "@/features/home/types/home-public";
 
-function ServiceSectionHeading() {
+function ServiceSectionHeading({
+  title,
+  description,
+}: {
+  title: string;
+  description: string;
+}) {
   return (
     <div className="text-center">
       <Reveal>
         <h2 className="text-4xl font-extrabold uppercase tracking-[-0.035em] max-sm:text-[30px] max-sm:leading-tight sm:text-5xl">
-          {homeSectionContent.featuredServices.title}
+          {title}
         </h2>
       </Reveal>
       <Reveal delay={140}>
         <p className="mx-auto mt-3 max-w-2xl text-xl leading-relaxed text-muted-foreground max-sm:text-sm">
-          {homeSectionContent.featuredServices.description}
+          {description}
         </p>
       </Reveal>
       <BuildingRule
@@ -24,7 +30,15 @@ function ServiceSectionHeading() {
   );
 }
 
-export function FeaturedServicesSection() {
+export function FeaturedServicesSection({
+  title,
+  description,
+  services,
+}: {
+  title: string;
+  description: string;
+  services: HomeServiceItem[];
+}) {
   return (
     <section className="relative overflow-hidden py-16 max-sm:bg-white">
       <div
@@ -36,8 +50,8 @@ export function FeaturedServicesSection() {
         aria-hidden="true"
       />
       <div className="relative mx-auto w-[min(1200px,calc(100%-2.25rem))]">
-        <ServiceSectionHeading />
-        <ServiceShowcase />
+        <ServiceSectionHeading title={title} description={description} />
+        <ServiceShowcase serviceItems={services} />
       </div>
     </section>
   );

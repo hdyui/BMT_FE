@@ -11,11 +11,7 @@ import {
 } from "@/shared/components/ui/carousel";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
-import {
-  relatedProjects,
-  relatedProjectsSection,
-  type RelatedProjectData as RelatedProject,
-} from "@/features/projects/data/related-projects";
+import type { PublicProjectListItem as RelatedProject } from "@/features/projects/types/projects-public";
 import { ProjectSectionHeading } from "./ProjectSectionHeading";
 
 function subscribeToProjectColumns(onStoreChange: () => void) {
@@ -46,7 +42,7 @@ function RelatedProjectCard({ project }: { project: RelatedProject }) {
     >
     <article className="relative aspect-[3334/2653] overflow-hidden rounded-[1.65rem] bg-white sm:rounded-[2rem]">
       <Image
-        src={project.image}
+        src={project.imageUrl}
         alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
         fill
         sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
@@ -67,7 +63,7 @@ function RelatedProjectCard({ project }: { project: RelatedProject }) {
   );
 }
 
-export function RelatedProjects() {
+export function RelatedProjects({ projects }: { projects: RelatedProject[] }) {
   const [api, setApi] = useState<CarouselApi>();
   const [selectedPage, setSelectedPage] = useState(0);
   const [pageCount, setPageCount] = useState(2);
@@ -97,6 +93,8 @@ export function RelatedProjects() {
     };
   }, [api, syncCarousel]);
 
+  if (projects.length === 0) return null;
+
   return (
     <section
       className="-mb-[2.342945vw] bg-[#f1f1f2] pt-[clamp(62px,7vw,110px)] pb-[calc(clamp(62px,7vw,110px)+2.342945vw)] lg:-mb-[2.57vw] lg:pb-[calc(clamp(62px,7vw,110px)+2.57vw)]"
@@ -104,7 +102,7 @@ export function RelatedProjects() {
     >
       <div className="mx-auto w-[min(1280px,calc(100%-2.25rem))]">
         <ProjectSectionHeading centered delay={80} duration={950}>
-          <span id="related-title">{relatedProjectsSection.title}</span>
+          <span id="related-title">DỰ ÁN LIÊN QUAN</span>
         </ProjectSectionHeading>
 
         <BuildingRule
@@ -129,7 +127,7 @@ export function RelatedProjects() {
           aria-label="Dự án liên quan"
         >
           <CarouselContent className="-ml-5">
-            {relatedProjects.map((project, index) => (
+            {projects.map((project, index) => (
               <CarouselItem
                 className="basis-full pl-5 sm:basis-1/2 lg:basis-1/3"
                 key={project.title}

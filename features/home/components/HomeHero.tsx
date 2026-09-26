@@ -4,7 +4,7 @@ import { PointerEvent, useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion, type Variants } from "framer-motion";
-import { homeHeroSlides as slides } from "@/features/home/data/home-content";
+import type { HomeHeroSlide } from "@/features/home/types/home-public";
 
 const contentContainerVariants: Variants = {
   hidden: {},
@@ -34,7 +34,7 @@ const bodyItemVariants: Variants = {
   },
 };
 
-export function HomeHero() {
+export function HomeHero({ slides }: { slides: HomeHeroSlide[] }) {
   const [selected, setSelected] = useState(0);
   const [isPaused, setIsPaused] = useState(false);
   const pointerStart = useRef<{ x: number; y: number; id: number } | null>(
@@ -49,7 +49,7 @@ export function HomeHero() {
       6000,
     );
     return () => window.clearTimeout(timer);
-  }, [isPaused, selected]);
+  }, [isPaused, selected, slides.length]);
 
   function selectRelative(direction: 1 | -1) {
     setSelected(

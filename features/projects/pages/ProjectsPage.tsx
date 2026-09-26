@@ -16,15 +16,15 @@ import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { Reveal } from "@/shared/components/Reveal";
 import { ProjectsHero } from "@/features/projects/components/ProjectsHero";
+import type {
+  ProjectsPublicData,
+  PublicProjectListItem,
+} from "@/features/projects/types/projects-public";
 import {
-  projectCards,
-  projectCategories as categories,
-  projectPageImages as projectImages,
-  type ProjectCategory as Category,
-  type ProjectCardData,
+  projectCategories as categoryVisuals,
 } from "@/features/projects/data/projects-page";
 
-const pageCount = 4;
+const pageSize = 9;
 
 const projectGridVariants: Variants = {
   hidden: { opacity: 0, y: 38 },
@@ -71,7 +71,7 @@ function ProjectCard({
   index,
   hiddenOnMobile = false,
 }: {
-  project: ProjectCardData & { image: string };
+  project: PublicProjectListItem;
   index: number;
   hiddenOnMobile?: boolean;
 }) {
@@ -91,7 +91,7 @@ function ProjectCard({
     >
       <div className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-[1.055]">
         <Image
-          src={project.image}
+          src={project.imageUrl}
           alt={`Dự án ${project.title} do BMT Decor thiết kế và thi công`}
           fill
           priority={index < 3}
@@ -120,9 +120,17 @@ function ProjectCard({
           aria-hidden="true"
         />
         <div className="relative z-10 grid h-full content-center">
-          <p className="text-[15px] leading-none font-normal uppercase tracking-[-0.03em] max-sm:text-[13px] max-sm:tracking-[-0.025em]">
-            Thiết kế thi công nội thất
-          </p>
+          {(project.style || project.area || project.year) && (
+            <p className="truncate px-2 text-[15px] leading-none font-normal uppercase tracking-[-0.03em] max-sm:text-[12px] max-sm:tracking-[-0.025em]">
+              {[
+                project.style,
+                project.area,
+                project.year ? String(project.year) : "",
+              ]
+                .filter(Boolean)
+                .join(" • ")}
+            </p>
+          )}
           <h3 className="mt-[7px] text-[clamp(14px,1.5vw,21px)] leading-none font-bold text-balance uppercase tracking-[-0.04em] max-sm:mt-[5px] max-sm:px-2 max-sm:text-[20px] max-sm:font-extrabold max-sm:tracking-[-0.045em]">
             {project.title}
           </h3>
@@ -143,8 +151,8 @@ function ProjectCard({
   );
 }
 
-export function ProjectsPage() {
-  const [activeCategory, setActiveCategory] = useState<Category>("Nhà ở");
+export function ProjectsPage({ data }: { data: ProjectsPublicData }) {
+  const [activeCategory, setActiveCategory] = useState(data.categories[0]?.name ?? "");
   const [activePage, setActivePage] = useState(0);
   const [mobileExpanded, setMobileExpanded] = useState(false);
   const projectGridRef = useRef<HTMLDivElement>(null);
@@ -152,20 +160,38 @@ export function ProjectsPage() {
     once: true,
     amount: 0.08,
   });
+
+  const categories = useMemo(
+    () =>
+      data.categories.flatMap((category) => {
+        const visual = categoryVisuals.find(
+          (item) => item.label === category.name,
+        );
+        return visual ? [{ ...category, ...visual }] : [];
+      }),
+    [data.categories],
+  );
+  const filteredProjects = useMemo(
+    () =>
+      data.projects.filter(
+        (project) => project.categoryName === activeCategory,
+      ).sort(
+        (left, right) =>
+          Number(right.isFeatured) - Number(left.isFeatured),
+      ),
+    [activeCategory, data.projects],
+  );
+  const pageCount = Math.max(1, Math.ceil(filteredProjects.length / pageSize));
   const visibleProjects = useMemo(
     () =>
-      projectImages.map((image, index) => {
-        const cards = projectCards[activeCategory];
-        const project = cards[(index + activePage * 3) % cards.length];
-        return {
-          image: projectImages[(index + activePage * 2) % projectImages.length],
-          ...project,
-        };
-      }),
-    [activeCategory, activePage],
+      filteredProjects.slice(
+        activePage * pageSize,
+        activePage * pageSize + pageSize,
+      ),
+    [activePage, filteredProjects],
   );
 
-  function selectCategory(category: Category) {
+  function selectCategory(category: string) {
     setActiveCategory(category);
     setActivePage(0);
     setMobileExpanded(false);
@@ -178,7 +204,7 @@ export function ProjectsPage() {
         className="relative overflow-hidden bg-[#f2f2f4] pt-0 sm:pt-[60px] max-sm:overflow-visible xl:pt-[var(--site-header-desktop-height)]"
         data-scroll-snap-page
       >
-        <ProjectsHero />
+        <ProjectsHero hero={data.page.hero} />
 
         <section
           className="relative bg-white pt-[62px] pb-[108px] max-sm:pt-[24px] max-sm:pb-[60px]"
@@ -348,7 +374,7 @@ export function ProjectsPage() {
               </div>
             </MotionConfig>
 
-            {!mobileExpanded && (
+            {!mobileExpanded && visibleProjects.length > 4 && (
               <button
                 className="mx-auto mt-[24px] hidden items-center gap-2 text-[16px] text-charcoal transition-colors duration-200 hover:text-brand focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-brand max-sm:flex"
                 type="button"
@@ -384,7 +410,14 @@ export function ProjectsPage() {
           </div>
         </section>
       </main>
-      <ContactForm showTopNotch />
+      <ContactForm
+        showTopNotch
+        title={data.page.contactForm.title}
+        description={data.page.contactForm.description}
+        submitLabel={data.page.contactForm.submitLabel}
+        successMessage={data.page.contactForm.successMessage}
+        submitToApi
+      />
       <SiteFooter showTopBorder={false} />
     </>
   );
