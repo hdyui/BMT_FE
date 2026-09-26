@@ -2,7 +2,7 @@ import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
-import { RichText } from "@/features/services/components/RichText";
+import { RichText } from "@/shared/components/RichText";
 import {
   ProjectCarousel,
   type FeaturedProject,

@@ -1,121 +1,40 @@
-import { apiClient, type ApiEnvelope } from "@/lib/api";
+import { fetchPageContent, fetchPublicContent } from "@/shared/lib/api/public-content";
 
+/** Một trang của cuốn hồ sơ (`GET /capability-profile/pages` → `items`). */
 export interface CapabilityProfilePage {
   id: string;
-  title: string;
   imageUrl: string;
-  metadata?: {
-    sortOrder?: number | null;
-  } | null;
+  /** Thứ tự đọc; nhỏ đứng trước. */
+  metadata?: { sortOrder?: number | null } | null;
 }
 
+/** Nội dung trang Hồ sơ năng lực (`GET /pages/capability-profile` → `content`). */
 export interface CapabilityProfileContent {
   hero: {
     title: string;
-    description: string;
     subtitle: string;
-    heroImage: string;
-    decor08: string;
-    heroImageAlt: string;
+    description: string;
+    heroImage?: string;
+    /** Hình phác thảo công trình ở góc trái banner. */
+    decor08?: string;
     documentHeading: string;
   };
   contactForm: {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     successMessage: string;
   };
 }
 
-export interface CapabilityProfilePageContent {
-  pageCode: string;
-  content: CapabilityProfileContent;
+/** Trang public: `null` khi backend không trả được nội dung. */
+export function getCapabilityProfileContent() {
+  return fetchPageContent<CapabilityProfileContent>("capability-profile");
 }
 
-interface CapabilityProfilePageInput {
-  title: string;
-  imageUrl: string;
-  metadata?: { sortOrder?: number };
-}
-
-export interface CapabilityProfileHeroUpdateInput {
-  title: string;
-  description: string;
-  subtitle: string;
-  documentHeading: string;
-}
-
-const capabilityProfilePagesPath = "/api/v1/capability-profile/pages";
-const capabilityProfileContentPath = "/api/v1/pages/capability-profile";
-const adminCapabilityProfileContentPath = "/api/v1/admin/pages/capability-profile";
-
-function unwrap<T>(response: ApiEnvelope<T>) {
-  if (!response.isSuccess) {
-    throw new Error("Company profile API returned an unsuccessful response.");
-  }
-  return response.value;
-}
-
+/** Các trang của cuốn hồ sơ; `null` khi backend không trả được (khác với danh sách rỗng). */
 export async function getCapabilityProfilePages() {
-  const response = await apiClient.get<ApiEnvelope<{ items: CapabilityProfilePage[] }>>(
-    capabilityProfilePagesPath,
+  const result = await fetchPublicContent<{ items: CapabilityProfilePage[] }>(
+    "/capability-profile/pages",
   );
-  return unwrap(response).items;
-}
-
-export async function getCapabilityProfileContent() {
-  const response = await apiClient.get<ApiEnvelope<CapabilityProfilePageContent>>(
-    capabilityProfileContentPath,
-  );
-  return unwrap(response);
-}
-
-export async function getAdminCapabilityProfilePages() {
-  const response = await apiClient.get<
-    ApiEnvelope<ApiEnvelope<{ items: CapabilityProfilePage[] }>>
-  >(`${capabilityProfilePagesPath.replace("/api/v1", "/api/v1/admin")}?pageIndex=1&pageSize=100`);
-  return unwrap(response).value.items;
-}
-
-export async function getAdminCapabilityProfileContent() {
-  const response = await apiClient.get<
-    ApiEnvelope<ApiEnvelope<CapabilityProfilePageContent>>
-  >(adminCapabilityProfileContentPath);
-  return unwrap(response).value;
-}
-
-export async function seedCapabilityProfileContent(input: CapabilityProfileContent) {
-  return apiClient.post(`${adminCapabilityProfileContentPath}/content`, input);
-}
-
-export async function updateCapabilityProfileHero(input: CapabilityProfileHeroUpdateInput) {
-  return apiClient.patch(`${adminCapabilityProfileContentPath}/hero`, input);
-}
-
-export async function updateCapabilityProfileContactForm(
-  input: CapabilityProfileContent["contactForm"],
-) {
-  return apiClient.patch(`${adminCapabilityProfileContentPath}/contact-form`, input);
-}
-
-export async function createCapabilityProfilePage(input: CapabilityProfilePageInput) {
-  const response = await apiClient.post<ApiEnvelope<CapabilityProfilePage>>(
-    "/api/v1/admin/capability-profile/pages",
-    input,
-  );
-  return unwrap(response);
-}
-
-export async function updateCapabilityProfilePage(
-  id: string,
-  input: Partial<CapabilityProfilePageInput>,
-) {
-  const response = await apiClient.patch<ApiEnvelope<CapabilityProfilePage>>(
-    `/api/v1/admin/capability-profile/pages/${id}`,
-    input,
-  );
-  return unwrap(response);
-}
-
-export async function deleteCapabilityProfilePage(id: string) {
-  await apiClient.delete(`/api/v1/admin/capability-profile/pages/${id}`);
+  return result?.items ?? null;
 }

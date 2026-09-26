@@ -1,4 +1,5 @@
-import { revalidateServicePage } from "@/features/admin/services/revalidate-service-page";
+import { revalidatePublicContent } from "@/features/admin/services/revalidate-public-content";
+import type { RemoteResourceBinding } from "@/features/admin/services/remote-binding";
 import type { AdminCrudRecord, AdminFieldValue } from "@/features/admin/lib/types/crud";
 import {
   SERVICE_PAGES,
@@ -29,18 +30,6 @@ interface AdminPage {
   nodes: PageNode[];
 }
 
-export interface RemoteResourceBinding {
-  /** Các resource cùng một trang được tải chung bằng một request. */
-  pageKey: string;
-  load(): Promise<Record<string, AdminCrudRecord[]>>;
-  /** Lưu thay đổi giữa hai trạng thái của một resource; trả về record sau khi backend xác nhận. */
-  save(
-    resourceKey: string,
-    previous: AdminCrudRecord[],
-    next: AdminCrudRecord[],
-  ): Promise<AdminCrudRecord[]>;
-}
-
 function toFieldValue(value: unknown): AdminFieldValue {
   if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
     return value;
@@ -67,8 +56,11 @@ const sameValue = (a: unknown, b: unknown) => JSON.stringify(a) === JSON.stringi
 function createBinding(page: ServicePageSpec): RemoteResourceBinding {
   const sectionByKey = new Map(page.sections.map((section) => [section.resourceKey, section]));
 
+  const pageKey = `services/${page.adminBase}`;
+
   return {
-    pageKey: `services/${page.adminBase}`,
+    pageKey,
+    handles: (resourceKey) => resourceKey === pageKey || resourceKey.startsWith(`${pageKey}/`),
 
     async load() {
       const { nodes } = await api.get<AdminPage>(`/admin/pages/${page.pageCode}`);
@@ -115,7 +107,7 @@ function createBinding(page: ServicePageSpec): RemoteResourceBinding {
       );
       // Đã lưu ở backend: xóa cache trang public để website đổi ngay. Lỗi ở bước
       // này (mất phiên, mạng) không được làm hỏng việc lưu vốn đã thành công.
-      await revalidateServicePage(page.pageCode).catch(() => undefined);
+      await revalidatePublicContent(`/pages/${page.pageCode}`).catch(() => undefined);
       const nodeById = new Map(saved.items.map((node) => [node.id, node]));
       return next.map((record) => {
         const node = nodeById.get(record.id);
@@ -125,13 +117,5 @@ function createBinding(page: ServicePageSpec): RemoteResourceBinding {
   };
 }
 
-const bindings = SERVICE_PAGES.map(createBinding);
-
-/** Binding của resource hoặc của trang (`services/<base>`); `null` nếu không thuộc 5 trang dịch vụ. */
-export function getRemoteBinding(resourceKey: string): RemoteResourceBinding | null {
-  return (
-    bindings.find(
-      (binding) => resourceKey === binding.pageKey || resourceKey.startsWith(`${binding.pageKey}/`),
-    ) ?? null
-  );
-}
+/** Binding của 5 trang dịch vụ (`services/<base>/...`). */
+export const serviceBindings: RemoteResourceBinding[] = SERVICE_PAGES.map(createBinding);

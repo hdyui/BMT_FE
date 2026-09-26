@@ -7,7 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/shared/components/ui/button";
 import { Input } from "@/shared/components/ui/input";
 import type { ContactFormContent } from "@/shared/components/contact-form-content";
-import { submitFormSubmission } from "@/shared/lib/form-submissions";
+import { describeSubmitError, submitFormSubmission } from "@/shared/lib/form-submissions";
 
 /**
  * Contact form riêng cho trang báo giá — cùng style/font/size/bold với
@@ -33,6 +33,7 @@ export function QuotationContactForm({
 }) {
   const [errors, setErrors] = useState<Errors>({});
   const [entered, setEntered] = useState(false);
+  const [submitting, setSubmitting] = useState(false);
   const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -87,11 +88,17 @@ export function QuotationContactForm({
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
 
+    setSubmitting(true);
     try {
-      await submitFormSubmission({ customerName: String(form.get("name") ?? "").trim(), phone: String(form.get("phone") ?? "").trim() });
-    } catch {
-      toast.error("Không thể gửi thông tin lúc này.");
+      await submitFormSubmission({
+        customerName: String(form.get("name") ?? "").trim(),
+        phone: String(form.get("phone") ?? "").trim(),
+      });
+    } catch (error) {
+      toast.error(describeSubmitError(error));
       return;
+    } finally {
+      setSubmitting(false);
     }
 
     toast.success(successMessage);
@@ -243,6 +250,7 @@ export function QuotationContactForm({
             <Button
               className="mt-4 h-12 w-full rounded-full bg-charcoal text-base font-semibold text-white shadow-md transition-[background-color,box-shadow,transform,translate,scale] duration-300 ease-out hover:-translate-y-[5px] hover:scale-[1.02] hover:bg-neutral-600 hover:shadow-[0_12px_28px_rgb(36_33_34/.25)] active:translate-y-[2px] active:scale-[0.99] active:shadow-sm max-lg:mt-[13px] max-lg:ml-auto max-lg:block max-lg:h-7 max-lg:w-[clamp(6.5rem,27vw,8.75rem)] max-lg:min-w-0 max-lg:text-[11px] max-lg:font-extrabold"
               type="submit"
+              disabled={submitting}
             >
               {submitLabel}
             </Button>

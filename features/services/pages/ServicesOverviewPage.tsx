@@ -6,9 +6,9 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { ContactForm } from "@/shared/components/ContactForm";
 import { FaqAccordion } from "@/features/services/components/FaqAccordion";
 import { ProcessAccordion } from "@/features/services/components/ProcessAccordion";
-import { RichText } from "@/features/services/components/RichText";
+import { RichText } from "@/shared/components/RichText";
 import { ServiceTabs } from "@/features/services/components/ServiceTabs";
-import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
+import { ContentUnavailable } from "@/shared/components/ContentUnavailable";
 import { getServicesOverviewContent } from "@/features/services/api/content";
 import { buildContactForm } from "@/features/services/api/build";
 import { FAQ_VISIBLE_QUESTIONS } from "@/features/services/api/spec";
@@ -24,7 +24,7 @@ const cardPositions = [
 export async function ServicesOverviewPage() {
   // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
   const content = await getServicesOverviewContent();
-  if (!content) return <ServiceUnavailable />;
+  if (!content) return <ContentUnavailable />;
 
   const { hero, process: processSection, faq } = content;
   const heroTitleLines = hero.title

@@ -11,7 +11,7 @@ import {
 
 import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
 import { adminCrudMockService } from "@/features/admin/services/crud-mock.service";
-import { getRemoteBinding } from "@/features/admin/services/service-pages.service";
+import { getRemoteBinding } from "@/features/admin/services/remote-bindings";
 import type { AdminCrudRecord } from "@/features/admin/lib/types/crud";
 import { ApiError } from "@/shared/lib/api/errors";
 
@@ -103,10 +103,17 @@ export function AdminCrudProvider({ children }: { children: React.ReactNode }) {
 
   const createRecord = useCallback(
     async (resourceKey: string, input: AdminCrudRecord) => {
-      if (getRemoteBinding(resourceKey)) {
-        throw new Error("Nội dung này có số mục cố định, không thể thêm mục mới.");
-      }
       const current = recordsByResource[resourceKey] ?? [];
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        if (!binding.create) {
+          throw new Error("Nội dung này có số mục cố định, không thể thêm mục mới.");
+        }
+        const saved = await binding.create(resourceKey, current, input);
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        const known = new Set(current.map((item) => item.id));
+        return saved.find((item) => !known.has(item.id)) ?? input;
+      }
       const next = await adminCrudMockService.create(current, input);
       setRecordsByResource((state) => ({ ...state, [resourceKey]: next }));
       return input;
@@ -136,10 +143,16 @@ export function AdminCrudProvider({ children }: { children: React.ReactNode }) {
 
   const removeRecord = useCallback(
     async (resourceKey: string, id: string) => {
-      if (getRemoteBinding(resourceKey)) {
-        throw new Error("Nội dung này có số mục cố định, không thể xóa.");
-      }
       const current = recordsByResource[resourceKey] ?? [];
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        if (!binding.remove) {
+          throw new Error("Nội dung này có số mục cố định, không thể xóa.");
+        }
+        const saved = await binding.remove(resourceKey, current, id);
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        return;
+      }
       const next = await adminCrudMockService.remove(current, id);
       setRecordsByResource((state) => ({ ...state, [resourceKey]: next }));
     },

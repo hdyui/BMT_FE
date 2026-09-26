@@ -1,21 +1,17 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import styles from "@/features/quotation/quotation.module.css";
+import { quotationChrome } from "@/features/quotation/data/quotation-chrome";
 import {
-  quotationAreaInput,
-  quotationBudgetInput,
-  quotationBuildingTypes as buildingTypes,
-  quotationNavLabels,
-  quotationRates,
-  quotationResultIncludeLabel,
-  quotationServiceTypes as serviceTypes,
-  quotationStepCopy as stepCopy,
-  quotationSteps as steps,
-} from "@/features/quotation/data/quotation-estimator";
+  BUILDING_TYPE_CODES,
+  ESTIMATE_LIMITS,
+  SERVICE_TYPE_CODES,
+} from "@/features/quotation/services/estimate-codes";
 import {
-  calculateQuotation,
+  estimateQuotation,
+  type QuotationEstimate,
   type QuotationPageContent,
 } from "@/features/quotation/services/quotation.service";
 
@@ -41,38 +37,37 @@ function formatNumber(value: number) {
 export function QuotationEstimator({
   content,
 }: {
-  content?: QuotationPageContent["estimator"];
+  content: QuotationPageContent["estimator"];
 }) {
-  const currentSteps = content?.stepLabels ?? steps;
-  const currentBuildingTypes = content?.buildingType.options ?? buildingTypes;
-  const currentServiceTypes = content?.service.options ?? serviceTypes;
-  const currentStepCopy = content
-    ? [
-        [content.buildingType.heading, content.buildingType.instruction],
-        [content.area.heading, content.area.instruction],
-        [content.budget.heading, content.budget.instruction],
-        [content.service.heading, content.service.instruction],
-      ]
-    : stepCopy;
+  const {
+    stepLabels,
+    buildingType,
+    area: areaContent,
+    budget: budgetContent,
+    service: serviceContent,
+  } = content;
+  const stepCopy = [
+    [buildingType.heading, buildingType.instruction],
+    [areaContent.heading, areaContent.instruction],
+    [budgetContent.heading, budgetContent.instruction],
+    [serviceContent.heading, serviceContent.instruction],
+  ];
   const sectionRef = useRef<HTMLElement>(null);
   const progressRef = useRef<HTMLDivElement>(null);
   const mobileTrackRef = useRef<HTMLSpanElement>(null);
   const stepButtonRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const [inView, setInView] = useState(false);
   const [step, setStep] = useState(0);
-  const [building, setBuilding] = useState(currentBuildingTypes[0] ?? buildingTypes[0]);
-  const [service, setService] = useState(currentServiceTypes[0] ?? serviceTypes[0]);
+  const [buildingIndex, setBuildingIndex] = useState(0);
+  const [serviceIndex, setServiceIndex] = useState(0);
   const [area, setArea] = useState("");
   const [budget, setBudget] = useState("");
   const [areaError, setAreaError] = useState("");
   const [budgetError, setBudgetError] = useState("");
   const [areaTouched, setAreaTouched] = useState(false);
   const [budgetTouched, setBudgetTouched] = useState(false);
-  const [apiEstimate, setApiEstimate] = useState<{
-    low: number;
-    high: number;
-    rate: number;
-  } | null>(null);
+  const [retry, setRetry] = useState(0);
+  const [result, setResult] = useState<{ key: string; data?: QuotationEstimate } | null>(null);
 
   useEffect(() => {
     const node = sectionRef.current;
@@ -115,88 +110,62 @@ export function QuotationEstimator({
     return () => resizeObserver.disconnect();
   }, [step]);
 
-  const localEstimate = useMemo(() => {
-    const squareMeters = digitsOnly(area) ? Number(area) : 80;
-    const [lowRate, highRate] = quotationRates[service];
-    return {
-      low: squareMeters * lowRate,
-      high: squareMeters * highRate,
-      rate: Math.round((lowRate + highRate) / 2 / 50000) * 50000,
-      squareMeters,
-    };
-  }, [area, service]);
+  // Ước tính do backend tính (POST /quotation/estimate) từ bảng giá thị trường của
+  // admin; không có công thức hay bảng giá dự phòng ở FE.
+  const requestKey =
+    step === 4 ? [buildingIndex, serviceIndex, area, budget, retry].join("|") : null;
 
   useEffect(() => {
-    if (step !== 4 || !digitsOnly(area) || !digitsOnly(budget.replaceAll(".", ""))) {
-      return;
-    }
-
+    if (requestKey === null) return;
     let cancelled = false;
-    void calculateQuotation({
-      buildingType: building,
+    estimateQuotation({
+      buildingType: BUILDING_TYPE_CODES[buildingIndex],
+      serviceType: SERVICE_TYPE_CODES[serviceIndex],
       areaM2: Number(area),
       budget: Number(budget.replaceAll(".", "")),
-      serviceType: service,
     })
-      .then((response) => {
-        const payload =
-          response && typeof response === "object" && "value" in response
-            ? response.value
-            : response;
-        if (!payload || typeof payload !== "object") return;
-
-        const result = payload as Record<string, unknown>;
-        const low = Number(result.low ?? result.min ?? result.unitPriceMin);
-        const high = Number(result.high ?? result.max ?? result.unitPriceMax);
-        if (!Number.isFinite(low) || !Number.isFinite(high) || cancelled) return;
-
-        setApiEstimate({
-          low: result.unitPriceMin ? low * Number(area) : low,
-          high: result.unitPriceMax ? high * Number(area) : high,
-          rate: Math.round(((low + high) / 2) / 50000) * 50000,
-        });
+      .then((data) => {
+        if (!cancelled) setResult({ key: requestKey, data });
       })
       .catch(() => {
-        if (!cancelled) setApiEstimate(null);
+        if (!cancelled) setResult({ key: requestKey });
       });
-
     return () => {
       cancelled = true;
     };
-  }, [area, budget, building, service, step]);
+  }, [requestKey, buildingIndex, serviceIndex, area, budget]);
 
-  const estimate = {
-    ...localEstimate,
-    ...(apiEstimate ?? {}),
-  };
+  const estimate = requestKey !== null && result?.key === requestKey ? result : null;
+
+  function areaProblem(value: string) {
+    if (!value.trim()) return quotationChrome.areaRequired;
+    if (!digitsOnly(value)) return quotationChrome.digitsOnly;
+    const squareMeters = Number(value);
+    if (squareMeters < ESTIMATE_LIMITS.areaMin || squareMeters > ESTIMATE_LIMITS.areaMax) {
+      return quotationChrome.areaRange;
+    }
+    return "";
+  }
+
+  function budgetProblem(plain: string) {
+    if (!plain.trim()) return quotationChrome.budgetRequired;
+    if (!digitsOnly(plain)) return quotationChrome.digitsOnly;
+    if (Number(plain) > ESTIMATE_LIMITS.budgetMax) return quotationChrome.budgetMax;
+    return "";
+  }
 
   function validateArea() {
     setAreaTouched(true);
-    if (!area.trim()) {
-      setAreaError("Vui lòng nhập diện tích.");
-      return false;
-    }
-    if (!digitsOnly(area)) {
-      setAreaError("Vui lòng chỉ nhập số");
-      return false;
-    }
-    setAreaError("");
-    return true;
+    const problem = areaProblem(area);
+    setAreaError(problem);
+    return !problem;
   }
 
   function validateBudget() {
     setBudgetTouched(true);
-    const plain = budget.replaceAll(".", "");
-    if (!plain.trim()) {
-      setBudgetError("Vui lòng nhập ngân sách.");
-      return false;
-    }
-    if (!digitsOnly(plain)) {
-      setBudgetError("Vui lòng chỉ nhập số");
-      return false;
-    }
-    setBudgetError("");
-    return true;
+    const problem = budgetProblem(budget.replaceAll(".", ""));
+    setBudgetError(problem);
+    return !problem;
   }
 
   function next() {
@@ -211,20 +180,14 @@ export function QuotationEstimator({
 
   function updateArea(value: string) {
     setArea(value);
-    if (!areaTouched) return;
-    if (!value.trim()) setAreaError("Vui lòng nhập diện tích.");
-    else if (!digitsOnly(value)) setAreaError("Vui lòng chỉ nhập số");
-    else setAreaError("");
+    if (areaTouched) setAreaError(areaProblem(value));
   }
 
   function updateBudget(value: string) {
     const plain = value.replaceAll(".", "");
     if (digitsOnly(plain)) setBudget(formatNumber(Number(plain)));
     else setBudget(value);
-    if (!budgetTouched) return;
-    if (!plain.trim()) setBudgetError("Vui lòng nhập ngân sách.");
-    else if (!digitsOnly(plain)) setBudgetError("Vui lòng chỉ nhập số");
-    else setBudgetError("");
+    if (budgetTouched) setBudgetError(budgetProblem(plain));
   }
 
   return (
@@ -247,7 +210,7 @@ export function QuotationEstimator({
             ref={mobileTrackRef}
             aria-hidden="true"
           />
-          {currentSteps.map((label, index) => (
+          {stepLabels.map((label, index) => (
             <div
               className={`contents md:relative md:z-[1] md:flex md:min-w-0 md:items-center md:justify-start md:self-stretch ${styles.progressItem}`}
               style={{
@@ -283,7 +246,7 @@ export function QuotationEstimator({
                 )}
               </button>
               <span
-                className={`relative mx-[0.1875rem] h-px min-w-1 flex-1 self-center bg-[#171415] md:mr-2 md:ml-3 md:h-0.5 md:min-w-[1.5625rem] ${styles.progressMobileItem} ${index === steps.length - 1 ? "hidden md:block" : "block"}`}
+                className={`relative mx-[0.1875rem] h-px min-w-1 flex-1 self-center bg-[#171415] md:mr-2 md:ml-3 md:h-0.5 md:min-w-[1.5625rem] ${styles.progressMobileItem} ${index === stepLabels.length - 1 ? "hidden md:block" : "block"}`}
                 style={{ animationDelay: `${index * 90}ms` }}
                 aria-hidden="true"
               />
@@ -301,10 +264,10 @@ export function QuotationEstimator({
                 id="estimator-title"
                 className="m-0 text-[1.5rem] leading-[1.08] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)] md:leading-[1.1]"
               >
-                {currentStepCopy[step][0]}
+                {stepCopy[step][0]}
               </h2>
               <p className="mx-auto mt-2 mb-0 min-h-8 max-w-[26rem] text-[0.72rem] leading-[1.35] text-balance md:mt-[0.8125rem] md:min-h-0 md:max-w-none md:text-[0.9375rem] md:leading-5">
-                {currentStepCopy[step][1]}
+                {stepCopy[step][1]}
               </p>
               <HeadingRule />
             </>
@@ -314,7 +277,7 @@ export function QuotationEstimator({
                 id="estimator-title"
                 className="m-0 text-[1.5rem] leading-[1.08] font-extrabold md:text-[clamp(1.875rem,3vw,2.5rem)] md:leading-[1.1]"
               >
-                ƯỚC TÍNH CỦA BẠN
+                {quotationChrome.resultHeading}
               </h2>
               <HeadingRule />
             </>
@@ -322,18 +285,18 @@ export function QuotationEstimator({
 
           {step === 0 && (
             <OptionGrid
-              options={currentBuildingTypes}
-              selected={building}
-              onSelect={setBuilding}
+              options={buildingType.options}
+              selected={buildingType.options[buildingIndex]}
+              onSelect={(value) => setBuildingIndex(Math.max(0, buildingType.options.indexOf(value)))}
             />
           )}
 
           {step === 1 && (
             <UnitInput
               id="area"
-              placeholder={content?.area.placeholder ?? quotationAreaInput.placeholder}
+              placeholder={areaContent.placeholder}
               value={area}
-              unit={content?.area.unit ?? quotationAreaInput.unit}
+              unit={areaContent.unit}
               error={areaError}
               valid={areaTouched && !areaError && digitsOnly(area)}
               onBlur={validateArea}
@@ -344,9 +307,9 @@ export function QuotationEstimator({
           {step === 2 && (
             <UnitInput
               id="budget"
-              placeholder={content?.budget.placeholder ?? quotationBudgetInput.placeholder}
+              placeholder={budgetContent.placeholder}
               value={budget}
-              unit={content?.budget.unit ?? quotationBudgetInput.unit}
+              unit={budgetContent.unit}
               error={budgetError}
               valid={
                 budgetTouched &&
@@ -360,9 +323,9 @@ export function QuotationEstimator({
 
           {step === 3 && (
             <OptionGrid
-              options={currentServiceTypes}
-              selected={service}
-              onSelect={setService}
+              options={serviceContent.options}
+              selected={serviceContent.options[serviceIndex]}
+              onSelect={(value) => setServiceIndex(Math.max(0, serviceContent.options.indexOf(value)))}
             />
           )}
 
@@ -376,27 +339,41 @@ export function QuotationEstimator({
                 className={`group/result relative grid h-[3.25rem] w-full place-items-center overflow-hidden rounded-full border-2 border-[#ef7b30] bg-[#f2f2f4] transition-[background-color] duration-[250ms] hover:bg-[#ececee] md:h-19 ${styles.animResult}`}
               >
                 <strong className="relative z-[1] text-[clamp(1.3125rem,6.3vw,1.875rem)] leading-none md:text-[clamp(1.75rem,3.2vw,2.6875rem)]">
-                  {formatNumber(estimate.low)}đ - {formatNumber(estimate.high)}đ
+                  {estimate?.data
+                    ? `${formatNumber(estimate.data.estimateMin)}đ - ${formatNumber(estimate.data.estimateMax)}đ`
+                    : estimate
+                      ? quotationChrome.calculateFailed
+                      : quotationChrome.calculating}
                 </strong>
                 <span
                   className={`absolute inset-0 z-[2] bg-white ${styles.animCurtain}`}
                   aria-hidden="true"
                 />
               </div>
-              <p
-                className={`mt-5 mb-0 text-[0.8125rem] leading-[1.45] md:text-[0.9375rem] md:leading-normal ${styles.animResultCaption}`}
-              >
-                ~ {formatNumber(estimate.rate)} đ/m² - {building}{" "}
-                {estimate.squareMeters} {content?.area.unit ?? quotationAreaInput.unit} - {content?.resultIncludeLabel ?? quotationResultIncludeLabel}{" "}
-                {service.toLocaleLowerCase("vi")}
-              </p>
+              {estimate?.data ? (
+                <p
+                  className={`mt-5 mb-0 text-[0.8125rem] leading-[1.45] md:text-[0.9375rem] md:leading-normal ${styles.animResultCaption}`}
+                >
+                  ~ {formatNumber(estimate.data.displayUnitPrice)} đ/m² -{" "}
+                  {buildingType.options[buildingIndex]} {estimate.data.areaM2} {areaContent.unit} -{" "}
+                  {content.resultIncludeLabel} {serviceContent.options[serviceIndex].toLocaleLowerCase("vi")}
+                </p>
+              ) : estimate ? (
+                <button
+                  className="mt-4 rounded-full border border-[#ef7b30] px-5 py-2 text-sm text-[#231f20] transition-colors hover:bg-[#f2f2f4]"
+                  type="button"
+                  onClick={() => setRetry((count) => count + 1)}
+                >
+                  {quotationChrome.retry}
+                </button>
+              ) : null}
             </div>
           )}
 
           <div className="mt-5 flex items-center justify-between md:mt-[2.1875rem]">
-            <StepButton onClick={previous} label={quotationNavLabels.back} icon="left" />
+            <StepButton onClick={previous} label={quotationChrome.back} icon="left" />
             {step < 4 && (
-              <StepButton onClick={next} label={quotationNavLabels.next} icon="right" />
+              <StepButton onClick={next} label={quotationChrome.next} icon="right" />
             )}
           </div>
         </div>

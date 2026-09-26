@@ -1,5 +1,6 @@
-import { apiClient } from "@/lib/api";
-import type { ApiEnvelope } from "@/lib/api";
+import type { BuildingTypeCode, ServiceTypeCode } from "@/features/quotation/services/estimate-codes";
+import { api } from "@/shared/lib/api/client";
+import { fetchPageContent } from "@/shared/lib/api/public-content";
 
 export interface QuotationOptionSection {
   heading: string;
@@ -7,107 +8,69 @@ export interface QuotationOptionSection {
   options: string[];
 }
 
-export interface QuotationTextSection {
+export interface QuotationInputSection {
   heading: string;
   instruction: string;
   placeholder: string;
   unit: string;
 }
 
+/** Nội dung trang Báo giá (`GET /pages/quotation` → `content`). */
 export interface QuotationPageContent {
   hero: {
     eyebrow: string;
     title: string;
     description: string;
-    mobileImage: string;
-    mainPhoto: string;
+    mobileImage?: string;
+    mainPhoto?: string;
   };
   estimator: {
     stepLabels: string[];
     buildingType: QuotationOptionSection;
-    area: QuotationTextSection;
-    budget: QuotationTextSection;
+    area: QuotationInputSection;
+    budget: QuotationInputSection;
     service: QuotationOptionSection;
     resultIncludeLabel: string;
   };
   contactForm: {
     title: string;
-    subtitle: string;
+    subtitle?: string;
     requiredMessage: string;
     successMessage: string;
   };
 }
 
+/** Trang public: `null` khi backend không trả được nội dung. */
+export function getQuotationContent() {
+  return fetchPageContent<QuotationPageContent>("quotation");
+}
+
 export interface QuotationEstimateRequest {
-  buildingType: string;
+  buildingType: BuildingTypeCode;
+  serviceType: ServiceTypeCode;
   areaM2: number;
   budget?: number | null;
+}
+
+/** Kết quả `POST /quotation/estimate` (số tiền đã làm tròn đến 1.000đ). */
+export interface QuotationEstimate {
+  buildingType: string;
   serviceType: string;
+  areaM2: number;
+  unitPriceMin: number;
+  unitPriceMax: number;
+  estimateMin: number;
+  estimateMax: number;
+  displayUnitPrice: number;
+  budgetComparison: {
+    status: "thieu" | "phu_hop" | "du";
+    difference: number;
+    ratio: number;
+    budgetPerM2: number;
+  } | null;
 }
 
-export interface QuotationEstimateResponse {
-  low?: number;
-  high?: number;
-  min?: number;
-  max?: number;
-  rate?: number;
-  unitPriceMin?: number;
-  unitPriceMax?: number;
-  [key: string]: unknown;
-}
-
-function unwrap<T>(response: ApiEnvelope<T>) {
-  if (!response.isSuccess) {
-    throw new Error("Quotation API returned an unsuccessful response.");
-  }
-  return response.value;
-}
-
-export async function getQuotationPage() {
-  const response = await apiClient.get<ApiEnvelope<{
-    pageCode: string;
-    content: QuotationPageContent;
-  }>>("/api/v1/pages/quotation");
-  return unwrap(response);
-}
-
-export async function getAdminQuotationPage() {
-  const response = await apiClient.get<
-    ApiEnvelope<ApiEnvelope<{
-      pageCode: string;
-      content: QuotationPageContent;
-    }>>
-  >("/api/v1/admin/pages/quotation");
-  return unwrap(response).value;
-}
-
-export function calculateQuotation(input: QuotationEstimateRequest) {
-  return apiClient.post<QuotationEstimateResponse | ApiEnvelope<QuotationEstimateResponse>>(
-    "/api/v1/quotation/estimate",
-    input,
-  );
-}
-
-export async function updateQuotationHero(input: unknown) {
-  return apiClient.patch("/api/v1/admin/pages/quotation/hero", input);
-}
-
-export async function updateQuotationEstimator(input: unknown) {
-  return apiClient.patch("/api/v1/admin/pages/quotation/estimator", input);
-}
-
-export async function updateQuotationContactForm(input: unknown) {
-  return apiClient.patch("/api/v1/admin/pages/quotation/contact-form", input);
-}
-
-export async function getQuotationPriceRanges() {
-  return apiClient.get("/api/v1/admin/price-ranges");
-}
-
-export async function createQuotationPriceRange(input: unknown) {
-  return apiClient.post("/api/v1/admin/price-ranges", input);
-}
-
-export async function updateQuotationPriceRange(id: string, input: unknown) {
-  return apiClient.patch(`/api/v1/admin/price-ranges/${id}`, input);
+/** Công thức tính nằm ở backend, dựa trên bảng giá thị trường admin nhập. */
+export function estimateQuotation(input: QuotationEstimateRequest) {
+  return api.post<QuotationEstimate>("/quotation/estimate", input, { public: true });
 }

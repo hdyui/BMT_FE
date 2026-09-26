@@ -3,7 +3,7 @@ import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
-import { RichText } from "@/features/services/components/RichText";
+import { RichText } from "@/shared/components/RichText";
 import type { ConstructionProcessStep } from "@/features/services/components/ConstructionProcessList";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";

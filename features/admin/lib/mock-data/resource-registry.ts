@@ -13,21 +13,7 @@ import {
   homeTrustReasons,
 } from "@/features/home/data/home-content";
 import { articles } from "@/features/news/data/news-page";
-import {
-  quotationAreaInput,
-  quotationBudgetInput,
-  quotationBuildingTypes,
-  quotationMarketRanges,
-  quotationNavLabels,
-  quotationResultIncludeLabel,
-  quotationServiceTypes,
-  quotationStepCopy,
-  quotationMobileHeroImage,
-  quotationSteps,
-} from "@/features/quotation/data/quotation-estimator";
 import { SERVICE_PAGES } from "@/features/services/api/spec";
-import { contactFormContent as quotationContactForm } from "@/features/quotation/data/quotation-contact-form";
-import { contactFormContent as capabilityProfileContactForm } from "@/features/capability-profile/data/contact-form";
 import { mockHomeHeroSlides } from "@/features/admin/lib/mock-data/home";
 import { mockProjectContent } from "@/features/admin/lib/mock-data/projects";
 import { projects as publicProjectDetails } from "@/features/projects/data/project-details";
@@ -98,9 +84,6 @@ const image = (
   label: string,
   options: Partial<AdminFieldConfig> = {},
 ): AdminFieldConfig => ({ key, label, type: "image", ...options });
-
-const lockedImage = (key: string, label: string): AdminFieldConfig =>
-  image(key, label, { editable: false });
 
 const list = (
   key: string,
@@ -1162,6 +1145,15 @@ const projectResources: AdminResourceConfig[] = [
 const serviceSlots = (resourceKey: string) =>
   SERVICE_PAGES.flatMap((page) => page.sections).find((item) => item.resourceKey === resourceKey)?.slots ?? 0;
 
+/** Nhãn cố định của 4 loại hình × 4 gói mà backend tính giá (theo mã enum, xem `quotation/services/estimate-codes.ts`). */
+const marketBuildingLabels = ["Nhà ở", "Văn phòng", "Thẩm mỹ viện, showroom", "Nhà hàng, khách sạn"];
+const marketServiceLabels = [
+  "Xây dựng trọn gói",
+  "Thiết kế kiến trúc & nội thất",
+  "Thi công xây dựng",
+  "Cải tạo & sửa chữa",
+];
+
 function serviceCollection(
   path: string,
   title: string,
@@ -1669,11 +1661,11 @@ const remainingResources: AdminResourceConfig[] = [
     kind: "singleton",
     titleField: "title",
     previewField: "mainPhoto",
-    // Site: dòng giới thiệu + tiêu đề + nút nằm cột trái, mô tả cột phải.
+    // Site: dòng giới thiệu + tiêu đề nằm cột trái, mô tả cột phải.
     editorLayout: {
       splitColumns: {
-        left: ["eyebrow", "title", "ctaLabel"],
-        right: ["description", "ctaHref"],
+        left: ["eyebrow", "title"],
+        right: ["description"],
       },
     },
     sections: [
@@ -1681,65 +1673,16 @@ const remainingResources: AdminResourceConfig[] = [
         text("eyebrow", "Khối Hero · Dòng giới thiệu"),
         textarea("title", "Khối Hero · Tiêu đề chính", { required: true }),
         textarea("description", "Khối Hero · Nội dung mô tả"),
-        text("ctaLabel", "Khối Hero · Chữ trên nút liên hệ"),
-        siteLink("ctaHref", "Khối Hero · Liên kết nút liên hệ"),
       ]),
       section("main-media", "Hình ảnh chính", [
-        lockedImage("desktopBackground", "Khối Hero · Ảnh nền trên máy tính"),
-        lockedImage("tabletBackground", "Khối Hero · Ảnh nền trên máy tính bảng"),
-        image("mobileImage", "Khối Hero · Ảnh trên điện thoại", { altKey: "mobileAlt" }),
-        image("mainPhoto", "Khối Hero · Ảnh kiến trúc sư", { altKey: "mainPhotoAlt" }),
-        lockedImage("accentLine", "Khối Hero · Thanh màu cam"),
-        lockedImage("introLogo", "Khối Hero · Logo đầu đoạn text"),
-        lockedImage("buttonBackground", "Khối Hero · Ảnh nền nút liên hệ"),
-      ]),
-      section("decor", "Hình ảnh trang trí", [
-        lockedImage("decor01", "Khối Hero · Hình trang trí 1"),
-        lockedImage("decor02", "Khối Hero · Hình trang trí 2"),
-        lockedImage("decor03", "Khối Hero · Hình trang trí 3"),
-        lockedImage("decor04", "Khối Hero · Hình trang trí 4"),
-        lockedImage("decor08", "Khối Hero · Hình trang trí 5"),
-        lockedImage("decor09", "Khối Hero · Hình trang trí 6"),
-        lockedImage("decor10", "Khối Hero · Hình trang trí 7"),
-        lockedImage("decor11", "Khối Hero · Hình trang trí 8"),
-        lockedImage("decor12", "Khối Hero · Hình trang trí 9"),
-        lockedImage("decor13", "Khối Hero · Hình trang trí 10"),
+        image("mobileImage", "Khối Hero · Ảnh trên điện thoại"),
+        image("mainPhoto", "Khối Hero · Ảnh kiến trúc sư"),
       ]),
     ],
-    initialRecords: [record("quotation-hero", {
-      eyebrow: "BÁO GIÁ DỊCH VỤ BMT DECOR",
-      title: "MINH BẠCH VÀ\nTỐI ƯU CHI PHÍ",
-      description: "Tham khảo báo giá các dịch vụ thiết kế kiến trúc & nội thất, thiết kế thi công, xây nhà trọn gói, thi công nội & ngoại thất, cải tạo và sửa chữa nhà. Mỗi phương án được tư vấn và báo giá chi tiết theo nhu cầu thực tế, giúp khách hàng tối ưu ngân sách.",
-      ctaLabel: "LIÊN HỆ NGAY",
-      ctaHref: "/contact",
-      desktopBackground: "/images/bao-gia/decor-06.jpg",
-      tabletBackground: "/images/bao-gia/decor-14.jpg",
-      mobileImage: quotationMobileHeroImage,
-      mobileAlt: "Kiến trúc sư BMT Decor đang tính toán phương án thiết kế",
-      mainPhoto: "/images/bao-gia/decor-07.jpg",
-      mainPhotoAlt: "Kiến trúc sư BMT Decor đang tính toán phương án thiết kế",
-      accentLine: "/images/bao-gia/decor-15.jpg",
-      introLogo: "/images/bao-gia/dong goi trang bao gia web BMT decor-16.png",
-      buttonBackground: "/images/bao-gia/decor-17.jpg",
-      decor01: "/images/bao-gia/decor-01.jpg",
-      decor02: "/images/bao-gia/decor-02.jpg",
-      decor03: "/images/bao-gia/decor-03.jpg",
-      decor04: "/images/bao-gia/decor-04.jpg",
-      decor08: "/images/bao-gia/decor-08.jpg",
-      decor09: "/images/bao-gia/decor-09.jpg",
-      decor10: "/images/bao-gia/decor-10.jpg",
-      decor11: "/images/bao-gia/decor-11.jpg",
-      decor12: "/images/bao-gia/decor-12.jpg",
-      decor13: "/images/bao-gia/decor-13.jpg",
-    })],
+    initialRecords: [],
   }),
-  contactFormResource("quotation", "contact-form", "Báo giá", quotationContactForm),
-  contactFormResource(
-    "settings",
-    "capability-profile/contact-form",
-    "Hồ sơ năng lực",
-    capabilityProfileContactForm,
-  ),
+  contactFormResource("quotation", "contact-form", "Báo giá"),
+  contactFormResource("settings", "capability-profile/contact-form", "Hồ sơ năng lực"),
   resource({
     module: "contacts",
     path: "hero",
@@ -1787,42 +1730,18 @@ const remainingResources: AdminResourceConfig[] = [
     sections: [
       section("hero-copy", "Nội dung phần mở đầu", [
         textarea("title", "Khối Hero · Tiêu đề chính", { required: true }),
-        text("subtitle", "Khối Hero · Tiêu đề phụ"),
-        textarea("description", "Khối Hero · Nội dung mô tả"),
+        text("subtitle", "Khối Hero · Tiêu đề phụ", { required: true }),
+        textarea("description", "Khối Hero · Nội dung mô tả", { required: true }),
       ]),
       section("hero-media", "Hình ảnh phần mở đầu", [
-        image("heroImage", "Khối Hero · Ảnh Hồ sơ năng lực", { altKey: "heroAlt" }),
-        lockedImage("lineLogo", "Khối Hero · Logo line đen"),
+        image("heroImage", "Khối Hero · Ảnh Hồ sơ năng lực"),
         image("decor08", "Khối Hero · Hình phác thảo công trình"),
-        lockedImage("decor04", "Khối Hero · Hình trang trí 1"),
-        lockedImage("decor05", "Khối Hero · Hình trang trí 2"),
-        lockedImage("decor06", "Khối Hero · Hình trang trí 3"),
-        lockedImage("decor07", "Khối Hero · Hình trang trí 4"),
-        lockedImage("decor09", "Khối Hero · Hình trang trí 5"),
-        lockedImage("decor11", "Khối Hero · Hình trang trí 6"),
       ]),
       section("document", "Phần tài liệu", [
-        text("documentHeading", "Tiêu đề phần hồ sơ"),
-        lockedImage("documentLine", "Logo line đen dưới tiêu đề"),
+        text("documentHeading", "Tiêu đề phần hồ sơ", { required: true }),
       ]),
     ],
-    initialRecords: [record("capability-profile", {
-      title: "HỒ SƠ NĂNG LỰC\nBMT DECOR",
-      subtitle: "KHẲNG ĐỊNH NĂNG LỰC - ĐỒNG HÀNH KIẾN TẠO GIÁ TRỊ BỀN VỮNG",
-      description: "Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ chuyên môn, quy trình triển khai và các dự án tiêu biểu, phản ánh năng lực thiết kế, thi công và cải tạo công trình một cách chuyên nghiệp và đồng bộ.",
-      heroImage: "/images/capability-profile/hero-profile.webp",
-      heroAlt: "Bộ hồ sơ năng lực BMT Decor được trưng bày trên bàn gỗ",
-      lineLogo: "/images/capability-profile/decor-14.webp",
-      decor04: "/images/capability-profile/decor-04.webp",
-      decor05: "/images/capability-profile/decor-05.webp",
-      decor06: "/images/capability-profile/decor-06.webp",
-      decor07: "/images/capability-profile/decor-07.webp",
-      decor08: "/images/capability-profile/decor-08.webp",
-      decor09: "/images/capability-profile/decor-09.webp",
-      decor11: "/images/capability-profile/decor-11.webp",
-      documentHeading: "HỒ SƠ DOANH NGHIỆP",
-      documentLine: "/images/capability-profile/decor-14.webp",
-    })],
+    initialRecords: [],
   }),
   resource({
     module: "settings",
@@ -1833,14 +1752,13 @@ const remainingResources: AdminResourceConfig[] = [
     priority: "P2",
     kind: "collection",
     collectionMode: "dynamic",
+    // Tên "Trang N" do hệ thống đặt theo thứ tự (trang web chỉ hiện ảnh).
     titleField: "title",
     previewField: "image",
     orderField: "order",
     sections: [
       section("content", "Nội dung trang", [
-        text("title", "Tên trang", { required: true, span: 12 }),
         image("image", "Ảnh trang", {
-          altKey: "imageAlt",
           ratio: "1:1.414",
           recommendedSize: "1240 x 1754px",
           required: true,
@@ -1848,22 +1766,7 @@ const remainingResources: AdminResourceConfig[] = [
         orderField,
       ]),
     ],
-    initialRecords: Array.from({ length: 20 }, (_, index) => {
-      const pageNumber = index + 1;
-      const paddedNumber = String(pageNumber).padStart(2, "0");
-      const title =
-        pageNumber === 1
-          ? "Bìa trước hồ sơ năng lực BMT Decor"
-          : pageNumber === 20
-            ? "Bìa sau hồ sơ năng lực BMT Decor"
-            : `Trang ${pageNumber} hồ sơ năng lực BMT Decor`;
-      return record(`capability-profile-page-${paddedNumber}`, {
-        title,
-        image: `/images/capability-profile/profile-page-${paddedNumber}.webp`,
-        imageAlt: title,
-        order: pageNumber,
-      });
-    }),
+    initialRecords: [],
   }),
   resource({
     module: "news",
@@ -1988,86 +1891,52 @@ const remainingResources: AdminResourceConfig[] = [
     path: "estimator",
     title: "Nội dung công cụ ước tính",
     singular: "Nội dung công cụ ước tính",
-    description: "Quản lý hướng dẫn và lựa chọn trong công cụ ước tính.",
+    description: "Quản lý hướng dẫn, lựa chọn và khoảng giá thị trường trong công cụ ước tính.",
     priority: "P1",
     kind: "singleton",
     titleField: "heading1",
     sections: [
       section("steps", "Thanh tiến trình", [list("stepLabels", "Tên các bước", { listMode: "fixed", listLayout: "inline" })]),
-      section(`step-01`, `Bước 01 · ${quotationSteps[0]}`, [
+      section("step-01", "Bước 01 · Loại hình", [
         text("heading1", "Tiêu đề", { required: true }),
         text("instruction1", "Hướng dẫn"),
         list("buildingOptions", "Các loại hình", { listMode: "fixed", listLayout: "inline" }),
       ]),
-      section(`step-02`, `Bước 02 · ${quotationSteps[1]}`, [
+      section("step-02", "Bước 02 · Diện tích", [
         text("heading2", "Tiêu đề", { required: true }),
         text("instruction2", "Hướng dẫn"),
         text("areaPlaceholder", "Chữ gợi ý trong ô nhập"),
         text("areaUnit", "Đơn vị hiển thị trong ô nhập"),
       ]),
-      section(`step-03`, `Bước 03 · ${quotationSteps[2]}`, [
+      section("step-03", "Bước 03 · Ngân sách", [
         text("heading3", "Tiêu đề", { required: true }),
         text("instruction3", "Hướng dẫn"),
         text("budgetPlaceholder", "Chữ gợi ý trong ô nhập"),
         text("budgetUnit", "Đơn vị hiển thị trong ô nhập"),
       ]),
-      section(`step-04`, `Bước 04 · ${quotationSteps[3]}`, [
+      section("step-04", "Bước 04 · Gói", [
         text("heading4", "Tiêu đề", { required: true }),
         text("instruction4", "Hướng dẫn"),
         list("serviceOptions", "Các gói", { listMode: "fixed", listLayout: "inline" }),
       ]),
-      // Bước 05 đang chạy trên dữ liệu giả, chưa nối API nên chỉ mở đúng dòng
-      // chữ tĩnh trong câu kết quả.
-      section(`step-05`, `Bước 05 · ${quotationSteps[4]}`, [
+      section("step-05", "Bước 05 · Ước tính", [
         text("resultIncludeLabel", "Chữ đứng trước tên gói ở dòng kết quả"),
       ]),
-      ...quotationBuildingTypes.map((building, buildingIndex) =>
+      // Khoảng giá lưu ở bảng `price-ranges` của backend, gắn theo mã loại hình × gói
+      // (không theo chữ nhãn), nên nhãn ở đây cố định.
+      ...marketBuildingLabels.map((building, buildingIndex) =>
         section(
           `market-${buildingIndex}`,
           `Khoảng thị trường · ${building} (đ/m² sàn)`,
-          quotationServiceTypes.flatMap((service, serviceIndex) => [
+          marketServiceLabels.flatMap((service, serviceIndex) => [
             number(`market_${buildingIndex}_${serviceIndex}_min`, `${service} · Từ`, { span: 6, required: true }),
             number(`market_${buildingIndex}_${serviceIndex}_max`, `${service} · Đến`, { span: 6, required: true }),
           ]),
           "Đơn giá hiển thị ở bước 05 được hệ thống tính từ khoảng này theo loại hình và gói khách chọn.",
         ),
       ),
-      section("nav", "Nút chuyển bước", [
-        text("backLabel", "Chữ trên nút lùi lại", { required: true }),
-        text("nextLabel", "Chữ trên nút đi tiếp", { required: true }),
-      ]),
     ],
-    initialRecords: [record("quotation-estimator", {
-      ...Object.fromEntries(
-        quotationBuildingTypes.flatMap((building, buildingIndex) =>
-          quotationServiceTypes.flatMap((_, serviceIndex) => {
-            const [min, max] = quotationMarketRanges[building][serviceIndex];
-            return [
-              [`market_${buildingIndex}_${serviceIndex}_min`, min],
-              [`market_${buildingIndex}_${serviceIndex}_max`, max],
-            ];
-          }),
-        ),
-      ),
-      stepLabels: [...quotationSteps],
-      heading1: quotationStepCopy[0][0],
-      instruction1: quotationStepCopy[0][1],
-      buildingOptions: [...quotationBuildingTypes],
-      heading2: quotationStepCopy[1][0],
-      instruction2: quotationStepCopy[1][1],
-      areaPlaceholder: quotationAreaInput.placeholder,
-      areaUnit: quotationAreaInput.unit,
-      heading3: quotationStepCopy[2][0],
-      instruction3: quotationStepCopy[2][1],
-      budgetPlaceholder: quotationBudgetInput.placeholder,
-      budgetUnit: quotationBudgetInput.unit,
-      heading4: quotationStepCopy[3][0],
-      instruction4: quotationStepCopy[3][1],
-      serviceOptions: [...quotationServiceTypes],
-      resultIncludeLabel: quotationResultIncludeLabel,
-      backLabel: quotationNavLabels.back,
-      nextLabel: quotationNavLabels.next,
-    })],
+    initialRecords: [],
   }),
   resource({
     module: "contacts",

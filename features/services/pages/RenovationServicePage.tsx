@@ -6,8 +6,8 @@ import { Reveal } from "@/shared/components/Reveal";
 import { ContactForm } from "@/shared/components/ContactForm";
 
 // Tái sử dụng components dùng chung
-import { RichText } from "@/features/services/components/RichText";
-import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
+import { RichText } from "@/shared/components/RichText";
+import { ContentUnavailable } from "@/shared/components/ContentUnavailable";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
@@ -62,7 +62,7 @@ const EDGE_SHADOWS = [
 export async function RenovationServicePage() {
   // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
   const content = await getServiceDetailContent("serviceRenovation");
-  if (!content) return <ServiceUnavailable />;
+  if (!content) return <ContentUnavailable />;
   const heroImages = content.hero.images ?? {};
 
   const projects = buildProjects(content.featuredProjects.items);

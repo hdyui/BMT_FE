@@ -9,10 +9,10 @@ const ease = [0.16, 1, 0.3, 1] as const;
 
 export function ProfileDocumentSection({
   pages,
-  heading = "Hồ sơ doanh nghiệp",
+  heading,
 }: {
-  pages?: CapabilityProfilePage[];
-  heading?: string;
+  pages: readonly CapabilityProfilePage[];
+  heading: string;
 }) {
   return (
     <section className="relative bg-[#fdfdfd] pt-8 pb-6 sm:pt-10 lg:pt-10 lg:pb-8">
@@ -53,7 +53,7 @@ export function ProfileDocumentSection({
         viewport={{ once: true, amount: 0.12 }}
         transition={{ duration: 0.85, ease, delay: 0.15 }}
       >
-        <ProfileBook pages={pages} />
+        {pages.length >= 2 ? <ProfileBook pages={pages} /> : null}
       </motion.div>
     </section>
   );

@@ -2,7 +2,7 @@ import { SiteFooter } from "@/shared/components/layout/SiteFooter";
 import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 
 /** Hiện khi không lấy được nội dung trang từ backend (không có nội dung dự phòng). */
-export function ServiceUnavailable() {
+export function ContentUnavailable() {
   return (
     <div className="min-h-screen bg-white text-charcoal">
       <SiteHeader />

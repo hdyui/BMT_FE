@@ -33,24 +33,8 @@ const navIcons = {
   next: "/images/cai-tao-sua-chua/nav-next.png",
 } as const;
 
-type ProfilePage = { src: string; label: string };
+type ProfilePage = { src: string };
 type ProfileSheet = { front: ProfilePage; back: ProfilePage };
-
-const profilePages: ProfilePage[] = Array.from({ length: 20 }, (_, index) => {
-  const pageNumber = index + 1;
-  const paddedNumber = String(pageNumber).padStart(2, "0");
-  const label =
-    pageNumber === 1
-      ? "Bìa trước hồ sơ năng lực BMT Decor"
-      : pageNumber === 20
-        ? "Bìa sau hồ sơ năng lực BMT Decor"
-        : `Trang ${pageNumber} hồ sơ năng lực BMT Decor`;
-
-  return {
-    src: `/images/capability-profile/profile-page-${paddedNumber}.webp`,
-    label,
-  };
-});
 
 /* Cuốn hồ sơ gồm 10 tờ giấy vật lý, mỗi tờ in hai mặt theo thứ tự đọc 01-20.
    Khi mở sách, mặt sau của tờ trước nằm bên trái và mặt trước của tờ kế tiếp
@@ -236,21 +220,12 @@ function TurningSheet({
 }
 
 /* Nửa trang đứng yên bên dưới tờ đang lật. */
-function StaticPage({
-  src,
-  label,
-  side,
-}: {
-  src: string;
-  label: string;
-  side: Side;
-}) {
+function StaticPage({ src, side }: { src: string; side: Side }) {
   return (
     <div
       className={`absolute inset-y-0 z-10 w-1/2 bg-white bg-cover bg-center ${side === "left" ? "left-0 shadow-[-5px_12px_28px_rgb(41_34_30/.18)]" : "right-0 shadow-[5px_12px_28px_rgb(41_34_30/.18)]"}`}
       style={{ backgroundImage: `url(${src})` }}
-      role="img"
-      aria-label={label}
+      aria-hidden="true"
     />
   );
 }
@@ -263,13 +238,12 @@ function shiftFor(stage: Stage, sheetCount: number) {
   return stage === 0 ? "-25%" : stage === sheetCount ? "25%" : "0%";
 }
 
-export function ProfileBook({ pages }: { pages?: CapabilityProfilePage[] }) {
-  const order = pages?.length
-    ? pages
-        .slice()
-        .sort((left, right) => (left.metadata?.sortOrder ?? 0) - (right.metadata?.sortOrder ?? 0))
-        .map((page) => ({ src: page.imageUrl, label: page.title }))
-    : profilePages;
+export function ProfileBook({ pages }: { pages: readonly CapabilityProfilePage[] }) {
+  // Các trang do admin quản lý; thứ tự đọc theo `sortOrder` của backend.
+  const order = pages
+    .slice()
+    .sort((left, right) => (left.metadata?.sortOrder ?? 0) - (right.metadata?.sortOrder ?? 0))
+    .map((page) => ({ src: page.imageUrl }));
   const resolvedSheets = Array.from({ length: Math.floor(order.length / 2) }, (_, index) => ({
     front: order[index * 2],
     back: order[index * 2 + 1],
@@ -523,8 +497,7 @@ function MobileProfileBook({ pages }: { pages: ProfilePage[] }) {
         <div
           className="absolute inset-0 z-10 bg-white bg-cover bg-center"
           style={{ backgroundImage: `url(${order[staticIndex].src})` }}
-          role="img"
-          aria-label={order[staticIndex].label}
+          aria-hidden="true"
         />
 
         {turn &&
@@ -848,15 +821,9 @@ function DesktopProfileBook({ sheets }: { sheets: ProfileSheet[] }) {
           )}
 
           {leftPage && (
-            <StaticPage src={leftPage.src} label={leftPage.label} side="left" />
+            <StaticPage src={leftPage.src} side="left" />
           )}
-          {rightPage && (
-            <StaticPage
-              src={rightPage.src}
-              label={rightPage.label}
-              side="right"
-            />
-          )}
+          {rightPage && <StaticPage src={rightPage.src} side="right" />}
 
           {turning !== null && !reduceMotion && (
             <TurningSheet sheet={turning} progress={progress} sheets={sheets} />

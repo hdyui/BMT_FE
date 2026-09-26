@@ -9,7 +9,7 @@ import { ArrowLeft, Eye, EyeOff, LoaderCircle } from "lucide-react";
 import { Button } from "@/features/admin/components/ui/button";
 import { Input } from "@/features/admin/components/ui/input";
 import { sanitizeAdminLocation } from "@/features/admin/lib/auth-config";
-import { api } from "@/shared/lib/api/client";
+import { loginAdmin } from "@/features/admin/auth/service";
 import { ApiError } from "@/shared/lib/api/errors";
 
 function describeLoginError(error: unknown) {
@@ -29,8 +29,8 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
   const [error, setError] = useState<string | null>(null);
   const [pending, setPending] = useState(false);
 
-  // Gọi thẳng POST /api/v1/auth/login (Next chuyển tiếp sang backend). Backend
-  // trả cookie phiên HttpOnly nên trình duyệt tự lưu, không cần xử lý token.
+  // POST /api/v1/auth/login (Next chuyển tiếp sang backend). Backend trả cookie
+  // phiên HttpOnly nên trình duyệt tự lưu, không cần xử lý token.
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const form = new FormData(event.currentTarget);
@@ -45,7 +45,7 @@ export function AdminLoginForm({ location = "" }: { location?: string }) {
     setPending(true);
     setError(null);
     try {
-      await api.post("/auth/login", { email, password });
+      await loginAdmin({ email, password });
       router.replace(sanitizeAdminLocation(location));
     } catch (loginError) {
       setError(describeLoginError(loginError));

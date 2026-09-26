@@ -4,8 +4,8 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { ContactForm } from "@/shared/components/ContactForm";
-import { RichText } from "@/features/services/components/RichText";
-import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
+import { RichText } from "@/shared/components/RichText";
+import { ContentUnavailable } from "@/shared/components/ContentUnavailable";
 import { DesignHeroGallery } from "@/features/services/components/DesignHeroGallery";
 import { MobileHeroArtwork } from "@/features/services/components/MobileHeroArtwork";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
@@ -37,7 +37,7 @@ import { processCircle, solutionCardLayout } from "@/features/services/data/desi
 export async function DesignServicePage() {
   // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
   const content = await getServiceDetailContent("serviceArchitectureInterior");
-  if (!content) return <ServiceUnavailable />;
+  if (!content) return <ContentUnavailable />;
   const heroImages = content.hero.images ?? {};
 
   const projects = buildProjects(content.featuredProjects.items);

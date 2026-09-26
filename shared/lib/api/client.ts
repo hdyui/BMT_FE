@@ -82,7 +82,7 @@ function unwrap<T>(body: unknown, status: number): T {
 let refreshInFlight: Promise<boolean> | null = null;
 
 /** Xin phiên mới bằng refresh token; nhiều request cùng lúc chỉ gọi một lần. */
-function refreshSession(): Promise<boolean> {
+export function refreshSession(): Promise<boolean> {
   refreshInFlight ??= fetch(`${API_BASE_PATH}/auth/refresh`, {
     method: "POST",
     credentials: "same-origin",

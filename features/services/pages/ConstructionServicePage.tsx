@@ -12,8 +12,8 @@ import {
   ConstructionProcessList,
   type ConstructionProcessStep,
 } from "@/features/services/components/ConstructionProcessList";
-import { RichText } from "@/features/services/components/RichText";
-import { ServiceUnavailable } from "@/features/services/components/ServiceUnavailable";
+import { RichText } from "@/shared/components/RichText";
+import { ContentUnavailable } from "@/shared/components/ContentUnavailable";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
 import {
   ConstructionMobileHero,
@@ -237,7 +237,7 @@ const DIAMOND_BY_KEY = Object.fromEntries(
 export async function ConstructionServicePage() {
   // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
   const content = await getServiceDetailContent("serviceConstruction");
-  if (!content) return <ServiceUnavailable />;
+  if (!content) return <ContentUnavailable />;
   const heroImages = content.hero.images ?? {};
 
   const diamonds = HERO_DIAMONDS.flatMap((diamond) => {

@@ -9,8 +9,13 @@ const ease = [0.16, 1, 0.3, 1] as const;
 export function CapabilityHero({
   content,
 }: {
-  content?: CapabilityProfileContent["hero"];
+  content: CapabilityProfileContent["hero"];
 }) {
+  // Đoạn mô tả nhập nhiều dòng: mỗi dòng là một khối riêng ở desktop (dòng trên
+  // căn đều hai lề tới đúng bề ngang dòng dài nhất, dòng cuối căn trái), mobile
+  // nối liền thành một đoạn.
+  const titleLines = content.title.replace(/\r\n/g, "\n").trim().split("\n");
+  const descriptionLines = content.description.replace(/\r\n/g, "\n").trim().split("\n");
   // Do not emit an SSR-only initial style. Motion can finish this animation
   // before React hydrates on the client, which makes the server markup differ.
   const initialUp = false;
@@ -51,14 +56,16 @@ export function CapabilityHero({
           <Image className="h-auto w-full" src="/images/capability-profile/decor-04.webp" alt="" width={284} height={429} sizes="4.2vw" />
         </motion.div>
 
-        <motion.div
-          className="absolute bottom-[-9%] left-0 z-[1] w-[46%] opacity-45"
-          initial={false}
-          animate={{ opacity: 0.45 }}
-          transition={{ duration: 0.72, delay: 0.35 }}
-        >
-          <Image className="h-auto w-full" src={content?.decor08 || "/images/capability-profile/decor-08.webp"} alt="" width={3690} height={2774} sizes="46vw" unoptimized={Boolean(content?.decor08)} />
-        </motion.div>
+        {content.decor08 ? (
+          <motion.div
+            className="absolute bottom-[-9%] left-0 z-[1] w-[46%] opacity-45"
+            initial={false}
+            animate={{ opacity: 0.45 }}
+            transition={{ duration: 0.72, delay: 0.35 }}
+          >
+            <Image className="h-auto w-full" src={content.decor08} alt="" width={3690} height={2774} sizes="46vw" />
+          </motion.div>
+        ) : null}
 
         <motion.div
           className="absolute top-[77.7%] left-[42.4%] z-[1] aspect-square w-[8.7%] origin-top-right -rotate-[5deg] rounded-tl-full border-t-[clamp(25px,2.05vw,34px)] border-l-[clamp(25px,2.05vw,34px)] border-[#dedede] opacity-55"
@@ -114,15 +121,17 @@ export function CapabilityHero({
         </motion.div>
       </div>
 
-      <motion.div
-        className="pointer-events-none absolute -bottom-12 left-0 -z-10 w-[130%] max-w-none opacity-55 lg:hidden"
-        initial={false}
-        animate={{ opacity: 0.55 }}
-        transition={{ duration: 0.7, delay: 0.35 }}
-        aria-hidden="true"
-      >
-        <Image className="h-auto w-full" src={content?.decor08 || "/images/capability-profile/decor-08.webp"} alt="" width={3690} height={2774} sizes="100vw" unoptimized={Boolean(content?.decor08)} />
-      </motion.div>
+      {content.decor08 ? (
+        <motion.div
+          className="pointer-events-none absolute -bottom-12 left-0 -z-10 w-[130%] max-w-none opacity-55 lg:hidden"
+          initial={false}
+          animate={{ opacity: 0.55 }}
+          transition={{ duration: 0.7, delay: 0.35 }}
+          aria-hidden="true"
+        >
+          <Image className="h-auto w-full" src={content.decor08} alt="" width={3690} height={2774} sizes="100vw" />
+        </motion.div>
+      ) : null}
 
       {/* Chấm bi góc trên trái + vòng cam góc trên phải: bản mobile tách riêng
           khỏi khối decor desktop (hidden lg:block) vì bố cục desktop đặt hai
@@ -203,8 +212,11 @@ export function CapabilityHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.08 }}
         >
-          {content?.title || "Hồ sơ năng lực"}
-          <span className="mt-0.5 block">BMT Decor</span>
+          {titleLines.map((line, index) => (
+            <span className={index === 0 ? "block" : "mt-0.5 block"} key={index}>
+              {line}
+            </span>
+          ))}
         </motion.h1>
 
         <motion.p
@@ -213,7 +225,7 @@ export function CapabilityHero({
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.68, ease, delay: 0.28 }}
         >
-          {content?.subtitle || "Khẳng định năng lực - Đồng hành kiến tạo giá trị bền vững"}
+          {content.subtitle}
         </motion.p>
 
         <motion.div
@@ -232,65 +244,45 @@ export function CapabilityHero({
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.7, ease, delay: 0.66 }}
         >
-          {/* Ba đoạn tách sẵn để desktop xuống hàng đúng ở "chuyên" và "thiết".
-              Khối dùng w-max nên bề ngang bám sát dòng dài nhất (dòng 3); hai
-              dòng trên justify tới đúng bề ngang đó nên ba dòng thẳng đều hai
-              lề mà phần dãn chữ thêm là nhỏ nhất có thể. */}
-          {content?.description ? (
-            <>
-              <Image
-                className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
-                src="/images/capability-profile/intro-logo.png"
-                alt=""
-                width={90}
-                height={95}
-                sizes="1em"
-                aria-hidden="true"
-              />
-              {content.description}
-            </>
-          ) : (
-            <>
-              <span className="lg:block lg:[text-align-last:justify]">
-                <Image
-                  className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
-                  src="/images/capability-profile/intro-logo.png"
-                  alt=""
-                  width={90}
-                  height={95}
-                  sizes="1em"
-                  aria-hidden="true"
-                />
-                Khám phá tổng quan về BMT Decor thông qua lĩnh vực hoạt động, đội ngũ{" "}
-              </span>
-              <span className="lg:block lg:[text-align-last:justify]">
-                chuyên môn, quy trình triển khai và các dự án tiêu biểu, phản ánh năng lực{" "}
-              </span>
-              <span className="lg:block">
-                thiết kế, thi công và cải tạo công trình một cách chuyên nghiệp và đồng bộ.
-              </span>
-            </>
-          )}
+          <Image
+            className="mr-[0.35em] inline-block h-auto w-[0.8em] align-[-0.08em]"
+            src="/images/capability-profile/intro-logo.png"
+            alt=""
+            width={90}
+            height={95}
+            sizes="1em"
+            aria-hidden="true"
+          />
+          {descriptionLines.map((line, index) => (
+            <span
+              className={index < descriptionLines.length - 1 ? "lg:block lg:[text-align-last:justify]" : "lg:block"}
+              key={index}
+            >
+              {line}
+              {index < descriptionLines.length - 1 ? " " : null}
+            </span>
+          ))}
         </motion.p>
       </div>
 
-      <motion.div
-        className="group relative z-[3] mx-auto mt-8 w-[calc(100%-4rem)] max-w-[45rem] overflow-hidden rounded-[2rem] shadow-[0_18px_45px_rgb(65_57_51/.15)] lg:absolute lg:top-[13.9%] lg:left-[51%] lg:mt-0 lg:w-[41.8%] lg:max-w-[44rem] lg:rounded-[1.9rem]"
-        initial={false}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.9, ease, delay: 0.18 }}
-      >
-        <Image
-          className="h-auto w-full scale-[1.025] transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none group-hover:scale-[1.055]"
-          src={content?.heroImage || "/images/capability-profile/hero-profile.webp"}
-          alt={content?.heroImageAlt || "Bộ hồ sơ năng lực BMT Decor được trưng bày trên bàn gỗ"}
-          width={1800}
-          height={1200}
-          priority
-          sizes="(max-width: 1023px) calc(100vw - 64px), 42vw"
-          unoptimized={Boolean(content?.heroImage)}
-        />
-      </motion.div>
+      {content.heroImage ? (
+        <motion.div
+          className="group relative z-[3] mx-auto mt-8 w-[calc(100%-4rem)] max-w-[45rem] overflow-hidden rounded-[2rem] shadow-[0_18px_45px_rgb(65_57_51/.15)] lg:absolute lg:top-[13.9%] lg:left-[51%] lg:mt-0 lg:w-[41.8%] lg:max-w-[44rem] lg:rounded-[1.9rem]"
+          initial={false}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.9, ease, delay: 0.18 }}
+        >
+          <Image
+            className="h-auto w-full scale-[1.025] transition-transform duration-700 ease-[cubic-bezier(.16,1,.3,1)] motion-reduce:transition-none group-hover:scale-[1.055]"
+            src={content.heroImage}
+            alt=""
+            width={1800}
+            height={1200}
+            priority
+            sizes="(max-width: 1023px) calc(100vw - 64px), 42vw"
+          />
+        </motion.div>
+      ) : null}
     </section>
   );
 }

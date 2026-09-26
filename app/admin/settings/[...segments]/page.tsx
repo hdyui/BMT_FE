@@ -1,3 +1,4 @@
+import { RemoteResourceGate } from "@/features/admin/components/editor/RemoteResourceGate";
 import { AdminCrudRoute } from "@/features/admin/routing/AdminCrudRoute";
 
 export default async function AdminSettingsCrudPage({
@@ -6,5 +7,9 @@ export default async function AdminSettingsCrudPage({
   params: Promise<{ segments: string[] }>;
 }) {
   const { segments } = await params;
-  return <AdminCrudRoute module="settings" segments={segments} />;
+  return (
+    <RemoteResourceGate resourceKey={`settings/${segments.join("/")}`}>
+      <AdminCrudRoute module="settings" segments={segments} />
+    </RemoteResourceGate>
+  );
 }

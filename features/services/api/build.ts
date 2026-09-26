@@ -5,7 +5,7 @@ import type {
 } from "@/features/services/api/types";
 import type { FeaturedProject } from "@/features/services/components/ProjectCarousel";
 import type { SolutionCard } from "@/features/services/components/SolutionCards";
-import { contactFormChrome } from "@/features/services/data/contact-form-chrome";
+import { contactFormChrome } from "@/shared/components/contact-form-chrome";
 import type { ContactFormContent } from "@/shared/components/contact-form-content";
 
 /**
