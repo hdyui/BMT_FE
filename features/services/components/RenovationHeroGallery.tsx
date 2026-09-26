@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { Reveal } from "@/shared/components/Reveal";
 
-type HeroPhoto = { image: string; alt: string };
+type HeroPhoto = { image: string };
 
 type RenovationHeroGalleryProps = {
   large: HeroPhoto;
@@ -25,7 +25,7 @@ function PhotoFrame({
       <Image
         className="object-cover transition-transform duration-500 ease-out group-hover/frame:scale-110 group-active/frame:scale-110"
         src={photo.image}
-        alt={photo.alt}
+        alt=""
         fill
         sizes="(max-width: 1024px) 60vw, 30vw"
       />

@@ -11,6 +11,7 @@ import {
 
 import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
 import { adminCrudMockService } from "@/features/admin/services/crud-mock.service";
+import { getRemoteBinding } from "@/features/admin/services/remote-bindings";
 import { adminCatalogApiClient } from "@/features/admin/services/catalog-api.client";
 import {
   CONTACT_PAGE_ADMIN_API_RESOURCE_KEYS,
@@ -24,6 +25,16 @@ import {
   type AdminApiResourceKey,
 } from "@/features/admin/services/catalog-api.types";
 import type { AdminCrudRecord } from "@/features/admin/lib/types/crud";
+import { ApiError } from "@/shared/lib/api/errors";
+
+/**
+ * Trạng thái tải dữ liệu từ backend của một resource:
+ * `none` = resource chỉ chạy mock; còn lại chỉ có ý nghĩa với resource đã nối API.
+ */
+export interface RemoteState {
+  status: "none" | "idle" | "loading" | "ready" | "error";
+  error?: string;
+}
 
 const apiResourceKeys = new Set([
   "projects/list",
@@ -60,6 +71,9 @@ interface AdminCrudContextValue {
     resourceKey: string,
     records: AdminCrudRecord[],
   ) => Promise<void>;
+  getRemoteState: (resourceKey: string) => RemoteState;
+  /** Tải dữ liệu của trang chứa resource từ backend (chỉ tải một lần, trừ khi lần trước lỗi). */
+  loadRemote: (resourceKey: string) => Promise<void>;
 }
 
 const AdminCrudContext = createContext<AdminCrudContextValue | null>(null);
@@ -68,11 +82,18 @@ function createInitialRecords() {
   return Object.fromEntries(
     Object.entries(adminResourceRegistry).map(([key, config]) => [
       key,
-      apiResourceKeys.has(key)
+      apiResourceKeys.has(key) || getRemoteBinding(key)
         ? []
         : structuredClone(config.initialRecords),
     ]),
   );
+}
+
+function describeLoadError(error: unknown) {
+  if (error instanceof ApiError && (error.status === 404 || error.status === 409)) {
+    return "Nội dung trang này chưa được khởi tạo trên máy chủ. Vui lòng liên hệ đội backend để tạo dữ liệu ban đầu.";
+  }
+  return error instanceof Error ? error.message : "Không tải được nội dung.";
 }
 
 export function AdminCrudProvider({
@@ -82,6 +103,8 @@ export function AdminCrudProvider({
 }) {
   const [recordsByResource, setRecordsByResource] =
     useState<Record<string, AdminCrudRecord[]>>(createInitialRecords);
+  const [remoteStates, setRemoteStates] = useState<Record<string, RemoteState>>({});
+  const remoteInFlight = useRef(new Set<string>());
   const loadedApiResourcesRef = useRef(new Map<string, { records: AdminCrudRecord[]; expiresAt: number }>());
   const inFlightApiResourcesRef = useRef(
     new Map<string, Promise<AdminCrudRecord[]>>(),
@@ -91,6 +114,35 @@ export function AdminCrudProvider({
     (resourceKey: string) => recordsByResource[resourceKey] ?? [],
     [recordsByResource],
   );
+
+  const getRemoteState = useCallback(
+    (resourceKey: string): RemoteState => {
+      const binding = getRemoteBinding(resourceKey);
+      if (!binding) return { status: "none" };
+      return remoteStates[binding.pageKey] ?? { status: "idle" };
+    },
+    [remoteStates],
+  );
+
+  const loadRemote = useCallback(async (resourceKey: string) => {
+    const binding = getRemoteBinding(resourceKey);
+    if (!binding || remoteInFlight.current.has(binding.pageKey)) return;
+
+    remoteInFlight.current.add(binding.pageKey);
+    setRemoteStates((state) => ({ ...state, [binding.pageKey]: { status: "loading" } }));
+    try {
+      const loaded = await binding.load();
+      setRecordsByResource((state) => ({ ...state, ...loaded }));
+      setRemoteStates((state) => ({ ...state, [binding.pageKey]: { status: "ready" } }));
+    } catch (error) {
+      setRemoteStates((state) => ({
+        ...state,
+        [binding.pageKey]: { status: "error", error: describeLoadError(error) },
+      }));
+    } finally {
+      remoteInFlight.current.delete(binding.pageKey);
+    }
+  }, []);
 
   const loadRecords = useCallback(async (resourceKey: string) => {
     if (!apiResourceKeys.has(resourceKey)) return [];
@@ -143,7 +195,6 @@ export function AdminCrudProvider({
     },
     [],
   );
-
   const createRecord = useCallback(
     async (resourceKey: string, input: AdminCrudRecord) => {
       if (apiResourceKeys.has(resourceKey)) {
@@ -160,6 +211,16 @@ export function AdminCrudProvider({
       }
 
       const current = recordsByResource[resourceKey] ?? [];
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        if (!binding.create) {
+          throw new Error("Nội dung này có số mục cố định, không thể thêm mục mới.");
+        }
+        const saved = await binding.create(resourceKey, current, input);
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        const known = new Set(current.map((item) => item.id));
+        return saved.find((item) => !known.has(item.id)) ?? input;
+      }
       const next = await adminCrudMockService.create(current, input);
       setRecordsByResource((state) => ({ ...state, [resourceKey]: next }));
       return input;
@@ -186,6 +247,16 @@ export function AdminCrudProvider({
       }
 
       const current = recordsByResource[resourceKey] ?? [];
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        const saved = await binding.save(
+          resourceKey,
+          current,
+          current.map((item) => (item.id === id ? input : item)),
+        );
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        return saved.find((item) => item.id === id) ?? input;
+      }
       const next = await adminCrudMockService.update(current, id, input);
       setRecordsByResource((state) => ({ ...state, [resourceKey]: next }));
       return input;
@@ -211,6 +282,15 @@ export function AdminCrudProvider({
       }
 
       const current = recordsByResource[resourceKey] ?? [];
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        if (!binding.remove) {
+          throw new Error("Nội dung này có số mục cố định, không thể xóa.");
+        }
+        const saved = await binding.remove(resourceKey, current, id);
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        return;
+      }
       const next = await adminCrudMockService.remove(current, id);
       setRecordsByResource((state) => ({ ...state, [resourceKey]: next }));
     },
@@ -240,6 +320,17 @@ export function AdminCrudProvider({
         return;
       }
 
+      const binding = getRemoteBinding(resourceKey);
+      if (binding) {
+        const saved = await binding.save(
+          resourceKey,
+          recordsByResource[resourceKey] ?? [],
+          records,
+        );
+        setRecordsByResource((state) => ({ ...state, [resourceKey]: saved }));
+        return;
+      }
+
       const next = await adminCrudMockService.reorder(
         recordsByResource[resourceKey] ?? [],
         records,
@@ -258,6 +349,8 @@ export function AdminCrudProvider({
       updateRecord,
       removeRecord,
       reorderRecords,
+      getRemoteState,
+      loadRemote,
     }),
     [
       getRecords,
@@ -267,6 +360,8 @@ export function AdminCrudProvider({
       updateRecord,
       removeRecord,
       reorderRecords,
+      getRemoteState,
+      loadRemote,
     ],
   );
 

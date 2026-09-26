@@ -27,9 +27,16 @@ async function readEnvelope<T>(response: Response) {
 }
 
 export const formSubmissionsApiClient = {
-  async getList(status?: FormSubmissionStatus) {
-    const query = new URLSearchParams({ pageIndex: "1", pageSize: "100" });
-    if (status) query.set("status", status);
+  async getList(params: {
+    pageIndex?: number;
+    pageSize?: number;
+    status?: FormSubmissionStatus;
+  } = {}) {
+    const query = new URLSearchParams({
+      pageIndex: String(params.pageIndex ?? 1),
+      pageSize: String(params.pageSize ?? 100),
+    });
+    if (params.status) query.set("status", params.status);
 
     const response = await fetch(`/api/admin/form-submissions?${query}`, {
       method: "GET",

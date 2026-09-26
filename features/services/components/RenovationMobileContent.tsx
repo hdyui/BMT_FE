@@ -2,18 +2,46 @@ import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
-import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
+import { RichText } from "@/shared/components/RichText";
 import {
-  featuredProjects,
-  processSteps,
-  solutionCards,
-} from "@/features/services/data/renovation";
+  ProjectCarousel,
+  type FeaturedProject,
+} from "@/features/services/components/ProjectCarousel";
 
-const mobileProjects = [
-  featuredProjects[1],
-  featuredProjects[0],
-  featuredProjects[2],
-] as const;
+type MobileSolutionCard = {
+  number: string;
+  titlePrefix: string;
+  titleCategory: string;
+  tagline: string;
+  description: string;
+  checklist: readonly string[];
+  checklistLabel?: string;
+  cta: string;
+  image: string;
+};
+
+type MobileProcessStepData = {
+  number: string;
+  title: string;
+  subtitle: string;
+  description: string;
+  icon: string;
+};
+
+/** Dữ liệu từ API cho khối mobile. */
+export type RenovationMobileContentProps = {
+  hero: {
+    title: string;
+    subtitle: string;
+    images: { large?: string; top?: string; bottom?: string; wireframe?: string };
+  };
+  featured: { title: string; description: string; ctaLabel: string };
+  projects: readonly FeaturedProject[];
+  solutions: { title: string; description: string };
+  cards: readonly MobileSolutionCard[];
+  process: { title: string; logo?: string };
+  steps: readonly MobileProcessStepData[];
+};
 
 const mobileSolutionCtas = [
   {
@@ -38,7 +66,7 @@ const mobileSolutionCtas = [
   },
 ] as const;
 
-function RenovationMobileHero() {
+function RenovationMobileHero({ hero }: { hero: RenovationMobileContentProps["hero"] }) {
   return (
     <section className="relative isolate overflow-hidden bg-[#f2f2f3]">
       {/* ẢNH LÊN TRÊN: lưới 3 ảnh dự án theo luồng thường ở đầu banner. Bọc
@@ -57,20 +85,22 @@ function RenovationMobileHero() {
             aria-hidden="true"
           />
         </Reveal>
-        <Reveal
-          className="pointer-events-none absolute top-0 left-[63%] -z-10 h-[104%] w-[84%] -translate-x-1/2 -translate-y-[19.5%]"
-          delay={100}
-          from="fade"
-        >
-          <Image
-            className="size-full object-contain object-top opacity-70"
-            src="/images/cai-tao-sua-chua/hero-wireframe.png"
-            alt=""
-            width={2721}
-            height={3468}
-            aria-hidden="true"
-          />
-        </Reveal>
+        {hero.images.wireframe ? (
+          <Reveal
+            className="pointer-events-none absolute top-0 left-[63%] -z-10 h-[104%] w-[84%] -translate-x-1/2 -translate-y-[19.5%]"
+            delay={100}
+            from="fade"
+          >
+            <Image
+              className="size-full object-contain object-top opacity-70"
+              src={hero.images.wireframe}
+              alt=""
+              width={2721}
+              height={3468}
+              aria-hidden="true"
+            />
+          </Reveal>
+        ) : null}
         {/* Bóng vuông bo góc, mờ mềm, nhô lên quá cạnh trên khối. */}
         <div
           className="pointer-events-none absolute -top-[4%] right-[9%] -z-10 h-[19%] w-[16%] rounded-[1.75rem] bg-charcoal/[0.035] blur-[1.2vw]"
@@ -78,33 +108,39 @@ function RenovationMobileHero() {
         />
 
         <div className="mx-[5.7%] grid aspect-[1.09] grid-cols-2 grid-rows-[1.08fr_0.92fr] gap-[1.7%]">
-          <Reveal className="group/frame relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={160} from="right">
-            <Image
-              className="object-cover"
-              src="/images/cai-tao-sua-chua/hero-correct-top.png"
-              alt="Phòng khách sau cải tạo"
-              fill
-              sizes="45vw"
-            />
-          </Reveal>
-          <Reveal className="group/frame relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={320} from="right">
-            <Image
-              className="object-cover"
-              src="/images/cai-tao-sua-chua/hero-correct-bottom.png"
-              alt="Không gian phòng khách được cải tạo"
-              fill
-              sizes="45vw"
-            />
-          </Reveal>
-          <Reveal className="group/frame relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={480} from="right">
-            <Image
-              className="object-cover"
-              src="/images/cai-tao-sua-chua/hero-correct-large.png"
-              alt="Mặt tiền nhà sau cải tạo"
-              fill
-              sizes="45vw"
-            />
-          </Reveal>
+          {hero.images.top ? (
+            <Reveal className="group/frame relative overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={160} from="right">
+              <Image
+                className="object-cover"
+                src={hero.images.top}
+                alt=""
+                fill
+                sizes="45vw"
+              />
+            </Reveal>
+          ) : null}
+          {hero.images.bottom ? (
+            <Reveal className="group/frame relative col-start-1 row-start-2 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={320} from="right">
+              <Image
+                className="object-cover"
+                src={hero.images.bottom}
+                alt=""
+                fill
+                sizes="45vw"
+              />
+            </Reveal>
+          ) : null}
+          {hero.images.large ? (
+            <Reveal className="group/frame relative col-start-2 row-span-2 row-start-1 overflow-hidden rounded-[clamp(1.25rem,5vw,2rem)] border-[3px] border-white shadow-[0_10px_24px_rgb(36_33_34/.26)]" delay={480} from="right">
+              <Image
+                className="object-cover"
+                src={hero.images.large}
+                alt=""
+                fill
+                sizes="45vw"
+              />
+            </Reveal>
+          ) : null}
         </div>
       </div>
 
@@ -113,9 +149,7 @@ function RenovationMobileHero() {
       <div className="mt-[11vw] mb-[9vw] mr-[7%] ml-[7.3%] border-l-[3px] border-brand pl-[3.2%]">
         <Reveal>
           <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] leading-[1.12] font-extrabold text-brand uppercase">
-            Dịch vụ cải tạo &amp;
-            <br />
-            sửa chữa trọn gói
+            <RichText text={hero.title} />
           </h1>
         </Reveal>
         {/* KHÔNG override `h-` ở đây: `BuildingRule` mặc định `h-10`, còn ảnh
@@ -138,7 +172,7 @@ function RenovationMobileHero() {
               height={95}
               aria-hidden="true"
             />
-            Cải Tạo Không Gian - Nâng Tầm Giá Trị Công Trình
+            <RichText text={hero.subtitle} mode="inline" />
           </p>
         </Reveal>
       </div>
@@ -146,7 +180,16 @@ function RenovationMobileHero() {
   );
 }
 
-function RenovationMobileProjects() {
+function RenovationMobileProjects({
+  featured,
+  projects,
+}: {
+  featured: RenovationMobileContentProps["featured"];
+  projects: readonly FeaturedProject[];
+}) {
+  // Thứ tự carousel mobile: thẻ giữa là dự án thứ 2, hai bên là thứ 1 và thứ 3.
+  const mobileProjects = [projects[1], projects[0], projects[2]].filter(Boolean);
+
   return (
     <section className="relative px-4 pt-8 pb-3">
       {/* Tiêu đề KHÔNG có lớp nền nào — ăn thẳng theo nền trắng của trang nên
@@ -159,16 +202,16 @@ function RenovationMobileProjects() {
       <div className="mx-auto w-full max-w-[29rem] px-[1.125rem] text-center">
         <Reveal from="bottom">
           <h2 className="font-heading text-[clamp(1.12rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold uppercase">
-            Giải pháp cải tạo phù hợp cho
-            <br /> mọi công trình
+            <RichText
+              text={featured.title}
+              mode="inline"
+              breakAfter={{ phrase: "phù hợp cho", mobileOnly: true }}
+            />
           </h2>
         </Reveal>
         <Reveal delay={100} from="bottom">
           <p className="mt-4 text-pretty text-[0.82rem] leading-[1.3] text-justify [text-align-last:center]">
-            BMT Decor cung cấp dịch vụ cải tạo nhà ở, cải tạo văn phòng, cải tạo
-            showroom, cải tạo nhà hàng, sửa chữa nhà và nâng cấp không gian theo
-            nhu cầu thực tế, giúp khắc phục các hạng mục xuống cấp, tối ưu công
-            năng và nâng cao giá trị sử dụng với chi phí hợp lý.
+            <RichText text={featured.description} mode="inline" />
           </p>
         </Reveal>
         <BuildingRule
@@ -204,7 +247,7 @@ function RenovationMobileProjects() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label="TƯ VẤN MIỄN PHÍ"
+            label={featured.ctaLabel}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -220,19 +263,13 @@ function RenovationMobileProjects() {
   );
 }
 
-// Toạ độ ngắt dòng riêng cho tiêu đề card mobile — `titlePrefix`/`titleCategory`
-// gốc để xuống hàng tự nhiên theo bề rộng cột, làm chữ "VIỆN" (card 03) mồ côi
-// một mình một hàng và "CẢI TẠO" (card 04) tách xa khỏi "NHÀ HÀNG &". Định
-// nghĩa lại đúng điểm ngắt mong muốn cho từng card, mỗi dòng `whitespace-nowrap`
-// để không bị trình duyệt tự bẻ thêm.
-const mobileTitleLayouts = [
-  { line1: "CẢI TẠO & SỬA CHỮA", line2: "NHÀ Ở" },
-  { line1: "CẢI TẠO", line2: "VĂN PHÒNG" },
-  { line1: "CẢI TẠO", line1Accent: "SHOWROOM &", line2: "THẨM MỸ VIỆN" },
-  { line1: "CẢI TẠO", line1Accent: "NHÀ HÀNG &", line2: "KHÁCH SẠN" },
-] as const;
-
-function RenovationMobileSolutions() {
+function RenovationMobileSolutions({
+  intro,
+  cards,
+}: {
+  intro: RenovationMobileContentProps["solutions"];
+  cards: readonly MobileSolutionCard[];
+}) {
   return (
     // `bg-white` (không phải `bg-[#f4f4f4]`) để tách bạch khỏi
     // RenovationMobileProcess ngay bên dưới (`bg-[#f2f2f3]`) — hai mã màu cũ
@@ -242,14 +279,12 @@ function RenovationMobileSolutions() {
       <div className="mx-auto max-w-[29rem] text-center">
         <Reveal from="bottom">
           <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase">
-            <span className="font-normal">Cải tạo &amp; sửa chữa</span>
-            <br />
-            <span className="font-extrabold">theo từng loại hình công trình</span>
+            <RichText text={intro.title} mode="twoWeights" />
           </h2>
         </Reveal>
         <Reveal delay={140} from="bottom">
           <p className="mt-2 text-[clamp(0.72rem,2.9vw,0.86rem)]">
-            Giải pháp cải tạo tối ưu cho từng không gian
+            <RichText text={intro.description} mode="inline" />
           </p>
         </Reveal>
         <BuildingRule
@@ -260,8 +295,15 @@ function RenovationMobileSolutions() {
       </div>
 
       <div className="mx-auto mt-4 grid max-w-[29rem] gap-4">
-        {solutionCards.map((card, index) => {
-          const layout = mobileTitleLayouts[index];
+        {cards.map((card, index) => {
+          // Dòng 1 là tiền tố; nhóm công trình dạng "SHOWROOM & THẨM MỸ VIỆN" được
+          // tách sau dấu "&": phần đầu (tô cam) ở cuối dòng 1, phần sau xuống dòng 2.
+          const split = card.titleCategory.match(/^(.+?&)\s+(.+)$/);
+          const layout = {
+            line1: card.titlePrefix,
+            line1Accent: split?.[1],
+            line2: split?.[2] ?? card.titleCategory,
+          };
 
           return (
           <Reveal
@@ -275,7 +317,7 @@ function RenovationMobileSolutions() {
               <Image
                 className="object-cover object-center"
                 src={card.image}
-                alt={card.titleCategory}
+                alt=""
                 fill
                 sizes="calc(100vw - 2rem)"
               />
@@ -293,7 +335,7 @@ function RenovationMobileSolutions() {
                 </span>
                 <h3 className="font-heading min-w-0 pt-[1%] text-[clamp(1.05rem,4.7vw,1.45rem)] leading-[1.3] font-extrabold whitespace-nowrap uppercase">
                   <span className="text-charcoal">{layout.line1}</span>
-                  {"line1Accent" in layout ? (
+                  {layout.line1Accent ? (
                     <span className="text-brand"> {layout.line1Accent}</span>
                   ) : null}
                   <br />
@@ -309,7 +351,7 @@ function RenovationMobileSolutions() {
                 {card.description}
               </p>
               <p className="mt-2 text-[clamp(0.7rem,2.85vw,0.84rem)] font-extrabold">
-                BMT Decor cung cấp:
+                {card.checklistLabel ?? "BMT Decor cung cấp:"}
               </p>
               <ul className="mt-1 grid gap-0.5">
                 {card.checklist.map((item) => (
@@ -351,11 +393,13 @@ function RenovationMobileSolutions() {
 function MobileProcessStep({
   step,
   index,
+  total,
 }: {
-  step: (typeof processSteps)[number];
+  step: MobileProcessStepData;
   index: number;
+  total: number;
 }) {
-  const isLast = index === processSteps.length - 1;
+  const isLast = index === total - 1;
 
   return (
     <Reveal
@@ -427,22 +471,35 @@ function MobileProcessStep({
   );
 }
 
-function RenovationMobileProcess() {
+function RenovationMobileProcess({
+  process,
+  steps,
+}: {
+  process: RenovationMobileContentProps["process"];
+  steps: readonly MobileProcessStepData[];
+}) {
+  // Chữ "TẠI" cuối tiêu đề đứng cạnh logo, phần còn lại ở dòng trên.
+  const titleParts = process.title.trim().match(/^(.*\S)\s+(TẠI)$/i);
+  const titleHead = titleParts?.[1] ?? process.title;
+  const titleTail = titleParts?.[2] ?? null;
+
   return (
     <section className="bg-[#f2f2f3]">
       <div className="relative mx-auto aspect-[410/840] w-full max-w-[410px] overflow-hidden bg-[#f2f2f3]">
         <Reveal className="absolute inset-x-0 top-[1.55%]" from="bottom">
           <h2 className="font-heading text-center text-[min(4.74vw,19.4px)] leading-[1.08] font-extrabold uppercase">
-            Quy trình cải tạo &amp; sửa chữa
+            {titleHead}
             <span className="mt-[0.1%] flex items-center justify-center gap-[0.8%]">
-              Tại
-              <Image
-                className="h-auto w-[24.4%] object-contain"
-                src="/images/cai-tao-sua-chua/logo.png"
-                alt="BMT Decor"
-                width={1196}
-                height={207}
-              />
+              {titleTail}
+              {process.logo ? (
+                <Image
+                  className="h-auto w-[24.4%] object-contain"
+                  src={process.logo}
+                  alt=""
+                  width={1196}
+                  height={207}
+                />
+              ) : null}
             </span>
           </h2>
         </Reveal>
@@ -465,23 +522,23 @@ function RenovationMobileProcess() {
           />
         </Reveal>
 
-        {processSteps.map((step, index) => (
-          <MobileProcessStep step={step} index={index} key={step.number} />
+        {steps.map((step, index) => (
+          <MobileProcessStep step={step} index={index} total={steps.length} key={step.number} />
         ))}
       </div>
     </section>
   );
 }
 
-export function RenovationMobileContent() {
+export function RenovationMobileContent(props: RenovationMobileContentProps) {
   /* pt đúng bằng chiều cao header cố định (60px) để banner nằm sát ngay dưới
      header, không còn dải trắng thừa như mốc 85px cũ. */
   return (
     <main className="-mb-[2.342945vw] overflow-x-hidden pt-[60px] md:hidden">
-      <RenovationMobileHero />
-      <RenovationMobileProjects />
-      <RenovationMobileSolutions />
-      <RenovationMobileProcess />
+      <RenovationMobileHero hero={props.hero} />
+      <RenovationMobileProjects featured={props.featured} projects={props.projects} />
+      <RenovationMobileSolutions intro={props.solutions} cards={props.cards} />
+      <RenovationMobileProcess process={props.process} steps={props.steps} />
     </main>
   );
 }

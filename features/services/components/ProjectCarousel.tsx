@@ -350,7 +350,7 @@ export function ProjectCarousel({
                       project.zoom && "scale-[1.025]",
                     )}
                     src={project.image}
-                    alt={project.title}
+                    alt=""
                     fill
                     sizes="(max-width: 767px) 86vw, (max-width: 1023px) 48vw, min(38vw, 544px)"
                     draggable={false}

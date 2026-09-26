@@ -26,6 +26,7 @@ import {
   useUnsavedChangesGuard,
 } from "@/features/admin/components/editor/unsaved-changes";
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { describeSaveError } from "@/features/admin/lib/save-error";
 import { getResourceBreadcrumb } from "@/features/admin/lib/content-navigation";
 import { getDynamicCollectionUiKind } from "@/features/admin/lib/dynamic-collection-ui";
 import {
@@ -304,9 +305,7 @@ export function ResourceEditorPage({
       }
       return true;
     } catch (error) {
-      const message =
-        error instanceof Error ? error.message : "Không thể lưu nội dung.";
-      toast.error("Lưu nội dung thất bại", { description: message });
+      toast.error("Không lưu được thay đổi", { description: describeSaveError(error) });
       return false;
     } finally {
       setSaving(false);
