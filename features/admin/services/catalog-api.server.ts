@@ -2319,6 +2319,7 @@ function normalizeFormSubmissionItem(raw: unknown): FormSubmissionItem | null {
     customerName: stringValue(item, "customerName"),
     phone: stringValue(item, "phone"),
     status: stringValue(item, "status") === "done" ? "done" : "pending",
+    isRead: booleanValue(item, "isRead"),
     createdAt: stringValue(item, "createdAt"),
     updatedAt: typeof item.updatedAt === "string" ? item.updatedAt : null,
   };
@@ -2390,6 +2391,36 @@ export async function updateFormSubmissionStatus(
   if (!result.response.ok) {
     throw new Error(
       `Update form submission status failed (HTTP ${result.response.status}).`,
+    );
+  }
+  const item = normalizeFormSubmissionItem(unwrap(result.body));
+  if (!item) throw new Error("Invalid form submission response.");
+  return item;
+}
+
+export async function updateFormSubmissionRead(
+  id: string,
+  isRead: boolean,
+): Promise<FormSubmissionItem> {
+  if (!(await requireLocalAdminSession())) {
+    throw new Error("Unauthorized.");
+  }
+  const baseUrl = getApiBaseUrl();
+  if (!baseUrl) throw new Error("API_CLIENT is not configured.");
+  const sessionCookie = await backendLogin();
+
+  const result = await backendRequest(
+    `/admin/form-submissions/${id}/read`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ isRead }),
+    },
+    sessionCookie,
+  );
+  if (!result.response.ok) {
+    throw new Error(
+      `Update form submission read status failed (HTTP ${result.response.status}).`,
     );
   }
   const item = normalizeFormSubmissionItem(unwrap(result.body));

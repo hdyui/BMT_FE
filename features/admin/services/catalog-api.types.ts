@@ -158,6 +158,7 @@ export interface FormSubmissionItem {
   customerName: string;
   phone: string;
   status: FormSubmissionStatus;
+  isRead: boolean;
   createdAt: string;
   updatedAt: string | null;
 }
