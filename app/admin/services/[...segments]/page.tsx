@@ -1,5 +1,6 @@
 import { redirect } from "next/navigation";
 
+import { RemoteResourceGate } from "@/features/admin/components/editor/RemoteResourceGate";
 import { AdminCrudRoute } from "@/features/admin/routing/AdminCrudRoute";
 
 const contentPageByService: Record<string, string> = {
@@ -22,5 +23,9 @@ export default async function AdminServicesCrudPage({
   if (segments.length === 1 && contentPageByService[segments[0]]) {
     redirect(`/admin/content/${contentPageByService[segments[0]]}`);
   }
-  return <AdminCrudRoute module="services" segments={segments} />;
+  return (
+    <RemoteResourceGate resourceKey={`services/${segments.join("/")}`}>
+      <AdminCrudRoute module="services" segments={segments} />
+    </RemoteResourceGate>
+  );
 }

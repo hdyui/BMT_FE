@@ -3,15 +3,14 @@ import Image from "next/image";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { DiamondPhotoFrame } from "@/features/services/components/DiamondPhotoFrame";
-import { processSteps } from "@/features/services/data/construction";
+import { RichText } from "@/shared/components/RichText";
+import type { ConstructionProcessStep } from "@/features/services/components/ConstructionProcessList";
 
 const MOBILE_ROOT = "/images/thi-cong-xay-dung/mobile";
 
 const mobileHeroDiamonds = [
   {
     key: "top",
-    src: "/images/thi-cong-xay-dung/hero-frame-top.webp",
-    alt: "Thi công nhà hàng",
     left: "41.5%",
     top: "53.9%",
     size: "31.8%",
@@ -19,8 +18,6 @@ const mobileHeroDiamonds = [
   },
   {
     key: "right",
-    src: "/images/thi-cong-xay-dung/hero-frame-right.webp",
-    alt: "Thi công thẩm mỹ viện",
     left: "86.5%",
     top: "66%",
     size: "19.4%",
@@ -28,8 +25,6 @@ const mobileHeroDiamonds = [
   },
   {
     key: "bottom",
-    src: "/images/thi-cong-xay-dung/hero-frame-bottom.webp",
-    alt: "Thi công nhà ở",
     left: "60.9%",
     top: "88%",
     size: "27.5%",
@@ -37,8 +32,6 @@ const mobileHeroDiamonds = [
   },
   {
     key: "left",
-    src: "/images/thi-cong-xay-dung/hero-frame-left.webp",
-    alt: "Thi công văn phòng",
     left: "16.7%",
     top: "79.4%",
     size: "20.2%",
@@ -46,7 +39,21 @@ const mobileHeroDiamonds = [
   },
 ] as const;
 
-export function ConstructionMobileHero() {
+export function ConstructionMobileHero({
+  images,
+  title,
+  subtitle,
+}: {
+  /** Ảnh bốn hình kim cương từ API. */
+  images: Partial<Record<"top" | "right" | "bottom" | "left", string>>;
+  /** Chữ hero từ API. */
+  title: string;
+  subtitle: string;
+}) {
+  const heroDiamonds = mobileHeroDiamonds.flatMap((diamond) => {
+    const src = images[diamond.key];
+    return src ? [{ ...diamond, src }] : [];
+  });
   return (
     <section className="relative w-full overflow-hidden bg-[#F2F2F3] md:hidden">
       {/* ẢNH LÊN TRÊN: cụm 4 hình kim cương giữ NGUYÊN mọi toạ độ % trong khung
@@ -159,7 +166,7 @@ export function ConstructionMobileHero() {
               `HERO_BACKDROPS` bên desktop: tấm kim cương cùng kích thước, dời
               `-7.5%` KÍCH THƯỚC CHÍNH NÓ nên sliver tự scale theo mỗi hình.
               Vẽ TRƯỚC 4 ảnh nên chỉ ló mép trái. */}
-          {mobileHeroDiamonds.map((diamond, index) => (
+          {heroDiamonds.map((diamond, index) => (
             <Reveal
               key={`edge-${diamond.key}`}
               className="pointer-events-none absolute z-[2] aspect-square"
@@ -178,11 +185,10 @@ export function ConstructionMobileHero() {
             </Reveal>
           ))}
 
-          {mobileHeroDiamonds.map((diamond, index) => (
+          {heroDiamonds.map((diamond, index) => (
             <DiamondPhotoFrame
               key={diamond.key}
               src={diamond.src}
-              alt={diamond.alt}
               left={diamond.left}
               top={diamond.top}
               size={diamond.size}
@@ -211,7 +217,7 @@ export function ConstructionMobileHero() {
                 tràn khỏi màn hình. 5,55vw là cỡ lớn nhất còn đủ một dòng và
                 cũng chính là cỡ trong mockup (436/512 ink = 5,68vw). */}
             <h1 className="font-heading text-[clamp(1.1rem,5.55vw,1.65rem)] leading-[1.12] font-extrabold whitespace-nowrap text-brand uppercase">
-              Dịch vụ thi công xây dựng
+              <RichText text={title} mode="inline" />
             </h1>
           </Reveal>
           <BuildingRule
@@ -233,7 +239,7 @@ export function ConstructionMobileHero() {
               aria-hidden="true"
             />
             <p className="text-[clamp(0.55rem,2.85vw,0.7rem)] leading-relaxed text-charcoal">
-              Đồng Hành Kiến Tạo Công Trình Bền Vững
+              <RichText text={subtitle} mode="inline" />
             </p>
           </Reveal>
         </div>
@@ -241,14 +247,6 @@ export function ConstructionMobileHero() {
     </section>
   );
 }
-
-const processTitles = [
-  "Khảo sát công trình & tiếp nhận hồ sơ",
-  "Lập biện pháp & tiến độ thi công",
-  "Thi công xây dựng phần thô",
-  "Thi công hoàn thiện công trình",
-  "Nghiệm thu & Bàn giao",
-] as const;
 
 // Tâm thực của năm vòng tròn cam trong `process-timeline.webp`. Giữ tọa độ
 // số độc lập với tiêu đề để cả hai có thể được căn quang học chính xác.
@@ -260,7 +258,11 @@ const processTitleTops = [5.9, 25.55, 45.25, 64.6, 84.65] as const;
    `-translate-y-1/2` nên đặt đúng các tâm này là chữ cách đều trên/dưới nền cam. */
 const processDescriptionTops = [15.3, 34.34, 53.37, 72.42, 92.86] as const;
 
-export function ConstructionMobileProcess() {
+export function ConstructionMobileProcess({
+  steps,
+}: {
+  steps: readonly ConstructionProcessStep[];
+}) {
   return (
     <div className="relative mx-auto aspect-3056/6831 w-[82%] md:hidden">
       <Reveal className="absolute inset-0" from="fade">
@@ -274,8 +276,10 @@ export function ConstructionMobileProcess() {
         />
       </Reveal>
 
-      {processSteps.map((step, index) => {
+      {steps.map((step, index) => {
         const base = index * 160;
+        // Bản mobile viết tiêu đề bước trên một dòng: ghép dòng 1 và dòng 2 từ DB.
+        const mobileTitle = [step.title, step.subtitle].filter(Boolean).join(" ");
 
         return (
           <div className="contents" key={step.number}>
@@ -298,7 +302,7 @@ export function ConstructionMobileProcess() {
             >
               <Reveal delay={base + 90} from="left">
                 <h3 className="font-heading text-[3.25vw] leading-none font-extrabold whitespace-nowrap text-black">
-                  {processTitles[index]}
+                  {mobileTitle}
                 </h3>
               </Reveal>
             </div>

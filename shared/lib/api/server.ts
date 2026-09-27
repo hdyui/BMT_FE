@@ -1,9 +1,14 @@
 import "server-only";
 import { cache } from "react";
 import { publicApiTag } from "./cache-tags";
+import { API_ORIGIN } from "./config";
 
 export function getApiBaseUrl() {
-  const raw = process.env.API_CLIENT?.trim();
+  const raw = (
+    process.env.API_CLIENT ??
+    process.env.BMT_API_ORIGIN ??
+    API_ORIGIN
+  ).trim();
   if (!raw) return null;
   let base = raw.replace(/\/swagger\/index\.html\/?$/i, "").replace(/\/$/, "");
   if (!/\/api\/v1$/i.test(base)) base += "/api/v1";

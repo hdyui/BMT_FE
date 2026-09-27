@@ -1,55 +1,46 @@
 import Image from "next/image";
 import { Reveal } from "@/shared/components/Reveal";
-import { mobileHeroArtwork as designMobileHeroArtwork } from "@/features/services/data/design";
-import { mobileHeroArtwork as turnkeyMobileHeroArtwork } from "@/features/services/data/turnkey";
 
 type MobileHeroArtworkProps = {
   variant: "design" | "full-construction";
+  /** Ảnh artwork từ API. */
+  src: string;
 };
 
 const artwork = {
   design: {
-    src: designMobileHeroArtwork,
     clips: [
       {
         path: "polygon(20% 27%, 52% 27%, 30% 100%, 0 100%, 0 58%)",
         origin: "26% 64%",
-        alt: "Không gian showroom do BMT Decor thiết kế nội thất",
       },
       {
         path: "polygon(45% 32%, 76% 32%, 55% 100%, 25% 100%)",
         origin: "51% 66%",
-        alt: "Không gian nhà phố do BMT Decor thiết kế nội thất",
       },
       {
         path: "polygon(70% 24%, 100% 24%, 100% 100%, 48% 100%)",
         origin: "77% 62%",
-        alt: "Không gian spa do BMT Decor thiết kế nội thất",
       },
     ],
   },
   "full-construction": {
-    src: turnkeyMobileHeroArtwork,
     clips: [
       {
         path: "polygon(36% 24%, 78% 24%, 78% 60%, 36% 60%)",
         origin: "57% 42%",
-        alt: "Văn phòng do BMT Decor thiết kế và thi công",
       },
       {
         path: "polygon(0 36%, 48% 36%, 48% 70%, 0 70%)",
         origin: "24% 53%",
-        alt: "Phòng khách do BMT Decor thiết kế và thi công",
       },
       {
         path: "polygon(37% 50%, 100% 50%, 100% 82%, 37% 82%)",
         origin: "69% 66%",
-        alt: "Phòng họp do BMT Decor thiết kế và thi công",
       },
       {
         path: "polygon(5% 61%, 52% 61%, 52% 100%, 5% 100%)",
         origin: "29% 81%",
-        alt: "Phòng ăn do BMT Decor thiết kế và thi công",
       },
     ],
   },
@@ -61,8 +52,8 @@ const artwork = {
  * các nét trang trí. Vì mọi lớp dùng chung một canvas nên trạng thái cuối không
  * thể lệch vị trí hoặc tỷ lệ so với mockup gốc.
  */
-export function MobileHeroArtwork({ variant }: MobileHeroArtworkProps) {
-  const preset = artwork[variant];
+export function MobileHeroArtwork({ variant, src }: MobileHeroArtworkProps) {
+  const preset = { ...artwork[variant], src };
 
   return (
     // ẢNH LÊN TRÊN: artwork mobile (đã ghép sẵn, chừa ~24% rỗng ở đỉnh cho khối
@@ -103,7 +94,7 @@ export function MobileHeroArtwork({ variant }: MobileHeroArtworkProps) {
             <Image
               className="object-fill"
               src={preset.src}
-              alt={clip.alt}
+              alt=""
               fill
               sizes="100vw"
               loading="eager"

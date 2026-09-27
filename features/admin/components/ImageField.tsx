@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { ChangeEvent, useRef, useState } from "react";
-import { Expand, ImageIcon, Upload } from "lucide-react";
+import { ChangeEvent, useEffect, useRef, useState } from "react";
+import { Expand, ImageIcon, LoaderCircle, Upload } from "lucide-react";
+import { toast } from "sonner";
 
+import { useImageUploader } from "@/features/admin/components/ImageUploadContext";
 import { Button } from "@/features/admin/components/ui/button";
 import {
   Dialog,
@@ -12,6 +14,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/features/admin/components/ui/dialog";
+import { MAX_IMAGE_UPLOAD_BYTES } from "@/features/admin/lib/upload-image";
+import { ApiError } from "@/shared/lib/api/errors";
 import { cn } from "@/shared/lib/utils";
 import { isSafeAdminImageSrc } from "@/features/admin/lib/safe-admin-image";
 
@@ -52,20 +56,55 @@ export function ImageField({
   const fill = size === "fill";
   const safeValue = isSafeAdminImageSrc(value);
   const inputRef = useRef<HTMLInputElement>(null);
+  const uploader = useImageUploader();
+  const [localPreview, setLocalPreview] = useState<string | null>(null);
+  const [uploading, setUploading] = useState(false);
   const [viewerOpen, setViewerOpen] = useState(false);
+  // Trong lúc upload hiện ảnh vừa chọn; xong thì hiện ảnh thật từ `value`.
+  const shownValue = uploading && localPreview ? localPreview : value;
+  const safeShownValue = isSafeAdminImageSrc(shownValue);
 
-  function handleFile(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
+  useEffect(() => {
+    return () => {
+      if (localPreview) URL.revokeObjectURL(localPreview);
+    };
+  }, [localPreview]);
+
+  async function handleFile(event: ChangeEvent<HTMLInputElement>) {
+    const input = event.target;
+    const file = input.files?.[0];
+    input.value = "";
     if (!file || !file.type.startsWith("image/")) return;
 
-    const reader = new FileReader();
-    reader.onload = () => {
-      if (typeof reader.result === "string") {
-        onChange(reader.result);
-      }
-    };
-    reader.readAsDataURL(file);
-    event.target.value = "";
+    if (!uploader) {
+      // Khu vực chưa nối backend: chỉ xem trước tạm bằng blob URL.
+      if (localPreview) URL.revokeObjectURL(localPreview);
+      const preview = URL.createObjectURL(file);
+      setLocalPreview(preview);
+      onChange(preview);
+      return;
+    }
+
+    if (file.size > MAX_IMAGE_UPLOAD_BYTES) {
+      toast.error("Ảnh quá lớn", { description: "Vui lòng chọn ảnh nhỏ hơn 10 MB." });
+      return;
+    }
+
+    setLocalPreview(URL.createObjectURL(file));
+    setUploading(true);
+    try {
+      onChange(await uploader(file));
+    } catch (error) {
+      toast.error("Không tải được ảnh lên", {
+        description:
+          error instanceof ApiError && error.status === 400
+            ? "Tệp không phải ảnh hợp lệ."
+            : "Vui lòng thử lại sau ít phút.",
+      });
+    } finally {
+      setUploading(false);
+      setLocalPreview(null);
+    }
   }
 
   return (
@@ -127,14 +166,14 @@ export function ImageField({
                   : "h-20 w-28 shrink-0 sm:h-24 sm:w-32",
           )}
         >
-          {safeValue ? (
+          {safeShownValue ? (
             /* Chỉ hiện ảnh — không viền, không nền, không lớp phủ khi rê chuột
                — để nhìn đúng như ảnh thật, nhất là ảnh PNG nền trong suốt. */
             <Image
-              src={value}
+              src={shownValue}
               alt={alt || "Ảnh xem trước"}
               fill
-              unoptimized={value.startsWith("blob:") || value.startsWith("data:")}
+              unoptimized={shownValue.startsWith("blob:") || shownValue.startsWith("data:")}
               className={fit === "cover" ? "object-cover" : "object-contain"}
               sizes={size === "thumb" ? "128px" : "(max-width: 1024px) 90vw, 36rem"}
             />
@@ -164,8 +203,15 @@ export function ImageField({
               <Expand /> Xem ảnh
             </Button>
           )}
-          <Button type="button" variant="outline" size="sm" onClick={() => inputRef.current?.click()}>
-            <Upload /> {value ? "Đổi ảnh" : "Chọn ảnh"}
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            disabled={uploading}
+            onClick={() => inputRef.current?.click()}
+          >
+            {uploading ? <LoaderCircle className="animate-spin" /> : <Upload />}{" "}
+            {uploading ? "Đang tải lên..." : value ? "Đổi ảnh" : "Chọn ảnh"}
           </Button>
         </div>
       </div>

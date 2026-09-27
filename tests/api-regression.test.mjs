@@ -71,49 +71,50 @@ test("public fetch caches anonymously by tag and rejects failed envelopes", asyn
 
 function adminLoader(fetch, tags = []) {
   return loader({
-    "next/headers": { cookies: async () => ({ get: () => ({ value: "local-session" }) }) },
+    "next/headers": {
+      cookies: async () => ({
+        get: name =>
+          name === "accessToken"
+            ? { value: "access-session" }
+            : name === "refreshToken"
+              ? { value: "refresh-session" }
+              : undefined,
+      }),
+    },
     "next/cache": { revalidateTag: (tag, profile) => tags.push({ tag, profile }) },
     "@/shared/lib/api/server": { getApiBaseUrl: () => "https://backend.example/api/v1" },
     "@/features/admin/lib/auth-config": {
-      ADMIN_AUTH_COOKIE: "local-cookie", ADMIN_MOCK_SESSION: "local-session",
-      MOCK_ADMIN_ACCOUNT: { email: "test@example.com", password: "test-only" },
+      ADMIN_ACCESS_COOKIE: "accessToken",
+      ADMIN_REFRESH_COOKIE: "refreshToken",
     },
   }, { fetch })("features/admin/services/catalog-api.server.ts", "\nexport { backendRequest, backendLogin };\n");
 }
 
-test("parallel admin GETs share login and backend request; later reads remain fresh", async () => {
-  let logins = 0, reads = 0;
+test("parallel admin GETs share the backend request and forward the real session", async () => {
+  let reads = 0;
   const api = adminLoader(async (url, init) => {
-    if (url.endsWith("/auth/login")) {
-      logins++;
-      return new Response("{}", { headers: { "set-cookie": "session=one; Path=/" } });
-    }
     reads++;
     assert.equal(init.cache, "no-store");
+    assert.equal(init.headers.get("Cookie"), "accessToken=access-session; refreshToken=refresh-session");
     await new Promise(resolve => setTimeout(resolve, 5));
     return Response.json({ value: { content: { map: { title: "Map", googleMapsUrl: "https://maps.example/" } } } });
   });
   const [a, b] = await Promise.all([api.loadAdminApiResource("contacts/map"), api.loadAdminApiResource("contacts/map")]);
   assert.equal(a[0].googleMapsUrl, b[0].googleMapsUrl);
-  assert.equal(logins, 1);
   assert.equal(reads, 1);
   await api.loadAdminApiResource("contacts/map");
   assert.equal(reads, 2);
 });
 
-test("expired backend session retries once with refreshed cookie", async () => {
-  let logins = 0, reads = 0;
-  const api = adminLoader(async url => {
-    if (url.endsWith("/auth/login")) {
-      logins++;
-      return new Response("{}", { headers: { "set-cookie": "session=fresh; Path=/" } });
-    }
+test("an unauthorized backend response retries once with the forwarded cookie", async () => {
+  let reads = 0;
+  const api = adminLoader(async (_url, init) => {
     reads++;
+    assert.equal(init.headers.get("Cookie"), reads === 1 ? "session=expired" : "accessToken=access-session; refreshToken=refresh-session");
     return reads === 1 ? new Response("", { status: 401 }) : Response.json({ value: [] });
   });
   const result = await api.backendRequest("/admin/projects", {}, "session=expired");
   assert.equal(result.response.status, 200);
-  assert.equal(logins, 1);
   assert.equal(reads, 2);
 });
 
@@ -121,7 +122,6 @@ test("map save matches BE contract, reloads saved data and expires the public ta
   const tags = [], writes = [];
   const map = { title: "Office", googleMapsUrl: "https://www.google.com/maps?output=embed" };
   const api = adminLoader(async (url, init) => {
-    if (url.endsWith("/auth/login")) return new Response("{}", { headers: { "set-cookie": "session=one" } });
     if (init.method === "PATCH") {
       writes.push({ url, body: JSON.parse(init.body) });
       return Response.json({ isSuccess: true });

@@ -5,9 +5,8 @@ import { revalidateTag } from "next/cache";
 import { publicApiTag } from "@/shared/lib/api/cache-tags";
 
 import {
-  ADMIN_AUTH_COOKIE,
-  ADMIN_MOCK_SESSION,
-  MOCK_ADMIN_ACCOUNT,
+  ADMIN_ACCESS_COOKIE,
+  ADMIN_REFRESH_COOKIE,
 } from "@/features/admin/lib/auth-config";
 import type { AdminCrudRecord } from "@/features/admin/lib/types/crud";
 import {
@@ -49,10 +48,6 @@ export const ADMIN_API_RESOURCE_KEYS = [
 const SETTINGS_PARTNER_COUNT = 6;
 
 type UnknownRecord = Record<string, unknown>;
-
-let cachedBackendSessionCookie: string | null = null;
-let cachedBackendSessionAt = 0;
-const backendSessionReuseMs = 15 * 60 * 1000;
 
 function asRecord(value: unknown): UnknownRecord | null {
   return typeof value === "object" && value !== null && !Array.isArray(value)
@@ -110,68 +105,18 @@ async function readBody(response: Response) {
   }
 }
 
-async function performBackendLogin(baseUrl: string, force = false) {
-  if (
-    !force &&
-    cachedBackendSessionCookie &&
-    Date.now() - cachedBackendSessionAt < backendSessionReuseMs
-  ) {
-    return cachedBackendSessionCookie;
-  }
+async function backendLogin() {
+  const store = await cookies();
+  const sessionCookie = [ADMIN_ACCESS_COOKIE, ADMIN_REFRESH_COOKIE]
+    .map((name) => {
+      const value = store.get(name)?.value;
+      return value ? `${name}=${value}` : null;
+    })
+    .filter((value): value is string => Boolean(value))
+    .join("; ");
 
-  for (let attempt = 1; attempt <= 2; attempt += 1) {
-    const response = await fetch(`${baseUrl}/auth/login`, {
-      method: "POST",
-      signal: AbortSignal.timeout(15_000),
-      cache: "no-store",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        email: MOCK_ADMIN_ACCOUNT.email,
-        password: MOCK_ADMIN_ACCOUNT.password,
-      }),
-    });
-
-    if (response.status === 429 && attempt < 2) {
-      await new Promise((resolve) => setTimeout(resolve, attempt * 2500));
-      continue;
-    }
-
-    if (!response.ok) {
-      throw new Error(`Backend admin login failed (HTTP ${response.status}).`);
-    }
-
-    const setCookies =
-      typeof response.headers.getSetCookie === "function"
-        ? response.headers.getSetCookie()
-        : [response.headers.get("set-cookie")].filter(
-            (item): item is string => Boolean(item),
-          );
-
-    const cookie = setCookies
-      .map((item) => item.split(";")[0])
-      .filter(Boolean)
-      .join("; ");
-
-    if (!cookie) {
-      throw new Error("Backend admin login returned no session cookie.");
-    }
-
-    cachedBackendSessionCookie = cookie;
-    cachedBackendSessionAt = Date.now();
-    return cookie;
-  }
-
-  throw new Error("Backend admin login retry exhausted.");
-}
-
-let loginInFlight: Promise<string> | null = null;
-async function backendLogin(baseUrl: string, force = false) {
-  if (loginInFlight) return loginInFlight;
-  loginInFlight = performBackendLogin(baseUrl, force).finally(() => { loginInFlight = null; });
-  return loginInFlight;
+  if (!sessionCookie) throw new Error("Unauthorized.");
+  return sessionCookie;
 }
 
 type BackendResult = { response: Response; body: unknown; cookie: string };
@@ -180,7 +125,7 @@ const inFlightReads = new Map<string, Promise<BackendResult>>();
 async function backendRequest(path: string, init: RequestInit = {}, sessionCookie?: string): Promise<BackendResult> {
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const cookie = sessionCookie ?? await backendLogin(baseUrl);
+  const cookie = sessionCookie ?? await backendLogin();
   const method = (init.method ?? "GET").toUpperCase();
   const key = baseUrl + path + "|" + cookie;
   if (method === "GET" && inFlightReads.has(key)) return inFlightReads.get(key)!;
@@ -194,8 +139,7 @@ async function backendRequest(path: string, init: RequestInit = {}, sessionCooki
     };
     let response = await send();
     if (response.status === 401) {
-      activeCookie = cachedBackendSessionCookie && cachedBackendSessionCookie !== cookie
-        ? cachedBackendSessionCookie : await backendLogin(baseUrl, true);
+      activeCookie = await backendLogin();
       response = await send();
     }
     const body = await readBody(response);
@@ -219,7 +163,10 @@ async function backendRequest(path: string, init: RequestInit = {}, sessionCooki
 
 async function requireLocalAdminSession() {
   const store = await cookies();
-  return store.get(ADMIN_AUTH_COOKIE)?.value === ADMIN_MOCK_SESSION;
+  return Boolean(
+    store.get(ADMIN_ACCESS_COOKIE)?.value ||
+      store.get(ADMIN_REFRESH_COOKIE)?.value,
+  );
 }
 
 function normalizeProjects(value: unknown): AdminCrudRecord[] {
@@ -1810,7 +1757,7 @@ export async function mutateAdminApiResource({
 
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
 
   if (isHomeAdminApiResourceKey(resourceKey)) {
     if (method !== "PATCH") {
@@ -2279,7 +2226,7 @@ export async function loadAdminApiResource(resourceKey: AdminApiResourceKey) {
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
   return fetchResourceRecords(resourceKey, sessionCookie);
 }
 
@@ -2292,7 +2239,7 @@ export async function replaceAdminApiResource(
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
   if (isHomeAdminApiResourceKey(resourceKey)) {
     return saveHomeRecords(resourceKey, records, sessionCookie);
   }
@@ -2324,7 +2271,7 @@ export async function loadAdminApiRecord(
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
   const record = await fetchSingleRecord(resourceKey, id, sessionCookie);
   if (!record) {
     throw new Error("Admin record not found.");
@@ -2387,7 +2334,7 @@ export async function loadFormSubmissions(params: {
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
 
   const query = new URLSearchParams();
   query.set("pageIndex", String(params.pageIndex ?? 1));
@@ -2429,7 +2376,7 @@ export async function updateFormSubmissionStatus(
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
 
   const result = await backendRequest(
     `/admin/form-submissions/${id}/status`,
@@ -2456,7 +2403,7 @@ export async function deleteFormSubmission(id: string): Promise<void> {
   }
   const baseUrl = getApiBaseUrl();
   if (!baseUrl) throw new Error("API_CLIENT is not configured.");
-  const sessionCookie = await backendLogin(baseUrl);
+  const sessionCookie = await backendLogin();
 
   const result = await backendRequest(
     `/admin/form-submissions/${id}`,

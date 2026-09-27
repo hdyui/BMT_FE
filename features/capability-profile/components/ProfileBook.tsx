@@ -17,6 +17,7 @@ import {
   useTransform,
   type MotionValue,
 } from "motion/react";
+import type { CapabilityProfilePage } from "@/features/capability-profile/services/capability-profile.service";
 
 type Stage = number;
 type SheetIndex = number;
@@ -32,32 +33,12 @@ const navIcons = {
   next: "/images/cai-tao-sua-chua/nav-next.png",
 } as const;
 
-type ProfilePage = { src: string; label: string };
-
-const profilePages: ProfilePage[] = Array.from({ length: 20 }, (_, index) => {
-  const pageNumber = index + 1;
-  const paddedNumber = String(pageNumber).padStart(2, "0");
-  const label =
-    pageNumber === 1
-      ? "Bìa trước hồ sơ năng lực BMT Decor"
-      : pageNumber === 20
-        ? "Bìa sau hồ sơ năng lực BMT Decor"
-        : `Trang ${pageNumber} hồ sơ năng lực BMT Decor`;
-
-  return {
-    src: `/images/capability-profile/profile-page-${paddedNumber}.webp`,
-    label,
-  };
-});
+type ProfilePage = { src: string };
+type ProfileSheet = { front: ProfilePage; back: ProfilePage };
 
 /* Cuốn hồ sơ gồm 10 tờ giấy vật lý, mỗi tờ in hai mặt theo thứ tự đọc 01-20.
    Khi mở sách, mặt sau của tờ trước nằm bên trái và mặt trước của tờ kế tiếp
    nằm bên phải, tạo đúng các spread 02 | 03, 04 | 05 ... 18 | 19 trong PDF mẫu. */
-const sheets = Array.from({ length: profilePages.length / 2 }, (_, index) => ({
-  front: profilePages[index * 2],
-  back: profilePages[index * 2 + 1],
-}));
-
 /* Tờ giấy được cắt thành nhiều dải dọc, mỗi dải xoay lệch nhau một chút để
    ghép lại thành mặt cong — đây là mấu chốt để trang lật cong như giấy thật
    thay vì xoay phẳng cứng như một tấm bìa. 18 dải là mức đủ mượt mà GPU vẫn
@@ -152,9 +133,11 @@ function faceStyle(src: string, index: number, mirrored: boolean) {
 function TurningSheet({
   sheet,
   progress,
+  sheets,
 }: {
   sheet: SheetIndex;
   progress: MotionValue<number>;
+  sheets: ProfileSheet[];
 }) {
   const stripRefs = useRef<(HTMLDivElement | null)[]>([]);
   const shadeRefs = useRef<(HTMLSpanElement | null)[]>([]);
@@ -237,41 +220,42 @@ function TurningSheet({
 }
 
 /* Nửa trang đứng yên bên dưới tờ đang lật. */
-function StaticPage({
-  src,
-  label,
-  side,
-}: {
-  src: string;
-  label: string;
-  side: Side;
-}) {
+function StaticPage({ src, side }: { src: string; side: Side }) {
   return (
     <div
       className={`absolute inset-y-0 z-10 w-1/2 bg-white bg-cover bg-center ${side === "left" ? "left-0 shadow-[-5px_12px_28px_rgb(41_34_30/.18)]" : "right-0 shadow-[5px_12px_28px_rgb(41_34_30/.18)]"}`}
       style={{ backgroundImage: `url(${src})` }}
-      role="img"
-      aria-label={label}
+      aria-hidden="true"
     />
   );
 }
 
-function shiftFor(stage: Stage) {
+function shiftFor(stage: Stage, sheetCount: number) {
   /* Sách đóng thì chỉ có 1 nửa hiện ra, nên đẩy cả khung đi 1/4 bề ngang để
      nửa đó nằm giữa màn hình — mở ra là khung trượt về 0.
      Bìa trước nằm ở nửa PHẢI nên phải kéo sang trái, bìa sau nằm ở nửa TRÁI nên
      đẩy sang phải. */
-  return stage === 0 ? "-25%" : stage === sheets.length ? "25%" : "0%";
+  return stage === 0 ? "-25%" : stage === sheetCount ? "25%" : "0%";
 }
 
-export function ProfileBook() {
+export function ProfileBook({ pages }: { pages: readonly CapabilityProfilePage[] }) {
+  // Các trang do admin quản lý; thứ tự đọc theo `sortOrder` của backend.
+  const order = pages
+    .slice()
+    .sort((left, right) => (left.metadata?.sortOrder ?? 0) - (right.metadata?.sortOrder ?? 0))
+    .map((page) => ({ src: page.imageUrl }));
+  const resolvedSheets = Array.from({ length: Math.floor(order.length / 2) }, (_, index) => ({
+    front: order[index * 2],
+    back: order[index * 2 + 1],
+  }));
+
   return (
     <>
       <div className="lg:hidden">
-        <MobileProfileBook />
+        <MobileProfileBook pages={order} />
       </div>
       <div className="hidden lg:block">
-        <DesktopProfileBook />
+        <DesktopProfileBook sheets={resolvedSheets} />
       </div>
     </>
   );
@@ -375,8 +359,8 @@ function MobileTurningFlap({
   );
 }
 
-function MobileProfileBook() {
-  const order = profilePages;
+function MobileProfileBook({ pages }: { pages: ProfilePage[] }) {
+  const order = pages;
 
   const [index, setIndex] = useState(0);
   const [turn, setTurn] = useState<{ from: number; dir: 1 | -1 } | null>(null);
@@ -513,8 +497,7 @@ function MobileProfileBook() {
         <div
           className="absolute inset-0 z-10 bg-white bg-cover bg-center"
           style={{ backgroundImage: `url(${order[staticIndex].src})` }}
-          role="img"
-          aria-label={order[staticIndex].label}
+          aria-hidden="true"
         />
 
         {turn &&
@@ -598,13 +581,13 @@ function MobileProfileBook() {
   );
 }
 
-function DesktopProfileBook() {
+function DesktopProfileBook({ sheets }: { sheets: ProfileSheet[] }) {
   const [stage, setStage] = useState<Stage>(0);
   const [turning, setTurning] = useState<SheetIndex | null>(null);
   const reduceMotion = useReducedMotion();
 
   const progress = useMotionValue(0);
-  const shift = useMotionValue(shiftFor(0));
+  const shift = useMotionValue(shiftFor(0, sheets.length));
   /* Bóng tờ đang lật hắt xuống 2 trang bên dưới, đậm nhất lúc tờ giấy dựng
      đứng giữa cú lật. */
   const castShadow = useTransform(progress, (value) =>
@@ -634,7 +617,7 @@ function DesktopProfileBook() {
       const duration = 0.42 + 0.62 * distance;
 
       busyRef.current = true;
-      animate(shift, shiftFor(nextStage), { duration, ease: EASE });
+      animate(shift, shiftFor(nextStage, sheets.length), { duration, ease: EASE });
       animate(progress, to, {
         duration,
         ease: EASE,
@@ -645,7 +628,7 @@ function DesktopProfileBook() {
         },
       });
     },
-    [progress, shift],
+    [progress, sheets.length, shift],
   );
 
   const turnPage = useCallback(
@@ -656,7 +639,7 @@ function DesktopProfileBook() {
 
       if (reduceMotion) {
         setStage(next as Stage);
-        shift.set(shiftFor(next as Stage));
+        shift.set(shiftFor(next as Stage, sheets.length));
         return;
       }
 
@@ -667,7 +650,7 @@ function DesktopProfileBook() {
       progress.set(direction > 0 ? 0 : 1);
       settle(sheet, direction > 0 ? 1 : 0);
     },
-    [progress, reduceMotion, settle, shift, stage],
+    [progress, reduceMotion, settle, shift, stage, sheets.length],
   );
 
   function peek(on: boolean) {
@@ -838,18 +821,12 @@ function DesktopProfileBook() {
           )}
 
           {leftPage && (
-            <StaticPage src={leftPage.src} label={leftPage.label} side="left" />
+            <StaticPage src={leftPage.src} side="left" />
           )}
-          {rightPage && (
-            <StaticPage
-              src={rightPage.src}
-              label={rightPage.label}
-              side="right"
-            />
-          )}
+          {rightPage && <StaticPage src={rightPage.src} side="right" />}
 
           {turning !== null && !reduceMotion && (
-            <TurningSheet sheet={turning} progress={progress} />
+            <TurningSheet sheet={turning} progress={progress} sheets={sheets} />
           )}
 
           {/* Bóng tờ giấy hắt xuống trang bên dưới, toả ra từ gáy sách. Chỉ vẽ

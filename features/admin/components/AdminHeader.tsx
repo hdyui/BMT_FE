@@ -3,35 +3,61 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useTransition } from "react";
+import { useEffect, useState, useTransition } from "react";
 import { Bell, LogOut, UserRound } from "lucide-react";
 
 import { Button } from "@/features/admin/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
+  DropdownMenuGroup,
   DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/features/admin/components/ui/dropdown-menu";
-import { logoutAdmin } from "@/features/admin/auth/actions";
 import { ThemeSwitcher } from "@/features/admin/components/ThemeSwitcher";
 import { getAdminSectionKey } from "@/features/admin/lib/admin-sidebar";
 import {
   adminHeaderNavigation,
   type AdminHeaderNavItem,
 } from "@/features/admin/lib/constants/navigation";
+import {
+  getCurrentAdmin,
+  logoutAdmin,
+  type AdminAccount,
+} from "@/features/admin/auth/service";
 import { cn } from "@/shared/lib/utils";
 
 export function AdminHeader() {
   const pathname = usePathname();
   const [loggingOut, startLogout] = useTransition();
+  const [account, setAccount] = useState<AdminAccount | null>(null);
   const activeKey = getAdminSectionKey(pathname);
+
+  // GET /auth/me: tài khoản của phiên hiện tại. Phiên hết hạn thì HTTP client tự
+  // xin lại hoặc chuyển về trang đăng nhập, nên lỗi ở đây chỉ làm mất dòng email.
+  useEffect(() => {
+    let active = true;
+    getCurrentAdmin()
+      .then((current) => {
+        if (active) setAccount(current);
+      })
+      .catch(() => undefined);
+    return () => {
+      active = false;
+    };
+  }, []);
 
   function handleLogout() {
     const location = `${window.location.pathname}${window.location.search}`;
 
     startLogout(async () => {
-      await logoutAdmin(location);
+      // POST /api/v1/auth/logout thu hồi phiên ở backend (backend xóa cookie phiên).
+      // Lỗi mạng không được chặn đăng xuất: `expired=1` bắt proxy xóa cookie phiên
+      // còn sót ở website, và `next` giúp quay lại đúng trang sau khi đăng nhập lại.
+      await logoutAdmin().catch(() => undefined);
+      window.location.assign(`/admin/login?expired=1&next=${encodeURIComponent(location)}`);
     });
   }
 
@@ -68,7 +94,15 @@ export function AdminHeader() {
             >
               <UserRound strokeWidth={1.8} />
             </DropdownMenuTrigger>
-            <DropdownMenuContent align="end" sideOffset={6} className="w-40">
+            <DropdownMenuContent align="end" sideOffset={6} className="w-56">
+              {account ? (
+                <>
+                  <DropdownMenuGroup>
+                    <DropdownMenuLabel className="truncate">{account.email}</DropdownMenuLabel>
+                  </DropdownMenuGroup>
+                  <DropdownMenuSeparator />
+                </>
+              ) : null}
               <DropdownMenuItem disabled={loggingOut} onClick={handleLogout}>
                 <LogOut /> {loggingOut ? "Đang đăng xuất..." : "Đăng xuất"}
               </DropdownMenuItem>

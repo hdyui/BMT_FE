@@ -4,12 +4,17 @@ import { SiteHeader } from "@/shared/components/layout/SiteHeader";
 import { BuildingRule } from "@/shared/components/BuildingRule";
 import { Reveal } from "@/shared/components/Reveal";
 import { ContactForm } from "@/shared/components/ContactForm";
+import { RichText } from "@/shared/components/RichText";
+import { ContentUnavailable } from "@/shared/components/ContentUnavailable";
 import { DesignHeroGallery } from "@/features/services/components/DesignHeroGallery";
 import { MobileHeroArtwork } from "@/features/services/components/MobileHeroArtwork";
 import { ProjectCarousel } from "@/features/services/components/ProjectCarousel";
 import { SolutionCards } from "@/features/services/components/SolutionCards";
 import { PillCtaButton } from "@/features/services/components/PillCtaButton";
-import { ProcessTimeline } from "@/features/services/components/ProcessTimeline";
+import {
+  ProcessTimeline,
+  type ProcessStep,
+} from "@/features/services/components/ProcessTimeline";
 import {
   SERVICE_HERO_CLASS_NAME,
   SERVICE_PROJECT_CAROUSEL_CLASS_NAME,
@@ -20,14 +25,36 @@ import {
   SERVICE_SOLUTION_HEADING_CLASS_NAME,
   SERVICE_SOLUTION_SECTION_CLASS_NAME,
 } from "@/features/services/config/layout";
+import { getServiceDetailContent } from "@/features/services/api/content";
 import {
-  contactFormContent,
-  featuredProjectCtaLabel,
-  featuredProjects,
-  solutionCards,
-} from "@/features/services/data/design";
+  buildContactForm,
+  buildProjects,
+  buildSolutionCards,
+  stepNumber,
+} from "@/features/services/api/build";
+import { processCircle, solutionCardLayout } from "@/features/services/data/design";
 
-export function DesignServicePage() {
+export async function DesignServicePage() {
+  // Toàn bộ nội dung do admin quản lý và lấy từ backend; không có bản tĩnh thay thế.
+  const content = await getServiceDetailContent("serviceArchitectureInterior");
+  if (!content) return <ContentUnavailable />;
+  const heroImages = content.hero.images ?? {};
+
+  const projects = buildProjects(content.featuredProjects.items);
+  const cards = buildSolutionCards(content.solutions.items, solutionCardLayout);
+  const processSteps: ProcessStep[] = content.process.items.map((step, index) => ({
+    number: stepNumber(index),
+    icon: step.image ?? "",
+    circle: processCircle(index),
+    title: step.title,
+    copy: step.description ?? "",
+  }));
+  const processLogo = content.process.brandLogo;
+  // Bản mobile đặt chữ "TẠI" cuối tiêu đề cạnh logo, phần còn lại ở dòng trên.
+  const processTitleParts = content.process.title.trim().match(/^(.*\S)\s+(TẠI)$/i);
+  const processTitleHead = processTitleParts?.[1] ?? content.process.title;
+  const processTitleTail = processTitleParts?.[2] ?? null;
+
   return (
     <div className="min-h-screen bg-white text-charcoal md:pt-16 xl:pt-[var(--site-header-desktop-height)]">
       <SiteHeader />
@@ -44,7 +71,9 @@ export function DesignServicePage() {
       <section
         className={`${SERVICE_HERO_CLASS_NAME} max-md:!h-auto max-md:!min-h-0 max-md:pt-[60px]`}
       >
-        <MobileHeroArtwork variant="design" />
+        {heroImages.mobileArtwork ? (
+          <MobileHeroArtwork variant="design" src={heroImages.mobileArtwork} />
+        ) : null}
 
         {/* Bản vẽ wireframe nền trái. `object-contain` nên bề rộng thật của
             hình = 0.698 x chiều cao banner, KHÔNG phải w-[38%]. Kéo sang trái
@@ -64,21 +93,23 @@ export function DesignServicePage() {
                 Hai số `-top-` và `-left-` phải đi cùng nhau: thu nhỏ bản vẽ thì
                 mép phải nét vẽ tự lùi trái, muốn giữ nguyên chỗ đó thì phải nhích
                 `-left-` lên tương ứng. */}
-        <Reveal
-          className="absolute -top-[7%] -bottom-[1.25rem] -left-[5.5%] -z-10 hidden w-[46%] lg:block"
-          delay={100}
-          from="fade"
-        >
-          <Image
-            className="size-full object-contain object-left-bottom opacity-80"
-            src="/images/thiet-ke-kien-truc-noi-that/hero-wireframe-original.png"
-            alt=""
-            fill
-            sizes="38vw"
-            loading="eager"
-            aria-hidden="true"
-          />
-        </Reveal>
+        {heroImages.wireframeImage ? (
+          <Reveal
+            className="absolute -top-[7%] -bottom-[1.25rem] -left-[5.5%] -z-10 hidden w-[46%] lg:block"
+            delay={100}
+            from="fade"
+          >
+            <Image
+              className="size-full object-contain object-left-bottom opacity-80"
+              src={heroImages.wireframeImage}
+              alt=""
+              fill
+              sizes="38vw"
+              loading="eager"
+              aria-hidden="true"
+            />
+          </Reveal>
+        ) : null}
 
         {/* Layout mới: Trái là Text (Max Width), Phải là Gallery bám sát viền */}
         {/* Màn nhỏ: chữ dồn lên trên, cụm ảnh nằm dưới -> không chồng lên nhau. */}
@@ -111,9 +142,7 @@ export function DesignServicePage() {
 
           <Reveal>
             <h1 className="font-heading text-[clamp(1.1rem,5.9vw,1.75rem)] font-extrabold leading-[1.12] text-brand">
-              DỊCH VỤ THIẾT KẾ KIẾN TRÚC
-              <br />
-              &amp; NỘI THẤT CHUYÊN NGHIỆP
+              <RichText text={content.hero.title} mode="ampersandMobile" />
             </h1>
           </Reveal>
 
@@ -137,7 +166,7 @@ export function DesignServicePage() {
               aria-hidden="true"
             />
             <p className="text-[clamp(0.55rem,2.75vw,0.68rem)] leading-relaxed">
-              Kiến tạo không gian hài hòa giữa thẩm mỹ và công năng
+              <RichText text={content.hero.subtitle} mode="inline" />
             </p>
           </Reveal>
         </div>
@@ -170,16 +199,7 @@ export function DesignServicePage() {
               {/* Mockup dùng cỡ chữ ~1.89vw; 2.15vw cũ làm tiêu đề tràn khỏi
                   khối chữ và đè lên bản vẽ nền. */}
               <h1 className="font-heading text-xl font-extrabold leading-[1.12] text-brand max-md:text-[clamp(1.35rem,5.25vw,1.55rem)] sm:text-[clamp(1.6rem,1.95vw,2.2rem)]">
-                <span className="md:hidden">
-                  DỊCH VỤ THIẾT KẾ KIẾN TRÚC
-                  <br />
-                  &amp; NỘI THẤT CHUYÊN NGHIỆP
-                </span>
-                <span className="hidden md:inline">
-                  DỊCH VỤ THIẾT KẾ KIẾN TRÚC&nbsp;&amp;
-                  <br />
-                  NỘI THẤT CHUYÊN NGHIỆP
-                </span>
+                <RichText text={content.hero.title} mode="ampersand" />
               </h1>
             </Reveal>
             <Reveal
@@ -210,15 +230,20 @@ export function DesignServicePage() {
                 aria-hidden="true"
               />
               <p className="mt-2 max-w-[250px] text-pretty text-sm font-normal leading-relaxed max-md:mt-0 max-md:max-w-none max-md:whitespace-nowrap max-md:text-[clamp(0.55rem,2.85vw,0.7rem)] sm:text-base">
-                Kiến tạo không gian hài hòa giữa
-                <br className="hidden sm:inline" /> thẩm mỹ và công năng
+                <RichText text={content.hero.subtitle} mode="desktopBreaks" breakFrom="sm" />
               </p>
             </Reveal>
           </div>
 
           {/* Cụm ảnh bên phải: tự dán sát mép phải và tự tính kích thước theo
               chiều cao banner (xem DesignHeroGallery). */}
-          <DesignHeroGallery />
+          <DesignHeroGallery
+            images={{
+              left: heroImages.leftImage,
+              center: heroImages.centerImage,
+              right: heroImages.rightImage,
+            }}
+          />
         </div>
       </section>
 
@@ -239,20 +264,20 @@ export function DesignServicePage() {
         >
           <Reveal>
             <h2 className="font-heading text-center text-3xl font-extrabold leading-[1.08] max-md:text-[clamp(1.12rem,4.75vw,1.55rem)] sm:text-4xl">
-              GIẢI PHÁP THIẾT KẾ TỐI ƯU CHO MỌI KHÔNG GIAN
+              <RichText text={content.featuredProjects.title} mode="inline" />
             </h2>
           </Reveal>
           <Reveal delay={140}>
             <p className="mx-auto mt-4 max-w-3xl text-pretty text-justify [text-align-last:center] text-sm leading-relaxed max-md:text-[0.82rem] max-md:leading-[1.3]">
-              BMT Decor cung cấp dịch vụ{" "}
-              <strong className="font-bold">thiết kế kiến trúc</strong>,{" "}
-              <strong className="font-bold">thiết kế nội thất</strong> và giải
-              pháp thiết kế đồng bộ cho nhà ở, văn
-              <br className="hidden lg:inline" /> phòng, showroom, spa, nhà hàng
-              và khách sạn. Mỗi phương án đều được nghiên cứu kỹ lưỡng nhằm tối
-              ưu công
-              <br className="hidden lg:inline" /> năng, ngân sách và giá trị sử
-              dụng lâu dài.
+              <RichText
+                text={content.featuredProjects.description}
+                mode="desktopBreaks"
+                breakFrom="lg"
+                bold={{
+                  phrases: ["thiết kế kiến trúc", "thiết kế nội thất"],
+                  className: "font-bold",
+                }}
+              />
             </p>
           </Reveal>
           <BuildingRule
@@ -267,7 +292,7 @@ export function DesignServicePage() {
           delay={120}
         >
           <ProjectCarousel
-            projects={featuredProjects}
+            projects={projects}
             prevIcon="/images/cai-tao-sua-chua/nav-prev.png"
             nextIcon="/images/cai-tao-sua-chua/nav-next.png"
             mobileMockup
@@ -281,7 +306,7 @@ export function DesignServicePage() {
           <PillCtaButton
             className="h-full max-md:[&>span:first-child]:!h-[clamp(2rem,7vw,2.75rem)]"
             href="#contact-form"
-            label={featuredProjectCtaLabel}
+            label={content.featuredProjects.ctaLabel ?? ""}
             image="/images/thi-cong-xay-dung/btn-pill.png"
             imageWidth={1539}
             imageHeight={292}
@@ -304,16 +329,12 @@ export function DesignServicePage() {
               {/* Mockup tách 2 dòng: dòng trên chữ thường, dòng dưới in đậm —
                   giống hệt 3 trang dịch vụ còn lại. */}
               <h2 className="font-heading text-[clamp(1.05rem,4.55vw,1.5rem)] leading-[1.12] uppercase md:text-4xl">
-                <span className="font-normal">THIẾT KẾ NỘI THẤT</span>
-                <br />
-                <span className="font-extrabold">
-                  THEO TỪNG LOẠI HÌNH CÔNG TRÌNH
-                </span>
+                <RichText text={content.solutions.title} mode="twoWeights" />
               </h2>
             </Reveal>
             <Reveal delay={140} from="bottom">
               <p className="mx-auto mt-2 max-w-xl text-[clamp(0.72rem,2.9vw,0.86rem)] md:mt-4 md:text-sm md:leading-relaxed">
-                Giải pháp thiết kế tối ưu cho từng không gian
+                <RichText text={content.solutions.description} mode="inline" />
               </p>
             </Reveal>
             <Reveal delay={250} from="left">
@@ -327,7 +348,7 @@ export function DesignServicePage() {
 
         <div className={SERVICE_SOLUTION_CARDS_CLASS_NAME}>
           <SolutionCards
-            cards={solutionCards}
+            cards={cards}
             checkIcon="/images/cai-tao-sua-chua/icon-house.png"
             ruleImage="/images/cai-tao-sua-chua/rule-short.png"
           />
@@ -345,26 +366,32 @@ export function DesignServicePage() {
         <div className="mx-auto mb-14 w-[min(790px,calc(100%-2.25rem))] max-md:mb-6">
           <Reveal className="">
             <h2 className="hidden flex-wrap items-center justify-center gap-x-3 gap-y-2 text-4xl font-extrabold md:flex">
-              <span className="mt-2.5">QUY TRÌNH THIẾT KẾ TẠI</span>
-              <Image
-                className="inline-block h-9 w-auto sm:h-10"
-                src="/images/thiet-ke-kien-truc-noi-that/process-brand-logo.png"
-                alt="BMT Decor"
-                width={1196}
-                height={207}
-              />
-            </h2>
-            <h2 className="font-heading text-center text-[clamp(0.95rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold md:hidden">
-              <span className="block">QUY TRÌNH THIẾT KẾ</span>
-              <span className="flex items-center justify-center gap-1">
-                TẠI
+              <span className="mt-2.5">
+                <RichText text={content.process.title} mode="inline" />
+              </span>
+              {processLogo ? (
                 <Image
-                  className="h-[1.28rem] w-auto"
-                  src="/images/thiet-ke-kien-truc-noi-that/process-brand-logo.png"
-                  alt="BMT Decor"
+                  className="inline-block h-9 w-auto sm:h-10"
+                  src={processLogo}
+                  alt=""
                   width={1196}
                   height={207}
                 />
+              ) : null}
+            </h2>
+            <h2 className="font-heading text-center text-[clamp(0.95rem,4.75vw,1.55rem)] leading-[1.08] font-extrabold md:hidden">
+              <span className="block">{processTitleHead}</span>
+              <span className="flex items-center justify-center gap-1">
+                {processTitleTail}
+                {processLogo ? (
+                  <Image
+                    className="h-[1.28rem] w-auto"
+                    src={processLogo}
+                    alt=""
+                    width={1196}
+                    height={207}
+                  />
+                ) : null}
               </span>
             </h2>
           </Reveal>
@@ -374,10 +401,10 @@ export function DesignServicePage() {
           />
         </div>
 
-        <ProcessTimeline />
+        <ProcessTimeline steps={processSteps} />
       </section>
 
-      <ContactForm showTopNotch {...contactFormContent} />
+      <ContactForm showTopNotch {...buildContactForm(content.contactForm)} />
       {/* Mobile: nền contact form đã là cam nên vạch cam đầu footer thành thừa. */}
       <SiteFooter hideTopBorderOnMobile />
     </div>

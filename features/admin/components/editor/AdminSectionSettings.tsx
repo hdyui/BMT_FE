@@ -5,6 +5,7 @@ import { Eye, LoaderCircle, Save } from "lucide-react";
 import { toast } from "sonner";
 
 import { useAdminCrud } from "@/features/admin/components/editor/AdminCrudProvider";
+import { describeSaveError } from "@/features/admin/lib/save-error";
 import { EditorField } from "@/features/admin/components/editor/EditorField";
 import type {
   AdminCrudRecord,
@@ -72,6 +73,8 @@ export function AdminSectionSettings({
       toast.success("Đã cập nhật thiết lập section", {
         description: "Thay đổi chỉ tồn tại trong phiên hiện tại.",
       });
+    } catch (error) {
+      toast.error("Không lưu được thay đổi", { description: describeSaveError(error) });
     } finally {
       setSaving(false);
     }
