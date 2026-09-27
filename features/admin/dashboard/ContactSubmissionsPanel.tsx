@@ -102,6 +102,18 @@ export function ContactSubmissionsPanel() {
     }
   }
 
+  async function updateRead(id: string, isRead: boolean) {
+    markPending(id, true);
+    try {
+      await formSubmissionsApiClient.updateRead(id, isRead);
+      reload();
+    } catch (updateError) {
+      toast.error(describeError(updateError));
+    } finally {
+      markPending(id, false);
+    }
+  }
+
   async function removeSubmission(id: string) {
     markPending(id, true);
     try {
@@ -190,11 +202,12 @@ export function ContactSubmissionsPanel() {
       ) : (
         <>
           <div className="overflow-x-auto">
-            <Table className="min-w-[780px]">
+            <Table className="min-w-[900px]">
               <TableHeader>
                 <TableRow>
                   <TableHead className="px-5 sm:px-6">Họ tên</TableHead>
                   <TableHead>Số điện thoại</TableHead>
+                  <TableHead>Đã đọc</TableHead>
                   <TableHead>Đã duyệt</TableHead>
                   <TableHead>Thời gian gửi</TableHead>
                   <TableHead className="px-5 text-right sm:px-6">Thao tác</TableHead>
@@ -210,6 +223,21 @@ export function ContactSubmissionsPanel() {
                         {submission.customerName}
                       </TableCell>
                       <TableCell className="font-medium tabular-nums">{submission.phone}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center gap-2">
+                          <Checkbox
+                            checked={submission.isRead}
+                            disabled={isPending}
+                            onCheckedChange={(value) =>
+                              void updateRead(submission.id, Boolean(value))
+                            }
+                            aria-label={submission.isRead ? "Bỏ đánh dấu đã đọc" : "Đánh dấu đã đọc"}
+                          />
+                          <span className="text-xs text-muted-foreground">
+                            {submission.isRead ? "Đã đọc" : "Chưa đọc"}
+                          </span>
+                        </div>
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
                           <Checkbox

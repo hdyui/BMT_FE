@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import {
   deleteFormSubmission,
   loadFormSubmissions,
+  updateFormSubmissionRead,
   updateFormSubmissionStatus,
 } from "@/features/admin/services/catalog-api.server";
 import type { FormSubmissionStatus } from "@/features/admin/services/catalog-api.types";
@@ -36,9 +37,20 @@ export async function GET(request: Request) {
 
 export async function PATCH(request: Request) {
   try {
-    const body = (await request.json()) as { id?: string; status?: string };
-    if (!body.id || (body.status !== "pending" && body.status !== "done")) {
-      throw new Error("Thiếu id hoặc status hợp lệ.");
+    const body = (await request.json()) as {
+      id?: string;
+      status?: string;
+      isRead?: boolean;
+    };
+    if (!body.id) throw new Error("Thiếu id.");
+
+    if (typeof body.isRead === "boolean") {
+      const value = await updateFormSubmissionRead(body.id, body.isRead);
+      return NextResponse.json({ isSuccess: true, value });
+    }
+
+    if (body.status !== "pending" && body.status !== "done") {
+      throw new Error("Thiếu status hợp lệ.");
     }
     const value = await updateFormSubmissionStatus(body.id, body.status);
     return NextResponse.json({ isSuccess: true, value });
