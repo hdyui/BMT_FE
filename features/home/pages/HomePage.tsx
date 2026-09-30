@@ -58,8 +58,6 @@ function ProjectSectionHeading({
 }
 
 export function HomePage({ data }: { data: HomePublicData }) {
-
-
   const [mainNews, ...secondaryNews] = data.highlightedNews;
 
   return (
@@ -216,28 +214,28 @@ export function HomePage({ data }: { data: HomePublicData }) {
           <SectionHeading title={data.featuredNewsTitle} />
           <div className="mt-9 grid items-start gap-8 lg:grid-cols-[1.08fr_0.92fr]">
             {mainNews ? (
-            <Reveal className="self-start">
-              <Link className="group block" href={mainNews.href}>
-                <div
-                  className="relative overflow-hidden rounded-3xl"
-                  style={{ aspectRatio: "1.65 / 1" }}
-                >
-                  <Image
-                    className="object-cover transition-transform duration-700 group-hover:scale-105"
-                    src={mainNews.desktopImage}
-                    alt={mainNews.imageAlt}
-                    fill
-                    sizes="(max-width:1024px) 100vw, 55vw"
-                  />
-                </div>
-                <h3 className="mt-5 text-xl font-bold transition-colors group-hover:text-brand">
-                  {mainNews.title}
-                </h3>
-                <p className="mt-2 text-justify text-sm leading-relaxed text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:line-clamp-2 max-sm:text-left max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
-                  {mainNews.excerpt}
-                </p>
-              </Link>
-            </Reveal>
+              <Reveal className="self-start">
+                <Link className="group block" href={mainNews.href}>
+                  <div
+                    className="relative overflow-hidden rounded-3xl"
+                    style={{ aspectRatio: "1.65 / 1" }}
+                  >
+                    <Image
+                      className="object-cover transition-transform duration-700 group-hover:scale-105"
+                      src={mainNews.desktopImage}
+                      alt={mainNews.imageAlt}
+                      fill
+                      sizes="(max-width:1024px) 100vw, 55vw"
+                    />
+                  </div>
+                  <h3 className="mt-5 text-xl font-bold transition-colors group-hover:text-brand">
+                    {mainNews.title}
+                  </h3>
+                  <p className="mt-2 text-justify text-sm leading-relaxed text-muted-foreground [text-align-last:left] [text-justify:inter-character] max-sm:line-clamp-2 max-sm:text-left max-sm:text-[14px] max-sm:font-normal max-sm:leading-[1.35] max-sm:text-charcoal/80">
+                    {mainNews.excerpt}
+                  </p>
+                </Link>
+              </Reveal>
             ) : null}
             <div className="grid gap-4">
               {secondaryNews.map((item, index) => (
