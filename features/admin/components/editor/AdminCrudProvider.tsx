@@ -9,6 +9,8 @@ import {
   useState,
 } from "react";
 
+import { ImageUploadProvider } from "@/features/admin/components/ImageUploadContext";
+import { uploadImage } from "@/features/admin/lib/upload-image";
 import { adminResourceRegistry } from "@/features/admin/lib/mock-data/resource-registry";
 import { adminCrudMockService } from "@/features/admin/services/crud-mock.service";
 import { getRemoteBinding } from "@/features/admin/services/remote-bindings";
@@ -367,7 +369,7 @@ export function AdminCrudProvider({
 
   return (
     <AdminCrudContext.Provider value={value}>
-      {children}
+      <ImageUploadProvider value={uploadImage}>{children}</ImageUploadProvider>
     </AdminCrudContext.Provider>
   );
 }
