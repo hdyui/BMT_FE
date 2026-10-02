@@ -1,0 +1,3392 @@
+{
+  "startedAt": "2026-10-02T08:43:09.864Z",
+  "origin": "http://localhost:3001",
+  "resources": [
+    {
+      "key": "home/hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "home/featured-services",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "home/statistics",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 3,
+      "emptyFields": []
+    },
+    {
+      "key": "home/why-bmt",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/partners",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 6,
+      "emptyFields": []
+    },
+    {
+      "key": "home/trust-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "home/services-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/partners-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "home/profile-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "home/contact-form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:subtitle"
+      ]
+    },
+    {
+      "key": "about/hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "about/journey",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 6,
+      "emptyFields": []
+    },
+    {
+      "key": "about/core-values",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 5,
+      "emptyFields": []
+    },
+    {
+      "key": "about/vision-mission",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "about/capabilities",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "about/journey-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "about/core-values-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "about/capabilities-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "about/contact-form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "projects/list",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 37,
+      "emptyFields": []
+    },
+    {
+      "key": "projects/list-section-content",
+      "source": "mock"
+    },
+    {
+      "key": "projects/details",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 0,
+      "emptyFields": []
+    },
+    {
+      "key": "projects/related",
+      "source": "mock"
+    },
+    {
+      "key": "projects/related-section-content",
+      "source": "mock"
+    },
+    {
+      "key": "projects/contact-form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "services/overview/hero-content",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/hero-cards",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/process-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/faq-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/service-list",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/process",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 6,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/faq",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/overview/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "services/xay-dung-tron-goi/hero",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/featured-project-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/solutions-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/process-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/featured-project",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 3,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/solutions",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/process",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 6,
+      "emptyFields": []
+    },
+    {
+      "key": "services/xay-dung-tron-goi/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/hero",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/featured-project-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/solutions-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/process-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/featured-project",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 3,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/solutions",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/process",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 6,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "services/thi-cong-xay-dung/hero",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/featured-project-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/solutions-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/process-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/featured-project",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 3,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/solutions",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/process",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 5,
+      "emptyFields": []
+    },
+    {
+      "key": "services/thi-cong-xay-dung/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "services/cai-tao-sua-chua/hero",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/featured-project-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/solutions-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/process-intro",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/featured-project",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 3,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/solutions",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 4,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/process",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 5,
+      "emptyFields": []
+    },
+    {
+      "key": "services/cai-tao-sua-chua/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "projects/page-hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "news/page-hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "quotation/hero",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "quotation/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/capability-profile/contact-form",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "contacts/hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "contacts/map",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/capability-profile",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/capability-profile-pages",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 21,
+      "emptyFields": []
+    },
+    {
+      "key": "news/featured-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "news/list",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 20,
+      "emptyFields": [
+        "0:body",
+        "1:body",
+        "2:body",
+        "3:body",
+        "4:body",
+        "5:body",
+        "6:body",
+        "7:body",
+        "8:body",
+        "9:body",
+        "10:body",
+        "11:body",
+        "12:body",
+        "13:body",
+        "14:body",
+        "15:body",
+        "16:body",
+        "17:body",
+        "18:body",
+        "19:body"
+      ]
+    },
+    {
+      "key": "news/contact-form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "recruitment/hero",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "recruitment/jobs",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 9,
+      "emptyFields": [
+        "0:department",
+        "0:location",
+        "0:schedule",
+        "0:compensation",
+        "0:summary",
+        "0:responsibilities",
+        "0:benefits",
+        "1:department",
+        "1:location",
+        "1:schedule",
+        "1:compensation",
+        "1:summary",
+        "1:responsibilities",
+        "1:benefits",
+        "2:department",
+        "2:location",
+        "2:schedule",
+        "2:compensation",
+        "2:summary",
+        "2:responsibilities",
+        "2:benefits",
+        "3:department",
+        "3:location",
+        "3:schedule",
+        "3:compensation",
+        "3:summary",
+        "3:responsibilities",
+        "3:benefits",
+        "4:department",
+        "4:location",
+        "4:schedule",
+        "4:compensation",
+        "4:summary",
+        "4:responsibilities",
+        "4:benefits",
+        "5:department",
+        "5:location",
+        "5:schedule",
+        "5:compensation",
+        "5:summary",
+        "5:responsibilities",
+        "5:benefits",
+        "6:department",
+        "6:location",
+        "6:schedule",
+        "6:compensation",
+        "6:summary",
+        "6:responsibilities",
+        "6:benefits",
+        "7:department",
+        "7:location",
+        "7:schedule",
+        "7:compensation",
+        "7:summary",
+        "7:responsibilities",
+        "7:benefits",
+        "8:department",
+        "8:location",
+        "8:schedule",
+        "8:compensation",
+        "8:summary",
+        "8:responsibilities",
+        "8:benefits"
+      ]
+    },
+    {
+      "key": "recruitment/jobs-section-content",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "recruitment/contact-form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "quotation/estimator",
+      "source": "remote-binding",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "contacts/form",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": [
+        "0:description"
+      ]
+    },
+    {
+      "key": "settings/branding",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    },
+    {
+      "key": "settings/footer",
+      "source": "catalog-api",
+      "status": 200,
+      "count": 1,
+      "emptyFields": []
+    }
+  ],
+  "requests": [
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=recruitment%2Fjobs",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 6575,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fhero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 218,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Flist",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 6798,
+      "success": true,
+      "shape": "array",
+      "count": 37
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 6798,
+      "success": true,
+      "shape": "array",
+      "count": 0
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fwhy-bmt",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 196,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fstatistics",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 193,
+      "success": true,
+      "shape": "array",
+      "count": 3
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Ffeatured-services",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 193,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=news%2Flist",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 6994,
+      "success": true,
+      "shape": "array",
+      "count": 20
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Ftrust-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 147,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fprofile-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 147,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fservices-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 148,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=home%2Fcontact-form",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 143,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=contacts%2Fform",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 121,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=contacts%2Fmap",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 122,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=contacts%2Fhero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 123,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fhero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 170,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fjourney",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 49,
+      "success": true,
+      "shape": "array",
+      "count": 6
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fvision-mission",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 49,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fjourney-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 49,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fcore-values",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 134,
+      "success": true,
+      "shape": "array",
+      "count": 5
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fcore-values-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 134,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fcapabilities",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 134,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fcapabilities-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 134,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=about%2Fcontact-form",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 116,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=settings%2Fbranding",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 153,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=settings%2Fpartners",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 152,
+      "success": true,
+      "shape": "array",
+      "count": 6
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=settings%2Fpartners-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 152,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=settings%2Ffooter",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 38,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fpage-hero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 104,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fcontact-form",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 105,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=news%2Fpage-hero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 118,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=news%2Ffeatured-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 117,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=recruitment%2Fcontact-form",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 112,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=recruitment%2Fjobs-section-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 112,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=recruitment%2Fhero",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 125,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=news%2Fcontact-form",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 132,
+      "success": true,
+      "shape": "array",
+      "count": 1
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceTurnkey",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 1455,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/services",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 1459,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceArchitectureInterior",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 1477,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceConstruction",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 1479,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceRenovation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 298,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/quotation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 398,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/capability-profile",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 475,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/capability-profile/pages?pageIndex=1&pageSize=100",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 677,
+      "success": true,
+      "shape": "object",
+      "count": 21,
+      "totalCount": 21
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/price-ranges",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 797,
+      "success": true,
+      "shape": "array",
+      "count": 16
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/auth/me",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 73,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/project-categories",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 86,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects?PageIndex=1&PageSize=500",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 107,
+      "success": true,
+      "shape": "object",
+      "count": 37,
+      "totalCount": 37
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "array",
+      "count": 36
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/news",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 198,
+      "success": true,
+      "shape": "array",
+      "count": 20
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/news?Featured=true",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 109,
+      "success": true,
+      "shape": "array",
+      "count": 5
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/project-categories",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 241,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/news",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 227,
+      "success": true,
+      "shape": "object",
+      "count": 20,
+      "totalCount": 20
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/jobs",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 91,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/site-settings",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 96,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/jobs",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 101,
+      "success": true,
+      "shape": "object",
+      "count": 9,
+      "totalCount": 9
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/price-ranges",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 92,
+      "success": true,
+      "shape": "array",
+      "count": 16
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/site-settings",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/home/full-content",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 191,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/capability-profile/pages?pageIndex=1&pageSize=100",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 112,
+      "success": true,
+      "shape": "object",
+      "count": 21,
+      "totalCount": 21
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/capability-profile/pages",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 116,
+      "success": true,
+      "shape": "object",
+      "count": 21
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/form-submissions?PageIndex=1&PageSize=100",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "object",
+      "count": 5,
+      "totalCount": 5
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/home",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 185,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/about",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 98,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/about",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 201,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/home",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 284,
+      "success": true,
+      "shape": "object",
+      "count": 4,
+      "totalCount": 4
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/projects",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 105,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/news",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 108,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/projects",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 111,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/news?HighlightHome=true",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 710,
+      "success": true,
+      "shape": "array",
+      "count": 4
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/news",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 97,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/recruitment",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 188,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/contact",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 189,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/recruitment",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 192,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/contact",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 106,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/services",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 83,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/services",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 112,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/serviceTurnkey",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 198,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceTurnkey",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 297,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/serviceArchitectureInterior",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 185,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceArchitectureInterior",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 219,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceConstruction",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 104,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/serviceConstruction",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 104,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/quotation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 191,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/serviceRenovation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 199,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/quotation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 103,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/serviceRenovation",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 207,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/pages/capability-profile",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 72,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/pages/capability-profile",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 102,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/7f0c8abc-9df8-4348-9012-9e85a49d1d8c",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 73,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-o-mau-09",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 77,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-hang-fusion-tan-binh-tan-cang",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 92,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/8bcf3fd4-b0b3-4eb7-babe-868408a76b98",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/demotest",
+      "method": "GET",
+      "status": 404,
+      "durationMs": 102,
+      "success": false,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/84a8f369-fff0-4186-a8c3-29e48b4f0468",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 102,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/homestay-nhiet-doi-quan-7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 214,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=84a8f369-fff0-4186-a8c3-29e48b4f0468",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 227,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/56a20f0c-935f-423e-9824-30b1646c18be",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 234,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=7f0c8abc-9df8-4348-9012-9e85a49d1d8c",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 249,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/2dab1099-8aae-4abc-a0ba-e38e26c0c251",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 73,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/cafe-san-vuon-go-vap",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 73,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/rooftop-lounge-binh-thanh",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 78,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/f30ede9c-5c87-4acb-9475-de06400747e5",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 145,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=56a20f0c-935f-423e-9824-30b1646c18be",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 396,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=8bcf3fd4-b0b3-4eb7-babe-868408a76b98",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 404,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=2dab1099-8aae-4abc-a0ba-e38e26c0c251",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 181,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=f30ede9c-5c87-4acb-9475-de06400747e5",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 161,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/48ff4428-c194-4440-bc66-55c03c308af6",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/5cb3322b-acc8-4462-ae54-ae6d82178ebd",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 93,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/boutique-hotel-quan-3",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 104,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-hang-nhat-quan-1",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 98,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-hang-chay-phu-nhuan",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 195,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=4df7d34d-5072-420d-a7e9-fc70edea60e9",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 201,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=c022cb19-abeb-45c1-9399-f48845d6a0cc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 198,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=5cb3322b-acc8-4462-ae54-ae6d82178ebd",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 198,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=48ff4428-c194-4440-bc66-55c03c308af6",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 213,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/wellness-spa-thu-duc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/showroom-my-pham-go-vap",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 97,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/e71b53f4-b381-4ff7-9055-ab9f48e698e7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 100,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=e71b53f4-b381-4ff7-9055-ab9f48e698e7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 103,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/ff538c09-4a7d-4bcc-a7a0-5bf010ccea84",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 86,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/7ce08a68-2a4b-4be7-9b6e-0f0ce71283df",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 189,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nail-studio-phu-nhuan",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 88,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=7ce08a68-2a4b-4be7-9b6e-0f0ce71283df",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 190,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/e6c01b60-2573-443e-8e9c-832f5d87d512",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 98,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=ff538c09-4a7d-4bcc-a7a0-5bf010ccea84",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 197,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/showroom-vat-lieu-quan-7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 192,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/e309a997-7d9a-4ff4-bf84-3b9d7f239ff7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 85,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=e6c01b60-2573-443e-8e9c-832f5d87d512",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 196,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/salon-toc-binh-thanh",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 185,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/showroom-thoi-trang-thao-dien",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 102,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=de6db77b-9e09-4224-9c6b-4e9910a7c28d",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 105,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=e309a997-7d9a-4ff4-bf84-3b9d7f239ff7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/de6db77b-9e09-4224-9c6b-4e9910a7c28d",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 194,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/48723032-ba19-4065-8972-71a4b9a1c926",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 89,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/cafe-concept-thao-dien",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 791,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/beauty-clinic-quan-1",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 88,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=48723032-ba19-4065-8972-71a4b9a1c926",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 125,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/8b0466c0-ea51-4b4e-a1c9-1e8a1b617a3b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 104,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-startup-thu-duc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 105,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/4df7d34d-5072-420d-a7e9-fc70edea60e9",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 894,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=8b0466c0-ea51-4b4e-a1c9-1e8a1b617a3b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 109,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/c022cb19-abeb-45c1-9399-f48845d6a0cc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 985,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/b097ed7e-6e0d-49b2-9fb9-5d044cd011b0",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 157,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-agency-binh-thanh",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 101,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-tai-chinh-tan-binh",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 98,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/show-office-sala",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 163,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=d0df73d6-e028-46f6-bc4f-cba003672863",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 103,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=b097ed7e-6e0d-49b2-9fb9-5d044cd011b0",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 176,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/d0df73d6-e028-46f6-bc4f-cba003672863",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 193,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/1aa975ab-c74e-4321-b287-d5edd6355955",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 191,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=1aa975ab-c74e-4321-b287-d5edd6355955",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 193,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/coworking-space-thao-dien",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 107,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/19920da8-9370-4740-ba1d-42a350ef8c74",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 107,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-luat-quan-1",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 87,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=19920da8-9370-4740-ba1d-42a350ef8c74",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 123,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/7874f7d1-5031-4397-9b93-f16fb2c5c978",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 180,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/biet-thu-san-vuon-nha-be",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 177,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/401d67ff-157e-41e2-ae3f-0aadf541ae2b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 179,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-pho-wabi-sabi-go-vap",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/6df60296-ca96-400b-93af-dbb5d1701e0f",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=96e662b8-24e4-472f-9c16-cc753aefec5d",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 205,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=6df60296-ca96-400b-93af-dbb5d1701e0f",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 210,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=401d67ff-157e-41e2-ae3f-0aadf541ae2b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 277,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/96e662b8-24e4-472f-9c16-cc753aefec5d",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 304,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=7874f7d1-5031-4397-9b93-f16fb2c5c978",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 386,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/3b2ca1d8-c39a-4f21-a248-5d6c044394a1",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 186,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/can-ho-modern-minimal-quan-2",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 187,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-cong-nghe-quan-3",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 404,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/90cf9a5e-7697-4022-8c0a-25f16f20ee00",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 195,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-pho-toi-gian-quan-9",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 197,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/56990ba1-4201-48ae-9879-0e713eb699f7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 202,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-pho-japandi-thu-duc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 202,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=56990ba1-4201-48ae-9879-0e713eb699f7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 203,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=3b2ca1d8-c39a-4f21-a248-5d6c044394a1",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 301,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/b15545a2-29a9-45dc-85cc-a77a356424c4",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 197,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/spa-cham-soc-da-phu-nhuan",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 199,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=b15545a2-29a9-45dc-85cc-a77a356424c4",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 199,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=90cf9a5e-7697-4022-8c0a-25f16f20ee00",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 299,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-pho-2-tang-quan-9",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 286,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/e783aa28-1458-437c-a152-72a3b706190f",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 195,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/studio-sang-tao-phu-nhuan",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 297,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/25e6b08b-11ed-4523-9dcc-d802b04f04b7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 297,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/bf91059e-48a3-454b-9dc9-40a3691d924e",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 287,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-hang-san-vuon-thu-duc",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=e783aa28-1458-437c-a152-72a3b706190f",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 196,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=cb4df47e-0ccc-439b-bdc4-09379f59458b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 204,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/showroom-noi-that-bmt",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 200,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=bf91059e-48a3-454b-9dc9-40a3691d924e",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 293,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=25e6b08b-11ed-4523-9dcc-d802b04f04b7",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 315,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/van-phong-bmt-decor",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 196,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/19b41e60-e6ab-45c0-ad91-4928c67a3916",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 197,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/18ef023b-9d78-48bd-8c36-c1c9d91c8e0f",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 183,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-binh-thanh",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 195,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/cb4df47e-0ccc-439b-bdc4-09379f59458b",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 402,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/admin/projects/9f87449c-7d9c-4c25-b554-09a328468a13",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 197,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=18ef023b-9d78-48bd-8c36-c1c9d91c8e0f",
+      "method": "GET",
+      "status": 500,
+      "durationMs": 186,
+      "success": false,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=19b41e60-e6ab-45c0-ad91-4928c67a3916",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 210,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=9f87449c-7d9c-4c25-b554-09a328468a13",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 292,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects/nha-phu-nhuan",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 664,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects?categoryId=3d51d47f-43cb-41ce-9b97-1729fdf40bcd",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 79,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects?categoryId=d2c86ec3-d080-40df-bafe-3e1abb7ef8ed",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 87,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects?categoryId=e51de878-84ae-4c4e-9b5b-cb815120dc99",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "https://bmt-deploy-latest.onrender.com/api/v1/projects?categoryId=ca648aae-e523-4a83-b97b-8dfc1641f519",
+      "method": "GET",
+      "status": 200,
+      "durationMs": 99,
+      "success": true,
+      "shape": "array",
+      "count": 9
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 131,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 102,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 316,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 92,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 330,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 76,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 89,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 78,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 165,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 91,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 503,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 77,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 95,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 90,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 107,
+      "success": true,
+      "shape": "object"
+    },
+    {
+      "url": "http://localhost:3001/api/v1/quotation/estimate",
+      "method": "POST",
+      "status": 200,
+      "durationMs": 92,
+      "success": true,
+      "shape": "object"
+    }
+  ],
+  "comparisons": [
+    {
+      "item": "page:home",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "items",
+        "pageIndex",
+        "pageSize",
+        "totalCount",
+        "hasNextPage",
+        "hasPreviousPage"
+      ]
+    },
+    {
+      "item": "page:about",
+      "sameContent": true,
+      "adminKeys": [
+        "hero",
+        "journey",
+        "visionMission",
+        "coreValues",
+        "capabilities",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "hero",
+        "journey",
+        "visionMission",
+        "coreValues",
+        "capabilities",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:projects",
+      "sameContent": true,
+      "adminKeys": [
+        "pageCode",
+        "hero",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "pageCode",
+        "hero",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:news",
+      "sameContent": true,
+      "adminKeys": [
+        "pageCode",
+        "hero",
+        "featuredSection",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "pageCode",
+        "hero",
+        "featuredSection",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:recruitment",
+      "sameContent": true,
+      "adminKeys": [
+        "pageCode",
+        "hero",
+        "jobsSection",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "pageCode",
+        "hero",
+        "jobsSection",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:contact",
+      "sameContent": true,
+      "adminKeys": [
+        "hero",
+        "contactForm",
+        "map"
+      ],
+      "publicKeys": [
+        "hero",
+        "contactForm",
+        "map"
+      ]
+    },
+    {
+      "item": "page:services",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "hero",
+        "serviceList",
+        "process",
+        "faq",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:serviceTurnkey",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "hero",
+        "featuredProjects",
+        "solutions",
+        "process",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:serviceArchitectureInterior",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "hero",
+        "featuredProjects",
+        "solutions",
+        "process",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:serviceConstruction",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "hero",
+        "featuredProjects",
+        "solutions",
+        "process",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:serviceRenovation",
+      "sameContent": false,
+      "adminKeys": [
+        "pageCode",
+        "nodes"
+      ],
+      "publicKeys": [
+        "hero",
+        "featuredProjects",
+        "solutions",
+        "process",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:quotation",
+      "sameContent": true,
+      "adminKeys": [
+        "hero",
+        "estimator",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "hero",
+        "estimator",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "page:capability-profile",
+      "sameContent": true,
+      "adminKeys": [
+        "hero",
+        "contactForm"
+      ],
+      "publicKeys": [
+        "hero",
+        "contactForm"
+      ]
+    },
+    {
+      "item": "project:demotest",
+      "sameContent": null,
+      "publicStatus": 404,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-o-mau-09",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:homestay-nhiet-doi-quan-7",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-hang-fusion-tan-binh-tan-cang",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:cafe-san-vuon-go-vap",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:rooftop-lounge-binh-thanh",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-hang-nhat-quan-1",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-hang-chay-phu-nhuan",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:wellness-spa-thu-duc",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:showroom-my-pham-go-vap",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nail-studio-phu-nhuan",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:showroom-vat-lieu-quan-7",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:salon-toc-binh-thanh",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:showroom-thoi-trang-thao-dien",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:beauty-clinic-quan-1",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:boutique-hotel-quan-3",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-startup-thu-duc",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:cafe-concept-thao-dien",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:show-office-sala",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-agency-binh-thanh",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-tai-chinh-tan-binh",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:coworking-space-thao-dien",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-pho-wabi-sabi-go-vap",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:biet-thu-san-vuon-nha-be",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-luat-quan-1",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-cong-nghe-quan-3",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-pho-japandi-thu-duc",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:can-ho-modern-minimal-quan-2",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:spa-cham-soc-da-phu-nhuan",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-pho-toi-gian-quan-9",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:showroom-noi-that-bmt",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-pho-2-tang-quan-9",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:studio-sang-tao-phu-nhuan",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-hang-san-vuon-thu-duc",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:van-phong-bmt-decor",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-binh-thanh",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 200
+    },
+    {
+      "item": "project:nha-phu-nhuan",
+      "sameContent": true,
+      "publicStatus": 200,
+      "normalizedStatus": 500
+    }
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 340326
+    },
+    {
+      "route": "/projects",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 182133
+    },
+    {
+      "route": "/about",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 303173
+    },
+    {
+      "route": "/services/turnkey",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 308885
+    },
+    {
+      "route": "/services",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 253941
+    },
+    {
+      "route": "/services/design",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 293395
+    },
+    {
+      "route": "/services/construction",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 319809
+    },
+    {
+      "route": "/quotation",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 104037
+    },
+    {
+      "route": "/services/renovation",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 380566
+    },
+    {
+      "route": "/news",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 225011
+    },
+    {
+      "route": "/capability-profile",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 109694
+    },
+    {
+      "route": "/contact",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 80597
+    },
+    {
+      "route": "/careers",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 169268
+    },
+    {
+      "route": "/projects/nha-o-mau-09",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216706
+    },
+    {
+      "route": "/projects/nha-hang-fusion-tan-binh-tan-cang",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216778
+    },
+    {
+      "route": "/projects/homestay-nhiet-doi-quan-7",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216778
+    },
+    {
+      "route": "/projects/cafe-san-vuon-go-vap",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216588
+    },
+    {
+      "route": "/projects/rooftop-lounge-binh-thanh",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216778
+    },
+    {
+      "route": "/projects/nha-hang-chay-phu-nhuan",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216690
+    },
+    {
+      "route": "/projects/boutique-hotel-quan-3",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216644
+    },
+    {
+      "route": "/projects/cafe-concept-thao-dien",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216672
+    },
+    {
+      "route": "/projects/nha-hang-nhat-quan-1",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216584
+    },
+    {
+      "route": "/projects/wellness-spa-thu-duc",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216594
+    },
+    {
+      "route": "/projects/showroom-my-pham-go-vap",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216728
+    },
+    {
+      "route": "/projects/nail-studio-phu-nhuan",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216630
+    },
+    {
+      "route": "/projects/showroom-vat-lieu-quan-7",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216770
+    },
+    {
+      "route": "/projects/salon-toc-binh-thanh",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216614
+    },
+    {
+      "route": "/projects/showroom-thoi-trang-thao-dien",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216958
+    },
+    {
+      "route": "/projects/beauty-clinic-quan-1",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216614
+    },
+    {
+      "route": "/projects/van-phong-startup-thu-duc",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216774
+    },
+    {
+      "route": "/projects/show-office-sala",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216416
+    },
+    {
+      "route": "/projects/van-phong-agency-binh-thanh",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216850
+    },
+    {
+      "route": "/projects/coworking-space-thao-dien",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13464
+    },
+    {
+      "route": "/projects/van-phong-tai-chinh-tan-binh",
+      "status": 200,
+      "fallbackNotice": false,
+      "htmlBytes": 216896
+    },
+    {
+      "route": "/projects/van-phong-luat-quan-1",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13452
+    },
+    {
+      "route": "/projects/van-phong-cong-nghe-quan-3",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13467
+    },
+    {
+      "route": "/projects/nha-pho-wabi-sabi-go-vap",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13461
+    },
+    {
+      "route": "/projects/biet-thu-san-vuon-nha-be",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13461
+    },
+    {
+      "route": "/projects/can-ho-modern-minimal-quan-2",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13473
+    },
+    {
+      "route": "/projects/nha-pho-japandi-thu-duc",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13458
+    },
+    {
+      "route": "/projects/nha-pho-toi-gian-quan-9",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13458
+    },
+    {
+      "route": "/projects/spa-cham-soc-da-phu-nhuan",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13462
+    },
+    {
+      "route": "/projects/studio-sang-tao-phu-nhuan",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13464
+    },
+    {
+      "route": "/projects/nha-pho-2-tang-quan-9",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13452
+    },
+    {
+      "route": "/projects/nha-hang-san-vuon-thu-duc",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13463
+    },
+    {
+      "route": "/projects/showroom-noi-that-bmt",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13452
+    },
+    {
+      "route": "/projects/van-phong-bmt-decor",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13446
+    },
+    {
+      "route": "/projects/nha-binh-thanh",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13431
+    },
+    {
+      "route": "/projects/nha-phu-nhuan",
+      "status": 500,
+      "fallbackNotice": false,
+      "htmlBytes": 13428
+    }
+  ],
+  "estimates": [
+    {
+      "buildingType": "nha_o",
+      "serviceType": "xay_dung_tron_goi",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "van_phong",
+      "serviceType": "xay_dung_tron_goi",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_o",
+      "serviceType": "thi_cong_xay_dung",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "van_phong",
+      "serviceType": "thiet_ke_kien_truc_noi_that",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_o",
+      "serviceType": "thiet_ke_kien_truc_noi_that",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "van_phong",
+      "serviceType": "cai_tao_sua_chua",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "van_phong",
+      "serviceType": "thi_cong_xay_dung",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "tham_my_vien_showroom",
+      "serviceType": "thiet_ke_kien_truc_noi_that",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "tham_my_vien_showroom",
+      "serviceType": "xay_dung_tron_goi",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "tham_my_vien_showroom",
+      "serviceType": "thi_cong_xay_dung",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_o",
+      "serviceType": "cai_tao_sua_chua",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "tham_my_vien_showroom",
+      "serviceType": "cai_tao_sua_chua",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_hang_khach_san",
+      "serviceType": "xay_dung_tron_goi",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_hang_khach_san",
+      "serviceType": "thi_cong_xay_dung",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_hang_khach_san",
+      "serviceType": "thiet_ke_kien_truc_noi_that",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    },
+    {
+      "buildingType": "nha_hang_khach_san",
+      "serviceType": "cai_tao_sua_chua",
+      "status": 200,
+      "matchesRange": true,
+      "correctTotals": true
+    }
+  ],
+  "issues": [],
+  "projectCounts": {
+    "admin": 37,
+    "public": 36,
+    "excluded": [
+      {
+        "id": "84a8f369-fff0-4186-a8c3-29e48b4f0468",
+        "slug": "demotest"
+      }
+    ]
+  },
+  "categoryCounts": [
+    {
+      "name": "Văn phòng",
+      "count": 9
+    },
+    {
+      "name": "Nhà ở",
+      "count": 9
+    },
+    {
+      "name": "Nhà hàng, khách sạn",
+      "count": 9
+    },
+    {
+      "name": "Thẩm mỹ viện, showroom",
+      "count": 9
+    }
+  ],
+  "auth": {
+    "login": 200,
+    "unauthenticatedCatalog": 401,
+    "unauthenticatedAdmin": 307,
+    "redirectsToLogin": true
+  },
+  "finishedAt": "2026-10-02T08:44:17.374Z"
+}

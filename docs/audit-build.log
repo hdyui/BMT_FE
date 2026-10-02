@@ -1,0 +1,73 @@
+
+> my-app@0.1.0 build
+> next build
+
+▲ Next.js 16.3.2 (Turbopack)
+- Environments: .env
+✓ Running next.config.ts took 28ms
+- Experiments (use with caution):
+  · cpus: 2
+
+  Creating an optimized production build ...
+✓ Compiled successfully in 1780ms
+  Running TypeScript ...
+  Finished TypeScript in 1987ms ...
+  Collecting page data using 2 workers ...
+  Generating static pages using 2 workers (0/35) ...
+  Generating static pages using 2 workers (8/35)
+  Generating static pages using 2 workers (17/35)
+  Generating static pages using 2 workers (26/35)
+✓ Generating static pages using 2 workers (35/35) in 3.6s
+  Finalizing page optimization ...
+
+Route (app)                            Revalidate  Expire
+┌ ○ /                                          1m      1y
+├ ○ /_not-found                                1m      1y
+├ ○ /about                                     1m      1y
+├ ○ /admin                                     1m      1y
+├ ○ /admin/about                               1m      1y
+├ ƒ /admin/about/[...segments]
+├ ○ /admin/capability-profile                  1m      1y
+├ ○ /admin/capability-profile/content          1m      1y
+├ ○ /admin/contact-submissions                 1m      1y
+├ ○ /admin/contacts                            1m      1y
+├ ƒ /admin/contacts/[...segments]
+├ ○ /admin/content                             1m      1y
+├ ƒ /admin/content/[pageId]
+├ ○ /admin/dashboard                           1m      1y
+├ ○ /admin/home                                1m      1y
+├ ƒ /admin/home/[...segments]
+├ ƒ /admin/login
+├ ○ /admin/news                                1m      1y
+├ ƒ /admin/news/[...segments]
+├ ○ /admin/projects                            1m      1y
+├ ƒ /admin/projects/[...segments]
+├ ○ /admin/quotation                           1m      1y
+├ ƒ /admin/quotation/[...segments]
+├ ○ /admin/recruitment                         1m      1y
+├ ƒ /admin/recruitment/[...segments]
+├ ○ /admin/services                            1m      1y
+├ ƒ /admin/services/[...segments]
+├ ○ /admin/settings                            1m      1y
+├ ƒ /admin/settings/[...segments]
+├ ƒ /api/admin/catalog
+├ ƒ /api/admin/form-submissions
+├ ƒ /api/form-submissions
+├ ○ /capability-profile                        1m      1y
+├ ○ /careers                                   1m      1y
+├ ○ /contact                                   1m      1y
+├ ○ /news                                      1m      1y
+├ ○ /projects                                  1m      1y
+├ ƒ /projects/[slug]
+├ ○ /quotation                                 1m      1y
+├ ○ /services                                  1m      1y
+├ ○ /services/construction                     1m      1y
+├ ○ /services/design                           1m      1y
+├ ○ /services/renovation                       1m      1y
+└ ○ /services/turnkey                          1m      1y
+
+
+ƒ Proxy (Middleware)
+
+○  (Static)   prerendered as static content
+ƒ  (Dynamic)  server-rendered on demand

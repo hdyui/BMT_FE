@@ -1,0 +1,829 @@
+{
+  "startedAt": "2026-10-02T08:49:49.891Z",
+  "saves": [
+    {
+      "key": "home/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.0.children.3.updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "about/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "projects/page-hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "news/page-hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "recruitment/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "contacts/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "settings/branding",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ],
+      "savedIdMatches": true
+    },
+    {
+      "key": "services/overview/hero-content",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.3.updatedAt"
+      ]
+    },
+    {
+      "key": "services/xay-dung-tron-goi/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.3.updatedAt"
+      ]
+    },
+    {
+      "key": "services/thiet-ke-kien-truc-noi-that/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.3.updatedAt"
+      ]
+    },
+    {
+      "key": "services/thi-cong-xay-dung/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.3.updatedAt"
+      ]
+    },
+    {
+      "key": "services/cai-tao-sua-chua/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "nodes.0.children.3.updatedAt"
+      ]
+    },
+    {
+      "key": "quotation/hero",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ]
+    },
+    {
+      "key": "settings/capability-profile",
+      "status": 200,
+      "rawResponseUnchanged": false,
+      "contentPreserved": true,
+      "changedPaths": [
+        "updatedAt"
+      ]
+    }
+  ],
+  "details": [
+    {
+      "group": "news",
+      "id": "12eb3e24-2d03-4acb-bc5a-ed6c18ebf085",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "e1531442-c727-49e8-8a38-85ef80cfbe7b",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "3db59f24-5a32-49f0-889d-a643eec1e509",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "cf39c4b8-8f2c-4e21-9ad1-40d682c89ef0",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "dd2732c0-918c-42d9-8e59-e9bbeb7bb419",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "ad6917a0-2cf6-4823-841e-ee72a65cb8a2",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "3613e4f4-c3b6-4b3a-a250-401c85447b3f",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "cf95930e-d624-40af-962e-69ce7f43db5b",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "982ab58f-56b2-4193-b054-17c02626dcd6",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "9a0d0cd0-da5a-4fdf-98ba-8648798d803f",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "0912ad0c-2104-4c4d-947e-dfe71e2a48c3",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "ea9f7fef-3ff2-46b7-aa8c-d3517c828749",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "05818926-216d-4f63-a8c5-6055d697e6b3",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "4570d52a-8876-4f3f-94a7-75023cab3a9c",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "595860ef-48af-4126-9ff4-916a703a52fe",
+      "status": 200,
+      "normalizedBodyLength": 161,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "c7ac3fdd-a931-4600-a0a2-869d31c5adcd",
+      "status": 200,
+      "normalizedBodyLength": 112,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "45adef48-e812-4b96-98aa-5c2742343cea",
+      "status": 200,
+      "normalizedBodyLength": 117,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "2f7afc68-bb9e-429c-964a-1f0b0a5805df",
+      "status": 200,
+      "normalizedBodyLength": 120,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "0f1bcfb0-f7e5-4334-8e5c-1c9f646592fc",
+      "status": 200,
+      "normalizedBodyLength": 118,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "news",
+      "id": "276b9efe-a0c1-4838-a1c6-715b375b1c65",
+      "status": 200,
+      "normalizedBodyLength": 118,
+      "fields": [
+        "content",
+        "updatedAt",
+        "id",
+        "slug",
+        "title",
+        "excerpt",
+        "imageUrl",
+        "featured",
+        "highlightHome",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "4904318f-4285-4b62-8369-a3db3bb3433e",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "e290f52f-7a1e-4afa-86db-a473f6494c41",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "328bf90c-b969-491b-aa6d-9f1f33a8861e",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "586cd290-6ec2-4f63-8cbb-c09930df5182",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "d7b3aff4-07e9-4030-b652-fca9f393aa61",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "3cc50b1b-b8ee-4927-9301-1fe51e7f45c2",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "35865fba-1586-469c-8436-8237ad251271",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "fc33b1ec-6672-4ec1-8de6-5ec0fd0f733f",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    },
+    {
+      "group": "jobs",
+      "id": "8a984538-31e6-4a59-837a-c1cbb01b6600",
+      "status": 200,
+      "fields": [
+        "department",
+        "location",
+        "schedule",
+        "compensation",
+        "summary",
+        "responsibilities",
+        "benefits",
+        "updatedAt",
+        "id",
+        "title",
+        "image",
+        "createdAt"
+      ],
+      "emptyNormalizedFields": []
+    }
+  ],
+  "rechecks": [
+    {
+      "route": "/projects/coworking-space-thao-dien",
+      "status": 200
+    },
+    {
+      "route": "/projects/van-phong-luat-quan-1",
+      "status": 200
+    },
+    {
+      "route": "/projects/van-phong-cong-nghe-quan-3",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-pho-wabi-sabi-go-vap",
+      "status": 200
+    },
+    {
+      "route": "/projects/biet-thu-san-vuon-nha-be",
+      "status": 200
+    },
+    {
+      "route": "/projects/can-ho-modern-minimal-quan-2",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-pho-japandi-thu-duc",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-pho-toi-gian-quan-9",
+      "status": 200
+    },
+    {
+      "route": "/projects/spa-cham-soc-da-phu-nhuan",
+      "status": 200
+    },
+    {
+      "route": "/projects/studio-sang-tao-phu-nhuan",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-pho-2-tang-quan-9",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-hang-san-vuon-thu-duc",
+      "status": 200
+    },
+    {
+      "route": "/projects/showroom-noi-that-bmt",
+      "status": 200
+    },
+    {
+      "route": "/projects/van-phong-bmt-decor",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-binh-thanh",
+      "status": 200
+    },
+    {
+      "route": "/projects/nha-phu-nhuan",
+      "status": 200
+    },
+    {
+      "route": "http://localhost:3001/api/admin/catalog?resourceKey=projects%2Fdetails&id=18ef023b-9d78-48bd-8c36-c1c9d91c8e0f",
+      "status": 200
+    }
+  ],
+  "auth": {
+    "refreshOnlyCatalogStatus": 500,
+    "refreshOnlyError": "GET /admin/projects?PageIndex=1&PageSize=500 failed (HTTP 401).",
+    "explicitRefreshStatus": 200,
+    "catalogAfterRefreshStatus": 200
+  },
+  "nodeComparisons": [
+    {
+      "page": "services",
+      "fieldsChecked": 64,
+      "absentValues": []
+    },
+    {
+      "page": "serviceTurnkey",
+      "fieldsChecked": 71,
+      "absentValues": []
+    },
+    {
+      "page": "serviceArchitectureInterior",
+      "fieldsChecked": 73,
+      "absentValues": []
+    },
+    {
+      "page": "serviceConstruction",
+      "fieldsChecked": 70,
+      "absentValues": []
+    },
+    {
+      "page": "serviceRenovation",
+      "fieldsChecked": 69,
+      "absentValues": []
+    }
+  ],
+  "issues": [],
+  "backendDeleteContracts": [
+    {
+      "path": "/api/v1/admin/form-submissions/{id}"
+    },
+    {
+      "path": "/api/v1/admin/jobs/{id}"
+    },
+    {
+      "path": "/api/v1/admin/news/{id}"
+    },
+    {
+      "path": "/api/v1/admin/projects/{id}"
+    }
+  ],
+  "categoryChange": {
+    "status": 200,
+    "expected": "3d51d47f-43cb-41ce-9b97-1729fdf40bcd",
+    "actual": "d2c86ec3-d080-40df-bafe-3e1abb7ef8ed",
+    "userSelectedNewName": "Văn phòng",
+    "actualName": "Nhà ở",
+    "reproducedStaleId": true
+  },
+  "sampleRestored": true,
+  "finishedAt": "2026-10-02T08:59:10.214Z",
+  "preservationVerifiedAt": "2026-10-02T08:58:15.059Z"
+}

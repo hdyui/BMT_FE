@@ -1,0 +1,35 @@
+[
+  {
+    "group": "projects",
+    "id": "f6ffabeb-d7ef-42c5-993e-e54468c26ed5",
+    "resourceKey": "projects/list",
+    "title": "API AUDIT 1790931842267 Project",
+    "deleted": true
+  },
+  {
+    "group": "news",
+    "id": "a1583a36-2309-41fa-a3e2-e41b861bc202",
+    "resourceKey": "news/list",
+    "title": "API AUDIT 1790931842267 News",
+    "deleted": true
+  },
+  {
+    "group": "jobs",
+    "id": "e19afb18-358e-452f-984d-f5b87116360a",
+    "resourceKey": "recruitment/jobs",
+    "title": "API AUDIT 1790931842267 Job",
+    "deleted": true
+  },
+  {
+    "group": "capability-profile/pages",
+    "id": "27494984-fea3-4d61-9f7e-616bcafad021",
+    "title": "API AUDIT 1790931842267 Profile page",
+    "deleted": true
+  },
+  {
+    "group": "form-submissions",
+    "id": "c83b34d7-574f-41de-a2e2-40a3cf01fd46",
+    "title": "API AUDIT 1790931842267 Contact",
+    "deleted": true
+  }
+]
