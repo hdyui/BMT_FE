@@ -1,0 +1,494 @@
+{
+  "startedAt": "2026-10-02T09:12:25.087Z",
+  "routes": [
+    {
+      "route": "/admin/dashboard",
+      "finalRoute": "/admin/dashboard",
+      "status": 200,
+      "title": "Tổng quan | BMT Admin"
+    },
+    {
+      "route": "/admin/projects",
+      "finalRoute": "/admin/projects",
+      "status": 200,
+      "title": "Nội dung Dự án | BMT Admin"
+    },
+    {
+      "route": "/admin/news",
+      "finalRoute": "/admin/news",
+      "status": 200,
+      "title": "Nội dung Tin tức | BMT Admin"
+    },
+    {
+      "route": "/admin/recruitment",
+      "finalRoute": "/admin/recruitment",
+      "status": 200,
+      "title": "Nội dung Tuyển dụng | BMT Admin"
+    },
+    {
+      "route": "/admin/settings/branding",
+      "finalRoute": "/admin/settings/branding",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/contact-submissions",
+      "finalRoute": "/admin/contact-submissions",
+      "status": 200,
+      "title": "Khách hàng liên hệ | BMT Admin"
+    },
+    {
+      "route": "/admin/content/home",
+      "finalRoute": "/admin/content/home",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/about",
+      "finalRoute": "/admin/content/about",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/services",
+      "finalRoute": "/admin/content/services",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/services-overview",
+      "finalRoute": "/admin/content/services-overview",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/turnkey",
+      "finalRoute": "/admin/content/turnkey",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/design",
+      "finalRoute": "/admin/content/design",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/construction",
+      "finalRoute": "/admin/content/construction",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/renovation",
+      "finalRoute": "/admin/content/renovation",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/projects",
+      "finalRoute": "/admin/content/projects",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/capability-profile",
+      "finalRoute": "/admin/content/capability-profile",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/quotation",
+      "finalRoute": "/admin/content/quotation",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/news",
+      "finalRoute": "/admin/content/news",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/recruitment",
+      "finalRoute": "/admin/content/recruitment",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content/contact",
+      "finalRoute": "/admin/content/contact",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/content",
+      "finalRoute": "/admin/content",
+      "status": 200,
+      "title": "Nội dung trang | BMT Admin"
+    },
+    {
+      "route": "/admin/settings",
+      "finalRoute": "/admin/settings",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/settings/partners",
+      "finalRoute": "/admin/settings/partners",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/settings/footer",
+      "finalRoute": "/admin/settings/footer",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/hero",
+      "finalRoute": "/admin/home/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/why-bmt",
+      "finalRoute": "/admin/home/why-bmt",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/statistics",
+      "finalRoute": "/admin/home/statistics",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/featured-services",
+      "finalRoute": "/admin/home/featured-services",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/profile-section-content",
+      "finalRoute": "/admin/home/profile-section-content",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/home/contact-form",
+      "finalRoute": "/admin/home/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/hero",
+      "finalRoute": "/admin/about/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/journey",
+      "finalRoute": "/admin/about/journey",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/vision-mission",
+      "finalRoute": "/admin/about/vision-mission",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/core-values",
+      "finalRoute": "/admin/about/core-values",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/capabilities",
+      "finalRoute": "/admin/about/capabilities",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/about/contact-form",
+      "finalRoute": "/admin/about/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/overview/hero-cards",
+      "finalRoute": "/admin/services/overview/hero-cards",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/overview/service-list",
+      "finalRoute": "/admin/services/overview/service-list",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/overview/process",
+      "finalRoute": "/admin/services/overview/process",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/overview/faq",
+      "finalRoute": "/admin/services/overview/faq",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/overview/contact-form",
+      "finalRoute": "/admin/services/overview/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/xay-dung-tron-goi/hero",
+      "finalRoute": "/admin/services/xay-dung-tron-goi/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/xay-dung-tron-goi/featured-project",
+      "finalRoute": "/admin/services/xay-dung-tron-goi/featured-project",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/xay-dung-tron-goi/solutions",
+      "finalRoute": "/admin/services/xay-dung-tron-goi/solutions",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/xay-dung-tron-goi/process",
+      "finalRoute": "/admin/services/xay-dung-tron-goi/process",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/xay-dung-tron-goi/contact-form",
+      "finalRoute": "/admin/services/xay-dung-tron-goi/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thiet-ke-kien-truc-noi-that/hero",
+      "finalRoute": "/admin/services/thiet-ke-kien-truc-noi-that/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thiet-ke-kien-truc-noi-that/featured-project",
+      "finalRoute": "/admin/services/thiet-ke-kien-truc-noi-that/featured-project",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thiet-ke-kien-truc-noi-that/solutions",
+      "finalRoute": "/admin/services/thiet-ke-kien-truc-noi-that/solutions",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thiet-ke-kien-truc-noi-that/process",
+      "finalRoute": "/admin/services/thiet-ke-kien-truc-noi-that/process",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thiet-ke-kien-truc-noi-that/contact-form",
+      "finalRoute": "/admin/services/thiet-ke-kien-truc-noi-that/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thi-cong-xay-dung/hero",
+      "finalRoute": "/admin/services/thi-cong-xay-dung/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thi-cong-xay-dung/featured-project",
+      "finalRoute": "/admin/services/thi-cong-xay-dung/featured-project",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thi-cong-xay-dung/solutions",
+      "finalRoute": "/admin/services/thi-cong-xay-dung/solutions",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thi-cong-xay-dung/process",
+      "finalRoute": "/admin/services/thi-cong-xay-dung/process",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/thi-cong-xay-dung/contact-form",
+      "finalRoute": "/admin/services/thi-cong-xay-dung/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/cai-tao-sua-chua/hero",
+      "finalRoute": "/admin/services/cai-tao-sua-chua/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/cai-tao-sua-chua/featured-project",
+      "finalRoute": "/admin/services/cai-tao-sua-chua/featured-project",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/cai-tao-sua-chua/solutions",
+      "finalRoute": "/admin/services/cai-tao-sua-chua/solutions",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/cai-tao-sua-chua/process",
+      "finalRoute": "/admin/services/cai-tao-sua-chua/process",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/services/cai-tao-sua-chua/contact-form",
+      "finalRoute": "/admin/services/cai-tao-sua-chua/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/projects/page-hero",
+      "finalRoute": "/admin/projects/page-hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/projects/list-section-content",
+      "finalRoute": "/admin/projects/list-section-content",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/projects/contact-form",
+      "finalRoute": "/admin/projects/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/capability-profile/content",
+      "finalRoute": "/admin/capability-profile/content",
+      "status": 200,
+      "title": "Nội dung Hồ sơ năng lực | BMT Admin"
+    },
+    {
+      "route": "/admin/settings/capability-profile-pages",
+      "finalRoute": "/admin/settings/capability-profile-pages",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/settings/capability-profile/contact-form",
+      "finalRoute": "/admin/settings/capability-profile/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/quotation/hero",
+      "finalRoute": "/admin/quotation/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/quotation/estimator",
+      "finalRoute": "/admin/quotation/estimator",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/quotation/contact-form",
+      "finalRoute": "/admin/quotation/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/news/page-hero",
+      "finalRoute": "/admin/news/page-hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/news/featured-section-content",
+      "finalRoute": "/admin/news/featured-section-content",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/news/contact-form",
+      "finalRoute": "/admin/news/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/recruitment/hero",
+      "finalRoute": "/admin/recruitment/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/recruitment/jobs-section-content",
+      "finalRoute": "/admin/recruitment/jobs-section-content",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/recruitment/contact-form",
+      "finalRoute": "/admin/recruitment/contact-form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/contacts/hero",
+      "finalRoute": "/admin/contacts/hero",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/contacts/form",
+      "finalRoute": "/admin/contacts/form",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    },
+    {
+      "route": "/admin/contacts/map",
+      "finalRoute": "/admin/contacts/map",
+      "status": 200,
+      "title": "BMT Admin | BMT Decor"
+    }
+  ],
+  "issues": [],
+  "newsPagination": {
+    "createdId": "ec987044-3fa2-4978-b506-4a23724ff6c7",
+    "backendTotal": 21,
+    "backendFetched": 21,
+    "frontendFetched": 20,
+    "missingCount": 1,
+    "omissionReproduced": true
+  },
+  "newsCleanup": {
+    "status": 200,
+    "absent": true,
+    "finalTotal": 20
+  },
+  "finishedAt": "2026-10-02T09:13:49.203Z"
+}

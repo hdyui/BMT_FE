@@ -63,21 +63,6 @@ export const formSubmissionsApiClient = {
     return readEnvelope<FormSubmissionItem>(response);
   },
 
-  async updateRead(id: string, isRead: boolean) {
-    const response = await fetch("/api/admin/form-submissions", {
-      method: "PATCH",
-      cache: "no-store",
-      credentials: "same-origin",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ id, isRead }),
-    });
-
-    return readEnvelope<FormSubmissionItem>(response);
-  },
-
   async remove(id: string) {
     const response = await fetch("/api/admin/form-submissions", {
       method: "DELETE",
